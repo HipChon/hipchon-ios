@@ -7,65 +7,49 @@
 
 import RxSwift
 import UIKit
+import Then
 
 class MainFilterView: UIView {
     private let bag = DisposeBag()
 
-    private let positionLogo: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart.fill")
-        imageView.contentMode = .scaleAspectFit
+    private let positionLogo = UIImageView().then {
+        $0.image = UIImage(systemName: "heart.fill")
+        $0.contentMode = .scaleAspectFit
+    }
 
-        return imageView
-    }()
+    private let positionButton = UIButton().then {
+        $0.setTitle("대한민국 어디서든", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+    }
 
-    private let positionButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("대한민국 어디서든", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+    private let dateLogo = UIImageView().then {
+        $0.image = UIImage(systemName: "heart.fill")
+        $0.contentMode = .scaleAspectFit
+    }
 
-        return button
-    }()
+    private let dateButton = UIButton().then {
+        $0.setTitle("날짜 선택", for: .normal)
+        $0.setTitleColor(.lightGray, for: .normal)
+        $0.titleLabel?.textAlignment = .left
+    }
 
-    private let dateLogo: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart.fill")
-        imageView.contentMode = .scaleAspectFit
+    private let peopleNumLogo = UIImageView().then {
+        $0.image = UIImage(systemName: "heart.fill")
+        $0.contentMode = .scaleAspectFit
+    }
 
-        return imageView
-    }()
+    private let peopleNumButton = UIButton().then {
+        $0.setTitle("성인 / 어린이 1명", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+    }
 
-    private let dateButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("날짜 선택", for: .normal)
-        button.setTitleColor(.lightGray, for: .normal)
-        button.titleLabel?.textAlignment = .left
-        return button
-    }()
-
-    private let peopleNumLogo: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart.fill")
-        imageView.contentMode = .scaleAspectFit
-
-        return imageView
-    }()
-
-    private let peopleNumButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("성인 / 어린이 1명", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-
-    private let findButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("숙소 찾기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 12.0
-        return button
-    }()
+    private let findButton = UIButton().then {
+        $0.setTitle("숙소 찾기", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.lightText, for: .highlighted)
+        $0.backgroundColor = .tintColor
+        $0.layer.cornerRadius = 12.0
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -78,7 +62,12 @@ class MainFilterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_: MainFilterViewModel) {}
+    func bind(_ viewModel: MainFilterViewModel) {
+        findButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.findButtonTapped)
+            .disposed(by: bag)
+    }
 
     private func attribute() {
         backgroundColor = .white

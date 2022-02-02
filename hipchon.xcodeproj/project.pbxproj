@@ -8,8 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		3A7D358079476DF3ECF3F75A /* Pods_hipchon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D95E75F856206A0F1A096E8 /* Pods_hipchon.framework */; };
+		D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538A27AA59160047A05C /* PlaceListViewController.swift */; };
+		D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538C27AA59200047A05C /* PlaceListViewModel.swift */; };
+		D83E538F27AA65E10047A05C /* CategoryCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538E27AA65E10047A05C /* CategoryCellViewModel.swift */; };
+		D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E539227AA6D0C0047A05C /* PlaceListCell.swift */; };
+		D83E539527AA6F310047A05C /* PlaceListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */; };
 		D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86D27A6C224005B8C25 /* UIView+.swift */; };
-		D841C87027A6C554005B8C25 /* CateogryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86F27A6C552005B8C25 /* CateogryCollectionViewCell.swift */; };
+		D841C87027A6C554005B8C25 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86F27A6C552005B8C25 /* CategoryCell.swift */; };
 		D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF7C27A67D6F00E41F4F /* AppDelegate.swift */; };
 		D88FAF7F27A67D6F00E41F4F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF7E27A67D6F00E41F4F /* SceneDelegate.swift */; };
 		D88FAF8127A67D6F00E41F4F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF8027A67D6F00E41F4F /* LoginViewController.swift */; };
@@ -27,8 +32,13 @@
 		78BDEC32C7850AC383E0A7E5 /* Pods-hipchon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hipchon.release.xcconfig"; path = "Target Support Files/Pods-hipchon/Pods-hipchon.release.xcconfig"; sourceTree = "<group>"; };
 		7D95E75F856206A0F1A096E8 /* Pods_hipchon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hipchon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E0ABCC1241B3D083244BD37 /* Pods-hipchon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hipchon.debug.xcconfig"; path = "Target Support Files/Pods-hipchon/Pods-hipchon.debug.xcconfig"; sourceTree = "<group>"; };
+		D83E538A27AA59160047A05C /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
+		D83E538C27AA59200047A05C /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
+		D83E538E27AA65E10047A05C /* CategoryCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellViewModel.swift; sourceTree = "<group>"; };
+		D83E539227AA6D0C0047A05C /* PlaceListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListCell.swift; sourceTree = "<group>"; };
+		D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListCellViewModel.swift; sourceTree = "<group>"; };
 		D841C86D27A6C224005B8C25 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
-		D841C86F27A6C552005B8C25 /* CateogryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateogryCollectionViewCell.swift; sourceTree = "<group>"; };
+		D841C86F27A6C552005B8C25 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		D88FAF7927A67D6F00E41F4F /* hipchon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hipchon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D88FAF7C27A67D6F00E41F4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D88FAF7E27A67D6F00E41F4F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +83,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D83E539027AA68500047A05C /* CategoryCell */ = {
+			isa = PBXGroup;
+			children = (
+				D841C86F27A6C552005B8C25 /* CategoryCell.swift */,
+				D83E538E27AA65E10047A05C /* CategoryCellViewModel.swift */,
+			);
+			path = CategoryCell;
+			sourceTree = "<group>";
+		};
+		D83E539127AA6D010047A05C /* PlaceList */ = {
+			isa = PBXGroup;
+			children = (
+				D83E538A27AA59160047A05C /* PlaceListViewController.swift */,
+				D83E538C27AA59200047A05C /* PlaceListViewModel.swift */,
+				D83E539227AA6D0C0047A05C /* PlaceListCell.swift */,
+				D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */,
+			);
+			path = PlaceList;
+			sourceTree = "<group>";
+		};
 		D841C86B27A6B60C005B8C25 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,7 +128,7 @@
 		D841C87127A6C706005B8C25 /* Subcomponents */ = {
 			isa = PBXGroup;
 			children = (
-				D841C86F27A6C552005B8C25 /* CateogryCollectionViewCell.swift */,
+				D83E539027AA68500047A05C /* CategoryCell */,
 			);
 			path = Subcomponents;
 			sourceTree = "<group>";
@@ -132,6 +162,7 @@
 				D841C86D27A6C224005B8C25 /* UIView+.swift */,
 				D841C86B27A6B60C005B8C25 /* Auth */,
 				D841C86C27A6B613005B8C25 /* Home */,
+				D83E539127AA6D010047A05C /* PlaceList */,
 			);
 			path = hipchon;
 			sourceTree = "<group>";
@@ -250,15 +281,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */,
+				D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */,
+				D83E538F27AA65E10047A05C /* CategoryCellViewModel.swift in Sources */,
 				D88FAF9327A68A7900E41F4F /* LoginModel.swift in Sources */,
+				D83E539527AA6F310047A05C /* PlaceListCellViewModel.swift in Sources */,
 				D88FAF9127A689B500E41F4F /* LoginViewModel.swift in Sources */,
-				D841C87027A6C554005B8C25 /* CateogryCollectionViewCell.swift in Sources */,
+				D841C87027A6C554005B8C25 /* CategoryCell.swift in Sources */,
 				D8E7756427A810C0005E037D /* MainFilterView.swift in Sources */,
 				D8E7756627A81178005E037D /* MainFilterViewModel.swift in Sources */,
 				D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */,
 				D88FAF8127A67D6F00E41F4F /* LoginViewController.swift in Sources */,
 				D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */,
 				D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */,
+				D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */,
 				D88FAF7F27A67D6F00E41F4F /* SceneDelegate.swift in Sources */,
 				D88FAF9527A68AD500E41F4F /* HomeViewController.swift in Sources */,
 			);

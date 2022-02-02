@@ -11,17 +11,20 @@ import RxSwift
 
 class LoginViewModel {
     private let bag = DisposeBag()
-
+    
     // MARK: viewModel -> view
 
     let loginValid: Driver<Bool>
+    let presentHomeViewController: Signal<HomeViewModel>
 
     // MARK: view -> viewModel
 
     let email = BehaviorRelay<String>(value: "")
     let password = BehaviorRelay<String>(value: "")
+    let loginButtonTapped = PublishRelay<Void>()
 
     init() {
+        let homeViewModel = HomeViewModel()
         let loginModel = BehaviorSubject<LoginModel>(value: LoginModel())
 
         Observable.combineLatest(email, password)
@@ -33,10 +36,10 @@ class LoginViewModel {
             .map { $0.emailValidCheck() && $0.passwordValidCheck() }
             .asDriver(onErrorJustReturn: false)
 
-        loginModel
-            .subscribe(onNext: {
-                print($0.email, $0.password)
-            })
-            .disposed(by: bag)
+        presentHomeViewController = loginButtonTapped
+            .map { _ in homeViewModel }
+            .asSignal(onErrorSignalWith: .empty())
+            
+        
     }
 }

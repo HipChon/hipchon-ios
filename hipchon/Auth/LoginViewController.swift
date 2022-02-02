@@ -9,56 +9,51 @@ import RxCocoa
 import RxSwift
 import SnapKit
 import UIKit
+import Then
 
 class LoginViewController: UIViewController {
     // MARK: Property
 
-    private lazy var mainLogoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart.fill")
+    private lazy var mainLogoImageView = UIImageView().then {
+        $0.image = UIImage(systemName: "heart.fill")
+    }
 
-        return imageView
-    }()
+    private lazy var emailTextField = UITextField().then {
+        $0.borderStyle = .roundedRect
+        $0.textContentType = .emailAddress
+        $0.autocapitalizationType = .none
+    }
 
-    private lazy var emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .roundedRect
-        textField.textContentType = .emailAddress
-        textField.autocapitalizationType = .none
-        return textField
-    }()
+    private lazy var passwordTextField = UITextField().then {
+        $0.borderStyle = .roundedRect
+        $0.isSecureTextEntry = true
+        $0.textContentType = .password
+    }
 
-    private lazy var passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .roundedRect
-        textField.isSecureTextEntry = true
-        textField.textContentType = .password
-        return textField
-    }()
+    private lazy var loginButton = UIButton().then {
+        $0.setTitle("로그인", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.lightText, for: .highlighted)
+        $0.backgroundColor = .tintColor
+    }
 
-    private lazy var loginButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("로그인", for: .normal)
-
-        button.backgroundColor = .blue
-        return button
-    }()
-
-    private lazy var registerButrton: UIButton = {
-        let button = UIButton()
-        button.setTitle("회원가입", for: .normal)
-        button.backgroundColor = .blue
-        return button
-    }()
+    private lazy var registerButrton = UIButton().then {
+        $0.setTitle("회원가입", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.lightText, for: .highlighted)
+        $0.backgroundColor = .tintColor
+    }
 
     private var bag = DisposeBag()
-    let viewModel = LoginViewModel()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        bind(viewModel)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
         layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func bind(_ viewModel: LoginViewModel) {
@@ -72,6 +67,11 @@ class LoginViewController: UIViewController {
         passwordTextField.rx.text
             .orEmpty
             .bind(to: viewModel.password)
+            .disposed(by: bag)
+        
+        loginButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.loginButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -87,12 +87,14 @@ class LoginViewController: UIViewController {
 
         // MARK: scene
 
-        loginButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                let homeVC = HomeViewController()
-                homeVC.modalPresentationStyle = .fullScreen
-                self?.present(homeVC, animated: true, completion: nil)
+        viewModel.presentHomeViewController
+            .emit(onNext: { [weak self] viewModel in
+                let homeViewController = HomeViewController()
+                homeViewController.bind(viewModel)
+                
+                let homeNavigationViewController = UINavigationController(rootViewController: homeViewController)
+                homeNavigationViewController.modalPresentationStyle = .fullScreen
+                self?.present(homeNavigationViewController, animated: true, completion: nil)
             })
             .disposed(by: bag)
     }

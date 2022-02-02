@@ -9,43 +9,32 @@ import RxCocoa
 import RxSwift
 import SnapKit
 import UIKit
+import Then
 
 class HomeViewController: UIViewController {
     // MARK: Property
 
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.bounces = true
-        scrollView.showsVerticalScrollIndicator = false
+    private lazy var scrollView = UIScrollView().then {
+        $0.bounces = true
+        $0.showsVerticalScrollIndicator = false
+    }
 
-        return scrollView
-    }()
+    private lazy var contentView = UIView().then { _ in
+    }
 
-    private lazy var contentView: UIView = {
-        let view = UIView()
+    private lazy var searchBar = UISearchBar().then {
+        $0.searchTextField.borderStyle = .none
+    }
 
-        return view
-    }()
+    private lazy var mainView = UIView().then {
+        $0.backgroundColor = .red
+    }
 
-    private lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.searchTextField.borderStyle = .none
-        return searchBar
-    }()
+    private lazy var mainFilterView = MainFilterView().then { _ in
+    }
 
-    private lazy var mainView: UIView = {
-        let view = UIView()
-
-        view.backgroundColor = .red
-        return view
-    }()
-
-    private lazy var mainFilterView: MainFilterView = {
-        let mainFilterView = MainFilterView()
-        return mainFilterView
-    }()
-
-    private lazy var categoryCollectionView: UICollectionView = {
+    private lazy var categoryCollectionView = UICollectionView(frame: .zero,
+                                                               collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 10.0
         let width = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
@@ -53,19 +42,15 @@ class HomeViewController: UIViewController {
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
-
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
-        collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identyfier)
-
-        collectionView.showsHorizontalScrollIndicator = false
-
-        return collectionView
-    }()
+        
+        $0.collectionViewLayout = layout
+        $0.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.identyfier)
+        $0.showsHorizontalScrollIndicator = false
+    }
 
     private lazy var marginView: UIView = {
         let view = UIView()
@@ -74,16 +59,19 @@ class HomeViewController: UIViewController {
     }()
 
     private let bag = DisposeBag()
-    let viewModel = HomeViewModel()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        bind()
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
         layout()
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-    func bind() {
+
+    func bind(_ viewModel: HomeViewModel) {
         // MARK: subViews Binding
 
         mainFilterView.bind(viewModel.mainFilterViewModel)
@@ -94,16 +82,26 @@ class HomeViewController: UIViewController {
 
         viewModel.cateogorys
             .drive(categoryCollectionView.rx.items) { col, idx, model in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.identyfier, for: IndexPath(row: idx, section: 0)) as? CategoryCollectionViewCell else { return UICollectionViewCell() }
-                cell.setDate(model)
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: CategoryCell.identyfier, for: IndexPath(row: idx, section: 0)) as? CategoryCell else { return UICollectionViewCell() }
+                let categoryCellViewModel = CategoryCellViewModel()
+                cell.bind(categoryCellViewModel)
+                categoryCellViewModel.category.accept(model)
                 return cell
             }
             .disposed(by: bag)
 
         // MARK: scene
+        viewModel.pushPlaceListViewController
+            .emit(onNext: { [weak self] viewModel in
+                let placeListViewController = PlaceListViewController()
+                placeListViewController.bind(viewModel)
+                self?.navigationController?.pushViewController(placeListViewController, animated: false)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {
+        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
     }
 

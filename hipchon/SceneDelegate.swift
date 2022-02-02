@@ -9,13 +9,16 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-
+    let loginViewModel = LoginViewModel()
+    
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
-        window?.rootViewController = LoginViewController()
+        let loginViewController = LoginViewController()
+        loginViewController.bind(loginViewModel)
+        window?.rootViewController = loginViewController
         window?.makeKeyAndVisible()
     }
 }
