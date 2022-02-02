@@ -62,7 +62,12 @@ class MainFilterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_: MainFilterViewModel) {}
+    func bind(_ viewModel: MainFilterViewModel) {
+        findButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.findButtonTapped)
+            .disposed(by: bag)
+    }
 
     private func attribute() {
         backgroundColor = .white

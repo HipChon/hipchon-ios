@@ -6,9 +6,12 @@
 //
 
 import RxSwift
+import RxRelay
 
 class MainFilterViewModel {
     private let bag = DisposeBag()
 
+    let findButtonTapped = PublishRelay<Void>()
+    
     init() {}
 }

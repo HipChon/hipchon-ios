@@ -44,15 +44,16 @@ class LoginViewController: UIViewController {
         $0.backgroundColor = .tintColor
     }
 
-
     private var bag = DisposeBag()
-    let viewModel = LoginViewModel()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        bind(viewModel)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
         layout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func bind(_ viewModel: LoginViewModel) {
@@ -66,6 +67,11 @@ class LoginViewController: UIViewController {
         passwordTextField.rx.text
             .orEmpty
             .bind(to: viewModel.password)
+            .disposed(by: bag)
+        
+        loginButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.loginButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -81,12 +87,14 @@ class LoginViewController: UIViewController {
 
         // MARK: scene
 
-        loginButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                let homeVC = HomeViewController()
-                homeVC.modalPresentationStyle = .fullScreen
-                self?.present(homeVC, animated: true, completion: nil)
+        viewModel.presentHomeViewController
+            .emit(onNext: { [weak self] viewModel in
+                let homeViewController = HomeViewController()
+                homeViewController.bind(viewModel)
+                
+                let homeNavigationViewController = UINavigationController(rootViewController: homeViewController)
+                homeNavigationViewController.modalPresentationStyle = .fullScreen
+                self?.present(homeNavigationViewController, animated: true, completion: nil)
             })
             .disposed(by: bag)
     }

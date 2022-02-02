@@ -22,6 +22,7 @@ class HomeViewModel {
     // MARK: viewModel -> view
 
     let cateogorys: Driver<[CategoryModel]>
+    let pushPlaceListViewController: Signal<PlaceListViewModel>
 
     // MARK: view -> viewModel
 
@@ -38,10 +39,13 @@ class HomeViewModel {
             CategoryModel(name: "반려동물"),
             CategoryModel(name: "프리미엄"),
         ]
-
-        let datas = BehaviorSubject<[CategoryModel]>(value: tmps)
-
-        cateogorys = datas
-            .asDriver(onErrorJustReturn: [])
+        let placeListViewModel = PlaceListViewModel()
+        
+        cateogorys = Driver.just(tmps)
+        
+        pushPlaceListViewController = mainFilterViewModel.findButtonTapped
+            .map { _ in placeListViewModel }
+            .asSignal(onErrorSignalWith: .empty())
+            
     }
 }
