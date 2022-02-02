@@ -9,47 +9,41 @@ import RxCocoa
 import RxSwift
 import SnapKit
 import UIKit
+import Then
 
 class LoginViewController: UIViewController {
     // MARK: Property
 
-    private lazy var mainLogoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart.fill")
+    private lazy var mainLogoImageView = UIImageView().then {
+        $0.image = UIImage(systemName: "heart.fill")
+    }
 
-        return imageView
-    }()
+    private lazy var emailTextField = UITextField().then {
+        $0.borderStyle = .roundedRect
+        $0.textContentType = .emailAddress
+        $0.autocapitalizationType = .none
+    }
 
-    private lazy var emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .roundedRect
-        textField.textContentType = .emailAddress
-        textField.autocapitalizationType = .none
-        return textField
-    }()
+    private lazy var passwordTextField = UITextField().then {
+        $0.borderStyle = .roundedRect
+        $0.isSecureTextEntry = true
+        $0.textContentType = .password
+    }
 
-    private lazy var passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .roundedRect
-        textField.isSecureTextEntry = true
-        textField.textContentType = .password
-        return textField
-    }()
+    private lazy var loginButton = UIButton().then {
+        $0.setTitle("로그인", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.lightText, for: .highlighted)
+        $0.backgroundColor = .tintColor
+    }
 
-    private lazy var loginButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("로그인", for: .normal)
+    private lazy var registerButrton = UIButton().then {
+        $0.setTitle("회원가입", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.lightText, for: .highlighted)
+        $0.backgroundColor = .tintColor
+    }
 
-        button.backgroundColor = .blue
-        return button
-    }()
-
-    private lazy var registerButrton: UIButton = {
-        let button = UIButton()
-        button.setTitle("회원가입", for: .normal)
-        button.backgroundColor = .blue
-        return button
-    }()
 
     private var bag = DisposeBag()
     let viewModel = LoginViewModel()

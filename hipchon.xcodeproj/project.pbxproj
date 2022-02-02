@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A7D358079476DF3ECF3F75A /* Pods_hipchon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D95E75F856206A0F1A096E8 /* Pods_hipchon.framework */; };
+		D83E538927AA496A0047A05C /* tmp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D83E538827AA496A0047A05C /* tmp.storyboard */; };
 		D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86D27A6C224005B8C25 /* UIView+.swift */; };
 		D841C87027A6C554005B8C25 /* CateogryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86F27A6C552005B8C25 /* CateogryCollectionViewCell.swift */; };
 		D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF7C27A67D6F00E41F4F /* AppDelegate.swift */; };
@@ -27,6 +28,7 @@
 		78BDEC32C7850AC383E0A7E5 /* Pods-hipchon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hipchon.release.xcconfig"; path = "Target Support Files/Pods-hipchon/Pods-hipchon.release.xcconfig"; sourceTree = "<group>"; };
 		7D95E75F856206A0F1A096E8 /* Pods_hipchon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hipchon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E0ABCC1241B3D083244BD37 /* Pods-hipchon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hipchon.debug.xcconfig"; path = "Target Support Files/Pods-hipchon/Pods-hipchon.debug.xcconfig"; sourceTree = "<group>"; };
+		D83E538827AA496A0047A05C /* tmp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = tmp.storyboard; sourceTree = "<group>"; };
 		D841C86D27A6C224005B8C25 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		D841C86F27A6C552005B8C25 /* CateogryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateogryCollectionViewCell.swift; sourceTree = "<group>"; };
 		D88FAF7927A67D6F00E41F4F /* hipchon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hipchon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +128,7 @@
 			children = (
 				D88FAF7C27A67D6F00E41F4F /* AppDelegate.swift */,
 				D88FAF7E27A67D6F00E41F4F /* SceneDelegate.swift */,
+				D83E538827AA496A0047A05C /* tmp.storyboard */,
 				D88FAF8527A67D7100E41F4F /* Assets.xcassets */,
 				D88FAF8727A67D7100E41F4F /* LaunchScreen.storyboard */,
 				D88FAF8A27A67D7100E41F4F /* Info.plist */,
@@ -198,6 +201,7 @@
 			files = (
 				D88FAF8927A67D7100E41F4F /* LaunchScreen.storyboard in Resources */,
 				D88FAF8627A67D7100E41F4F /* Assets.xcassets in Resources */,
+				D83E538927AA496A0047A05C /* tmp.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
