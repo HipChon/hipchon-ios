@@ -8,8 +8,8 @@
 import RxCocoa
 import RxSwift
 import SnapKit
-import UIKit
 import Then
+import UIKit
 
 class LoginViewController: UIViewController {
     // MARK: Property
@@ -51,8 +51,9 @@ class LoginViewController: UIViewController {
         attribute()
         layout()
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -68,7 +69,7 @@ class LoginViewController: UIViewController {
             .orEmpty
             .bind(to: viewModel.password)
             .disposed(by: bag)
-        
+
         loginButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.loginButtonTapped)
@@ -88,13 +89,18 @@ class LoginViewController: UIViewController {
         // MARK: scene
 
         viewModel.presentHomeViewController
-            .emit(onNext: { [weak self] viewModel in
-                let homeViewController = HomeViewController()
-                homeViewController.bind(viewModel)
-                
-                let homeNavigationViewController = UINavigationController(rootViewController: homeViewController)
-                homeNavigationViewController.modalPresentationStyle = .fullScreen
-                self?.present(homeNavigationViewController, animated: true, completion: nil)
+            .emit(onNext: { [weak self] _ in
+
+                let tapBarViewController = TabBarViewController()
+                tapBarViewController.modalPresentationStyle = .fullScreen
+                self?.present(tapBarViewController, animated: true, completion: nil)
+
+//                let homeViewController = HomeViewController()
+//                homeViewController.bind(viewModel)
+//
+//                let homeNavigationViewController = UINavigationController(rootViewController: homeViewController)
+//                homeNavigationViewController.modalPresentationStyle = .fullScreen
+//                self?.present(homeNavigationViewController, animated: true, completion: nil)
             })
             .disposed(by: bag)
     }

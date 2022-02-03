@@ -11,7 +11,7 @@ import RxSwift
 
 class LoginViewModel {
     private let bag = DisposeBag()
-    
+
     // MARK: viewModel -> view
 
     let loginValid: Driver<Bool>
@@ -39,7 +39,5 @@ class LoginViewModel {
         presentHomeViewController = loginButtonTapped
             .map { _ in homeViewModel }
             .asSignal(onErrorSignalWith: .empty())
-            
-        
     }
 }

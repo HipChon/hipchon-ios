@@ -6,8 +6,8 @@
 //
 
 import RxSwift
-import UIKit
 import Then
+import UIKit
 
 class MainFilterView: UIView {
     private let bag = DisposeBag()

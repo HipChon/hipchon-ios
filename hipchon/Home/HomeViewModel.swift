@@ -40,12 +40,11 @@ class HomeViewModel {
             CategoryModel(name: "프리미엄"),
         ]
         let placeListViewModel = PlaceListViewModel()
-        
+
         cateogorys = Driver.just(tmps)
-        
+
         pushPlaceListViewController = mainFilterViewModel.findButtonTapped
             .map { _ in placeListViewModel }
             .asSignal(onErrorSignalWith: .empty())
-            
     }
 }

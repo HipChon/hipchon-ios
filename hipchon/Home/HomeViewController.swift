@@ -8,8 +8,8 @@
 import RxCocoa
 import RxSwift
 import SnapKit
-import UIKit
 import Then
+import UIKit
 
 class HomeViewController: UIViewController {
     // MARK: Property
@@ -46,7 +46,6 @@ class HomeViewController: UIViewController {
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
 
-        
         $0.collectionViewLayout = layout
         $0.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
@@ -65,11 +64,11 @@ class HomeViewController: UIViewController {
         attribute()
         layout()
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     func bind(_ viewModel: HomeViewModel) {
         // MARK: subViews Binding
@@ -91,6 +90,7 @@ class HomeViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
+
         viewModel.pushPlaceListViewController
             .emit(onNext: { [weak self] viewModel in
                 let placeListViewController = PlaceListViewController()
