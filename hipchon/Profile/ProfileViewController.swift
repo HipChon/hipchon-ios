@@ -18,13 +18,16 @@ class ProfileViewController: UIViewController {
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        attribute()
         layout()
     }
 
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLayoutSubviews() {
+        attribute()
     }
 
     func bind(_: ProfileViewModel) {
@@ -37,7 +40,10 @@ class ProfileViewController: UIViewController {
         // MARK: scene
     }
 
-    func attribute() {}
+    func attribute() {
+        view.backgroundColor = .white
+        navigationController?.isNavigationBarHidden = true
+    }
 
     func layout() {}
 }

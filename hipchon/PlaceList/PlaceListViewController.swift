@@ -31,6 +31,13 @@ class PlaceListViewController: UIViewController {
     }
 
     func bind(_ viewModel: PlaceListViewModel) {
+        // MARK: view -> viewModel
+        placeList.rx.modelSelected(PlaceModel.self)
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.selectedPlace)
+            .disposed(by: bag)
+        
+        // MARK: viewModel -> view
         viewModel.places
             .drive(placeList.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: PlaceListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceListCell else { return UITableViewCell() }
@@ -39,6 +46,16 @@ class PlaceListViewController: UIViewController {
 
                 return cell
             }
+            .disposed(by: bag)
+        
+        // MARK: scene
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                self.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
             .disposed(by: bag)
     }
 

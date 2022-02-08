@@ -1,8 +1,8 @@
 //
-//  DefaultViewController.swift
+//  MyPlaceViewController.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/02/03.
+//  Created by 김범수 on 2022/02/08.
 //
 
 import RxCocoa
@@ -11,14 +11,13 @@ import SnapKit
 import Then
 import UIKit
 
-class DefaultViewController: UIViewController {
+class MyPlaceViewController: UIViewController {
     // MARK: Property
 
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        attribute()
         layout()
     }
 
@@ -26,8 +25,12 @@ class DefaultViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidLayoutSubviews() {
+        attribute()
+    }
 
-    func bind(_: DefaultViewModel) {
+    func bind(_: MyPlaceViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
@@ -37,7 +40,10 @@ class DefaultViewController: UIViewController {
         // MARK: scene
     }
 
-    func attribute() {}
+    func attribute() {
+        view.backgroundColor = .white
+        navigationController?.isNavigationBarHidden = true
+    }
 
     func layout() {}
 }

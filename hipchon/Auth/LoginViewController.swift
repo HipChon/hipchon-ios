@@ -34,14 +34,14 @@ class LoginViewController: UIViewController {
         $0.setTitle("로그인", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.setTitleColor(.lightText, for: .highlighted)
-        $0.backgroundColor = .tintColor
+        $0.backgroundColor = .blue
     }
 
     private lazy var registerButrton = UIButton().then {
         $0.setTitle("회원가입", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.setTitleColor(.lightText, for: .highlighted)
-        $0.backgroundColor = .tintColor
+        $0.backgroundColor = .blue
     }
 
     private var bag = DisposeBag()

@@ -9,19 +9,33 @@ import UIKit
 
 class TabBarViewController: UITabBarController {
     let homeViewModel = HomeViewModel()
+    let feedViewModel = FeedViewModel()
+    let myPlaceViewModel = MyPlaceViewModel()
     let profileViewModel = ProfileViewModel()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
         let homeViewController = HomeViewController()
-        homeViewController.tabBarItem = UITabBarItem(title: nil,
+        homeViewController.tabBarItem = UITabBarItem(title: "홈",
                                                      image: UIImage(systemName: "list.bullet"),
                                                      selectedImage: UIImage(systemName: "list.bullet"))
         homeViewController.bind(homeViewModel)
+        
+        let feedViewController = FeedViewController()
+        feedViewController.tabBarItem = UITabBarItem(title: "피드",
+                                                     image: UIImage(systemName: "list.bullet"),
+                                                     selectedImage: UIImage(systemName: "list.bullet"))
+        feedViewController.bind(feedViewModel)
+        
+        let myPlaceViewController = MyPlaceViewController()
+        myPlaceViewController.tabBarItem = UITabBarItem(title: "장소",
+                                                     image: UIImage(systemName: "list.bullet"),
+                                                     selectedImage: UIImage(systemName: "list.bullet"))
+        myPlaceViewController.bind(myPlaceViewModel)
 
         let profileViewController = ProfileViewController()
-        profileViewController.tabBarItem = UITabBarItem(title: nil,
+        profileViewController.tabBarItem = UITabBarItem(title: "프로필",
                                                         image: UIImage(systemName: "person"),
                                                         selectedImage: UIImage(systemName: "person.fill"))
         profileViewController.bind(profileViewModel)
@@ -40,7 +54,9 @@ class TabBarViewController: UITabBarController {
 
         viewControllers = [
             UINavigationController(rootViewController: homeViewController),
-            UINavigationController(rootViewController: profileViewController),
+            UINavigationController(rootViewController: feedViewController),
+            UINavigationController(rootViewController: myPlaceViewController),
+            UINavigationController(rootViewController: profileViewController)
         ]
     }
 

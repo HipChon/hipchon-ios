@@ -47,7 +47,7 @@ class MainFilterView: UIView {
         $0.setTitle("숙소 찾기", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.setTitleColor(.lightText, for: .highlighted)
-        $0.backgroundColor = .tintColor
+        $0.backgroundColor = .blue
         $0.layer.cornerRadius = 12.0
     }
 

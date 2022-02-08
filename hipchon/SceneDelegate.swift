@@ -16,9 +16,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
-        let loginViewController = LoginViewController()
-        loginViewController.bind(loginViewModel)
-        window?.rootViewController = loginViewController
+        
+//        let loginViewController = LoginViewController()
+//        loginViewController.bind(loginViewModel)
+//        window?.rootViewController = loginViewController
+        
+        let tapBarViewController = TabBarViewController()
+        window?.rootViewController = tapBarViewController
+
         window?.makeKeyAndVisible()
     }
 }

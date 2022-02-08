@@ -21,6 +21,10 @@ class HomeViewController: UIViewController {
 
     private lazy var contentView = UIView().then { _ in
     }
+    
+    private lazy var mainLogoImageView = UIImageView().then {
+        $0.image = UIImage(named: "mainLogo")!
+    }
 
     private lazy var searchBar = UISearchBar().then {
         $0.searchTextField.borderStyle = .none
@@ -69,6 +73,10 @@ class HomeViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidLayoutSubviews() {
+        attribute()
+    }
 
     func bind(_ viewModel: HomeViewModel) {
         // MARK: subViews Binding
@@ -101,7 +109,7 @@ class HomeViewController: UIViewController {
     }
 
     func attribute() {
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .white
     }
 
@@ -120,6 +128,7 @@ class HomeViewController: UIViewController {
         }
 
         [
+            mainLogoImageView,
             searchBar,
             mainFilterView,
             categoryCollectionView,
@@ -127,28 +136,36 @@ class HomeViewController: UIViewController {
         ].forEach {
             contentView.addSubview($0)
         }
-
-        searchBar.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.top.equalToSuperview().inset(30.0)
-            $0.height.equalTo(40.0)
+        
+        mainLogoImageView.snp.makeConstraints {
+            $0.width.equalToSuperview().multipliedBy(71.0 / 390.0)
+            $0.height.equalTo(view.snp.width).multipliedBy(59.0 / 390.0)
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(1.0)
         }
 
-        mainFilterView.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(24.0)
-            $0.leading.trailing.equalToSuperview().inset(12.0)
-            $0.height.equalTo(mainFilterView.snp.width).multipliedBy(0.8)
+        searchBar.snp.makeConstraints {
+            $0.top.equalTo(mainLogoImageView.snp.bottom).offset(12.0)
+            $0.width.equalToSuperview().multipliedBy(342.0 / 390.0)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(42.0)
         }
 
         categoryCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(mainFilterView.snp.bottom).offset(12.0)
+            $0.top.equalTo(searchBar.snp.bottom).offset(12.0)
             let itemSize = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
             $0.height.equalTo(itemSize * 2 + 10.0)
         }
+        
+        mainFilterView.snp.makeConstraints {
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24.0)
+            $0.leading.trailing.equalToSuperview().inset(12.0)
+            $0.height.equalTo(mainFilterView.snp.width).multipliedBy(0.8)
+        }
 
         marginView.snp.makeConstraints {
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12.0)
+            $0.top.equalTo(mainFilterView.snp.bottom).offset(12.0)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1000.0)
             $0.bottom.equalToSuperview()

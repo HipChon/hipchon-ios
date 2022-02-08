@@ -5,28 +5,16 @@
 //  Created by 김범수 on 2022/02/02.
 //
 
-import Foundation
 import RxCocoa
 
-class PlaceModel: Codable {
-    let name: String?
-    let address: String?
-    let price: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case name, address, price
-    }
-
-    init(name: String, address: String, price: Double) {
-        self.name = name
-        self.address = address
-        self.price = price
-    }
-}
-
 class PlaceListViewModel {
+    // MARK: viewModel -> view
     let places: Driver<[PlaceModel]>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
+    // MARK: view -> viewModel
+    let selectedPlace = PublishRelay<PlaceModel>()
+    
     init() {
         let tmps = [
             PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
@@ -38,5 +26,11 @@ class PlaceListViewModel {
         ]
 
         places = Driver.just(tmps)
+        
+        
+        pushPlaceDetailVC = selectedPlace
+            .map { PlaceDetailViewModel(place: $0) }
+            .asSignal(onErrorSignalWith: .empty())
+        
     }
 }

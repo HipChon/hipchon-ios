@@ -1,8 +1,8 @@
 //
-//  DefaultViewController.swift
+//  ReviewDetailViewController.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/02/03.
+//  Created by 김범수 on 2022/02/08.
 //
 
 import RxCocoa
@@ -11,7 +11,7 @@ import SnapKit
 import Then
 import UIKit
 
-class DefaultViewController: UIViewController {
+class ReviewDetailViewController: UIViewController {
     // MARK: Property
 
     private let bag = DisposeBag()
@@ -27,7 +27,7 @@ class DefaultViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_: DefaultViewModel) {
+    func bind(_ viewModel: ReviewDetailViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
@@ -37,7 +37,9 @@ class DefaultViewController: UIViewController {
         // MARK: scene
     }
 
-    func attribute() {}
+    func attribute() {
+        view.backgroundColor = .white
+    }
 
     func layout() {}
 }
