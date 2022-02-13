@@ -14,8 +14,13 @@ class PlaceDetailViewModel {
     // MARK: subViewModels
 
     // MARK: viewModel -> view
+    let urls: Driver<[URL]>
 
     // MARK: view -> viewModel
 
-    init(place: PlaceModel) {}
+    init(place: PlaceModel) {
+        urls = Driver.just(place)
+            .compactMap { $0.imageUrls?.compactMap { URL(string: $0) } }
+        
+    }
 }

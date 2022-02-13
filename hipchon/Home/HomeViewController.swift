@@ -54,6 +54,26 @@ class HomeViewController: UIViewController {
         $0.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
     }
+    
+    private lazy var bannerCollectionView = UICollectionView(frame: .zero,
+                                                             collectionViewLayout: UICollectionViewFlowLayout()).then {
+      let layout = UICollectionViewFlowLayout()
+      let itemSpacing: CGFloat = 0.0
+      let width = view.frame.width
+        let height = width * (218.0 / 390.0)
+
+      layout.itemSize = CGSize(width: width, height: height)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+      layout.scrollDirection = .horizontal
+      layout.minimumLineSpacing = itemSpacing
+      layout.minimumInteritemSpacing = itemSpacing
+
+      $0.collectionViewLayout = layout
+      $0.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.identyfier)
+      $0.showsHorizontalScrollIndicator = false
+      $0.bounces = false
+        $0.isPagingEnabled = true
+  }
 
     private lazy var marginView: UIView = {
         let view = UIView()
@@ -88,11 +108,20 @@ class HomeViewController: UIViewController {
         // MARK: viewModel -> view
 
         viewModel.cateogorys
-            .drive(categoryCollectionView.rx.items) { col, idx, model in
+            .drive(categoryCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: CategoryCell.identyfier, for: IndexPath(row: idx, section: 0)) as? CategoryCell else { return UICollectionViewCell() }
                 let categoryCellViewModel = CategoryCellViewModel()
                 cell.bind(categoryCellViewModel)
-                categoryCellViewModel.category.accept(model)
+                categoryCellViewModel.category.accept(data)
+                return cell
+            }
+            .disposed(by: bag)
+        
+        viewModel.banners
+            .drive(bannerCollectionView.rx.items) { col, idx, data in
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: BannerCell.identyfier, for: IndexPath(row: idx, section: 0)) as? BannerCell else { return UICollectionViewCell() }
+                let bannerCellViewModel = BannerCellViewModel(data)
+                cell.bind(bannerCellViewModel)
                 return cell
             }
             .disposed(by: bag)
@@ -130,6 +159,7 @@ class HomeViewController: UIViewController {
         [
             mainLogoImageView,
             searchBar,
+            bannerCollectionView,
             mainFilterView,
             categoryCollectionView,
             marginView,
@@ -151,9 +181,16 @@ class HomeViewController: UIViewController {
             $0.height.equalTo(42.0)
         }
 
-        categoryCollectionView.snp.makeConstraints {
+        bannerCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(searchBar.snp.bottom).offset(12.0)
+            let height = view.frame.width * (218.0 / 390.0)
+            $0.height.equalTo(height)
+        }
+        
+        categoryCollectionView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(bannerCollectionView.snp.bottom).offset(12.0)
             let itemSize = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
             $0.height.equalTo(itemSize * 2 + 10.0)
         }

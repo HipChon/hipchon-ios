@@ -8,10 +8,6 @@
 import RxCocoa
 import RxSwift
 
-struct CategoryModel {
-    let name: String?
-}
-
 class HomeViewModel {
     private let bag = DisposeBag()
 
@@ -22,29 +18,25 @@ class HomeViewModel {
     // MARK: viewModel -> view
 
     let cateogorys: Driver<[CategoryModel]>
+    let banners: Driver<[BannerModel]>
     let pushPlaceListViewController: Signal<PlaceListViewModel>
+    
 
     // MARK: view -> viewModel
 
     init() {
-        let tmps = [
-            CategoryModel(name: "오션뷰"),
-            CategoryModel(name: "바다근처"),
-            CategoryModel(name: "시골살기"),
-            CategoryModel(name: "마당"),
-            CategoryModel(name: "재택근무"),
-            CategoryModel(name: "숲세권"),
-            CategoryModel(name: "돌담"),
-            CategoryModel(name: "뚜벅이"),
-            CategoryModel(name: "반려동물"),
-            CategoryModel(name: "프리미엄"),
-        ]
+
         let placeListViewModel = PlaceListViewModel()
 
-        cateogorys = Driver.just(tmps)
+        cateogorys = Driver.just(CategoryModel.tmpModels)
 
         pushPlaceListViewController = mainFilterViewModel.findButtonTapped
             .map { _ in placeListViewModel }
             .asSignal(onErrorSignalWith: .empty())
+
+        
+        banners = Driver.just(BannerModel.tmpModels)
+            
+        
     }
 }

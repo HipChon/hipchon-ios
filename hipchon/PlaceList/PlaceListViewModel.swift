@@ -16,16 +16,7 @@ class PlaceListViewModel {
     let selectedPlace = PublishRelay<PlaceModel>()
     
     init() {
-        let tmps = [
-            PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
-            PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
-            PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
-            PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
-            PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
-            PlaceModel(name: "제주도", address: "제주특별자치도 제주시 성산일출봉", price: 50000.0),
-        ]
-
-        places = Driver.just(tmps)
+        places = Driver.just(PlaceModel.tmpModels)
         
         
         pushPlaceDetailVC = selectedPlace

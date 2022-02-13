@@ -13,6 +13,10 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     // MARK: Property
+    
+    private lazy var settingButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "house"), for: .normal)
+    }
 
     private let bag = DisposeBag()
 
@@ -30,14 +34,25 @@ class ProfileViewController: UIViewController {
         attribute()
     }
 
-    func bind(_: ProfileViewModel) {
+    func bind(_ viewModel: ProfileViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
+        settingButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.settingButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
         // MARK: scene
+        viewModel.pushSettingVC
+            .emit(onNext: { [weak self] viewModel in
+                let settingVC = SettingViewController()
+                settingVC.bind(viewModel)
+                self?.navigationController?.pushViewController(settingVC, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {
@@ -45,5 +60,14 @@ class ProfileViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
     }
 
-    func layout() {}
+    func layout() {
+        [
+            settingButton
+        ].forEach { view.addSubview($0) }
+        
+        settingButton.snp.makeConstraints {
+            $0.height.width.equalTo(30.0)
+            $0.top.trailing.equalToSuperview().inset(30)
+        }
+    }
 }

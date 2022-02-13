@@ -19,6 +19,7 @@ target 'hipchon' do
   # For UI
   pod 'SnapKit'
   pod 'Then'
+  pod 'Kingfisher'
   #pod 'MaterialComponents/BottomSheet'
   #pod 'SideMenu'
   #pod 'NMapsMap'
