@@ -21,17 +21,17 @@ class TabBarViewController: UITabBarController {
                                                      image: UIImage(systemName: "list.bullet"),
                                                      selectedImage: UIImage(systemName: "list.bullet"))
         homeViewController.bind(homeViewModel)
-        
+
         let feedViewController = FeedViewController()
         feedViewController.tabBarItem = UITabBarItem(title: "피드",
                                                      image: UIImage(systemName: "list.bullet"),
                                                      selectedImage: UIImage(systemName: "list.bullet"))
         feedViewController.bind(feedViewModel)
-        
+
         let myPlaceViewController = MyPlaceViewController()
         myPlaceViewController.tabBarItem = UITabBarItem(title: "장소",
-                                                     image: UIImage(systemName: "list.bullet"),
-                                                     selectedImage: UIImage(systemName: "list.bullet"))
+                                                        image: UIImage(systemName: "list.bullet"),
+                                                        selectedImage: UIImage(systemName: "list.bullet"))
         myPlaceViewController.bind(myPlaceViewModel)
 
         let profileViewController = ProfileViewController()
@@ -56,7 +56,7 @@ class TabBarViewController: UITabBarController {
             UINavigationController(rootViewController: homeViewController),
             UINavigationController(rootViewController: feedViewController),
             UINavigationController(rootViewController: myPlaceViewController),
-            UINavigationController(rootViewController: profileViewController)
+            UINavigationController(rootViewController: profileViewController),
         ]
     }
 

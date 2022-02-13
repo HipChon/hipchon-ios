@@ -27,7 +27,7 @@ class ReviewDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: ReviewDetailViewModel) {
+    func bind(_: ReviewDetailViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel

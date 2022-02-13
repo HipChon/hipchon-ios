@@ -9,7 +9,7 @@ import Foundation
 
 struct CategoryModel {
     let name: String?
-    
+
     static var tmpModels: [CategoryModel] {
         return [
             CategoryModel(name: "오션뷰"),

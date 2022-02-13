@@ -9,12 +9,12 @@ import Foundation
 import RxCocoa
 
 class PlaceImageCellViewModel {
-    
     // MARK: viewModel -> view
+
     let url: Driver<URL>
-    
+
     // MARK: view -> viewModel
-    
+
     init(_ data: URL) {
         url = Driver.just(data)
     }

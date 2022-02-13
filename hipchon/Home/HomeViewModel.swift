@@ -20,12 +20,10 @@ class HomeViewModel {
     let cateogorys: Driver<[CategoryModel]>
     let banners: Driver<[BannerModel]>
     let pushPlaceListViewController: Signal<PlaceListViewModel>
-    
 
     // MARK: view -> viewModel
 
     init() {
-
         let placeListViewModel = PlaceListViewModel()
 
         cateogorys = Driver.just(CategoryModel.tmpModels)
@@ -34,9 +32,6 @@ class HomeViewModel {
             .map { _ in placeListViewModel }
             .asSignal(onErrorSignalWith: .empty())
 
-        
         banners = Driver.just(BannerModel.tmpModels)
-            
-        
     }
 }

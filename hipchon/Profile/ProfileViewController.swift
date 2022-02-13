@@ -13,7 +13,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     // MARK: Property
-    
+
     private lazy var settingButton = UIButton().then {
         $0.setImage(UIImage(systemName: "house"), for: .normal)
     }
@@ -29,7 +29,7 @@ class ProfileViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLayoutSubviews() {
         attribute()
     }
@@ -38,6 +38,7 @@ class ProfileViewController: UIViewController {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
+
         settingButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.settingButtonTapped)
@@ -46,6 +47,7 @@ class ProfileViewController: UIViewController {
         // MARK: viewModel -> view
 
         // MARK: scene
+
         viewModel.pushSettingVC
             .emit(onNext: { [weak self] viewModel in
                 let settingVC = SettingViewController()
@@ -62,9 +64,9 @@ class ProfileViewController: UIViewController {
 
     func layout() {
         [
-            settingButton
+            settingButton,
         ].forEach { view.addSubview($0) }
-        
+
         settingButton.snp.makeConstraints {
             $0.height.width.equalTo(30.0)
             $0.top.trailing.equalToSuperview().inset(30)

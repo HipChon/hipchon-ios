@@ -15,7 +15,7 @@ class FeedViewController: UIViewController {
     // MARK: Property
 
     private let bag = DisposeBag()
-    
+
     private lazy var reviewList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(ReviewListCell.self, forCellReuseIdentifier: ReviewListCell.identyfier)
@@ -34,19 +34,21 @@ class FeedViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLayoutSubviews() {
         attribute()
     }
-    
+
     func bind(_ viewModel: FeedViewModel) {
         // MARK: view -> viewModel
+
         reviewList.rx.modelSelected(ReviewModel.self)
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.selectedReview)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
+
         viewModel.reviews
             .drive(reviewList.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ReviewListCell else { return UITableViewCell() }
@@ -56,8 +58,9 @@ class FeedViewController: UIViewController {
                 return cell
             }
             .disposed(by: bag)
-        
+
         // MARK: scene
+
         viewModel.pushReviewDetailVC
             .emit(onNext: { [weak self] viewModel in
                 guard let self = self else { return }
@@ -82,5 +85,4 @@ class FeedViewController: UIViewController {
             $0.edges.equalToSuperview().inset(16.0)
         }
     }
-
 }

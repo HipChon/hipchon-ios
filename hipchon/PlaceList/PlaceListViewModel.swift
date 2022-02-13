@@ -9,19 +9,19 @@ import RxCocoa
 
 class PlaceListViewModel {
     // MARK: viewModel -> view
+
     let places: Driver<[PlaceModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
     // MARK: view -> viewModel
+
     let selectedPlace = PublishRelay<PlaceModel>()
-    
+
     init() {
         places = Driver.just(PlaceModel.tmpModels)
-        
-        
+
         pushPlaceDetailVC = selectedPlace
             .map { PlaceDetailViewModel(place: $0) }
             .asSignal(onErrorSignalWith: .empty())
-        
     }
 }

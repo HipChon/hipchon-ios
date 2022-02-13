@@ -6,43 +6,41 @@
 //
 
 import Foundation
-import UIKit
 import RxSwift
+import UIKit
 
 class PlaceImageCell: UICollectionViewCell {
-    
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
     }
-    
+
     public static let identyfier = "PlaceImageCell"
     private let bag = DisposeBag()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
         layout()
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func bind(_ viewModel: PlaceImageCellViewModel) {
         viewModel.url
             .drive(imageView.rx.setImageKF)
             .disposed(by: bag)
     }
-    
-    private func attribute() {
-        
-    }
-    
+
+    private func attribute() {}
+
     private func layout() {
         [
-            imageView
+            imageView,
         ].forEach { addSubview($0) }
-        
+
         imageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

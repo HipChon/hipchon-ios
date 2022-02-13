@@ -21,7 +21,7 @@ class HomeViewController: UIViewController {
 
     private lazy var contentView = UIView().then { _ in
     }
-    
+
     private lazy var mainLogoImageView = UIImageView().then {
         $0.image = UIImage(named: "mainLogo")!
     }
@@ -54,26 +54,26 @@ class HomeViewController: UIViewController {
         $0.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
     }
-    
+
     private lazy var bannerCollectionView = UICollectionView(frame: .zero,
                                                              collectionViewLayout: UICollectionViewFlowLayout()).then {
-      let layout = UICollectionViewFlowLayout()
-      let itemSpacing: CGFloat = 0.0
-      let width = view.frame.width
+        let layout = UICollectionViewFlowLayout()
+        let itemSpacing: CGFloat = 0.0
+        let width = view.frame.width
         let height = width * (218.0 / 390.0)
 
-      layout.itemSize = CGSize(width: width, height: height)
+        layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-      layout.scrollDirection = .horizontal
-      layout.minimumLineSpacing = itemSpacing
-      layout.minimumInteritemSpacing = itemSpacing
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = itemSpacing
+        layout.minimumInteritemSpacing = itemSpacing
 
-      $0.collectionViewLayout = layout
-      $0.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.identyfier)
-      $0.showsHorizontalScrollIndicator = false
-      $0.bounces = false
+        $0.collectionViewLayout = layout
+        $0.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.identyfier)
+        $0.showsHorizontalScrollIndicator = false
+        $0.bounces = false
         $0.isPagingEnabled = true
-  }
+    }
 
     private lazy var marginView: UIView = {
         let view = UIView()
@@ -93,7 +93,7 @@ class HomeViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLayoutSubviews() {
         attribute()
     }
@@ -116,7 +116,7 @@ class HomeViewController: UIViewController {
                 return cell
             }
             .disposed(by: bag)
-        
+
         viewModel.banners
             .drive(bannerCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: BannerCell.identyfier, for: IndexPath(row: idx, section: 0)) as? BannerCell else { return UICollectionViewCell() }
@@ -166,7 +166,7 @@ class HomeViewController: UIViewController {
         ].forEach {
             contentView.addSubview($0)
         }
-        
+
         mainLogoImageView.snp.makeConstraints {
             $0.width.equalToSuperview().multipliedBy(71.0 / 390.0)
             $0.height.equalTo(view.snp.width).multipliedBy(59.0 / 390.0)
@@ -187,14 +187,14 @@ class HomeViewController: UIViewController {
             let height = view.frame.width * (218.0 / 390.0)
             $0.height.equalTo(height)
         }
-        
+
         categoryCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(bannerCollectionView.snp.bottom).offset(12.0)
             let itemSize = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
             $0.height.equalTo(itemSize * 2 + 10.0)
         }
-        
+
         mainFilterView.snp.makeConstraints {
             $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24.0)
             $0.leading.trailing.equalToSuperview().inset(12.0)

@@ -14,15 +14,16 @@ class ProfileViewModel {
     // MARK: subViewModels
 
     // MARK: viewModel -> view
+
     let pushSettingVC: Signal<SettingViewModel>
-    
+
     // MARK: view -> viewModel
+
     let settingButtonTapped = PublishRelay<Void>()
 
     init() {
         pushSettingVC = settingButtonTapped
             .map { SettingViewModel() }
             .asSignal(onErrorSignalWith: .empty())
-        
     }
 }
