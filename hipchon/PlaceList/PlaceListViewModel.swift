@@ -18,7 +18,8 @@ class PlaceListViewModel {
     let selectedPlace = PublishRelay<PlaceModel>()
 
     init() {
-        places = Driver.just(PlaceModel.tmpModels)
+        places = NetworkManager.shared.getPlaces()
+            .asDriver(onErrorJustReturn: [])
 
         pushPlaceDetailVC = selectedPlace
             .map { PlaceDetailViewModel(place: $0) }

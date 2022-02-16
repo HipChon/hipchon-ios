@@ -23,18 +23,19 @@ class HomeViewController: UIViewController {
     }
 
     private lazy var mainLogoImageView = UIImageView().then {
-        $0.image = UIImage(named: "mainLogo")!
+        $0.image = UIImage(named: "mainLogo") ?? UIImage()
+    }
+
+    private lazy var searchButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "magnifyingglass") ?? UIImage(), for: .normal)
+    }
+
+    private lazy var menuButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "line.3.horizontal") ?? UIImage(), for: .normal)
     }
 
     private lazy var searchBar = UISearchBar().then {
         $0.searchTextField.borderStyle = .none
-    }
-
-    private lazy var mainView = UIView().then {
-        $0.backgroundColor = .red
-    }
-
-    private lazy var mainFilterView = MainFilterView().then { _ in
     }
 
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
@@ -53,6 +54,12 @@ class HomeViewController: UIViewController {
         $0.collectionViewLayout = layout
         $0.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
+    }
+
+    private lazy var pickView = PickView().then { _ in
+    }
+
+    private lazy var weelkyHipPlaceView = WeeklyHipPlaceView().then { _ in
     }
 
     private lazy var bannerCollectionView = UICollectionView(frame: .zero,
@@ -75,11 +82,12 @@ class HomeViewController: UIViewController {
         $0.isPagingEnabled = true
     }
 
-    private lazy var marginView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray
-        return view
-    }()
+    private lazy var mainFilterView = MainFilterView().then { _ in
+    }
+
+    private lazy var marginView = UIView().then {
+        $0.backgroundColor = .gray
+    }
 
     private let bag = DisposeBag()
 
@@ -94,16 +102,24 @@ class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLayoutSubviews() {
-        attribute()
-    }
-
     func bind(_ viewModel: HomeViewModel) {
         // MARK: subViews Binding
 
         mainFilterView.bind(viewModel.mainFilterViewModel)
+        pickView.bind(viewModel.pickViewModel)
+        weelkyHipPlaceView.bind(viewModel.weeklyHipPlaceViewModel)
 
         // MARK: view -> viewModel
+
+        searchButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.searchButtonTapped)
+            .disposed(by: bag)
+
+        menuButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.menuButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -158,10 +174,14 @@ class HomeViewController: UIViewController {
 
         [
             mainLogoImageView,
+            searchButton,
+            menuButton,
             searchBar,
-            bannerCollectionView,
-            mainFilterView,
             categoryCollectionView,
+            pickView,
+            weelkyHipPlaceView,
+            bannerCollectionView,
+//            mainFilterView,
             marginView,
         ].forEach {
             contentView.addSubview($0)
@@ -174,6 +194,18 @@ class HomeViewController: UIViewController {
             $0.top.equalToSuperview().inset(1.0)
         }
 
+        searchButton.snp.makeConstraints {
+            $0.height.width.equalTo(16.0)
+            $0.centerY.equalTo(mainLogoImageView.snp.centerY)
+            $0.trailing.equalTo(menuButton.snp.leading).offset(24.0)
+        }
+
+        menuButton.snp.makeConstraints {
+            $0.height.width.equalTo(16.0)
+            $0.top.equalTo(searchButton.snp.top)
+            $0.trailing.equalToSuperview().inset(27.0)
+        }
+
         searchBar.snp.makeConstraints {
             $0.top.equalTo(mainLogoImageView.snp.bottom).offset(12.0)
             $0.width.equalToSuperview().multipliedBy(342.0 / 390.0)
@@ -181,28 +213,40 @@ class HomeViewController: UIViewController {
             $0.height.equalTo(42.0)
         }
 
-        bannerCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(searchBar.snp.bottom).offset(12.0)
-            let height = view.frame.width * (218.0 / 390.0)
-            $0.height.equalTo(height)
-        }
-
         categoryCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(bannerCollectionView.snp.bottom).offset(12.0)
+            $0.top.equalTo(searchBar.snp.bottom).offset(12.0)
             let itemSize = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
             $0.height.equalTo(itemSize * 2 + 10.0)
         }
 
-        mainFilterView.snp.makeConstraints {
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24.0)
-            $0.leading.trailing.equalToSuperview().inset(12.0)
-            $0.height.equalTo(mainFilterView.snp.width).multipliedBy(0.8)
+        pickView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(20.0)
+            $0.height.equalTo(331.0)
         }
 
+        weelkyHipPlaceView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(pickView.snp.bottom)
+            $0.height.equalTo(157.0)
+        }
+
+        bannerCollectionView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(weelkyHipPlaceView.snp.bottom)
+            let height = view.frame.width * (218.0 / 390.0)
+            $0.height.equalTo(height)
+        }
+
+//        mainFilterView.snp.makeConstraints {
+//            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24.0)
+//            $0.leading.trailing.equalToSuperview().inset(12.0)
+//            $0.height.equalTo(mainFilterView.snp.width).multipliedBy(0.8)
+//        }
+
         marginView.snp.makeConstraints {
-            $0.top.equalTo(mainFilterView.snp.bottom).offset(12.0)
+            $0.top.equalTo(bannerCollectionView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1000.0)
             $0.bottom.equalToSuperview()

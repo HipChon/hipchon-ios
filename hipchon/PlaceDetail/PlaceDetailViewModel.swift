@@ -21,6 +21,6 @@ class PlaceDetailViewModel {
 
     init(place: PlaceModel) {
         urls = Driver.just(place)
-            .compactMap { $0.imageUrls?.compactMap { URL(string: $0) } }
+            .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
     }
 }

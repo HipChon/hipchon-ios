@@ -5,17 +5,37 @@
 //  Created by 김범수 on 2022/02/02.
 //
 
-import Foundation
 import RxCocoa
+import RxSwift
 
 class PlaceListCellViewModel {
+    private let bag = DisposeBag()
+
+    // MARK: viewModel -> voew
+
     let name: Driver<String>
     let address: Driver<String>
-    let price: Driver<String>
+    let category: Driver<String>
+    let placeImageURLs: Driver<[URL]>
 
     init(_ data: PlaceModel) {
-        name = Driver.just(data.name ?? "")
-        address = Driver.just(data.address ?? "")
-        price = Driver.just("\(data.price ?? 0.0)")
+        let place = BehaviorSubject<PlaceModel>(value: data)
+
+        name = place
+            .compactMap { $0.name }
+            .asDriver(onErrorJustReturn: "")
+
+        address = place
+            .compactMap { $0.address }
+            .asDriver(onErrorJustReturn: "")
+
+        category = place
+            .compactMap { $0.category }
+            .asDriver(onErrorJustReturn: "")
+
+        placeImageURLs = place
+            .compactMap { $0.imageURLs }
+            .map { $0.compactMap { URL(string: $0) } }
+            .asDriver(onErrorJustReturn: [])
     }
 }

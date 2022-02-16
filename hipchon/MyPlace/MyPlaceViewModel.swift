@@ -15,7 +15,12 @@ class MyPlaceViewModel {
 
     // MARK: viewModel -> view
 
+    let places: Driver<[PlaceModel]>
+
     // MARK: view -> viewModel
 
-    init() {}
+    init() {
+        places = NetworkManager.shared.getPlaces()
+            .asDriver(onErrorJustReturn: [])
+    }
 }

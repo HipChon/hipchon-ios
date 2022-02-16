@@ -8,19 +8,14 @@
 import Foundation
 
 class ReviewModel: Codable {
-    let title: String?
+    let id: Int?
     let content: String?
-    let place: String?
+    let postDt: String?
+    let imageURLs: [String]?
+    let user: UserModel?
+    let place: PlaceModel?
 
     enum Codingkeys: String, CodingKey {
-        case title
-        case content
-        case place
-    }
-
-    init(title: String, content: String, place: String) {
-        self.title = title
-        self.content = content
-        self.place = place
+        case id, content, postDt, imageURLs, user, place
     }
 }

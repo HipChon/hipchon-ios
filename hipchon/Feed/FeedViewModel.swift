@@ -21,20 +21,11 @@ class FeedViewModel {
     let selectedReview = PublishRelay<ReviewModel>()
 
     init() {
-        let tmps = [
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-            ReviewModel(title: "완전 좋은 여행이었어요", content: "시설이 좋아서 너무 잘 다녀왔네요", place: "제주도 숙소"),
-        ]
-
-        reviews = Driver.just(tmps)
+        reviews = NetworkManager.shared.getReviews()
+            .asDriver(onErrorJustReturn: [])
 
         pushReviewDetailVC = selectedReview
-            .map { ReviewDetailViewModel(review: $0) }
+            .map { ReviewDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

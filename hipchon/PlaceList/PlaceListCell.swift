@@ -9,19 +9,37 @@ import RxSwift
 import UIKit
 
 class PlaceListCell: UITableViewCell {
+    private lazy var placeImageCollectView = UICollectionView(frame: .zero,
+                                                              collectionViewLayout: UICollectionViewLayout()).then {
+        let layout = UICollectionViewFlowLayout()
+        let itemSpacing: CGFloat = 0.0
+        let width = contentView.frame.width
+        let height = width * (166.0 / 350.0)
+
+        layout.itemSize = CGSize(width: width, height: height)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = itemSpacing
+        layout.minimumInteritemSpacing = itemSpacing
+
+        $0.collectionViewLayout = layout
+        $0.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.identyfier)
+        $0.showsHorizontalScrollIndicator = false
+        $0.bounces = false
+        $0.isPagingEnabled = true
+    }
+
     private lazy var nameLabel = UILabel().then {
-        $0.textColor = .red
-        $0.sizeToFit()
+        $0.font = UIFont.systemFont(ofSize: 18.0, weight: .bold)
     }
 
     private lazy var addressLabel = UILabel().then {
-        $0.textColor = .blue
-        $0.sizeToFit()
+        $0.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
+        $0.textColor = .secondaryLabel
     }
 
-    private lazy var priceLabel = UILabel().then {
-        $0.textColor = .green
-        $0.sizeToFit()
+    private lazy var categoryLabel = UILabel().then {
+        $0.font = UIFont.systemFont(ofSize: 16.0, weight: .bold)
     }
 
     public static let identyfier = "PlaceListCell"
@@ -40,10 +58,12 @@ class PlaceListCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 15.0, left: 20.0, bottom: 15.0, right: 20.0))
     }
 
     func bind(_ viewModel: PlaceListCellViewModel) {
+        // MARK: viewModel -> view
+
         viewModel.name
             .drive(nameLabel.rx.text)
             .disposed(by: bag)
@@ -52,8 +72,18 @@ class PlaceListCell: UITableViewCell {
             .drive(addressLabel.rx.text)
             .disposed(by: bag)
 
-        viewModel.price
-            .drive(priceLabel.rx.text)
+        viewModel.category
+            .drive(categoryLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.placeImageURLs
+            .drive(placeImageCollectView.rx.items) { tv, row, data in
+                guard let cell = tv.dequeueReusableCell(withReuseIdentifier: PhotoCell.identyfier,
+                                                        for: IndexPath(row: row, section: 0)) as? PhotoCell else { return UICollectionViewCell() }
+                let viewModel = PhotoCellViewModel(data)
+                cell.bind(viewModel)
+                return cell
+            }
             .disposed(by: bag)
     }
 
@@ -62,29 +92,35 @@ class PlaceListCell: UITableViewCell {
         contentView.addShadow(offset: CGSize(width: 2.0, height: 2.0))
         contentView.backgroundColor = .white
         selectionStyle = .none
+        clipsToBounds = true
     }
 
     private func layout() {
         [
+            placeImageCollectView,
             nameLabel,
             addressLabel,
-            priceLabel,
+            categoryLabel,
 
         ].forEach { contentView.addSubview($0) }
 
+        placeImageCollectView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(contentView.frame.width * (166.0 / 350.0))
+        }
+
         nameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(50.0)
+            $0.top.equalTo(placeImageCollectView.snp.bottom).offset(16.0)
+            $0.leading.equalToSuperview().inset(22.0)
         }
 
         addressLabel.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(50.0)
+            $0.top.equalTo(nameLabel.snp.bottom).offset(7.0)
+            $0.leading.equalTo(nameLabel.snp.leading)
         }
 
-        priceLabel.snp.makeConstraints {
-            $0.top.equalTo(addressLabel.snp.bottom).offset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(50.0)
+        categoryLabel.snp.makeConstraints {
+            $0.bottom.trailing.equalToSuperview().inset(14.0)
         }
     }
 }

@@ -12,7 +12,8 @@ class PlaceListViewController: UIViewController {
     private lazy var placeList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
-        $0.rowHeight = view.frame.width * (300.0 / 350.0)
+        $0.rowHeight = view.frame.width * (302.0 / 380.0)
+        $0.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }
@@ -77,7 +78,7 @@ class PlaceListViewController: UIViewController {
         ].forEach { view.addSubview($0) }
 
         placeList.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(16.0)
+            $0.edges.equalToSuperview()
         }
     }
 }

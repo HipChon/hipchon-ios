@@ -14,6 +14,8 @@ class HomeViewModel {
     // MARK: subViewModels
 
     let mainFilterViewModel = MainFilterViewModel()
+    let pickViewModel = PickViewModel()
+    let weeklyHipPlaceViewModel = WeeklyHipPlaceViewModel()
 
     // MARK: viewModel -> view
 
@@ -23,12 +25,15 @@ class HomeViewModel {
 
     // MARK: view -> viewModel
 
+    let searchButtonTapped = PublishRelay<Void>()
+    let menuButtonTapped = PublishRelay<Void>()
+
     init() {
         let placeListViewModel = PlaceListViewModel()
 
         cateogorys = Driver.just(CategoryModel.tmpModels)
 
-        pushPlaceListViewController = mainFilterViewModel.findButtonTapped
+        pushPlaceListViewController = searchButtonTapped
             .map { _ in placeListViewModel }
             .asSignal(onErrorSignalWith: .empty())
 

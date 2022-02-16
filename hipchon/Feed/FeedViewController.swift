@@ -19,7 +19,7 @@ class FeedViewController: UIViewController {
     private lazy var reviewList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(ReviewListCell.self, forCellReuseIdentifier: ReviewListCell.identyfier)
-        $0.rowHeight = view.frame.width * (300.0 / 350.0)
+        $0.rowHeight = 440.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }

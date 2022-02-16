@@ -17,5 +17,5 @@ class ReviewDetailViewModel {
 
     // MARK: view -> viewModel
 
-    init(review _: ReviewModel) {}
+    init(_: ReviewModel) {}
 }
