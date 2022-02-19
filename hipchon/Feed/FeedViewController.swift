@@ -15,6 +15,9 @@ class FeedViewController: UIViewController {
     // MARK: Property
 
     private let bag = DisposeBag()
+    
+    private lazy var searchNavigationView = SearchNavigationView().then { _ in
+    }
 
     private lazy var reviewList = UITableView().then {
         $0.backgroundColor = .white
@@ -78,11 +81,19 @@ class FeedViewController: UIViewController {
 
     private func layout() {
         [
+            searchNavigationView,
             reviewList,
         ].forEach { view.addSubview($0) }
 
+        searchNavigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(68.0)
+        }
+        
         reviewList.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(16.0)
+            $0.top.equalTo(searchNavigationView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview().inset(16.0)
         }
     }
 }
