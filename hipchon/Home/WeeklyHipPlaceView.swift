@@ -37,7 +37,7 @@ class WeeklyHipPlaceView: UIView {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = false
-        $0.backgroundColor = .lightGray
+        $0.backgroundColor = .white
     }
 
     override init(frame: CGRect) {

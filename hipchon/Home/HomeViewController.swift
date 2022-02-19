@@ -27,11 +27,11 @@ class HomeViewController: UIViewController {
     }
 
     private lazy var searchButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "magnifyingglass") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "search") ?? UIImage(), for: .normal)
     }
 
     private lazy var menuButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "line.3.horizontal") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "filter") ?? UIImage(), for: .normal)
     }
 
     private lazy var searchBar = UISearchBar().then {
@@ -41,12 +41,12 @@ class HomeViewController: UIViewController {
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
                                                                collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
-        let itemSpacing: CGFloat = 10.0
-        let width = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
+        let itemSpacing: CGFloat = 0.0
+        let width = (view.frame.width - 44.0 * 2) / 4
         let height = width
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
+        layout.sectionInset = UIEdgeInsets(top: 36.0, left: 44.0, bottom: 36.0, right: 44.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -216,8 +216,8 @@ class HomeViewController: UIViewController {
         categoryCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(searchBar.snp.bottom).offset(12.0)
-            let itemSize = (view.frame.width - 16.0 * 2 - 10.0 * 4) / 5
-            $0.height.equalTo(itemSize * 2 + 10.0)
+            let itemSize = (view.frame.width - 44.0 * 2) / 4
+            $0.height.equalTo(itemSize * 2 + 36.0 * 2)
         }
 
         pickView.snp.makeConstraints {

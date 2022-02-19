@@ -64,6 +64,8 @@
 		D88FAF9327A68A7900E41F4F /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF9227A68A7900E41F4F /* LoginModel.swift */; };
 		D88FAF9527A68AD500E41F4F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF9427A68AD500E41F4F /* HomeViewController.swift */; };
 		D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF9627A68ADB00E41F4F /* HomeViewModel.swift */; };
+		D8E019D927C0CFA600A167CA /* SearchNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */; };
+		D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */; };
 		D8E7756427A810C0005E037D /* MainFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756327A810C0005E037D /* MainFilterView.swift */; };
 		D8E7756627A81178005E037D /* MainFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756527A81178005E037D /* MainFilterViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -130,6 +132,8 @@
 		D88FAF9227A68A7900E41F4F /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		D88FAF9427A68AD500E41F4F /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D88FAF9627A68ADB00E41F4F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationView.swift; sourceTree = "<group>"; };
+		D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationViewModel.swift; sourceTree = "<group>"; };
 		D8E7756327A810C0005E037D /* MainFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterView.swift; sourceTree = "<group>"; };
 		D8E7756527A81178005E037D /* MainFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -179,6 +183,8 @@
 				D8091FF827B2803E000F057E /* FeedViewModel.swift */,
 				D809200A27B28831000F057E /* ReviewListCell.swift */,
 				D809200C27B28AD9000F057E /* ReviewListCellViewModel.swift */,
+				D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */,
+				D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -505,6 +511,7 @@
 				D83304DE27AC1763008E7DB7 /* TabBarViewController.swift in Sources */,
 				D871F4AE27BD12D700CCDE4D /* PickViewModel.swift in Sources */,
 				D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */,
+				D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */,
 				D871F4BC27BD395E00CCDE4D /* PhotoCell.swift in Sources */,
 				D88FAF8127A67D6F00E41F4F /* LoginViewController.swift in Sources */,
 				D8091FFC27B28095000F057E /* MyPlaceViewController.swift in Sources */,
@@ -521,6 +528,7 @@
 				D871F4A827BD111300CCDE4D /* PickCell.swift in Sources */,
 				D8237DEC27B9361800238387 /* PlaceImageCell.swift in Sources */,
 				D809200627B286FF000F057E /* PlaceModel.swift in Sources */,
+				D8E019D927C0CFA600A167CA /* SearchNavigationView.swift in Sources */,
 				D88FAF7F27A67D6F00E41F4F /* SceneDelegate.swift in Sources */,
 				D88FAF9527A68AD500E41F4F /* HomeViewController.swift in Sources */,
 				D809201027B28C3F000F057E /* ReviewDetailViewController.swift in Sources */,

@@ -12,11 +12,12 @@ class CategoryCell: UICollectionViewCell {
     public static let identyfier = "CategoryCell"
     private let bag = DisposeBag()
 
-    private lazy var label: UILabel = {
-        let label = UILabel()
-
-        return label
-    }()
+    private lazy var label = UILabel().then { _ in
+    }
+    
+    private lazy var imageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,22 +31,34 @@ class CategoryCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: CategoryCellViewModel) {
+        
+        // MARK: view -> viewModel
+        
+        // MARK: viewModel -> view
+        
         viewModel.title
             .drive(label.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.image
+            .drive(imageView.rx.image)
             .disposed(by: bag)
     }
 
     private func attribute() {
-        contentView.backgroundColor = .lightGray
-        contentView.addShadow(offset: CGSize(width: 2.0, height: 2.0))
-        contentView.layer.cornerRadius = 8.0
+        contentView.backgroundColor = .white
     }
 
     private func layout() {
         [
+            imageView,
             label,
         ].forEach {
             contentView.addSubview($0)
+        }
+        
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
 
         label.snp.makeConstraints {

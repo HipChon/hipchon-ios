@@ -14,7 +14,7 @@ class PickView: UIView {
     private let bag = DisposeBag()
 
     private lazy var titleLabel = UILabel().then {
-        $0.text = "힙촌러 픽"
+        $0.text = "로컬 힙스터 픽"
         $0.font = UIFont.boldSystemFont(ofSize: 16.0)
     }
 
@@ -37,7 +37,7 @@ class PickView: UIView {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
-        $0.backgroundColor = .lightGray
+        $0.backgroundColor = .white
     }
 
     override init(frame: CGRect) {
@@ -63,7 +63,7 @@ class PickView: UIView {
     }
 
     private func attribute() {
-        backgroundColor = .lightGray
+        backgroundColor = .white
     }
 
     private func layout() {

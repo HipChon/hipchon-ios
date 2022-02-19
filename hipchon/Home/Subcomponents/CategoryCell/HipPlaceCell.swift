@@ -11,7 +11,6 @@ import UIKit
 class HipPlaceCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
-        $0.layer.cornerRadius = 10.0
     }
 
     public static let identyfier = "HipPlaceCell"
@@ -35,7 +34,8 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     private func attribute() {
-        contentView.layer.cornerRadius = 5.0
+        layer.masksToBounds = true
+        layer.cornerRadius = 5.0
     }
 
     private func layout() {
