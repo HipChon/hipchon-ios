@@ -10,8 +10,9 @@ import UIKit
 
 class MyPlaceCell: UITableViewCell {
     private lazy var placeImageView = UIImageView().then {
-        $0.layer.cornerRadius = $0.frame.width / 2
         $0.contentMode = .scaleToFill
+        $0.layer.cornerRadius = 5.0
+        $0.layer.masksToBounds = true
     }
 
     private lazy var nameLabel = UILabel().then {
@@ -24,6 +25,10 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var addressLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+    }
+    
+    private lazy var boundaryView = UIView().then {
+        $0.backgroundColor = .lightGray
     }
 
     public static let identyfier = "ReviewListCell"
@@ -63,11 +68,13 @@ class MyPlaceCell: UITableViewCell {
     }
 
     private func layout() {
+        
         [
             placeImageView,
             nameLabel,
             addressLabel,
             categoryLabel,
+            boundaryView
         ].forEach { contentView.addSubview($0) }
 
         placeImageView.snp.makeConstraints {
@@ -91,6 +98,12 @@ class MyPlaceCell: UITableViewCell {
             $0.centerY.equalTo(categoryLabel.snp.centerY)
             $0.leading.equalTo(categoryLabel.snp.trailing).offset(24.0)
             $0.height.equalTo(15.0)
+        }
+        
+        boundaryView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1.0)
         }
     }
 }

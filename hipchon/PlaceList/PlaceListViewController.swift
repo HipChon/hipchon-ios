@@ -9,10 +9,14 @@ import RxSwift
 import UIKit
 
 class PlaceListViewController: UIViewController {
+    
+    private lazy var searchNavigationView = SearchNavigationView().then { _ in
+    }
+    
     private lazy var placeList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
-        $0.rowHeight = view.frame.width * (302.0 / 380.0)
+        $0.rowHeight = view.frame.width * ((262.0 + 15.0) / (350.0 + 20.0 * 2))
         $0.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
@@ -64,21 +68,25 @@ class PlaceListViewController: UIViewController {
     }
 
     private func attribute() {
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .systemBackground
-
-        navigationController?.navigationItem.title = "장소 검색"
-        navigationController?.navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.backItem?.title = ""
     }
 
     private func layout() {
         [
+            searchNavigationView,
             placeList,
         ].forEach { view.addSubview($0) }
 
+        searchNavigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(68.0)
+        }
+        
         placeList.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(searchNavigationView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }

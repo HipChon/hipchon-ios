@@ -10,6 +10,7 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
+import MaterialComponents.MaterialBottomSheet
 
 class HomeViewController: UIViewController {
     // MARK: Property
@@ -30,12 +31,8 @@ class HomeViewController: UIViewController {
         $0.setImage(UIImage(named: "search") ?? UIImage(), for: .normal)
     }
 
-    private lazy var menuButton = UIButton().then {
+    private lazy var filterButton = UIButton().then {
         $0.setImage(UIImage(named: "filter") ?? UIImage(), for: .normal)
-    }
-
-    private lazy var searchBar = UISearchBar().then {
-        $0.searchTextField.borderStyle = .none
     }
 
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
@@ -82,9 +79,6 @@ class HomeViewController: UIViewController {
         $0.isPagingEnabled = true
     }
 
-    private lazy var mainFilterView = MainFilterView().then { _ in
-    }
-
     private lazy var marginView = UIView().then {
         $0.backgroundColor = .gray
     }
@@ -93,7 +87,6 @@ class HomeViewController: UIViewController {
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        attribute()
         layout()
     }
 
@@ -101,11 +94,14 @@ class HomeViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidLayoutSubviews() {
+        attribute()
+    }
 
     func bind(_ viewModel: HomeViewModel) {
         // MARK: subViews Binding
 
-        mainFilterView.bind(viewModel.mainFilterViewModel)
         pickView.bind(viewModel.pickViewModel)
         weelkyHipPlaceView.bind(viewModel.weeklyHipPlaceViewModel)
 
@@ -116,9 +112,9 @@ class HomeViewController: UIViewController {
             .bind(to: viewModel.searchButtonTapped)
             .disposed(by: bag)
 
-        menuButton.rx.tap
+        filterButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.menuButtonTapped)
+            .bind(to: viewModel.filterButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -144,13 +140,28 @@ class HomeViewController: UIViewController {
 
         // MARK: scene
 
-        viewModel.pushPlaceListViewController
+        viewModel.pushPlaceListVC
             .emit(onNext: { [weak self] viewModel in
-                let placeListViewController = PlaceListViewController()
-                placeListViewController.bind(viewModel)
-                self?.navigationController?.pushViewController(placeListViewController, animated: false)
+                let placeListVC = PlaceListViewController()
+                placeListVC.bind(viewModel)
+                self?.navigationController?.pushViewController(placeListVC, animated: false)
             })
             .disposed(by: bag)
+        
+        viewModel.presentFilterVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let filterVC = FilterViewController()
+                filterVC.bind(viewModel)
+                
+                // MDC 바텀 시트로 설정
+                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
+                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+                                                          height: filterVC.viewHeight)
+                self.present(bottomSheet, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+        
     }
 
     func attribute() {
@@ -175,13 +186,11 @@ class HomeViewController: UIViewController {
         [
             mainLogoImageView,
             searchButton,
-            menuButton,
-            searchBar,
+            filterButton,
             categoryCollectionView,
             pickView,
             weelkyHipPlaceView,
             bannerCollectionView,
-//            mainFilterView,
             marginView,
         ].forEach {
             contentView.addSubview($0)
@@ -191,38 +200,34 @@ class HomeViewController: UIViewController {
             $0.width.equalToSuperview().multipliedBy(71.0 / 390.0)
             $0.height.equalTo(view.snp.width).multipliedBy(59.0 / 390.0)
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(1.0)
+            $0.top.equalToSuperview().inset(4.0)
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(4.0)
         }
 
         searchButton.snp.makeConstraints {
             $0.height.width.equalTo(16.0)
             $0.centerY.equalTo(mainLogoImageView.snp.centerY)
-            $0.trailing.equalTo(menuButton.snp.leading).offset(24.0)
+//            $0.trailing.equalTo(filterButton.snp.leading).offset(24.0)
+            $0.trailing.equalToSuperview().inset(27.0 + 16.0 + 24.0)
+//            $0.trailing.equalTo(filterButton.snp.leading).offset(24.0)
         }
 
-        menuButton.snp.makeConstraints {
+        filterButton.snp.makeConstraints {
             $0.height.width.equalTo(16.0)
             $0.top.equalTo(searchButton.snp.top)
             $0.trailing.equalToSuperview().inset(27.0)
         }
 
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(mainLogoImageView.snp.bottom).offset(12.0)
-            $0.width.equalToSuperview().multipliedBy(342.0 / 390.0)
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(42.0)
-        }
-
         categoryCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(searchBar.snp.bottom).offset(12.0)
+            $0.leading.trailing.equalToSuperview().inset(22.0)
+            $0.top.equalTo(mainLogoImageView.snp.bottom).offset(29.0)
             let itemSize = (view.frame.width - 44.0 * 2) / 4
             $0.height.equalTo(itemSize * 2 + 36.0 * 2)
         }
 
         pickView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(20.0)
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(16.0)
             $0.height.equalTo(331.0)
         }
 
@@ -238,12 +243,6 @@ class HomeViewController: UIViewController {
             let height = view.frame.width * (218.0 / 390.0)
             $0.height.equalTo(height)
         }
-
-//        mainFilterView.snp.makeConstraints {
-//            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(24.0)
-//            $0.leading.trailing.equalToSuperview().inset(12.0)
-//            $0.height.equalTo(mainFilterView.snp.width).multipliedBy(0.8)
-//        }
 
         marginView.snp.makeConstraints {
             $0.top.equalTo(bannerCollectionView.snp.bottom)

@@ -66,8 +66,8 @@
 		D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FAF9627A68ADB00E41F4F /* HomeViewModel.swift */; };
 		D8E019D927C0CFA600A167CA /* SearchNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */; };
 		D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */; };
-		D8E7756427A810C0005E037D /* MainFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756327A810C0005E037D /* MainFilterView.swift */; };
-		D8E7756627A81178005E037D /* MainFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756527A81178005E037D /* MainFilterViewModel.swift */; };
+		D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756327A810C0005E037D /* FilterViewController.swift */; };
+		D8E7756627A81178005E037D /* FilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756527A81178005E037D /* FilterViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,8 +134,8 @@
 		D88FAF9627A68ADB00E41F4F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationView.swift; sourceTree = "<group>"; };
 		D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationViewModel.swift; sourceTree = "<group>"; };
-		D8E7756327A810C0005E037D /* MainFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterView.swift; sourceTree = "<group>"; };
-		D8E7756527A81178005E037D /* MainFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFilterViewModel.swift; sourceTree = "<group>"; };
+		D8E7756327A810C0005E037D /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		D8E7756527A81178005E037D /* FilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,8 +301,6 @@
 			children = (
 				D88FAF9427A68AD500E41F4F /* HomeViewController.swift */,
 				D88FAF9627A68ADB00E41F4F /* HomeViewModel.swift */,
-				D8E7756327A810C0005E037D /* MainFilterView.swift */,
-				D8E7756527A81178005E037D /* MainFilterViewModel.swift */,
 				D871F4AB27BD11CF00CCDE4D /* PickView.swift */,
 				D871F4AD27BD12D700CCDE4D /* PickViewModel.swift */,
 				D871F4AF27BD186100CCDE4D /* WeeklyHipPlaceView.swift */,
@@ -361,8 +359,18 @@
 				D8237DE027B921A900238387 /* Setting */,
 				D83E539127AA6D010047A05C /* PlaceList */,
 				D809200427B28381000F057E /* PlaceDetail */,
+				D8E019DC27C0D49600A167CA /* Filter */,
 			);
 			path = hipchon;
+			sourceTree = "<group>";
+		};
+		D8E019DC27C0D49600A167CA /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				D8E7756327A810C0005E037D /* FilterViewController.swift */,
+				D8E7756527A81178005E037D /* FilterViewModel.swift */,
+			);
+			path = Filter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -503,10 +511,10 @@
 				D83304E527AC1AAA008E7DB7 /* DefaultViewController.swift in Sources */,
 				D871F4AA27BD111900CCDE4D /* PickCellModel.swift in Sources */,
 				D8237DE227B9245A00238387 /* BannerCell.swift in Sources */,
-				D8E7756427A810C0005E037D /* MainFilterView.swift in Sources */,
+				D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */,
 				D8237DE427B9246400238387 /* BannerCellViewModel.swift in Sources */,
 				D809201227B28C46000F057E /* ReviewDetailViewModel.swift in Sources */,
-				D8E7756627A81178005E037D /* MainFilterViewModel.swift in Sources */,
+				D8E7756627A81178005E037D /* FilterViewModel.swift in Sources */,
 				D871F4B427BD18DC00CCDE4D /* HipPlaceCell.swift in Sources */,
 				D83304DE27AC1763008E7DB7 /* TabBarViewController.swift in Sources */,
 				D871F4AE27BD12D700CCDE4D /* PickViewModel.swift in Sources */,

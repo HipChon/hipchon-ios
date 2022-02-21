@@ -26,6 +26,10 @@ class FeedViewController: UIViewController {
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }
+    
+    private lazy var uploadButton = UIButton().then {
+        $0.setImage(UIImage(named: "upload"), for: .normal)
+    }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -83,6 +87,7 @@ class FeedViewController: UIViewController {
         [
             searchNavigationView,
             reviewList,
+            uploadButton,
         ].forEach { view.addSubview($0) }
 
         searchNavigationView.snp.makeConstraints {
@@ -93,7 +98,13 @@ class FeedViewController: UIViewController {
         
         reviewList.snp.makeConstraints {
             $0.top.equalTo(searchNavigationView.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview().inset(16.0)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        uploadButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(26.0)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(43.0)
+            $0.width.height.equalTo(50.0)
         }
     }
 }
