@@ -50,23 +50,23 @@ class CategoryCell: UICollectionViewCell {
     }
 
     private func layout() {
-        [
-            imageView,
-            label,
-        ].forEach {
-            contentView.addSubview($0)
-        }
+        
+        let stackView = UIStackView(arrangedSubviews: [imageView, label])
+        stackView.distribution = .fill
+        stackView.axis = .vertical
+        stackView.spacing = 5.0
+        stackView.alignment = .center
+
+        contentView.addSubview(stackView)
         
         imageView.snp.makeConstraints {
+            $0.height.equalToSuperview().multipliedBy(0.5)
+            $0.width.equalToSuperview().multipliedBy(0.5)
+        }
+        
+        stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-
-        label.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
     }
 
-    func setDate(_ data: CategoryModel) {
-        label.text = data.name
-    }
 }

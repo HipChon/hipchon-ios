@@ -39,11 +39,11 @@ class HomeViewController: UIViewController {
                                                                collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 0.0
-        let width = (view.frame.width - 44.0 * 2) / 4
+        let width = (view.frame.width - 32.0 * 2) / 4
         let height = width
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 36.0, left: 44.0, bottom: 36.0, right: 44.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -219,10 +219,10 @@ class HomeViewController: UIViewController {
         }
 
         categoryCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(22.0)
+            $0.leading.trailing.equalToSuperview().inset(32.0)
             $0.top.equalTo(mainLogoImageView.snp.bottom).offset(29.0)
-            let itemSize = (view.frame.width - 44.0 * 2) / 4
-            $0.height.equalTo(itemSize * 2 + 36.0 * 2)
+            let itemSize = (view.frame.width - 32.0 * 2) / 4
+            $0.height.equalTo(itemSize * 2)
         }
 
         pickView.snp.makeConstraints {
