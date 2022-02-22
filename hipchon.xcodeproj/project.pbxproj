@@ -41,6 +41,11 @@
 		D83E538F27AA65E10047A05C /* CategoryCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538E27AA65E10047A05C /* CategoryCellViewModel.swift */; };
 		D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E539227AA6D0C0047A05C /* PlaceListCell.swift */; };
 		D83E539527AA6F310047A05C /* PlaceListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */; };
+		D840812B27C5263B00FA9D1B /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840812A27C5263B00FA9D1B /* StartViewController.swift */; };
+		D840812D27C5269C00FA9D1B /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840812C27C5269C00FA9D1B /* StartViewModel.swift */; };
+		D840812F27C52C6F00FA9D1B /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840812E27C52C6E00FA9D1B /* RegisterViewController.swift */; };
+		D840813127C52CC500FA9D1B /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813027C52CC500FA9D1B /* RegisterViewModel.swift */; };
+		D840813327C5343E00FA9D1B /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813227C5343E00FA9D1B /* AuthModel.swift */; };
 		D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86D27A6C224005B8C25 /* UIView+.swift */; };
 		D841C87027A6C554005B8C25 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86F27A6C552005B8C25 /* CategoryCell.swift */; };
 		D871F4A827BD111300CCDE4D /* PickCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871F4A727BD111300CCDE4D /* PickCell.swift */; };
@@ -107,6 +112,11 @@
 		D83E538E27AA65E10047A05C /* CategoryCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellViewModel.swift; sourceTree = "<group>"; };
 		D83E539227AA6D0C0047A05C /* PlaceListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListCell.swift; sourceTree = "<group>"; };
 		D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListCellViewModel.swift; sourceTree = "<group>"; };
+		D840812A27C5263B00FA9D1B /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		D840812C27C5269C00FA9D1B /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
+		D840812E27C52C6E00FA9D1B /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		D840813027C52CC500FA9D1B /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		D840813227C5343E00FA9D1B /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
 		D841C86D27A6C224005B8C25 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		D841C86F27A6C552005B8C25 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		D871F4A727BD111300CCDE4D /* PickCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickCell.swift; sourceTree = "<group>"; };
@@ -289,9 +299,14 @@
 		D841C86B27A6B60C005B8C25 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				D840812A27C5263B00FA9D1B /* StartViewController.swift */,
+				D840812C27C5269C00FA9D1B /* StartViewModel.swift */,
 				D88FAF8027A67D6F00E41F4F /* LoginViewController.swift */,
 				D88FAF9027A689B500E41F4F /* LoginViewModel.swift */,
 				D88FAF9227A68A7900E41F4F /* LoginModel.swift */,
+				D840812E27C52C6E00FA9D1B /* RegisterViewController.swift */,
+				D840813027C52CC500FA9D1B /* RegisterViewModel.swift */,
+				D840813227C5343E00FA9D1B /* AuthModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -488,6 +503,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8237DEE27B9362800238387 /* PlaceImageCellViewModel.swift in Sources */,
+				D840812F27C52C6F00FA9D1B /* RegisterViewController.swift in Sources */,
 				D871F4BE27BD396600CCDE4D /* PhotoCellViewModel.swift in Sources */,
 				D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */,
 				D83304E227AC1A43008E7DB7 /* ProfileViewModel.swift in Sources */,
@@ -512,11 +528,13 @@
 				D871F4AA27BD111900CCDE4D /* PickCellModel.swift in Sources */,
 				D8237DE227B9245A00238387 /* BannerCell.swift in Sources */,
 				D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */,
+				D840812D27C5269C00FA9D1B /* StartViewModel.swift in Sources */,
 				D8237DE427B9246400238387 /* BannerCellViewModel.swift in Sources */,
 				D809201227B28C46000F057E /* ReviewDetailViewModel.swift in Sources */,
 				D8E7756627A81178005E037D /* FilterViewModel.swift in Sources */,
 				D871F4B427BD18DC00CCDE4D /* HipPlaceCell.swift in Sources */,
 				D83304DE27AC1763008E7DB7 /* TabBarViewController.swift in Sources */,
+				D840812B27C5263B00FA9D1B /* StartViewController.swift in Sources */,
 				D871F4AE27BD12D700CCDE4D /* PickViewModel.swift in Sources */,
 				D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */,
 				D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */,
@@ -528,11 +546,13 @@
 				D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */,
 				D83304E727AC1AEB008E7DB7 /* DefaultViewModel.swift in Sources */,
 				D8091FF727B28034000F057E /* FeedViewController.swift in Sources */,
+				D840813327C5343E00FA9D1B /* AuthModel.swift in Sources */,
 				D871F4B827BD23F800CCDE4D /* MyPlaceCell.swift in Sources */,
 				D871F4B027BD186100CCDE4D /* WeeklyHipPlaceView.swift in Sources */,
 				D8237DE827B929BD00238387 /* RxImageView+.swift in Sources */,
 				D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */,
 				D80967B927BA83310015E7EF /* UserModel.swift in Sources */,
+				D840813127C52CC500FA9D1B /* RegisterViewModel.swift in Sources */,
 				D871F4A827BD111300CCDE4D /* PickCell.swift in Sources */,
 				D8237DEC27B9361800238387 /* PlaceImageCell.swift in Sources */,
 				D809200627B286FF000F057E /* PlaceModel.swift in Sources */,
