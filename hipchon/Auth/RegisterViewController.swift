@@ -47,7 +47,7 @@ class RegisterViewController: UIViewController {
     private lazy var emailValidLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 14.0, weight: .medium)
         $0.text = "올바르지 않은 이메일 형식입니다"
-        $0.textColor = .red
+        $0.textColor = .systemRed
         $0.isHidden = true
     }
     
@@ -76,12 +76,12 @@ class RegisterViewController: UIViewController {
     private lazy var passwordValidLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 14.0, weight: .medium)
         $0.text = "올바르지 않은 비밀번호 형식입니다"
-        $0.textColor = .red
+        $0.textColor = .systemRed
         $0.isHidden = true
     }
     
     private lazy var regitserButton = UIButton().then {
-        $0.backgroundColor = .green
+        $0.backgroundColor = .systemGreen
         $0.layer.cornerRadius = 5.0
         $0.setTitle("회원가입", for: .normal)
         $0.setTitleColor(.black, for: .normal)
@@ -113,8 +113,8 @@ class RegisterViewController: UIViewController {
         let emailValidColor = Signal.merge(
             emailTextField.rx.controlEvent(.editingDidBegin)
                 .take(1)
-                .map { UIColor.green }
-                .asSignal(onErrorJustReturn: UIColor.green),
+                .map { UIColor.systemGreen }
+                .asSignal(onErrorJustReturn: UIColor.systemGreen),
 
             emailTextField.rx.controlEvent(.editingDidEnd)
                 .withLatestFrom(viewModel.emailValid)
@@ -123,7 +123,7 @@ class RegisterViewController: UIViewController {
                 .asSignal(onErrorJustReturn: UIColor.lightGray),
             
             viewModel.emailValid
-                .map { $0 == true ? UIColor.green : UIColor.red }
+                .map { $0 == true ? UIColor.systemGreen : UIColor.systemRed }
         )
         
         emailValidColor
@@ -152,15 +152,17 @@ class RegisterViewController: UIViewController {
         let passwordValidColor = Signal.merge(
             passwordTextField.rx.controlEvent(.editingDidBegin)
                 .take(1)
-                .map { UIColor.green }
-                .asSignal(onErrorJustReturn: UIColor.green),
+                .map { UIColor.systemGreen }
+                .asSignal(onErrorJustReturn: UIColor.systemGreen),
 
             passwordTextField.rx.controlEvent(.editingDidEnd)
-                .map { UIColor.lightGray }
+                .withLatestFrom(viewModel.passwordValid)
+                .filter { $0 == true }
+                .map { _ in UIColor.lightGray }
                 .asSignal(onErrorJustReturn: UIColor.lightGray),
 
             viewModel.passwordValid
-                .map { $0 == true ? UIColor.green : UIColor.red }
+                .map { $0 == true ? UIColor.systemGreen : UIColor.red }
         )
         
         passwordValidColor
@@ -198,7 +200,9 @@ class RegisterViewController: UIViewController {
             .disposed(by: bag)
 
       
-        
+        viewModel.registerButtonValid
+            .drive(regitserButton.rx.validUI)
+            .disposed(by: bag)
         
         // MARK: scene
         

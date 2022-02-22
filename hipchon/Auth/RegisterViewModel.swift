@@ -16,6 +16,7 @@ class RegisterViewModel {
     let emailValid: Signal<Bool>
     let passwordValid: Signal<Bool>
     let passwordWrongType: Driver<RegisterPasswordCheckType>
+    let registerButtonValid: Driver<Bool>
 
 
     // MARK: view -> viewModel
@@ -31,29 +32,21 @@ class RegisterViewModel {
             .asSignal(onErrorJustReturn: false)
         
         let passwordCheckType = PublishSubject<RegisterPasswordCheckType>()
-        
-        password
+
+        passwordValid = password
             .filter { $0 != "" }
-           .map { AuthModel.registerPasswordValidCheck(password: $0) }
-           .bind(to: passwordCheckType)
-           .disposed(by: bag)
-        
-        passwordValid = passwordCheckType
+            .map { AuthModel.registerPasswordValidCheck(password: $0) }
             .map { $0 == .right }
             .asSignal(onErrorJustReturn: false)
 
-        passwordWrongType = passwordCheckType
+        passwordWrongType = password
+            .map { AuthModel.registerPasswordValidCheck(password: $0) }
             .asDriver(onErrorJustReturn: .right)
-        
-        password
-            .subscribe(onNext: {
-                print($0)
-            })
-        
-        passwordCheckType
-            .subscribe(onNext: {
-                print($0)
-            })
+     
+        registerButtonValid = Observable.combineLatest(emailValid.asObservable(),
+                                                       passwordValid.asObservable())
+            .map { $0 == true && $1 == true }
+            .asDriver(onErrorJustReturn: false)
         
     }
     

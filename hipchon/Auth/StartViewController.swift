@@ -98,7 +98,7 @@ class StartViewController: UIViewController {
         
         loginButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.height.equalTo(loginButton.snp.width).multipliedBy(60.0 / 350.0)
+            $0.height.equalTo(60.0)
             $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview().inset(52.0)
         }
