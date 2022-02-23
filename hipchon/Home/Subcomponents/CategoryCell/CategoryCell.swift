@@ -14,7 +14,7 @@ class CategoryCell: UICollectionViewCell {
 
     private lazy var label = UILabel().then { _ in
     }
-    
+
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
     }
@@ -31,15 +31,14 @@ class CategoryCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: CategoryCellViewModel) {
-        
         // MARK: view -> viewModel
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.title
             .drive(label.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.image
             .drive(imageView.rx.image)
             .disposed(by: bag)
@@ -50,7 +49,6 @@ class CategoryCell: UICollectionViewCell {
     }
 
     private func layout() {
-        
         let stackView = UIStackView(arrangedSubviews: [imageView, label])
         stackView.distribution = .fill
         stackView.axis = .vertical
@@ -58,15 +56,14 @@ class CategoryCell: UICollectionViewCell {
         stackView.alignment = .center
 
         contentView.addSubview(stackView)
-        
+
         imageView.snp.makeConstraints {
             $0.height.equalToSuperview().multipliedBy(0.5)
             $0.width.equalToSuperview().multipliedBy(0.5)
         }
-        
+
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
-
 }

@@ -47,6 +47,9 @@
 		D840813127C52CC500FA9D1B /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813027C52CC500FA9D1B /* RegisterViewModel.swift */; };
 		D840813327C5343E00FA9D1B /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813227C5343E00FA9D1B /* AuthModel.swift */; };
 		D840813527C5414300FA9D1B /* RxButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813427C5414300FA9D1B /* RxButton+.swift */; };
+		D840813727C544A200FA9D1B /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813627C544A200FA9D1B /* FilterCell.swift */; };
+		D840813927C545BE00FA9D1B /* FilterCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813827C545BE00FA9D1B /* FilterCellViewModel.swift */; };
+		D840813B27C545D300FA9D1B /* FilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813A27C545D300FA9D1B /* FilterModel.swift */; };
 		D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86D27A6C224005B8C25 /* UIView+.swift */; };
 		D841C87027A6C554005B8C25 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86F27A6C552005B8C25 /* CategoryCell.swift */; };
 		D871F4A827BD111300CCDE4D /* PickCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871F4A727BD111300CCDE4D /* PickCell.swift */; };
@@ -119,6 +122,9 @@
 		D840813027C52CC500FA9D1B /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		D840813227C5343E00FA9D1B /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
 		D840813427C5414300FA9D1B /* RxButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxButton+.swift"; sourceTree = "<group>"; };
+		D840813627C544A200FA9D1B /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
+		D840813827C545BE00FA9D1B /* FilterCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCellViewModel.swift; sourceTree = "<group>"; };
+		D840813A27C545D300FA9D1B /* FilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterModel.swift; sourceTree = "<group>"; };
 		D841C86D27A6C224005B8C25 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		D841C86F27A6C552005B8C25 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		D871F4A727BD111300CCDE4D /* PickCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickCell.swift; sourceTree = "<group>"; };
@@ -387,6 +393,9 @@
 			children = (
 				D8E7756327A810C0005E037D /* FilterViewController.swift */,
 				D8E7756527A81178005E037D /* FilterViewModel.swift */,
+				D840813627C544A200FA9D1B /* FilterCell.swift */,
+				D840813A27C545D300FA9D1B /* FilterModel.swift */,
+				D840813827C545BE00FA9D1B /* FilterCellViewModel.swift */,
 			);
 			path = Filter;
 			sourceTree = "<group>";
@@ -532,6 +541,7 @@
 				D8237DE227B9245A00238387 /* BannerCell.swift in Sources */,
 				D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */,
 				D840812D27C5269C00FA9D1B /* StartViewModel.swift in Sources */,
+				D840813B27C545D300FA9D1B /* FilterModel.swift in Sources */,
 				D840813527C5414300FA9D1B /* RxButton+.swift in Sources */,
 				D8237DE427B9246400238387 /* BannerCellViewModel.swift in Sources */,
 				D809201227B28C46000F057E /* ReviewDetailViewModel.swift in Sources */,
@@ -539,6 +549,7 @@
 				D871F4B427BD18DC00CCDE4D /* HipPlaceCell.swift in Sources */,
 				D83304DE27AC1763008E7DB7 /* TabBarViewController.swift in Sources */,
 				D840812B27C5263B00FA9D1B /* StartViewController.swift in Sources */,
+				D840813927C545BE00FA9D1B /* FilterCellViewModel.swift in Sources */,
 				D871F4AE27BD12D700CCDE4D /* PickViewModel.swift in Sources */,
 				D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */,
 				D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */,
@@ -549,6 +560,7 @@
 				D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */,
 				D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */,
 				D83304E727AC1AEB008E7DB7 /* DefaultViewModel.swift in Sources */,
+				D840813727C544A200FA9D1B /* FilterCell.swift in Sources */,
 				D8091FF727B28034000F057E /* FeedViewController.swift in Sources */,
 				D840813327C5343E00FA9D1B /* AuthModel.swift in Sources */,
 				D871F4B827BD23F800CCDE4D /* MyPlaceCell.swift in Sources */,

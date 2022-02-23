@@ -15,7 +15,7 @@ class FeedViewController: UIViewController {
     // MARK: Property
 
     private let bag = DisposeBag()
-    
+
     private lazy var searchNavigationView = SearchNavigationView().then { _ in
     }
 
@@ -26,7 +26,7 @@ class FeedViewController: UIViewController {
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }
-    
+
     private lazy var uploadButton = UIButton().then {
         $0.setImage(UIImage(named: "upload"), for: .normal)
     }
@@ -95,12 +95,12 @@ class FeedViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(68.0)
         }
-        
+
         reviewList.snp.makeConstraints {
             $0.top.equalTo(searchNavigationView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        
+
         uploadButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(26.0)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(43.0)

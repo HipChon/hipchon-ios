@@ -5,12 +5,12 @@
 //  Created by 김범수 on 2022/01/30.
 //
 
+import MaterialComponents.MaterialBottomSheet
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
 import UIKit
-import MaterialComponents.MaterialBottomSheet
 
 class HomeViewController: UIViewController {
     // MARK: Property
@@ -94,7 +94,7 @@ class HomeViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLayoutSubviews() {
         attribute()
     }
@@ -147,13 +147,13 @@ class HomeViewController: UIViewController {
                 self?.navigationController?.pushViewController(placeListVC, animated: false)
             })
             .disposed(by: bag)
-        
+
         viewModel.presentFilterVC
             .emit(onNext: { [weak self] viewModel in
                 guard let self = self else { return }
                 let filterVC = FilterViewController()
                 filterVC.bind(viewModel)
-                
+
                 // MDC 바텀 시트로 설정
                 let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
                 bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
@@ -161,7 +161,6 @@ class HomeViewController: UIViewController {
                 self.present(bottomSheet, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        
     }
 
     func attribute() {

@@ -14,8 +14,8 @@ class PlaceListCell: UITableViewCell {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 0.0
         let width = UIScreen.main.bounds.size.width - 20.0 * 2
-        let height = width * ( 166.0 / (262.0 + 15.0) )
-        
+        let height = width * (166.0 / (262.0 + 15.0))
+
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         layout.scrollDirection = .horizontal
@@ -27,20 +27,20 @@ class PlaceListCell: UITableViewCell {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
-        
+
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 5.0
         $0.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
-    
+
     private lazy var likeButton = UIButton().then {
-        $0.setImage(UIImage(named: "like.fill") ?? UIImage() , for: .normal)
+        $0.setImage(UIImage(named: "like.fill") ?? UIImage(), for: .normal)
     }
 
     private lazy var bookmarkButton = UIButton().then {
-        $0.setImage(UIImage(named: "bookmark") ?? UIImage() , for: .normal)
+        $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var nameLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 18.0, weight: .bold)
     }
@@ -70,7 +70,7 @@ class PlaceListCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0.0, left: 20.0, bottom: 15.0, right: 20.0))
     }
 
@@ -124,13 +124,13 @@ class PlaceListCell: UITableViewCell {
             let width = UIScreen.main.bounds.size.width - 20.0 * 2
             $0.height.equalTo(width * (166.0 / 350.0))
         }
-        
+
         likeButton.snp.makeConstraints {
             $0.top.equalTo(placeImageCollectView.snp.top).offset(15.0)
             $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)
             $0.width.height.equalTo(25.0)
         }
-        
+
         bookmarkButton.snp.makeConstraints {
             $0.top.equalTo(placeImageCollectView.snp.bottom).offset(15.0)
             $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)

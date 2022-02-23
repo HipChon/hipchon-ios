@@ -13,7 +13,7 @@ import UIKit
 
 class ReviewDetailViewController: UIViewController {
     // MARK: Property
-    
+
     private lazy var scrollView = UIScrollView().then { _ in
     }
 
@@ -28,7 +28,7 @@ class ReviewDetailViewController: UIViewController {
         $0.text = "공간 이름"
         $0.font = .systemFont(ofSize: 24.0, weight: .medium)
     }
-    
+
     private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
@@ -51,11 +51,11 @@ class ReviewDetailViewController: UIViewController {
         $0.layer.cornerRadius = 5.0
         $0.layer.masksToBounds = true
     }
-    
+
     private lazy var likeButton = UIButton().then {
         $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var likeCountLabel = UILabel().then {
         $0.text = "0"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
@@ -64,41 +64,41 @@ class ReviewDetailViewController: UIViewController {
     private lazy var commentButton = UIButton().then {
         $0.setImage(UIImage(named: "comment") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var commentCountLabel = UILabel().then {
         $0.text = "0"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var messageButton = UIButton().then {
         $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var messageCountLabel = UILabel().then {
         $0.text = "0"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var bookmarkButton = UIButton().then {
         $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var bookmarkCountLabel = UILabel().then {
         $0.text = "0"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var contentLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
     }
-    
+
     private lazy var linkView = UIView().then {
         $0.addShadow(offset: CGSize(width: 2.0, height: 2.0))
         $0.layer.cornerRadius = 22.0
         $0.layer.masksToBounds = true
         $0.backgroundColor = .lightGray
     }
-    
+
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -111,7 +111,7 @@ class ReviewDetailViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
@@ -153,6 +153,7 @@ class ReviewDetailViewController: UIViewController {
 
     func layout() {
         // MARK: scroll
+
         view.addSubview(scrollView)
 
         scrollView.snp.makeConstraints {
@@ -165,7 +166,7 @@ class ReviewDetailViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        
+
         [
             backButton,
             placeNameLabel,
@@ -177,18 +178,17 @@ class ReviewDetailViewController: UIViewController {
             contentLabel,
             linkView,
         ].forEach { contentView.addSubview($0) }
-        
+
         backButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(21.0)
             $0.leading.equalToSuperview().inset(28.0)
             $0.height.width.equalTo(15.0)
         }
-        
+
         placeNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
             $0.top.equalTo(backButton.snp.bottom).offset(32.0)
         }
-        
 
         profileImageView.snp.makeConstraints {
             $0.top.equalTo(placeNameLabel.snp.bottom).offset(36.0)
@@ -224,15 +224,15 @@ class ReviewDetailViewController: UIViewController {
             $0.top.equalTo(reviewImageView.snp.bottom).offset(45.0)
             $0.leading.equalToSuperview().inset(30.0)
         }
-        
+
         linkView.snp.makeConstraints {
             $0.top.equalTo(contentLabel.snp.bottom).offset(5.0)
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.height.equalTo(44.0)
         }
-        
+
         // MARK: Buttons
-        
+
         [
             likeButton,
             likeCountLabel,
@@ -241,45 +241,45 @@ class ReviewDetailViewController: UIViewController {
             messageButton,
             messageCountLabel,
             bookmarkButton,
-            bookmarkCountLabel
+            bookmarkCountLabel,
         ].forEach { contentView.addSubview($0) }
-        
+
         likeButton.snp.makeConstraints {
             $0.top.equalTo(reviewImageView.snp.bottom).offset(13.0)
             $0.leading.equalToSuperview().inset(30.0)
             $0.width.height.equalTo(20.0)
         }
-        
+
         likeCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
             $0.leading.equalTo(likeButton.snp.trailing).offset(8.0)
             $0.width.equalTo(24.0)
         }
-        
+
         commentButton.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
             $0.leading.equalTo(likeCountLabel.snp.trailing).offset(8.0)
             $0.width.height.equalTo(20.0)
         }
-        
+
         commentCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
             $0.leading.equalTo(commentButton.snp.trailing).offset(8.0)
             $0.width.equalTo(24.0)
         }
-        
+
         messageButton.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
             $0.leading.equalTo(commentCountLabel.snp.trailing).offset(8.0)
             $0.width.height.equalTo(20.0)
         }
-        
+
         messageCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
             $0.leading.equalTo(messageButton.snp.trailing).offset(8.0)
             $0.width.equalTo(24.0)
         }
-        
+
         bookmarkButton.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
 //            $0.trailing.equalTo(bookmarkCountLabel.snp.leading).offset(8.0)
@@ -287,13 +287,10 @@ class ReviewDetailViewController: UIViewController {
             $0.width.height.equalTo(20.0)
         }
 
-        
         bookmarkCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(likeButton.snp.centerY)
             $0.trailing.equalToSuperview().inset(20.0)
             $0.width.equalTo(24.0)
         }
-        
-        
     }
 }

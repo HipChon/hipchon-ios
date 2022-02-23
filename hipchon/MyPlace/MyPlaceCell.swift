@@ -26,7 +26,7 @@ class MyPlaceCell: UITableViewCell {
     private lazy var addressLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .lightGray
     }
@@ -68,13 +68,12 @@ class MyPlaceCell: UITableViewCell {
     }
 
     private func layout() {
-        
         [
             placeImageView,
             nameLabel,
             addressLabel,
             categoryLabel,
-            boundaryView
+            boundaryView,
         ].forEach { contentView.addSubview($0) }
 
         placeImageView.snp.makeConstraints {
@@ -99,7 +98,7 @@ class MyPlaceCell: UITableViewCell {
             $0.leading.equalTo(categoryLabel.snp.trailing).offset(24.0)
             $0.height.equalTo(15.0)
         }
-        
+
         boundaryView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.bottom.equalToSuperview()

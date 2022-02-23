@@ -25,7 +25,7 @@ class ReviewDetailViewModel {
 
     init(_ data: ReviewModel) {
         let review = BehaviorSubject<ReviewModel>(value: data)
-        
+
         profileImageURL = review
             .compactMap { $0.user?.profileImageURL }
             .compactMap { URL(string: $0) }
@@ -47,6 +47,5 @@ class ReviewDetailViewModel {
         content = review
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
-        
     }
 }

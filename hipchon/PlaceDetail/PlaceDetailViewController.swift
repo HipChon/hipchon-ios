@@ -43,11 +43,11 @@ class PlaceDetailViewController: UIViewController {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
-    
+
     private lazy var likeButton = UIButton().then {
         $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var likeCountLabel = UILabel().then {
         $0.text = "좋아요"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
@@ -56,34 +56,33 @@ class PlaceDetailViewController: UIViewController {
     private lazy var commentButton = UIButton().then {
         $0.setImage(UIImage(named: "comment") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var commentCountLabel = UILabel().then {
         $0.text = "댓글"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var messageButton = UIButton().then {
         $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var messageCountLabel = UILabel().then {
         $0.text = "메세지"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var bookmarkButton = UIButton().then {
         $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal)
     }
-    
+
     private lazy var bookmarkCountLabel = UILabel().then {
         $0.text = "북마크"
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
     }
-    
+
     private lazy var contentLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
     }
-    
 
     private lazy var marginView = UIView().then {
         $0.backgroundColor = .gray
@@ -134,6 +133,7 @@ class PlaceDetailViewController: UIViewController {
 
     func layout() {
         // MARK: scroll
+
         view.addSubview(scrollView)
 
         scrollView.snp.makeConstraints {
@@ -146,19 +146,19 @@ class PlaceDetailViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        
+
         // MARK: Button StackView
-        
+
         let likeStackView = UIStackView(arrangedSubviews: [likeButton, likeCountLabel])
         let commentStackView = UIStackView(arrangedSubviews: [commentButton, commentCountLabel])
         let messageStackView = UIStackView(arrangedSubviews: [messageButton, messageCountLabel])
         let bookmarkStackView = UIStackView(arrangedSubviews: [bookmarkButton, bookmarkCountLabel])
-        
+
         [
             likeStackView,
             commentStackView,
             messageStackView,
-            bookmarkStackView
+            bookmarkStackView,
         ].forEach {
             $0.alignment = .center
             $0.axis = .vertical
@@ -170,22 +170,22 @@ class PlaceDetailViewController: UIViewController {
             likeButton,
             commentButton,
             messageButton,
-            bookmarkButton
+            bookmarkButton,
         ].forEach { button in
             button.snp.makeConstraints {
                 $0.height.width.equalTo(20.0)
             }
         }
-        
+
         let buttonStackView = UIStackView(arrangedSubviews: [likeStackView,
                                                              commentStackView,
                                                              messageStackView,
                                                              bookmarkStackView])
-        
+
         buttonStackView.alignment = .center
         buttonStackView.axis = .horizontal
         buttonStackView.distribution = .equalSpacing
-        
+
         // MARK: make constraints
 
         [
@@ -207,7 +207,7 @@ class PlaceDetailViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(view.frame.width)
         }
-        
+
         buttonStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(40.0)
             $0.top.equalTo(imageCollectView.snp.bottom).offset(30.0)
@@ -219,12 +219,7 @@ class PlaceDetailViewController: UIViewController {
             $0.height.equalTo(1000.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        
-        // MARK: Buttons
 
-        
-       
-        
-        
+        // MARK: Buttons
     }
 }

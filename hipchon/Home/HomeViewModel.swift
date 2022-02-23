@@ -38,7 +38,7 @@ class HomeViewModel {
             .asSignal(onErrorSignalWith: .empty())
 
         banners = Driver.just(BannerModel.tmpModels)
-        
+
         presentFilterVC = filterButtonTapped
             .map { FilterViewModel() }
             .asSignal(onErrorSignalWith: .empty())

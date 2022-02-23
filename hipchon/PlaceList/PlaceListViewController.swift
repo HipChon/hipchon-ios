@@ -9,10 +9,9 @@ import RxSwift
 import UIKit
 
 class PlaceListViewController: UIViewController {
-    
     private lazy var searchNavigationView = SearchNavigationView().then { _ in
     }
-    
+
     private lazy var placeList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
@@ -83,7 +82,7 @@ class PlaceListViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(68.0)
         }
-        
+
         placeList.snp.makeConstraints {
             $0.top.equalTo(searchNavigationView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()

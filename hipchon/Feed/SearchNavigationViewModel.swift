@@ -10,8 +10,6 @@ import RxSwift
 
 class SearchNavigationViewModel {
     private let bag = DisposeBag()
-    
-    init() {
-        
-    }
+
+    init() {}
 }

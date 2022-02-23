@@ -33,9 +33,7 @@ class PhotoCell: UICollectionViewCell {
             .disposed(by: bag)
     }
 
-    private func attribute() {
-        
-    }
+    private func attribute() {}
 
     private func layout() {
         [
