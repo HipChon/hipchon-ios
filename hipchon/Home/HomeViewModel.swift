@@ -29,7 +29,7 @@ class HomeViewModel {
     let filterButtonTapped = PublishRelay<Void>()
 
     init() {
-        let placeListViewModel = PlaceListViewModel()
+        let placeListViewModel = PlaceListViewModel(SearchFilterModel(personnel: 0, pet: false, region: "", category: ""))
 
         cateogorys = Driver.just(CategoryModel.tmpModels)
 

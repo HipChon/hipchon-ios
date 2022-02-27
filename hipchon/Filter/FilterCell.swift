@@ -15,7 +15,7 @@ class FilterCell: UICollectionViewCell {
     }
 
     public static let identyfier = "FilterCell"
-    let bag = DisposeBag()
+    var bag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +26,11 @@ class FilterCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
     }
 
     func bind(_ viewModel: FilterCellViewModel) {

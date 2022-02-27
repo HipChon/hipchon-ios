@@ -133,31 +133,28 @@ class NetworkManager {
             [
                 {
                     "id": 1,
-                    "name": "러스틱 카페",
-                    "address": "서울특별시 용산구 서빙고",
-                    "category": "맛집",
+                    "name": "옹심이네",
+                    "region": "서울",
+                    "price": 100000.0,
                     "imageURLs": [
             "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    ]
+                    ],
+                    "hashtags": ["3인가능", "반려동물", "핫플"],
+                    "bookmarkCount": 32,
+                    "reviewCount": 12
                 },
-                {
-                    "id": 1,
-                    "name": "러스틱 카페",
-                    "address": "서울특별시 용산구 서빙고",
-                    "category": "맛집",
-                    "imageURLs": [
-            "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    ]
-                },
-                {
-                    "id": 1,
-                    "name": "러스틱 카페",
-                    "address": "서울특별시 용산구 서빙고",
-                    "category": "맛집",
-                    "imageURLs": [
-            "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    ]
-                },
+                 {
+                     "id": 1,
+                     "name": "옹심이네",
+                     "region": "서울",
+                     "price": 100000.0,
+                     "imageURLs": [
+             "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                     ],
+                     "hashtags": ["3인가능", "반려동물", "핫플"],
+                     "bookmarkCount": 32,
+                     "reviewCount": 12
+                 },
 
             ]
 

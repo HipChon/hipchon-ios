@@ -15,7 +15,7 @@ class FilterCellViewModel {
 
     // MARK: view -> viewModel
 
-    init(_ data: FilterModel) {
+    init(_ data: FilterCellModel) {
         name = Driver.just(data)
             .compactMap { $0.name }
     }

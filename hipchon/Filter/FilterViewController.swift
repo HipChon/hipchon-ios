@@ -117,6 +117,12 @@ class FilterViewController: UIViewController {
         $0.isPagingEnabled = false
     }
 
+    private lazy var resetButton = UIButton().then {
+        $0.backgroundColor = .white
+        $0.setTitle("초기화", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+    }
+
     private lazy var searchButton = UIButton().then {
         $0.backgroundColor = .black
         $0.setTitle("적용", for: .normal)
@@ -142,23 +148,19 @@ class FilterViewController: UIViewController {
 
         // MARK: view -> viewModel
 
-        regionCollectionView.rx.itemSelected
-            .map { $0.item }
-            .bind(to: viewModel.selectedRegionIdx)
+        regionCollectionView.rx.modelSelected(FilterCellModel.self)
+            .bind(to: viewModel.selectedRegion)
             .disposed(by: bag)
 
-        categoryCollectionView.rx.itemSelected
-            .map { $0.item }
-            .bind(to: viewModel.selectedCategoryIdx)
+        categoryCollectionView.rx.modelSelected(FilterCellModel.self)
+            .bind(to: viewModel.selectedCategory)
             .disposed(by: bag)
 
         plusButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.plusButtonTapped)
             .disposed(by: bag)
 
         minusButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.minusButtonTapped)
             .disposed(by: bag)
 
@@ -167,13 +169,23 @@ class FilterViewController: UIViewController {
             .bind(to: viewModel.petButtonTapped)
             .disposed(by: bag)
 
+        resetButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.resetButtonTapped)
+            .disposed(by: bag)
+
+        searchButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.searchButtonTapped)
+            .disposed(by: bag)
+
         // MARK: viewModel -> view
 
         viewModel.setPerssonel
             .drive(personnelNumberLabel.rx.text)
             .disposed(by: bag)
 
-        viewModel.selectedButtonType
+        viewModel.setSelectedButtonType
             .drive(onNext: {
                 self.minusButton.setTitleColor($0 == .minus ? .white : .black, for: .normal)
                 self.minusButton.backgroundColor = $0 == .minus ? .black : .white
@@ -200,10 +212,9 @@ class FilterViewController: UIViewController {
                 let FilterCellVM = FilterCellViewModel(data)
                 cell.bind(FilterCellVM)
 
-                viewModel.selectedRegionIdx
-                    .asDriver(onErrorJustReturn: 0)
+                viewModel.setRegion
                     .drive(onNext: {
-                        if $0 == idx {
+                        if $0.name == data.name {
                             cell.contentView.backgroundColor = .black
                             cell.filterLabel.textColor = .white
                         } else {
@@ -223,10 +234,9 @@ class FilterViewController: UIViewController {
                 let FilterCellVM = FilterCellViewModel(data)
                 cell.bind(FilterCellVM)
 
-                viewModel.selectedCategoryIdx
-                    .asDriver(onErrorJustReturn: 0)
+                viewModel.setCategory
                     .drive(onNext: {
-                        if $0 == idx {
+                        if $0.name == data.name {
                             cell.contentView.backgroundColor = .black
                             cell.filterLabel.textColor = .white
                         } else {
@@ -237,6 +247,28 @@ class FilterViewController: UIViewController {
                     .disposed(by: cell.bag)
                 return cell
             }
+            .disposed(by: bag)
+
+        // MARK: scene
+
+        viewModel.pushPlaceListVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self,
+                      let tabbarVC = self.presentingViewController as? UINavigationController else { return }
+                let placeListVC = PlaceListViewController()
+                placeListVC.bind(viewModel)
+
+                self.dismiss(animated: true, completion: {
+                    tabbarVC.pushViewController(placeListVC, animated: true)
+                })
+            })
+            .disposed(by: bag)
+
+        cancleButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            })
             .disposed(by: bag)
     }
 
@@ -280,6 +312,7 @@ class FilterViewController: UIViewController {
             regionCollectionView,
             categoryLabel,
             categoryCollectionView,
+            resetButton,
             searchButton,
         ].forEach {
             view.addSubview($0)
@@ -336,10 +369,15 @@ class FilterViewController: UIViewController {
             $0.top.equalTo(categoryLabel.snp.bottom).offset(19.0)
             $0.height.equalTo(33.0)
         }
+        resetButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(30.0)
+            $0.height.equalTo(87.0)
+        }
 
         searchButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(30.0)
+            $0.top.equalTo(resetButton.snp.bottom)
             $0.height.equalTo(87.0)
         }
     }

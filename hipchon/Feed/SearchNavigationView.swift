@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxCocoa
 import RxSwift
 import UIKit
 
@@ -14,8 +15,11 @@ class SearchNavigationView: UIView {
         $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
     }
 
-    private lazy var filterButton = UIButton().then {
-        $0.setImage(UIImage(named: "filter") ?? UIImage(), for: .normal)
+    private lazy var searchFilterButton = SearchFilterButton(frame: .zero).then { _ in
+    }
+
+    private lazy var sortButton = UIButton().then {
+        $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
     }
 
     private let bag = DisposeBag()
@@ -31,14 +35,38 @@ class SearchNavigationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_: SearchNavigationViewModel) {}
+    func bind(_ viewModel: SearchNavigationViewModel) {
+        // MARK: view -> viewModel
+
+        backButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.backButtonTapped)
+            .disposed(by: bag)
+
+        searchFilterButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.searchFilterButtonTapped)
+            .disposed(by: bag)
+
+        sortButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.sortButtonTapped)
+            .disposed(by: bag)
+
+        // MARK: viewModel -> view
+
+        viewModel.setSearchFilterTitle
+            .drive(searchFilterButton.rx.title())
+            .disposed(by: bag)
+    }
 
     func attribute() {}
 
     func layout() {
         [
             backButton,
-            filterButton,
+            searchFilterButton,
+            sortButton,
         ].forEach { addSubview($0) }
 
         backButton.snp.makeConstraints {
@@ -47,7 +75,13 @@ class SearchNavigationView: UIView {
             $0.width.height.equalTo(30.0)
         }
 
-        filterButton.snp.makeConstraints {
+        searchFilterButton.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.equalTo(224.0)
+            $0.height.equalTo(44.0)
+        }
+
+        sortButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(27.0)
             $0.width.height.equalTo(30.0)

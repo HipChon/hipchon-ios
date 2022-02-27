@@ -13,8 +13,9 @@ class PlaceListCell: UITableViewCell {
                                                               collectionViewLayout: UICollectionViewLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 0.0
-        let width = UIScreen.main.bounds.size.width - 20.0 * 2
-        let height = width * (166.0 / (262.0 + 15.0))
+        let width = UIScreen.main.bounds.size.width - 30.0 * 2
+        let cellHeight = width * ((280.0 + 16.0) / 330.0)
+        let height = cellHeight * (166.0 / 280.0)
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
@@ -33,24 +34,53 @@ class PlaceListCell: UITableViewCell {
         $0.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
 
-    private lazy var likeButton = UIButton().then {
-        $0.setImage(UIImage(named: "like.fill") ?? UIImage(), for: .normal)
+    private lazy var pageControl = UIPageControl().then { _ in
     }
 
     private lazy var bookmarkButton = UIButton().then {
         $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal)
     }
 
-    private lazy var nameLabel = UILabel().then {
+    private lazy var titleLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 18.0, weight: .bold)
     }
 
-    private lazy var addressLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
+    private lazy var distanceKmLabel = UILabel().then {
+        $0.font = UIFont.systemFont(ofSize: 13.0, weight: .bold)
         $0.textColor = .secondaryLabel
     }
 
-    private lazy var categoryLabel = UILabel().then {
+    private lazy var firstHashtagView = HashtagView(frame: .zero).then {
+        $0.backgroundColor = .systemYellow
+    }
+
+    private lazy var secondHashtagView = HashtagView(frame: .zero).then {
+        $0.backgroundColor = .systemYellow
+    }
+
+    private lazy var thirdHashtagView = HashtagView(frame: .zero).then {
+        $0.backgroundColor = .systemYellow
+    }
+
+    private lazy var bookmarkCountImageView = UIImageView().then {
+        $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
+    }
+
+    private lazy var bookmarkCountLabel = UILabel().then {
+        $0.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+        $0.textColor = .secondaryLabel
+    }
+
+    private lazy var reviewCountImageView = UIImageView().then {
+        $0.image = UIImage(named: "reviewCount") ?? UIImage()
+    }
+
+    private lazy var reviewCountLabel = UILabel().then {
+        $0.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+        $0.textColor = .secondaryLabel
+    }
+
+    private lazy var priceDesLabel = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 16.0, weight: .bold)
     }
 
@@ -71,23 +101,17 @@ class PlaceListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0.0, left: 20.0, bottom: 15.0, right: 20.0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0.0, left: 30.0, bottom: 16.0, right: 30.0))
     }
 
     func bind(_ viewModel: PlaceListCellViewModel) {
+        // MARK: subViewModels
+
+        firstHashtagView.bind(viewModel.firstHashtagVM)
+        secondHashtagView.bind(viewModel.secondHashtagVM)
+        thirdHashtagView.bind(viewModel.thirdHashtagVM)
+
         // MARK: viewModel -> view
-
-        viewModel.name
-            .drive(nameLabel.rx.text)
-            .disposed(by: bag)
-
-        viewModel.address
-            .drive(addressLabel.rx.text)
-            .disposed(by: bag)
-
-        viewModel.category
-            .drive(categoryLabel.rx.text)
-            .disposed(by: bag)
 
         viewModel.placeImageURLs
             .drive(placeImageCollectView.rx.items) { tv, row, data in
@@ -97,6 +121,32 @@ class PlaceListCell: UITableViewCell {
                 cell.bind(viewModel)
                 return cell
             }
+            .disposed(by: bag)
+
+        viewModel.imageCount
+            .drive(pageControl.rx.numberOfPages)
+            .disposed(by: bag)
+
+        viewModel.title
+            .drive(titleLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.distanceKm
+            .drive(distanceKmLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.bookmarkCount
+            .map { "\($0)" }
+            .drive(bookmarkCountLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.reviewCount
+            .map { "\($0)" }
+            .drive(reviewCountLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.priceDes
+            .drive(priceDesLabel.rx.text)
             .disposed(by: bag)
     }
 
@@ -109,46 +159,118 @@ class PlaceListCell: UITableViewCell {
     }
 
     private func layout() {
+        // MARK: hashtag
+
+        [firstHashtagView, secondHashtagView, thirdHashtagView].forEach {
+            $0.snp.makeConstraints {
+                $0.width.equalTo(51.0)
+                $0.height.equalTo(20.0)
+            }
+        }
+
+        let hashtagStackView = UIStackView(arrangedSubviews: [firstHashtagView, secondHashtagView, thirdHashtagView])
+        hashtagStackView.axis = .horizontal
+        hashtagStackView.alignment = .fill
+        hashtagStackView.distribution = .equalSpacing
+        hashtagStackView.spacing = 8.0
+
+        // MARK: count
+
+        [
+            bookmarkCountImageView,
+            reviewCountImageView,
+        ].forEach {
+            $0.snp.makeConstraints {
+                $0.width.height.equalTo(20.0)
+            }
+        }
+
+        let countStackView = UIStackView(arrangedSubviews: [bookmarkCountImageView, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
+        countStackView.axis = .horizontal
+        countStackView.alignment = .fill
+        countStackView.distribution = .equalSpacing
+        countStackView.spacing = 12.0
+
         [
             placeImageCollectView,
-            likeButton,
+            pageControl,
             bookmarkButton,
-            nameLabel,
-            addressLabel,
-            categoryLabel,
+            titleLabel,
+            distanceKmLabel,
+            hashtagStackView,
+            countStackView,
+            priceDesLabel,
 
         ].forEach { contentView.addSubview($0) }
 
         placeImageCollectView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            let width = UIScreen.main.bounds.size.width - 20.0 * 2
-            $0.height.equalTo(width * (166.0 / 350.0))
+            let width = UIScreen.main.bounds.size.width - 30.0 * 2
+            let cellHeight = width * ((280.0 + 16.0) / 330.0)
+            let height = cellHeight * (166.0 / 280.0)
+            $0.height.equalTo(height)
         }
 
-        likeButton.snp.makeConstraints {
+        pageControl.snp.makeConstraints {
+            $0.width.equalTo(40.0)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(40.0)
+        }
+
+        bookmarkButton.snp.makeConstraints {
             $0.top.equalTo(placeImageCollectView.snp.top).offset(15.0)
             $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)
             $0.width.height.equalTo(25.0)
         }
 
-        bookmarkButton.snp.makeConstraints {
-            $0.top.equalTo(placeImageCollectView.snp.bottom).offset(15.0)
-            $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)
-            $0.width.height.equalTo(25.0)
-        }
-
-        nameLabel.snp.makeConstraints {
+        titleLabel.snp.makeConstraints {
             $0.top.equalTo(placeImageCollectView.snp.bottom).offset(16.0)
-            $0.leading.equalToSuperview().inset(22.0)
+            $0.leading.equalToSuperview().inset(16.0)
         }
 
-        addressLabel.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(7.0)
-            $0.leading.equalTo(nameLabel.snp.leading)
+        distanceKmLabel.snp.makeConstraints {
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(9.0)
+            $0.centerY.equalTo(titleLabel)
         }
 
-        categoryLabel.snp.makeConstraints {
-            $0.bottom.trailing.equalToSuperview().inset(14.0)
+        hashtagStackView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(8.0)
+            $0.leading.equalTo(titleLabel.snp.leading)
         }
+
+        countStackView.snp.makeConstraints {
+            $0.bottom.leading.equalToSuperview().inset(16.0)
+        }
+
+        priceDesLabel.snp.makeConstraints {
+            $0.bottom.trailing.equalToSuperview().inset(16.0)
+        }
+    }
+}
+
+extension PlaceListCell: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity _: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // item의 사이즈와 item 간의 간격 사이즈를 구해서 하나의 item 크기로 설정.
+        let layout = placeImageCollectView.collectionViewLayout as! UICollectionViewFlowLayout
+        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+
+        // targetContentOff을 이용하여 x좌표가 얼마나 이동했는지 확인
+        // 이동한 x좌표 값과 item의 크기를 비교하여 몇 페이징이 될 것인지 값 설정
+        var offset = targetContentOffset.pointee
+        let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
+        var roundedIndex = round(index)
+
+        // scrollView, targetContentOffset의 좌표 값으로 스크롤 방향을 알 수 있다.
+        // index를 반올림하여 사용하면 item의 절반 사이즈만큼 스크롤을 해야 페이징이 된다.
+        // 스크로로 방향을 체크하여 올림,내림을 사용하면 좀 더 자연스러운 페이징 효과를 낼 수 있다.
+        if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+            roundedIndex = floor(index)
+        } else {
+            roundedIndex = ceil(index)
+        } // 위 코드를 통해 페이징 될 좌표값을 targetContentOffset에 대입하면 된다.
+        offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing, // - scrollView.contentInset.left,
+                         y: -scrollView.contentInset.top)
+
+        targetContentOffset.pointee = offset
     }
 }

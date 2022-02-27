@@ -5,6 +5,7 @@
 //  Created by 김범수 on 2022/02/08.
 //
 
+import MaterialComponents.MaterialBottomSheet
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -47,6 +48,10 @@ class FeedViewController: UIViewController {
     }
 
     func bind(_ viewModel: FeedViewModel) {
+        // MARK: subviewModels
+
+        searchNavigationView.bind(viewModel.searchNavigationVM)
+
         // MARK: view -> viewModel
 
         reviewList.rx.modelSelected(ReviewModel.self)
@@ -74,6 +79,20 @@ class FeedViewController: UIViewController {
                 let reviewDetailVC = ReviewDetailViewController()
                 reviewDetailVC.bind(viewModel)
                 self.navigationController?.pushViewController(reviewDetailVC, animated: true)
+            })
+            .disposed(by: bag)
+
+        viewModel.presentFilterVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let filterVC = FilterViewController()
+                filterVC.bind(viewModel)
+
+                // MDC 바텀 시트로 설정
+                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
+                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+                                                          height: filterVC.viewHeight)
+                self.present(bottomSheet, animated: true, completion: nil)
             })
             .disposed(by: bag)
     }
