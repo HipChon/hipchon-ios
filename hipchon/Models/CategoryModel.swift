@@ -6,22 +6,22 @@
 //
 
 import Foundation
+import UIKit
 
 struct CategoryModel {
     let name: String?
+    let image: UIImage?
 
     static var tmpModels: [CategoryModel] {
         return [
-            CategoryModel(name: "오션뷰"),
-            CategoryModel(name: "바다근처"),
-            CategoryModel(name: "시골살기"),
-            CategoryModel(name: "마당"),
-            CategoryModel(name: "재택근무"),
-            CategoryModel(name: "숲세권"),
-            CategoryModel(name: "돌담"),
-            CategoryModel(name: "뚜벅이"),
-            CategoryModel(name: "반려동물"),
-            CategoryModel(name: "프리미엄"),
+            CategoryModel(name: "불멍", image: UIImage(named: "불멍") ?? UIImage()),
+            CategoryModel(name: "논멍", image: UIImage(named: "논멍") ?? UIImage()),
+            CategoryModel(name: "물멍", image: UIImage(named: "물멍") ?? UIImage()),
+            CategoryModel(name: "밭멍", image: UIImage(named: "밭멍") ?? UIImage()),
+            CategoryModel(name: "촌캉스", image: UIImage(named: "촌캉스") ?? UIImage()),
+            CategoryModel(name: "체험", image: UIImage(named: "체험") ?? UIImage()),
+            CategoryModel(name: "가게", image: UIImage(named: "가게") ?? UIImage()),
+            CategoryModel(name: "기타", image: UIImage(named: "기타") ?? UIImage()),
         ]
     }
 }

@@ -18,6 +18,21 @@ class ProfileViewController: UIViewController {
         $0.setImage(UIImage(systemName: "house"), for: .normal)
     }
 
+    private lazy var backgroundImageView = UIImageView().then {
+        $0.backgroundColor = .gray
+    }
+
+    private lazy var profileImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.image = UIImage(named: "profile") ?? UIImage()
+        $0.layer.cornerRadius = $0.frame.width / 2
+    }
+
+    private lazy var nameLabel = UILabel().then {
+        $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+        $0.text = "김범수"
+    }
+
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -64,12 +79,27 @@ class ProfileViewController: UIViewController {
 
     func layout() {
         [
+            backgroundImageView,
             settingButton,
+            profileImageView,
+            nameLabel,
         ].forEach { view.addSubview($0) }
 
         settingButton.snp.makeConstraints {
             $0.height.width.equalTo(30.0)
             $0.top.trailing.equalToSuperview().inset(30)
+        }
+
+        backgroundImageView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.snp.width).multipliedBy(186.0 / 390.0)
+        }
+
+        profileImageView.snp.makeConstraints {
+            $0.width.equalTo(view.snp.width).multipliedBy(106.0 / 390.0)
+            $0.height.equalTo(profileImageView.snp.width)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(26.0)
         }
     }
 }

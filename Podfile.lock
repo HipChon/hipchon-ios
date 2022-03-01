@@ -2,6 +2,35 @@ PODS:
   - Alamofire (5.5.0)
   - Differentiator (5.0.0)
   - Kingfisher (7.1.2)
+  - MaterialComponents/Availability (124.2.0)
+  - MaterialComponents/BottomSheet (124.2.0):
+    - MaterialComponents/Elevation
+    - MaterialComponents/private/KeyboardWatcher
+    - MaterialComponents/private/Math
+    - MaterialComponents/ShadowElevations
+    - MaterialComponents/ShadowLayer
+    - MaterialComponents/ShapeLibrary
+    - MaterialComponents/Shapes
+  - MaterialComponents/Elevation (124.2.0):
+    - MaterialComponents/Availability
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/private/Application (124.2.0)
+  - MaterialComponents/private/Color (124.2.0):
+    - MaterialComponents/Availability
+  - MaterialComponents/private/KeyboardWatcher (124.2.0):
+    - MaterialComponents/private/Application
+  - MaterialComponents/private/Math (124.2.0)
+  - MaterialComponents/ShadowElevations (124.2.0)
+  - MaterialComponents/ShadowLayer (124.2.0):
+    - MaterialComponents/ShadowElevations
+  - MaterialComponents/ShapeLibrary (124.2.0):
+    - MaterialComponents/private/Math
+    - MaterialComponents/Shapes
+  - MaterialComponents/Shapes (124.2.0):
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+    - MaterialComponents/ShadowLayer
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -21,6 +50,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - Kingfisher
+  - MaterialComponents/BottomSheet
   - RxCocoa
   - RxDataSources
   - RxSwift
@@ -33,6 +63,7 @@ SPEC REPOS:
     - Alamofire
     - Differentiator
     - Kingfisher
+    - MaterialComponents
     - RxCocoa
     - RxDataSources
     - RxRelay
@@ -45,6 +76,7 @@ SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
+  MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -53,6 +85,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: dd21290414b50f7a6364eebd9eac5a50fddf6c14
+PODFILE CHECKSUM: 6ca1e30fc6aaa0434cc35359a599b70fd2bd0300
 
 COCOAPODS: 1.11.2

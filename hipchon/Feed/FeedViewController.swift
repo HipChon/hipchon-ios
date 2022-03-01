@@ -5,6 +5,7 @@
 //  Created by 김범수 on 2022/02/08.
 //
 
+import MaterialComponents.MaterialBottomSheet
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -16,12 +17,19 @@ class FeedViewController: UIViewController {
 
     private let bag = DisposeBag()
 
+    private lazy var searchNavigationView = SearchNavigationView().then { _ in
+    }
+
     private lazy var reviewList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(ReviewListCell.self, forCellReuseIdentifier: ReviewListCell.identyfier)
         $0.rowHeight = 440.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
+    }
+
+    private lazy var uploadButton = UIButton().then {
+        $0.setImage(UIImage(named: "upload"), for: .normal)
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -40,6 +48,10 @@ class FeedViewController: UIViewController {
     }
 
     func bind(_ viewModel: FeedViewModel) {
+        // MARK: subviewModels
+
+        searchNavigationView.bind(viewModel.searchNavigationVM)
+
         // MARK: view -> viewModel
 
         reviewList.rx.modelSelected(ReviewModel.self)
@@ -69,6 +81,20 @@ class FeedViewController: UIViewController {
                 self.navigationController?.pushViewController(reviewDetailVC, animated: true)
             })
             .disposed(by: bag)
+
+        viewModel.presentFilterVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let filterVC = FilterViewController()
+                filterVC.bind(viewModel)
+
+                // MDC 바텀 시트로 설정
+                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
+                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+                                                          height: filterVC.viewHeight)
+                self.present(bottomSheet, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -78,11 +104,26 @@ class FeedViewController: UIViewController {
 
     private func layout() {
         [
+            searchNavigationView,
             reviewList,
+            uploadButton,
         ].forEach { view.addSubview($0) }
 
+        searchNavigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(68.0)
+        }
+
         reviewList.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(16.0)
+            $0.top.equalTo(searchNavigationView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+
+        uploadButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(26.0)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(43.0)
+            $0.width.height.equalTo(50.0)
         }
     }
 }

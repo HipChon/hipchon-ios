@@ -10,7 +10,14 @@ import RxRelay
 import RxSwift
 
 class CategoryCellViewModel {
+    private let bag = DisposeBag()
+
+    // MARK: viewModel -> view
+
     let title: Driver<String>
+    let image: Driver<UIImage>
+
+    // MARK: view -> viewModel
 
     let category = PublishRelay<CategoryModel>()
 
@@ -18,5 +25,9 @@ class CategoryCellViewModel {
         title = category
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
+
+        image = category
+            .compactMap { $0.image }
+            .asDriver(onErrorJustReturn: UIImage())
     }
 }

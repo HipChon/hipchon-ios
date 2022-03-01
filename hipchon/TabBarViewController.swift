@@ -64,4 +64,9 @@ class TabBarViewController: UITabBarController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        navigationController?.isNavigationBarHidden = true
+    }
 }

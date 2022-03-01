@@ -31,11 +31,11 @@ class MyPlaceCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         category = place
-            .compactMap { $0.category }
+            .compactMap { $0.priceDes }
             .asDriver(onErrorJustReturn: "")
 
         address = place
-            .compactMap { $0.address }
+            .compactMap { $0.region }
             .asDriver(onErrorJustReturn: "")
     }
 }

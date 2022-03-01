@@ -12,11 +12,14 @@ class CategoryCell: UICollectionViewCell {
     public static let identyfier = "CategoryCell"
     private let bag = DisposeBag()
 
-    private lazy var label: UILabel = {
-        let label = UILabel()
+    private lazy var label = UILabel().then {
+        $0.textAlignment = .center
+        $0.font = .GmarketSans(size: 14.0, type: .medium)
+    }
 
-        return label
-    }()
+    private lazy var imageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,30 +33,40 @@ class CategoryCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: CategoryCellViewModel) {
+        // MARK: view -> viewModel
+
+        // MARK: viewModel -> view
+
         viewModel.title
             .drive(label.rx.text)
+            .disposed(by: bag)
+
+        viewModel.image
+            .drive(imageView.rx.image)
             .disposed(by: bag)
     }
 
     private func attribute() {
-        contentView.backgroundColor = .lightGray
-        contentView.addShadow(offset: CGSize(width: 2.0, height: 2.0))
-        contentView.layer.cornerRadius = 8.0
+        contentView.backgroundColor = .white
     }
 
     private func layout() {
         [
-            label,
+            imageView,
+            label
         ].forEach {
-            contentView.addSubview($0)
+            addSubview($0)
         }
-
+        
+        imageView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(20.0)
+            $0.width.height.equalTo(45.0)
+        }
+        
         label.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(imageView.snp.bottom).offset(8.0)
         }
-    }
-
-    func setDate(_ data: CategoryModel) {
-        label.text = data.name
     }
 }

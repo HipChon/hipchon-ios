@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     let loginViewModel = LoginViewModel()
+    let startViewModel = StartViewModel()
 
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -17,12 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
 
-//        let loginViewController = LoginViewController()
-//        loginViewController.bind(loginViewModel)
-//        window?.rootViewController = loginViewController
+//        let startViewController = StartViewController()
+//        startViewController.bind(startViewModel)
+//        window?.rootViewController = UINavigationController(rootViewController: startViewController)
 
         let tapBarViewController = TabBarViewController()
-        window?.rootViewController = tapBarViewController
+        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
 
         window?.makeKeyAndVisible()
     }

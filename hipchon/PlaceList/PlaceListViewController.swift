@@ -5,15 +5,18 @@
 //  Created by 김범수 on 2022/02/02.
 //
 
+import MaterialComponents.MaterialBottomSheet
 import RxSwift
 import UIKit
 
 class PlaceListViewController: UIViewController {
+    private lazy var searchNavigationView = SearchNavigationView().then { _ in
+    }
+
     private lazy var placeList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
-        $0.rowHeight = view.frame.width * (302.0 / 380.0)
-        $0.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        $0.rowHeight = (view.frame.width - 60.0) * ((280.0 + 16.0) / 330.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }
@@ -32,6 +35,10 @@ class PlaceListViewController: UIViewController {
     }
 
     func bind(_ viewModel: PlaceListViewModel) {
+        // MARK: subviewModels
+
+        searchNavigationView.bind(viewModel.searchNavigationVM)
+
         // MARK: view -> viewModel
 
         placeList.rx.modelSelected(PlaceModel.self)
@@ -61,24 +68,61 @@ class PlaceListViewController: UIViewController {
                 self.navigationController?.pushViewController(placeDetailVC, animated: true)
             })
             .disposed(by: bag)
+
+        viewModel.presentFilterVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let filterVC = FilterViewController()
+                filterVC.bind(viewModel)
+
+                // MDC 바텀 시트로 설정
+                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
+                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+                                                          height: filterVC.viewHeight)
+                self.present(bottomSheet, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+
+        viewModel.presentSortVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let sortVC = SortViewController()
+                sortVC.bind(viewModel)
+
+                // MDC 바텀 시트로 설정
+                let bottomSheet: MDCBottomSheetController = .init(contentViewController: sortVC)
+                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+                                                          height: sortVC.viewHeight)
+                self.present(bottomSheet, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+        viewModel.pop
+            .emit(onNext: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: bag)
     }
 
     private func attribute() {
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .systemBackground
-
-        navigationController?.navigationItem.title = "장소 검색"
-        navigationController?.navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.backItem?.title = ""
     }
 
     private func layout() {
         [
+            searchNavigationView,
             placeList,
         ].forEach { view.addSubview($0) }
 
+        searchNavigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(74.0)
+        }
+
         placeList.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(searchNavigationView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
