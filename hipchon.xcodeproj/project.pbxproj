@@ -135,6 +135,10 @@
 		D841C86F27A6C552005B8C25 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		D84B351A27CB9A6900BF1A63 /* SortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortViewController.swift; sourceTree = "<group>"; };
 		D84B351C27CB9BC200BF1A63 /* SortViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortViewModel.swift; sourceTree = "<group>"; };
+		D84B352027CBA8FE00BF1A63 /* BestReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewView.swift; sourceTree = "<group>"; };
+		D84B352227CBA90500BF1A63 /* BestReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewViewModel.swift; sourceTree = "<group>"; };
+		D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFBold.ttf; sourceTree = "<group>"; };
+		D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
 		D871F4A727BD111300CCDE4D /* PickCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickCell.swift; sourceTree = "<group>"; };
 		D871F4A927BD111900CCDE4D /* PickCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickCellModel.swift; sourceTree = "<group>"; };
 		D871F4AB27BD11CF00CCDE4D /* PickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickView.swift; sourceTree = "<group>"; };
@@ -342,6 +346,8 @@
 				D88FAF9627A68ADB00E41F4F /* HomeViewModel.swift */,
 				D871F4AB27BD11CF00CCDE4D /* PickView.swift */,
 				D871F4AD27BD12D700CCDE4D /* PickViewModel.swift */,
+				D84B352027CBA8FE00BF1A63 /* BestReviewView.swift */,
+				D84B352227CBA90500BF1A63 /* BestReviewViewModel.swift */,
 				D871F4AF27BD186100CCDE4D /* WeeklyHipPlaceView.swift */,
 				D871F4B127BD188100CCDE4D /* WeeklyHipPlaceViewModel.swift */,
 				D841C87127A6C706005B8C25 /* Subcomponents */,
@@ -538,6 +544,7 @@
 				D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */,
 				D83304E227AC1A43008E7DB7 /* ProfileViewModel.swift in Sources */,
 				D8091FFE27B280A1000F057E /* MyPlaceViewModel.swift in Sources */,
+				D84B352127CBA8FE00BF1A63 /* BestReviewView.swift in Sources */,
 				D80967BC27BA847E0015E7EF /* NetworkManager.swift in Sources */,
 				D8A3031227C9E6750013E71A /* SearchFilterModel.swift in Sources */,
 				D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */,

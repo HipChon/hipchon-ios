@@ -15,19 +15,19 @@ class WeeklyHipPlaceView: UIView {
 
     private lazy var titleLabel = UILabel().then {
         $0.text = "주간 힙플"
-        $0.font = UIFont.boldSystemFont(ofSize: 16.0)
+        $0.font = .systemFont(ofSize: 20.0, weight: .medium)
     }
 
     private lazy var hipPlaceCollectionView = UICollectionView(frame: .zero,
                                                                collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
-        let itemSpacing: CGFloat = 12.0
+        let itemSpacing: CGFloat = 10.0
 
-        let width = 138.0
-        let height = 90.0
+        let width = 296.0
+        let height = 154.0
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 12.0, bottom: 0.0, right: 0.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -63,7 +63,7 @@ class WeeklyHipPlaceView: UIView {
     }
 
     private func attribute() {
-        backgroundColor = .lightGray
+        backgroundColor = .white
     }
 
     private func layout() {
@@ -74,14 +74,13 @@ class WeeklyHipPlaceView: UIView {
 
         titleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(30.0)
-            $0.top.equalToSuperview().inset(14.0)
-            $0.height.equalTo(25.0)
+            $0.top.equalToSuperview().inset(20.0)
         }
 
         hipPlaceCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(titleLabel.snp.bottom).offset(10.0)
-            $0.bottom.equalToSuperview().inset(18.0)
+            $0.height.equalTo(154.0)
         }
     }
 }

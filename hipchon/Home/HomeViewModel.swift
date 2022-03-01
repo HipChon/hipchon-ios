@@ -13,8 +13,9 @@ class HomeViewModel {
 
     // MARK: subViewModels
 
-    let pickViewModel = PickViewModel()
-    let weeklyHipPlaceViewModel = WeeklyHipPlaceViewModel()
+    let pickVM = PickViewModel()
+    let weeklyHipPlaceVM = WeeklyHipPlaceViewModel()
+    let bestReviewVM = BestReviewViewModel()
 
     // MARK: viewModel -> view
 
@@ -26,21 +27,23 @@ class HomeViewModel {
     // MARK: view -> viewModel
 
     let searchButtonTapped = PublishRelay<Void>()
-    let filterButtonTapped = PublishRelay<Void>()
+    let selectedCategory = PublishRelay<CategoryModel>()
 
     init() {
-        let placeListViewModel = PlaceListViewModel(SearchFilterModel(personnel: 0, pet: false, region: "", category: ""))
-
+        
         cateogorys = Driver.just(CategoryModel.tmpModels)
 
-        pushPlaceListVC = searchButtonTapped
-            .map { _ in placeListViewModel }
+        pushPlaceListVC = selectedCategory
+            .map { SearchFilterModel(personnel: 0, pet: false, region: "", category: $0.name) }
+            .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
         banners = Driver.just(BannerModel.tmpModels)
 
-        presentFilterVC = filterButtonTapped
+        presentFilterVC = searchButtonTapped
             .map { FilterViewModel() }
             .asSignal(onErrorSignalWith: .empty())
+        
+        
     }
 }

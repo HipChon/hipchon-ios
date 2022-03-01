@@ -14,11 +14,14 @@ class WeeklyHipPlaceViewModel {
 
     // MARK: viewModel -> view
 
-    let hipPlaces: Driver<[BannerModel]>
+    let hipPlaces: Driver<[PlaceModel]>
 
     // MARK: view -> viewModel
 
     init() {
-        hipPlaces = Driver.just(BannerModel.tmpModels + BannerModel.tmpModels)
+        
+        hipPlaces = NetworkManager.shared.getPlaces()
+            .asDriver(onErrorJustReturn: [])
+
     }
 }

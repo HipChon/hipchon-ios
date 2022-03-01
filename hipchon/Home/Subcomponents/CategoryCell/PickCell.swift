@@ -35,7 +35,7 @@ class PickCell: UICollectionViewCell {
 
     private func attribute() {
         layer.masksToBounds = true
-        layer.cornerRadius = 11.0
+        layer.cornerRadius = 2.0
     }
 
     private func layout() {

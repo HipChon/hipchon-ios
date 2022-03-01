@@ -12,7 +12,8 @@ class CategoryCell: UICollectionViewCell {
     public static let identyfier = "CategoryCell"
     private let bag = DisposeBag()
 
-    private lazy var label = UILabel().then { _ in
+    private lazy var label = UILabel().then {
+        $0.textAlignment = .center
     }
 
     private lazy var imageView = UIImageView().then {
@@ -50,20 +51,21 @@ class CategoryCell: UICollectionViewCell {
 
     private func layout() {
         let stackView = UIStackView(arrangedSubviews: [imageView, label])
-        stackView.distribution = .fill
         stackView.axis = .vertical
-        stackView.spacing = 5.0
-        stackView.alignment = .center
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 8.0
+        
 
         contentView.addSubview(stackView)
 
         imageView.snp.makeConstraints {
-            $0.height.equalToSuperview().multipliedBy(0.5)
-            $0.width.equalToSuperview().multipliedBy(0.5)
+            $0.height.width.equalTo(45.0)
         }
 
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.width.equalTo(45.0)
+            $0.centerX.centerY.equalToSuperview()
         }
     }
 }

@@ -22,25 +22,23 @@ class HomeViewController: UIViewController {
 
     private lazy var contentView = UIView().then { _ in
     }
-
-    private lazy var mainLogoImageView = UIImageView().then {
-        $0.image = UIImage(named: "mainLogo") ?? UIImage()
+    
+    private lazy var searchButton = SearchFilterButton().then {
+        $0.setTitle("인원, 지역, 유형을 검색하세요", for: .normal)
+        $0.setTitleColor(.secondaryLabel, for: .normal)
+    }
+    
+    private lazy var boundaryView = UIView().then {
+        $0.backgroundColor = .lightGray
     }
 
-    private lazy var searchButton = UIButton().then {
-        $0.setImage(UIImage(named: "search") ?? UIImage(), for: .normal)
-    }
-
-    private lazy var filterButton = UIButton().then {
-        $0.setImage(UIImage(named: "filter") ?? UIImage(), for: .normal)
-    }
 
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
                                                                collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
-        let itemSpacing: CGFloat = 0.0
-        let width = (view.frame.width - 32.0 * 2) / 4
-        let height = width
+        let itemSpacing: CGFloat = 20.0
+        let width = (view.frame.width - 20.0 * 3) / 4
+        let height = 106.0
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
@@ -55,8 +53,8 @@ class HomeViewController: UIViewController {
 
     private lazy var pickView = PickView().then { _ in
     }
-
-    private lazy var weelkyHipPlaceView = WeeklyHipPlaceView().then { _ in
+    
+    private lazy var bestReviewView = BestReviewView().then { _ in
     }
 
     private lazy var bannerCollectionView = UICollectionView(frame: .zero,
@@ -78,9 +76,36 @@ class HomeViewController: UIViewController {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
+    
+    private lazy var weelkyHipPlaceView = WeeklyHipPlaceView().then { _ in
+    }
+    
+    private lazy var kakaoTitleLabel = UILabel().then {
+        $0.text = "어디서 살지 못 정하셨나요?"
+        $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+        $0.textColor = .black
+        $0.textAlignment = .center
+    }
+    
+    private lazy var kakaoButton = UIButton().then {
+        $0.backgroundColor = .systemYellow
+        $0.setTitle("카카오톡 상담하기", for: .normal)
+    }
+
+    private lazy var supportLabel = UILabel().then {
+        $0.text = "고객 지원"
+        $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+        $0.textColor = .black
+        $0.textAlignment = .center
+    }
+    
+    private lazy var placeRegisterButton = UIButton().then {
+        $0.backgroundColor = .systemYellow
+        $0.setTitle("공간 등록 문의", for: .normal)
+    }
 
     private lazy var marginView = UIView().then {
-        $0.backgroundColor = .gray
+        $0.backgroundColor = .white
     }
 
     private let bag = DisposeBag()
@@ -102,8 +127,9 @@ class HomeViewController: UIViewController {
     func bind(_ viewModel: HomeViewModel) {
         // MARK: subViews Binding
 
-        pickView.bind(viewModel.pickViewModel)
-        weelkyHipPlaceView.bind(viewModel.weeklyHipPlaceViewModel)
+        pickView.bind(viewModel.pickVM)
+        bestReviewView.bind(viewModel.bestReviewVM)
+        weelkyHipPlaceView.bind(viewModel.weeklyHipPlaceVM)
 
         // MARK: view -> viewModel
 
@@ -111,10 +137,10 @@ class HomeViewController: UIViewController {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.searchButtonTapped)
             .disposed(by: bag)
-
-        filterButton.rx.tap
+        
+        categoryCollectionView.rx.modelSelected(CategoryModel.self)
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.filterButtonTapped)
+            .bind(to: viewModel.selectedCategory)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -144,7 +170,7 @@ class HomeViewController: UIViewController {
             .emit(onNext: { [weak self] viewModel in
                 let placeListVC = PlaceListViewController()
                 placeListVC.bind(viewModel)
-                self?.navigationController?.pushViewController(placeListVC, animated: false)
+                self?.tabBarController?.navigationController?.pushViewController(placeListVC, animated: true)
             })
             .disposed(by: bag)
 
@@ -183,71 +209,90 @@ class HomeViewController: UIViewController {
         }
 
         [
-            mainLogoImageView,
             searchButton,
-            filterButton,
+            boundaryView,
             categoryCollectionView,
             pickView,
-            weelkyHipPlaceView,
+            bestReviewView,
             bannerCollectionView,
+            weelkyHipPlaceView,
             marginView,
         ].forEach {
             contentView.addSubview($0)
         }
 
-        mainLogoImageView.snp.makeConstraints {
-            $0.width.equalToSuperview().multipliedBy(71.0 / 390.0)
-            $0.height.equalTo(view.snp.width).multipliedBy(59.0 / 390.0)
-            $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(4.0)
-//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(4.0)
-        }
 
         searchButton.snp.makeConstraints {
-            $0.height.width.equalTo(16.0)
-            $0.centerY.equalTo(mainLogoImageView.snp.centerY)
-//            $0.trailing.equalTo(filterButton.snp.leading).offset(24.0)
-            $0.trailing.equalToSuperview().inset(27.0 + 16.0 + 24.0)
-//            $0.trailing.equalTo(filterButton.snp.leading).offset(24.0)
+            $0.top.equalTo(view.safeAreaInsets.top).offset(12.0)
+            $0.leading.trailing.equalToSuperview().inset(30.0)
+            $0.height.equalTo(44.0)
         }
-
-        filterButton.snp.makeConstraints {
-            $0.height.width.equalTo(16.0)
-            $0.top.equalTo(searchButton.snp.top)
-            $0.trailing.equalToSuperview().inset(27.0)
+        
+        boundaryView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1.0)
+            $0.top.equalTo(searchButton.snp.bottom).offset(16.0)
         }
 
         categoryCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(32.0)
-            $0.top.equalTo(mainLogoImageView.snp.bottom).offset(29.0)
-            let itemSize = (view.frame.width - 32.0 * 2) / 4
-            $0.height.equalTo(itemSize * 2)
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(boundaryView.snp.bottom)
+            $0.height.equalTo(106.0)
         }
 
         pickView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(16.0)
-            $0.height.equalTo(331.0)
+            $0.top.equalTo(categoryCollectionView.snp.bottom)
+            $0.height.equalTo(394.0)
+        }
+        
+        bestReviewView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(pickView.snp.bottom)
+            $0.height.equalTo(162.0)
+        }
+        
+        bannerCollectionView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(bestReviewView.snp.bottom)
+            let height = view.frame.width * (137.0 / 390.0)
+            $0.height.equalTo(height)
         }
 
         weelkyHipPlaceView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(pickView.snp.bottom)
-            $0.height.equalTo(157.0)
-        }
-
-        bannerCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(weelkyHipPlaceView.snp.bottom)
-            let height = view.frame.width * (218.0 / 390.0)
-            $0.height.equalTo(height)
-        }
-
-        marginView.snp.makeConstraints {
             $0.top.equalTo(bannerCollectionView.snp.bottom)
+            $0.height.equalTo(237.0)
+        }
+        
+        let stackView = UIStackView(arrangedSubviews: [kakaoTitleLabel, kakaoButton, supportLabel, placeRegisterButton])
+        
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.backgroundColor = .white
+        stackView.spacing = 20.0
+        
+        view.addSubview(stackView)
+        
+        [kakaoButton, placeRegisterButton].forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(48.0)
+            }
+        }
+        
+        stackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(weelkyHipPlaceView.snp.bottom).offset(42.0)
+        }
+        
+        
+        marginView.snp.makeConstraints {
+            $0.top.equalTo(stackView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1000.0)
             $0.bottom.equalToSuperview()
         }
+        
     }
 }
