@@ -14,11 +14,12 @@ class HipsterPickViewModel {
 
     // MARK: viewModel -> view
 
-    let hipsterPicks: Driver<[BannerModel]>
+    let hipsterPicks: Driver<[HipsterPickModel]>
 
     // MARK: view -> viewModel
 
     init() {
-        hipsterPicks = Driver.just(BannerModel.tmpModels)
+        hipsterPicks = HomeNetworkManager.shared.getHipsterPick()
+            .asDriver(onErrorJustReturn: [])
     }
 }

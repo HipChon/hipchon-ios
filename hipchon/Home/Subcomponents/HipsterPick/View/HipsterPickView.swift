@@ -26,7 +26,7 @@ class HipsterPickView: UIView {
         let height = 284.0
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 30.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -35,8 +35,8 @@ class HipsterPickView: UIView {
         $0.register(HipsterPickCell.self, forCellWithReuseIdentifier: HipsterPickCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
-        $0.isPagingEnabled = true
-        $0.backgroundColor = .white
+        $0.isPagingEnabled = false
+        $0.backgroundColor = .gray_background
     }
     
     private lazy var selectView = UIView().then {

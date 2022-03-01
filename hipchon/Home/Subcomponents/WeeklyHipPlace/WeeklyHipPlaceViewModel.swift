@@ -20,7 +20,7 @@ class WeeklyHipPlaceViewModel {
 
     init() {
         
-        hipPlaces = NetworkManager.shared.getPlaces()
+        hipPlaces = HomeNetworkManager.shared.getWeeklyHipPlace()
             .asDriver(onErrorJustReturn: [])
 
     }

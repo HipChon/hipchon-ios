@@ -10,7 +10,7 @@ import UIKit
 
 class BannerCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFit
     }
 
     public static let identyfier = "BannerCell"

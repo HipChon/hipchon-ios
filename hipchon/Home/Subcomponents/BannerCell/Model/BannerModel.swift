@@ -7,11 +7,17 @@
 
 import Foundation
 
-class BannerModel {
+class BannerModel: Codable {
     let imageURL: String?
+    let linkURL: String?
 
+    enum CodingKeys: String, CodingKey {
+        case imageURL, linkURL
+    }
+    
     init(imageURL: String) {
         self.imageURL = imageURL
+        linkURL = nil
     }
 
     static var tmpModels: [BannerModel] {

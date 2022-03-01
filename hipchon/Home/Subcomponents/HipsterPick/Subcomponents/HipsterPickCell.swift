@@ -12,6 +12,21 @@ class HipsterPickCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
     }
+    
+    private lazy var regionLabelView = RoundLabelView().then { _ in
+    }
+    
+    private lazy var titleLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 16.0, type: .bold) // Todo Extra Bold
+        $0.textColor = .white
+        $0.textAlignment = .left
+    }
+    
+    private lazy var contentLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 12.0, type: .medium)
+        $0.textColor = .white
+        $0.textAlignment = .left
+    }
 
     public static let identyfier = "HipsterPickCell"
     private let bag = DisposeBag()
@@ -28,8 +43,21 @@ class HipsterPickCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HipsterPickCellViewModel) {
-        viewModel.url
+        
+        regionLabelView.bind(viewModel.regionLabelVM)
+        
+        // MARK: viewModel -> view
+        
+        viewModel.imageURL
             .drive(imageView.rx.setImageKF)
+            .disposed(by: bag)
+        
+        viewModel.title
+            .drive(titleLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.content
+            .drive(contentLabel.rx.text)
             .disposed(by: bag)
     }
 
@@ -41,10 +69,27 @@ class HipsterPickCell: UICollectionViewCell {
     private func layout() {
         [
             imageView,
+            regionLabelView,
+            titleLabel,
+            contentLabel
         ].forEach { addSubview($0) }
 
         imageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        regionLabelView.snp.makeConstraints {
+            $0.leading.top.equalToSuperview().inset(16.0)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(16.0)
+            $0.bottom.equalTo(contentLabel.snp.top).offset(8.0)
+        }
+        
+        contentLabel.snp.makeConstraints {
+            $0.leading.equalTo(titleLabel)
+            $0.bottom.equalToSuperview().inset(16.0)
         }
     }
 }

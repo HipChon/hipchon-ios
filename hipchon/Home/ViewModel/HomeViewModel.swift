@@ -39,7 +39,8 @@ class HomeViewModel {
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        banners = Driver.just(BannerModel.tmpModels)
+        banners = HomeNetworkManager.shared.getBanners()
+            .asDriver(onErrorJustReturn: [])
 
         presentFilterVC = homeSearchVM.searchButtonTapped
             .map { FilterViewModel() }
