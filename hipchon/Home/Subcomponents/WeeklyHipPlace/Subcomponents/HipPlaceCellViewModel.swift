@@ -13,8 +13,8 @@ class HipPlaceCellViewModel {
     private let bag = DisposeBag()
     
     // MARK: subViewModels
-    let firstHashtagVM = HashtagViewModel()
-    let secondHashtagVM = HashtagViewModel()
+    let firstHashtagVM = RoundLabelViewModel()
+    let secondHashtagVM = RoundLabelViewModel()
     
     // MARK: viewModel -> view
 
@@ -51,14 +51,14 @@ class HipPlaceCellViewModel {
             .compactMap { $0.hashtags }
             .filter { $0.count >= 0 }
             .compactMap { $0[0] }
-            .bind(to: firstHashtagVM.hashtag)
+            .bind(to: firstHashtagVM.content)
             .disposed(by: bag)
         
         place
             .compactMap { $0.hashtags }
             .filter { $0.count >= 1 }
             .compactMap { $0[1] }
-            .bind(to: secondHashtagVM.hashtag)
+            .bind(to: secondHashtagVM.content)
             .disposed(by: bag)
         
         bookmarkCount = place

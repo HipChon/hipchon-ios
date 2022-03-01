@@ -27,14 +27,18 @@ class HipPlaceCell: UICollectionViewCell {
         $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal) 
     }
     
-    private lazy var firstHashtagView = HashtagView().then {
+    private lazy var firstHashtagView = RoundLabelView().then {
+        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
+        $0.label.textColor = .black
         $0.backgroundColor = .gray02
     }
     
-    private lazy var secondHashtagView = HashtagView().then {
+    private lazy var secondHashtagView = RoundLabelView().then {
+        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
+        $0.label.textColor = .black
         $0.backgroundColor = .gray02
     }
-    
+
     private lazy var bookmarkCountLabel = UILabel().then {
         $0.font = .GmarketSans(size: 12.0, type: .medium)
         $0.textColor = .black
@@ -138,15 +142,11 @@ class HipPlaceCell: UICollectionViewCell {
         firstHashtagView.snp.makeConstraints {
             $0.top.equalTo(regionLabel.snp.bottom).offset(8.0)
             $0.leading.equalTo(nameLabel)
-            $0.height.equalTo(20.0)
-            $0.width.equalTo(51.0)
         }
         
         secondHashtagView.snp.makeConstraints {
             $0.top.equalTo(regionLabel.snp.bottom).offset(8.0)
             $0.leading.equalTo(firstHashtagView.snp.trailing).offset(4.0)
-            $0.height.equalTo(20.0)
-            $0.width.equalTo(51.0)
         }
         
         bookmarkCountLabel.snp.makeConstraints {

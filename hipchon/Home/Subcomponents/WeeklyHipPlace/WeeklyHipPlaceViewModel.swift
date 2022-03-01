@@ -17,11 +17,11 @@ class WeeklyHipPlaceViewModel {
     let hipPlaces: Driver<[PlaceModel]>
 
     // MARK: view -> viewModel
+    
+    let selectedHipPlace = PublishRelay<PlaceModel>()
 
     init() {
-        
         hipPlaces = HomeNetworkManager.shared.getWeeklyHipPlace()
             .asDriver(onErrorJustReturn: [])
-
     }
 }

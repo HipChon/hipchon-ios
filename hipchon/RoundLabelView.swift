@@ -10,9 +10,7 @@ import RxSwift
 
 class RoundLabelView: UIView {
     
-    private lazy var label = UILabel().then {
-        $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
-        $0.textColor = .black
+    public lazy var label = UILabel().then {
         $0.textAlignment = .center
     }
     
@@ -28,6 +26,11 @@ class RoundLabelView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = frame.height * 0.5
+    }
+    
     func bind(_ viewModel: RoundLabelViewModel) {
         viewModel.setContent
             .drive(label.rx.text)
@@ -36,7 +39,6 @@ class RoundLabelView: UIView {
     
     private func attribute() {
         backgroundColor = .white
-        layer.cornerRadius = 13.0
     }
     
     private func layout() {

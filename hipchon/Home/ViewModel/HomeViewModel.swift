@@ -25,10 +25,13 @@ class HomeViewModel {
     let banners: Driver<[BannerModel]>
     let pushPlaceListVC: Signal<PlaceListViewModel>
     let presentFilterVC: Signal<FilterViewModel>
+    let openURL: Signal<URL>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
     // MARK: view -> viewModel
 
     let selectedCategory = PublishRelay<CategoryModel>()
+    let selectedBanner = PublishRelay<BannerModel>()
 
     init() {
         
@@ -46,6 +49,13 @@ class HomeViewModel {
             .map { FilterViewModel() }
             .asSignal(onErrorSignalWith: .empty())
         
+        openURL = selectedBanner
+            .compactMap { $0.linkURL }
+            .compactMap { URL(string: $0) }
+            .asSignal(onErrorSignalWith: .empty())
         
+        pushPlaceDetailVC = weeklyHipPlaceVM.selectedHipPlace
+            .map { PlaceDetailViewModel(place: $0) }
+            .asSignal(onErrorSignalWith: .empty())
     }
 }

@@ -13,7 +13,9 @@ class HipsterPickCell: UICollectionViewCell {
         $0.contentMode = .scaleToFill
     }
     
-    private lazy var regionLabelView = RoundLabelView().then { _ in
+    private lazy var regionLabelView = RoundLabelView().then {
+        $0.label.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
+        $0.label.textColor = .black
     }
     
     private lazy var titleLabel = UILabel().then {

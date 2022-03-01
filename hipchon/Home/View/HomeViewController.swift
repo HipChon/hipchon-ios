@@ -109,6 +109,10 @@ class HomeViewController: UIViewController {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.selectedCategory)
             .disposed(by: bag)
+        
+        bannerCollectionView.rx.modelSelected(BannerModel.self)
+            .bind(to: viewModel.selectedBanner)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -152,6 +156,20 @@ class HomeViewController: UIViewController {
                 bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
                                                           height: filterVC.viewHeight)
                 self.present(bottomSheet, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+        
+        viewModel.openURL
+            .emit(onNext: {
+                UIApplication.shared.open($0, options: [:])
+            })
+            .disposed(by: bag)
+        
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
             })
             .disposed(by: bag)
     }
