@@ -13,9 +13,11 @@ class HomeViewModel {
 
     // MARK: subViewModels
 
-    let pickVM = PickViewModel()
+    let homeSearchVM = HomeSearchViewModel()
+    let hipsterPickVM = HipsterPickViewModel()
     let weeklyHipPlaceVM = WeeklyHipPlaceViewModel()
     let bestReviewVM = BestReviewViewModel()
+    let customerServiceVM = CustomerServiewViewModel()
 
     // MARK: viewModel -> view
 
@@ -26,7 +28,6 @@ class HomeViewModel {
 
     // MARK: view -> viewModel
 
-    let searchButtonTapped = PublishRelay<Void>()
     let selectedCategory = PublishRelay<CategoryModel>()
 
     init() {
@@ -40,7 +41,7 @@ class HomeViewModel {
 
         banners = Driver.just(BannerModel.tmpModels)
 
-        presentFilterVC = searchButtonTapped
+        presentFilterVC = homeSearchVM.searchButtonTapped
             .map { FilterViewModel() }
             .asSignal(onErrorSignalWith: .empty())
         

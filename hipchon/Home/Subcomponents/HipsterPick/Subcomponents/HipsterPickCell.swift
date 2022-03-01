@@ -1,5 +1,5 @@
 //
-//  PickCell.swift
+//  HipsterPickCell.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/16.
@@ -8,12 +8,12 @@
 import RxSwift
 import UIKit
 
-class PickCell: UICollectionViewCell {
+class HipsterPickCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
     }
 
-    public static let identyfier = "PickCell"
+    public static let identyfier = "HipsterPickCell"
     private let bag = DisposeBag()
 
     override init(frame: CGRect) {
@@ -27,7 +27,7 @@ class PickCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: PickCellViewModel) {
+    func bind(_ viewModel: HipsterPickCellViewModel) {
         viewModel.url
             .drive(imageView.rx.setImageKF)
             .disposed(by: bag)

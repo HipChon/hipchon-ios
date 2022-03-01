@@ -1,5 +1,5 @@
 //
-//  PickCellModel.swift
+//  HipsterPickCellViewModel.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/16.
@@ -8,7 +8,7 @@
 import RxCocoa
 import RxSwift
 
-class PickCellViewModel {
+class HipsterPickCellViewModel {
     // MARK: viewModel -> view
 
     let url: Driver<URL>

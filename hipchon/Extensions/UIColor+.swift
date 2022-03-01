@@ -9,17 +9,20 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    static let primary_green: UIColor { return UIColor(hexString: "#3FCC53")! }
-    static let secondary_yellow: UIColor { return UIColor(hexString: "#FFDF40")! }
-    static let secondary_red: UIColor { return UIColor(hexString: "#FF4A4A")! }
-    static let secondary_blue: UIColor { return UIColor(hexString: "#00C9FF")! }
-    static let gray01: UIColor { return UIColor(hexString: "#F0F1F5")! }
-    static let gray02: UIColor { return UIColor(hexString: "#E4E5EB")! }
-    static let gray03: UIColor { return UIColor(hexString: "#D1D2D7")! }
-    static let gray04: UIColor { return UIColor(hexString: "#9B9CA4")! }
-    static let gray05: UIColor { return UIColor(hexString: "#6C6E78")! }
-    static let gray06: UIColor { return UIColor(hexString: "#484950")! }
-    static let gray07: UIColor { return UIColor(hexString: "#36373C")! }
+    static var primary_green: UIColor { return UIColor(hexString: "#3FCC53")! }
+    static var secondary_yellow: UIColor { return UIColor(hexString: "#FFDF40")! }
+    static var secondary_red: UIColor { return UIColor(hexString: "#FF4A4A")! }
+    static var secondary_blue: UIColor { return UIColor(hexString: "#00C9FF")! }
+    static var gray01: UIColor { return UIColor(hexString: "#F0F1F5")! }
+    static var gray02: UIColor { return UIColor(hexString: "#E4E5EB")! }
+    static var gray03: UIColor { return UIColor(hexString: "#D1D2D7")! }
+    static var gray04: UIColor { return UIColor(hexString: "#9B9CA4")! }
+    static var gray05: UIColor { return UIColor(hexString: "#6C6E78")! }
+    static var gray06: UIColor { return UIColor(hexString: "#484950")! }
+    static var gray07: UIColor { return UIColor(hexString: "#36373C")! }
+    static var gray_background: UIColor { return UIColor(hexString: "#F5F5F5")! }
+    static var gray_border: UIColor { return UIColor(hexString: "#E4E5EB")! }
+    static var typography_secondary: UIColor { return UIColor(hexString: "#6C6E78")! }
 
     convenience init(red: Int, green: Int, blue: Int, a: Int = 0xFF) {
         self.init(

@@ -14,6 +14,7 @@ class CategoryCell: UICollectionViewCell {
 
     private lazy var label = UILabel().then {
         $0.textAlignment = .center
+        $0.font = UIFont.GmarketSans(type: .medium, size: 14.0)
     }
 
     private lazy var imageView = UIImageView().then {
@@ -50,22 +51,22 @@ class CategoryCell: UICollectionViewCell {
     }
 
     private func layout() {
-        let stackView = UIStackView(arrangedSubviews: [imageView, label])
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 8.0
-        
-
-        contentView.addSubview(stackView)
-
-        imageView.snp.makeConstraints {
-            $0.height.width.equalTo(45.0)
+        [
+            imageView,
+            label
+        ].forEach {
+            addSubview($0)
         }
-
-        stackView.snp.makeConstraints {
-            $0.width.equalTo(45.0)
-            $0.centerX.centerY.equalToSuperview()
+        
+        imageView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(20.0)
+            $0.width.height.equalTo(45.0)
+        }
+        
+        label.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(imageView.snp.bottom).offset(8.0)
         }
     }
 }

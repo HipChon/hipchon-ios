@@ -1,5 +1,5 @@
 //
-//  PickViewModel.swift
+//  HipsterPickViewModel.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/16.
@@ -9,16 +9,16 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
-class PickViewModel {
+class HipsterPickViewModel {
     private let bag = DisposeBag()
 
     // MARK: viewModel -> view
 
-    let picks: Driver<[BannerModel]>
+    let hipsterPicks: Driver<[BannerModel]>
 
     // MARK: view -> viewModel
 
     init() {
-        picks = Driver.just(BannerModel.tmpModels)
+        hipsterPicks = Driver.just(BannerModel.tmpModels)
     }
 }

@@ -15,7 +15,7 @@ class WeeklyHipPlaceView: UIView {
 
     private lazy var titleLabel = UILabel().then {
         $0.text = "주간 힙플"
-        $0.font = .systemFont(ofSize: 20.0, weight: .medium)
+        $0.font = UIFont.GmarketSans(type: .medium, size: 20.0)
     }
 
     private lazy var hipPlaceCollectionView = UICollectionView(frame: .zero,
@@ -80,7 +80,8 @@ class WeeklyHipPlaceView: UIView {
         hipPlaceCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(titleLabel.snp.bottom).offset(10.0)
-            $0.height.equalTo(154.0)
+            $0.bottom.equalToSuperview().inset(20.0)
+//            $0.height.equalTo(154.0)
         }
     }
 }

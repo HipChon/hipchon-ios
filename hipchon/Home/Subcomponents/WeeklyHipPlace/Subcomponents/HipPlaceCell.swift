@@ -14,13 +14,13 @@ class HipPlaceCell: UICollectionViewCell {
     }
     
     private lazy var nameLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+        $0.font = UIFont.GmarketSans(type: .medium, size: 18.0)
         $0.textColor = .black
     }
     
     private lazy var regionLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 12.0, weight: .medium)
-        $0.textColor = .secondaryLabel
+        $0.font = UIFont.GmarketSans(type: .medium, size: 12.0)
+        $0.textColor = UIColor.typography_secondary
     }
     
     private lazy var bookmarkButton = UIButton().then {
@@ -28,20 +28,20 @@ class HipPlaceCell: UICollectionViewCell {
     }
     
     private lazy var firstHashtagView = HashtagView().then {
-        $0.backgroundColor = .systemGray6
+        $0.backgroundColor = .gray02
     }
     
     private lazy var secondHashtagView = HashtagView().then {
-        $0.backgroundColor = .systemGray6
+        $0.backgroundColor = .gray02
     }
     
     private lazy var bookmarkCountLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 12.0, weight: .medium)
+        $0.font = UIFont.GmarketSans(type: .medium, size: 12.0)
         $0.textColor = .black
     }
     
     private lazy var reviewCountLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 12.0, weight: .medium)
+        $0.font = UIFont.GmarketSans(type: .medium, size: 12.0)
         $0.textColor = .black
     }
     
@@ -51,17 +51,13 @@ class HipPlaceCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        attribute()
+        layout()
     }
 
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        attribute()
-        layout()
     }
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
@@ -91,10 +87,10 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     private func attribute() {
-        layer.masksToBounds = true
-        layer.cornerRadius = 2.0
-        addShadow(offset: CGSize(width: 2.0, height: 2.0))
         backgroundColor = .white
+        addShadow(offset: CGSize(width: 2.0, height: 2.0))
+        contentView.layer.masksToBounds = true
+        contentView.layer.cornerRadius = 100.0
     }
 
     private func layout() {

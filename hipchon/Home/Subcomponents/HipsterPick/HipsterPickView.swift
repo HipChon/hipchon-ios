@@ -1,5 +1,5 @@
 //
-//  PickView.swift
+//  HipsterPickView.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/16.
@@ -10,15 +10,15 @@ import RxSwift
 import Then
 import UIKit
 
-class PickView: UIView {
+class HipsterPickView: UIView {
     private let bag = DisposeBag()
 
     private lazy var titleLabel = UILabel().then {
         $0.text = "로컬 힙스터 픽"
-        $0.font = .systemFont(ofSize: 20.0, weight: .medium)
+        $0.font = UIFont.GmarketSans(type: .medium, size: 20.0)
     }
 
-    private lazy var picksCollectionView = UICollectionView(frame: .zero,
+    private lazy var hipsterPickCollectionView = UICollectionView(frame: .zero,
                                                             collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing = 8.0
@@ -32,7 +32,7 @@ class PickView: UIView {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(PickCell.self, forCellWithReuseIdentifier: PickCell.identyfier)
+        $0.register(HipsterPickCell.self, forCellWithReuseIdentifier: HipsterPickCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
@@ -54,11 +54,11 @@ class PickView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: PickViewModel) {
-        viewModel.picks
-            .drive(picksCollectionView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: PickCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PickCell else { return UICollectionViewCell() }
-                let pickCellViewModel = PickCellViewModel(data)
+    func bind(_ viewModel: HipsterPickViewModel) {
+        viewModel.hipsterPicks
+            .drive(hipsterPickCollectionView.rx.items) { col, idx, data in
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: HipsterPickCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HipsterPickCell else { return UICollectionViewCell() }
+                let pickCellViewModel = HipsterPickCellViewModel(data)
                 cell.bind(pickCellViewModel)
                 return cell
             }
@@ -66,13 +66,13 @@ class PickView: UIView {
     }
 
     private func attribute() {
-        backgroundColor = .systemGray6
+        backgroundColor = .gray_background
     }
 
     private func layout() {
         [
             titleLabel,
-            picksCollectionView,
+            hipsterPickCollectionView,
             selectView
         ].forEach { addSubview($0) }
 
@@ -81,7 +81,7 @@ class PickView: UIView {
             $0.top.equalToSuperview().inset(20.0)
         }
 
-        picksCollectionView.snp.makeConstraints {
+        hipsterPickCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(titleLabel.snp.bottom).offset(10.0)
             $0.height.equalTo(284.0)
@@ -89,7 +89,7 @@ class PickView: UIView {
         
         selectView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
-            $0.top.equalTo(picksCollectionView.snp.bottom).offset(33.0)
+            $0.top.equalTo(hipsterPickCollectionView.snp.bottom).offset(33.0)
             $0.height.equalTo(2.0)
         }
     }
