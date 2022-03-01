@@ -10,10 +10,17 @@ import RxSwift
 
 class HipPlaceCellViewModel {
     
+    private let bag = DisposeBag()
+    
+    // MARK: subViewModels
+    let firstHashtagVM = HashtagViewModel()
+    let secondHashtagVM = HashtagViewModel()
+    
     // MARK: viewModel -> view
 
     let url: Driver<URL>
     let name: Driver<String>
+    let bookmarkYn: Driver<Bool>
     let region: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
@@ -32,9 +39,27 @@ class HipPlaceCellViewModel {
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
         
+        bookmarkYn = place
+            .compactMap { $0.bookmarkYn }
+            .asDriver(onErrorJustReturn: false)
+        
         region = place
             .compactMap { $0.region }
             .asDriver(onErrorJustReturn: "")
+        
+        place
+            .compactMap { $0.hashtags }
+            .filter { $0.count >= 0 }
+            .compactMap { $0[0] }
+            .bind(to: firstHashtagVM.hashtag)
+            .disposed(by: bag)
+        
+        place
+            .compactMap { $0.hashtags }
+            .filter { $0.count >= 1 }
+            .compactMap { $0[1] }
+            .bind(to: secondHashtagVM.hashtag)
+            .disposed(by: bag)
         
         bookmarkCount = place
             .compactMap { $0.bookmarkCount }

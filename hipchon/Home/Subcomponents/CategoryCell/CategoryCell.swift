@@ -14,7 +14,7 @@ class CategoryCell: UICollectionViewCell {
 
     private lazy var label = UILabel().then {
         $0.textAlignment = .center
-        $0.font = UIFont.GmarketSans(type: .medium, size: 14.0)
+        $0.font = .GmarketSans(size: 14.0, type: .medium)
     }
 
     private lazy var imageView = UIImageView().then {

@@ -14,12 +14,12 @@ class HipPlaceCell: UICollectionViewCell {
     }
     
     private lazy var nameLabel = UILabel().then {
-        $0.font = UIFont.GmarketSans(type: .medium, size: 18.0)
+        $0.font = .GmarketSans(size: 18.0, type: .medium)
         $0.textColor = .black
     }
     
     private lazy var regionLabel = UILabel().then {
-        $0.font = UIFont.GmarketSans(type: .medium, size: 12.0)
+        $0.font = .GmarketSans(size: 12.0, type: .medium)
         $0.textColor = UIColor.typography_secondary
     }
     
@@ -36,12 +36,12 @@ class HipPlaceCell: UICollectionViewCell {
     }
     
     private lazy var bookmarkCountLabel = UILabel().then {
-        $0.font = UIFont.GmarketSans(type: .medium, size: 12.0)
+        $0.font = .GmarketSans(size: 12.0, type: .medium)
         $0.textColor = .black
     }
     
     private lazy var reviewCountLabel = UILabel().then {
-        $0.font = UIFont.GmarketSans(type: .medium, size: 12.0)
+        $0.font = .GmarketSans(size: 12.0, type: .medium)
         $0.textColor = .black
     }
     
@@ -61,6 +61,10 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
+        
+        firstHashtagView.bind(viewModel.firstHashtagVM)
+        secondHashtagView.bind(viewModel.secondHashtagVM)
+        
         // MARK: viewModel -> view
         
         viewModel.url
@@ -73,6 +77,11 @@ class HipPlaceCell: UICollectionViewCell {
         
         viewModel.region
             .drive(regionLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.bookmarkYn
+            .compactMap { $0 == true ? UIImage(named: "bookmarkY") : UIImage(named: "bookmarkN") }
+            .drive(bookmarkButton.rx.image)
             .disposed(by: bag)
         
         viewModel.bookmarkCount

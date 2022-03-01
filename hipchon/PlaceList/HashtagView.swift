@@ -11,7 +11,7 @@ import UIKit
 
 class HashtagView: UIView {
     private lazy var label = UILabel().then {
-        $0.font = .systemFont(ofSize: 10.0, weight: .medium)
+        $0.font = .GmarketSans(size: 10.0, type: .medium)
         $0.textColor = .black
         $0.textAlignment = .center
     }

@@ -21,6 +21,7 @@ class PlaceListCellViewModel {
 
     let placeImageURLs: Driver<[URL]>
     let title: Driver<String>
+    let bookmarkYn: Driver<Bool>
     let distanceKm: Driver<String>
     let priceDes: Driver<String>
     let bookmarkCount: Driver<Int>
@@ -39,6 +40,10 @@ class PlaceListCellViewModel {
         title = place
             .compactMap { $0.placeTitle }
             .asDriver(onErrorJustReturn: "")
+        
+        bookmarkYn = place
+            .compactMap { $0.bookmarkYn }
+            .asDriver(onErrorJustReturn: false)
 
         priceDes = place
             .compactMap { $0.priceDes }

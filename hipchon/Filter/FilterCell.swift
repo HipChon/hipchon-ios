@@ -11,7 +11,7 @@ import UIKit
 class FilterCell: UICollectionViewCell {
     lazy var filterLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 14.0, weight: .regular)
-        $0.font = .AppleSDGothicNeo(type: .regular, size: 14.0)
+        $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
         $0.textAlignment = .center
     }
 

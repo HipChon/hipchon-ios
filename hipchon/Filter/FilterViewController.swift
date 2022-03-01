@@ -12,7 +12,7 @@ import UIKit
 class FilterViewController: UIViewController {
     private lazy var titleLabel = UILabel().then {
         $0.text = "빠른 검색"
-        $0.font = .GmarketSans(type: .medium, size: 20.0)
+        $0.font = .GmarketSans(size: 20.0, type: .medium)
     }
 
     private lazy var cancleButton = UIButton().then {
@@ -21,7 +21,7 @@ class FilterViewController: UIViewController {
 
     private lazy var personnelLabel = UILabel().then {
         $0.text = "인원"
-        $0.font = .GmarketSans(type: .medium, size: 18.0)
+        $0.font = .GmarketSans(size: 18.0, type: .medium)
     }
 
     private lazy var personnelNumberView = UIView().then {
@@ -33,14 +33,14 @@ class FilterViewController: UIViewController {
 
     private lazy var personnelNumberLabel = UILabel().then {
         $0.text = "나만의"
-        $0.font = .AppleSDGothicNeo(type: .regular, size: 14.0)
+        $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
         $0.textAlignment = .center
     }
 
     private lazy var plusButton = UIButton().then {
         $0.setTitle("+", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .regular, size: 18.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .regular)
         $0.layer.cornerRadius = 11.5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
@@ -50,7 +50,7 @@ class FilterViewController: UIViewController {
     private lazy var minusButton = UIButton().then {
         $0.setTitle("-", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .regular, size: 18.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .regular)
         $0.layer.cornerRadius = 11.5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
@@ -60,7 +60,7 @@ class FilterViewController: UIViewController {
     private lazy var petButton = UIButton().then {
         $0.setTitle("반려동물", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .regular, size: 14.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
         $0.layer.cornerRadius = 16.5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
@@ -69,7 +69,7 @@ class FilterViewController: UIViewController {
 
     private lazy var regionLabel = UILabel().then {
         $0.text = "지역"
-        $0.font = .GmarketSans(type: .medium, size: 18.0)
+        $0.font = .GmarketSans(size: 18.0, type: .medium)
     }
 
     private lazy var regionCollectionView = UICollectionView(frame: .zero,
@@ -95,7 +95,7 @@ class FilterViewController: UIViewController {
 
     private lazy var categoryLabel = UILabel().then {
         $0.text = "유형"
-        $0.font = .GmarketSans(type: .medium, size: 18.0)
+        $0.font = .GmarketSans(size: 18.0, type: .medium)
     }
 
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
@@ -123,14 +123,14 @@ class FilterViewController: UIViewController {
         $0.backgroundColor = .white
         $0.setTitle("초기화", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .bold, size: 18.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
     }
 
     private lazy var searchButton = UIButton().then {
         $0.backgroundColor = .black
         $0.setTitle("적용", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .bold, size: 18.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
     }
 
     private let bag = DisposeBag()

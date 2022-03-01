@@ -15,7 +15,7 @@ class HipsterPickView: UIView {
 
     private lazy var titleLabel = UILabel().then {
         $0.text = "로컬 힙스터 픽"
-        $0.font = UIFont.GmarketSans(type: .medium, size: 20.0)
+        $0.font = .GmarketSans(size: 20.0, type: .medium)
     }
 
     private lazy var hipsterPickCollectionView = UICollectionView(frame: .zero,

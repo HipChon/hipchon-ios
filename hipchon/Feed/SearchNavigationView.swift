@@ -21,6 +21,10 @@ class SearchNavigationView: UIView {
     private lazy var sortButton = UIButton().then {
         $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
     }
+    
+    private lazy var boundaryView = UIView().then {
+        $0.backgroundColor = .gray_border
+    }
 
     private let bag = DisposeBag()
 
@@ -67,6 +71,7 @@ class SearchNavigationView: UIView {
             backButton,
             searchFilterButton,
             sortButton,
+            boundaryView
         ].forEach { addSubview($0) }
 
         backButton.snp.makeConstraints {
@@ -85,6 +90,11 @@ class SearchNavigationView: UIView {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(27.0)
             $0.width.height.equalTo(30.0)
+        }
+        
+        boundaryView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(1.0)
         }
     }
 }

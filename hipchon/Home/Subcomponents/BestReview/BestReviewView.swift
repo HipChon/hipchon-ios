@@ -15,7 +15,7 @@ class BestReviewView: UIView {
 
     private lazy var titleLabel = UILabel().then {
         $0.text = "베스트 후기"
-        $0.font = UIFont.GmarketSans(type: .medium, size: 20.0)
+        $0.font = .GmarketSans(size: 20.0, type: .medium)
     }
 
     private lazy var reviewsCollectionView = UICollectionView(frame: .zero,

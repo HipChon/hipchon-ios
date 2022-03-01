@@ -13,7 +13,7 @@ class CustomerServiewView: UIView {
     
     private lazy var counselingLabel = UILabel().then {
         $0.text = "어디서 살지 못 정하셨나요?"
-        $0.font = .GmarketSans(type: .medium, size: 16.0)
+        $0.font = .GmarketSans(size: 16.0, type: .medium)
         $0.textColor = .black
         $0.textAlignment = .center
     }
@@ -22,13 +22,13 @@ class CustomerServiewView: UIView {
         $0.backgroundColor = .secondary_yellow
         $0.setTitle("카카오톡 상담하기", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .medium, size: 16.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
         $0.layer.cornerRadius = 5.0
     }
 
     private lazy var placeRegisterLabel = UILabel().then {
         $0.text = "고객 지원"
-        $0.font = .GmarketSans(type: .medium, size: 16.0)
+        $0.font = .GmarketSans(size: 16.0, type: .medium)
         $0.textColor = .black
         $0.textAlignment = .center
     }
@@ -37,7 +37,7 @@ class CustomerServiewView: UIView {
         $0.backgroundColor = .gray02
         $0.setTitle("공간 등록 문의", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(type: .medium, size: 16.0)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
         $0.layer.cornerRadius = 5.0
     }
     

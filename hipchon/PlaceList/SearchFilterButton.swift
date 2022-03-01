@@ -25,6 +25,6 @@ class SearchFilterButton: UIButton {
         layer.borderColor = UIColor.lightGray.cgColor
         layer.borderWidth = 1.0
         setTitleColor(.black, for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 14.0, weight: .medium)
+        titleLabel?.font = .GmarketSans(size: 14.0, type: .medium)
     }
 }

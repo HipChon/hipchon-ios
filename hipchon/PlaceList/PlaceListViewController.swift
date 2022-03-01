@@ -117,11 +117,11 @@ class PlaceListViewController: UIViewController {
         searchNavigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+            $0.height.equalTo(74.0)
         }
 
         placeList.snp.makeConstraints {
-            $0.top.equalTo(searchNavigationView.snp.bottom).offset(20.0)
+            $0.top.equalTo(searchNavigationView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }

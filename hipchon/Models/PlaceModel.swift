@@ -11,6 +11,7 @@ class PlaceModel: Codable {
     let id: Int?
     let name: String?
     let region: String?
+    let bookmarkYn: Bool?
     let distance: Double?
     let price: Double?
     let imageURLs: [String]?
@@ -42,6 +43,6 @@ class PlaceModel: Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, name, region, distance, price, imageURLs, hashtags, bookmarkCount, reviewCount
+        case id, name, region, bookmarkYn, distance, price, imageURLs, hashtags, bookmarkCount, reviewCount
     }
 }

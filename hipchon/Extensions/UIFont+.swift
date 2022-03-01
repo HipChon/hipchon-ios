@@ -10,7 +10,7 @@ import UIKit
 enum FontType { case regular, bold, medium, light, semibold }
 
 extension UIFont {
-    static func GmarketSans(type: FontType, size: CGFloat) -> UIFont {
+    static func GmarketSans(size: CGFloat, type: FontType) -> UIFont {
         var fontName = ""
         switch type {
             case .medium:
@@ -23,7 +23,7 @@ extension UIFont {
         return UIFont(name: fontName, size: size) ?? UIFont.systemFont(ofSize: size)
     }
     
-    static func AppleSDGothicNeo(type: FontType, size: CGFloat) -> UIFont {
+    static func AppleSDGothicNeo(size: CGFloat, type: FontType) -> UIFont {
         var fontName = ""
         switch type {
             case .regular:

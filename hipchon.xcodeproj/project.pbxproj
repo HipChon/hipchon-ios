@@ -325,8 +325,7 @@
 			children = (
 				D83E538A27AA59160047A05C /* PlaceListViewController.swift */,
 				D83E538C27AA59200047A05C /* PlaceListViewModel.swift */,
-				D83E539227AA6D0C0047A05C /* PlaceListCell.swift */,
-				D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */,
+				D8C72EAD27CE2820007C160A /* SubComponents */,
 				D8A3031527C9F6240013E71A /* HashtagView.swift */,
 				D8A3031727C9F6D70013E71A /* HashtagViewModel.swift */,
 				D871F4BB27BD395E00CCDE4D /* PhotoCell.swift */,
@@ -503,6 +502,23 @@
 				D8C72EA527CE0C31007C160A /* CustomerServiceViewModel.swift */,
 			);
 			path = CustomerService;
+			sourceTree = "<group>";
+		};
+		D8C72EAC27CE2818007C160A /* PlaceListCell */ = {
+			isa = PBXGroup;
+			children = (
+				D83E539227AA6D0C0047A05C /* PlaceListCell.swift */,
+				D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */,
+			);
+			path = PlaceListCell;
+			sourceTree = "<group>";
+		};
+		D8C72EAD27CE2820007C160A /* SubComponents */ = {
+			isa = PBXGroup;
+			children = (
+				D8C72EAC27CE2818007C160A /* PlaceListCell */,
+			);
+			path = SubComponents;
 			sourceTree = "<group>";
 		};
 		D8E019DC27C0D49600A167CA /* Filter */ = {

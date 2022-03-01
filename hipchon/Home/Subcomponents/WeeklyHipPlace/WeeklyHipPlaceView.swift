@@ -15,7 +15,7 @@ class WeeklyHipPlaceView: UIView {
 
     private lazy var titleLabel = UILabel().then {
         $0.text = "주간 힙플"
-        $0.font = UIFont.GmarketSans(type: .medium, size: 20.0)
+        $0.font = .GmarketSans(size: 20.0, type: .medium)
     }
 
     private lazy var hipPlaceCollectionView = UICollectionView(frame: .zero,
