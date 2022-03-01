@@ -12,7 +12,7 @@ import UIKit
 class FilterViewController: UIViewController {
     private lazy var titleLabel = UILabel().then {
         $0.text = "빠른 검색"
-        $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+        $0.font = .GmarketSans(type: .medium, size: 20.0)
     }
 
     private lazy var cancleButton = UIButton().then {
@@ -21,7 +21,7 @@ class FilterViewController: UIViewController {
 
     private lazy var personnelLabel = UILabel().then {
         $0.text = "인원"
-        $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+        $0.font = .GmarketSans(type: .medium, size: 18.0)
     }
 
     private lazy var personnelNumberView = UIView().then {
@@ -33,14 +33,14 @@ class FilterViewController: UIViewController {
 
     private lazy var personnelNumberLabel = UILabel().then {
         $0.text = "나만의"
-        $0.font = .systemFont(ofSize: 14.0, weight: .regular)
+        $0.font = .AppleSDGothicNeo(type: .regular, size: 14.0)
         $0.textAlignment = .center
     }
 
     private lazy var plusButton = UIButton().then {
         $0.setTitle("+", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 18.0, weight: .regular)
+        $0.titleLabel?.font = .AppleSDGothicNeo(type: .regular, size: 18.0)
         $0.layer.cornerRadius = 11.5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
@@ -50,7 +50,7 @@ class FilterViewController: UIViewController {
     private lazy var minusButton = UIButton().then {
         $0.setTitle("-", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 18.0, weight: .regular)
+        $0.titleLabel?.font = .AppleSDGothicNeo(type: .regular, size: 18.0)
         $0.layer.cornerRadius = 11.5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
@@ -60,7 +60,7 @@ class FilterViewController: UIViewController {
     private lazy var petButton = UIButton().then {
         $0.setTitle("반려동물", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 14.0, weight: .regular)
+        $0.titleLabel?.font = .AppleSDGothicNeo(type: .regular, size: 14.0)
         $0.layer.cornerRadius = 16.5
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
@@ -69,7 +69,7 @@ class FilterViewController: UIViewController {
 
     private lazy var regionLabel = UILabel().then {
         $0.text = "지역"
-        $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+        $0.font = .GmarketSans(type: .medium, size: 18.0)
     }
 
     private lazy var regionCollectionView = UICollectionView(frame: .zero,
@@ -90,11 +90,12 @@ class FilterViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = false
+        $0.backgroundColor = .white
     }
 
     private lazy var categoryLabel = UILabel().then {
         $0.text = "유형"
-        $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+        $0.font = .GmarketSans(type: .medium, size: 18.0)
     }
 
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
@@ -115,22 +116,25 @@ class FilterViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = false
+        $0.backgroundColor = .white
     }
 
     private lazy var resetButton = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("초기화", for: .normal)
         $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(type: .bold, size: 18.0)
     }
 
     private lazy var searchButton = UIButton().then {
         $0.backgroundColor = .black
         $0.setTitle("적용", for: .normal)
         $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(type: .bold, size: 18.0)
     }
 
     private let bag = DisposeBag()
-    var viewHeight = 640.0
+    var viewHeight = 600.0
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -325,7 +329,7 @@ class FilterViewController: UIViewController {
 
         cancleButton.snp.makeConstraints {
             $0.centerY.equalTo(titleLabel)
-            $0.trailing.equalToSuperview().inset(40.0)
+            $0.trailing.equalToSuperview().inset(30.0)
             $0.height.width.equalTo(30.0)
         }
 
@@ -369,16 +373,17 @@ class FilterViewController: UIViewController {
             $0.top.equalTo(categoryLabel.snp.bottom).offset(19.0)
             $0.height.equalTo(33.0)
         }
+        
         resetButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(30.0)
+            $0.top.equalTo(categoryCollectionView.snp.bottom)
             $0.height.equalTo(87.0)
         }
 
         searchButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(resetButton.snp.bottom)
-            $0.height.equalTo(87.0)
+            $0.height.equalTo(54.0)
         }
     }
 }
