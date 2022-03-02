@@ -172,6 +172,14 @@ class HomeViewController: UIViewController {
                 self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
             })
             .disposed(by: bag)
+        
+        viewModel.pushHipsterPickDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                let hipsterPickDetailVC = HipsterPickDetailViewController()
+                hipsterPickDetailVC.bind(viewModel)
+                self?.tabBarController?.navigationController?.pushViewController(hipsterPickDetailVC, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {

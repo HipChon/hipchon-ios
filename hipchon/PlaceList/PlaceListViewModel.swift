@@ -40,7 +40,7 @@ class PlaceListViewModel {
             .disposed(by: bag)
 
         pushPlaceDetailVC = selectedPlace
-            .map { PlaceDetailViewModel(place: $0) }
+            .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
         searchFilterTitle = searchFilter

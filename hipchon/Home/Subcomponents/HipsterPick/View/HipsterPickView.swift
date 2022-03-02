@@ -55,6 +55,15 @@ class HipsterPickView: UIView {
     }
 
     func bind(_ viewModel: HipsterPickViewModel) {
+        
+        // MARK: view -> viewModel
+        
+        hipsterPickCollectionView.rx.modelSelected(HipsterPickModel.self)
+            .bind(to: viewModel.selectedHipsterPickModel)
+            .disposed(by: bag)
+        
+        // MARK: viewModel -> view
+        
         viewModel.hipsterPicks
             .drive(hipsterPickCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: HipsterPickCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HipsterPickCell else { return UICollectionViewCell() }

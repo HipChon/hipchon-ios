@@ -27,6 +27,7 @@ class HomeViewModel {
     let presentFilterVC: Signal<FilterViewModel>
     let openURL: Signal<URL>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let pushHipsterPickDetailVC: Signal<HipsterPickDetailViewModel>
 
     // MARK: view -> viewModel
 
@@ -42,7 +43,7 @@ class HomeViewModel {
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        banners = HomeNetworkManager.shared.getBanners()
+        banners = NetworkManager.shared.getBanners()
             .asDriver(onErrorJustReturn: [])
 
         presentFilterVC = homeSearchVM.searchButtonTapped
@@ -55,7 +56,11 @@ class HomeViewModel {
             .asSignal(onErrorSignalWith: .empty())
         
         pushPlaceDetailVC = weeklyHipPlaceVM.selectedHipPlace
-            .map { PlaceDetailViewModel(place: $0) }
+            .map { PlaceDetailViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
+        
+        pushHipsterPickDetailVC = hipsterPickVM.selectedHipsterPickModel
+            .map { HipsterPickDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

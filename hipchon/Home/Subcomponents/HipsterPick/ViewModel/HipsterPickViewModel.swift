@@ -17,9 +17,10 @@ class HipsterPickViewModel {
     let hipsterPicks: Driver<[HipsterPickModel]>
 
     // MARK: view -> viewModel
-
+    let selectedHipsterPickModel = PublishRelay<HipsterPickModel>()
+    
     init() {
-        hipsterPicks = HomeNetworkManager.shared.getHipsterPick()
+        hipsterPicks = NetworkManager.shared.getHipsterPick()
             .asDriver(onErrorJustReturn: [])
     }
 }

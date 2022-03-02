@@ -29,7 +29,7 @@ class PlaceDetailViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 0.0
         let width = view.frame.width
-        let height = width
+        let height = width * (263.0 / 390.0)
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
@@ -43,45 +43,19 @@ class PlaceDetailViewController: UIViewController {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
-
-    private lazy var likeButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
+    
+    private lazy var placeDesView = PlaceDesView().then { _ in
     }
-
-    private lazy var likeCountLabel = UILabel().then {
-        $0.text = "좋아요"
-        $0.font = .systemFont(ofSize: 14.0, weight: .regular)
+    
+    private lazy var firstBorderView = UIView().then {
+        $0.backgroundColor = .gray_border
     }
-
-    private lazy var commentButton = UIButton().then {
-        $0.setImage(UIImage(named: "comment") ?? UIImage(), for: .normal)
+    
+    private lazy var secondBorderView = UIView().then {
+        $0.backgroundColor = .gray_border
     }
-
-    private lazy var commentCountLabel = UILabel().then {
-        $0.text = "댓글"
-        $0.font = .systemFont(ofSize: 14.0, weight: .regular)
-    }
-
-    private lazy var messageButton = UIButton().then {
-        $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
-    }
-
-    private lazy var messageCountLabel = UILabel().then {
-        $0.text = "메세지"
-        $0.font = .systemFont(ofSize: 14.0, weight: .regular)
-    }
-
-    private lazy var bookmarkButton = UIButton().then {
-        $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal)
-    }
-
-    private lazy var bookmarkCountLabel = UILabel().then {
-        $0.text = "북마크"
-        $0.font = .systemFont(ofSize: 14.0, weight: .regular)
-    }
-
-    private lazy var contentLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
+    
+    private lazy var placeMapView = PlaceMapView().then { _ in
     }
 
     private lazy var marginView = UIView().then {
@@ -103,6 +77,8 @@ class PlaceDetailViewController: UIViewController {
 
     func bind(_ viewModel: PlaceDetailViewModel) {
         // MARK: subViews Binding
+        placeDesView.bind(viewModel.placeDesVM)
+        placeMapView.bind(viewModel.placeMapVM)
 
         // MARK: view -> viewModel
 
@@ -118,6 +94,12 @@ class PlaceDetailViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
+        
+        viewModel.openURL
+            .emit(onNext: {
+                UIApplication.shared.open($0, options: [:])
+            })
+            .disposed(by: bag)
 
         backButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
@@ -147,54 +129,25 @@ class PlaceDetailViewController: UIViewController {
             $0.width.equalToSuperview()
         }
 
-        // MARK: Button StackView
-
-        let likeStackView = UIStackView(arrangedSubviews: [likeButton, likeCountLabel])
-        let commentStackView = UIStackView(arrangedSubviews: [commentButton, commentCountLabel])
-        let messageStackView = UIStackView(arrangedSubviews: [messageButton, messageCountLabel])
-        let bookmarkStackView = UIStackView(arrangedSubviews: [bookmarkButton, bookmarkCountLabel])
-
-        [
-            likeStackView,
-            commentStackView,
-            messageStackView,
-            bookmarkStackView,
-        ].forEach {
-            $0.alignment = .center
-            $0.axis = .vertical
-            $0.distribution = .equalSpacing
-            $0.spacing = 10.0
-        }
-
-        [
-            likeButton,
-            commentButton,
-            messageButton,
-            bookmarkButton,
-        ].forEach { button in
-            button.snp.makeConstraints {
-                $0.height.width.equalTo(20.0)
-            }
-        }
-
-        let buttonStackView = UIStackView(arrangedSubviews: [likeStackView,
-                                                             commentStackView,
-                                                             messageStackView,
-                                                             bookmarkStackView])
-
-        buttonStackView.alignment = .center
-        buttonStackView.axis = .horizontal
-        buttonStackView.distribution = .equalSpacing
-
         // MARK: make constraints
 
         [
-            backButton,
+            
             imageCollectView,
-            buttonStackView,
+            backButton,
+            placeDesView,
+            firstBorderView,
+            placeMapView,
+            secondBorderView,
             marginView,
         ].forEach {
             contentView.addSubview($0)
+        }
+        
+        imageCollectView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.height.equalTo(view.frame.width * (263.0 / 390.0))
         }
 
         backButton.snp.makeConstraints {
@@ -202,24 +155,35 @@ class PlaceDetailViewController: UIViewController {
             $0.height.width.equalTo(30.0)
         }
 
-        imageCollectView.snp.makeConstraints {
-            $0.top.equalTo(backButton.snp.bottom).offset(100.0)
+        placeDesView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(view.frame.width)
+            $0.top.equalTo(imageCollectView.snp.bottom).offset(-15.0)
+            $0.height.equalTo(444.0)
         }
-
-        buttonStackView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(40.0)
-            $0.top.equalTo(imageCollectView.snp.bottom).offset(30.0)
-            $0.height.equalTo(48.0)
+        
+        firstBorderView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(placeDesView.snp.bottom)
+            $0.height.equalTo(8.0)
+        }
+        
+        placeMapView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(firstBorderView.snp.bottom)
+            $0.height.equalTo(285.0)
+        }
+        
+        secondBorderView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(placeMapView.snp.bottom)
+            $0.height.equalTo(8.0)
         }
 
         marginView.snp.makeConstraints {
-            $0.top.equalTo(imageCollectView.snp.bottom).offset(100.0)
+            $0.top.equalTo(secondBorderView.snp.bottom).offset(100.0)
             $0.height.equalTo(1000.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
-        // MARK: Buttons
     }
 }

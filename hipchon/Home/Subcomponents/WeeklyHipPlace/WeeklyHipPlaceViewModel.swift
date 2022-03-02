@@ -21,7 +21,7 @@ class WeeklyHipPlaceViewModel {
     let selectedHipPlace = PublishRelay<PlaceModel>()
 
     init() {
-        hipPlaces = HomeNetworkManager.shared.getWeeklyHipPlace()
+        hipPlaces = NetworkManager.shared.getWeeklyHipPlace()
             .asDriver(onErrorJustReturn: [])
     }
 }

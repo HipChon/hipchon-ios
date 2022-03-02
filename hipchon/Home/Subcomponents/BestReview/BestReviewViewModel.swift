@@ -14,11 +14,12 @@ class BestReviewViewModel {
 
     // MARK: viewModel -> view
 
-    let reviews: Driver<[BannerModel]>
+    let reviews: Driver<[BestReviewModel]>
 
     // MARK: view -> viewModel
 
     init() {
-        reviews = Driver.just(BannerModel.tmpModels)
+        reviews = NetworkManager.shared.getBestReview()
+            .asDriver(onErrorJustReturn: [])
     }
 }
