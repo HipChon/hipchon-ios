@@ -26,6 +26,7 @@ class HipPlaceCellViewModel {
     let reviewCount: Driver<Int>
 
     // MARK: view -> viewModel
+    let bookmarkButtonTapped = PublishRelay<Void>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -38,10 +39,6 @@ class HipPlaceCellViewModel {
         name = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
-        
-        bookmarkYn = place
-            .compactMap { $0.bookmarkYn }
-            .asDriver(onErrorJustReturn: false)
         
         region = place
             .compactMap { $0.region }
@@ -68,5 +65,51 @@ class HipPlaceCellViewModel {
         reviewCount = place
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
+        
+        // MARK: bookmark
+    
+        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
+        
+        bookmarkYn = bookmarked
+            .asDriver(onErrorJustReturn: false)
+        
+        let addBookmark = PublishSubject<Void>()
+        let deleteBookmark = PublishSubject<Void>()
+
+        bookmarkButtonTapped
+            .withLatestFrom(bookmarked)
+            .subscribe(onNext: {
+                switch $0 {
+                case true:
+                    deleteBookmark.onNext(())
+                case false:
+                    addBookmark.onNext(())
+                }
+            })
+            .disposed(by: bag)
+
+        addBookmark
+            .do(onNext: { bookmarked.onNext(true) })
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.addBookmark($0) }
+            .subscribe(onNext: {
+                if $0 == true {
+                    // reload
+                }
+            })
+            .disposed(by: bag)
+
+        deleteBookmark
+            .do(onNext: { bookmarked.onNext(false) })
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.deleteBookmark($0) }
+            .subscribe(onNext: {
+                if $0 == true {
+                    // reload
+                }
+            })
+            .disposed(by: bag)
     }
 }

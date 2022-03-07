@@ -31,6 +31,7 @@ PODS:
     - MaterialComponents/private/Color
     - MaterialComponents/private/Math
     - MaterialComponents/ShadowLayer
+  - NMapsMap (3.14.0)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -51,6 +52,7 @@ DEPENDENCIES:
   - Alamofire
   - Kingfisher
   - MaterialComponents/BottomSheet
+  - NMapsMap
   - RxCocoa
   - RxDataSources
   - RxSwift
@@ -64,6 +66,7 @@ SPEC REPOS:
     - Differentiator
     - Kingfisher
     - MaterialComponents
+    - NMapsMap
     - RxCocoa
     - RxDataSources
     - RxRelay
@@ -77,6 +80,7 @@ SPEC CHECKSUMS:
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
+  NMapsMap: 61c2abfc409bbcdc91583ccc455a5b6f64c7414e
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -85,6 +89,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: 6ca1e30fc6aaa0434cc35359a599b70fd2bd0300
+PODFILE CHECKSUM: 29acce55e0ef1a7e05e4f15088a2bad429500912
 
 COCOAPODS: 1.11.2

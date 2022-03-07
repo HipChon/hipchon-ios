@@ -35,7 +35,7 @@ class FeedViewModel {
 
         presentFilterVC = searchNavigationVM
             .searchFilterButtonTapped
-            .map { FilterViewModel() }
+            .map { FilterViewModel(.search) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

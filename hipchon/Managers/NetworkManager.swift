@@ -388,8 +388,8 @@ class NetworkManager {
                 "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
                 "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
                 "link": "http://www.naver.com",
-                "geoLat": 137.0,
-                "geoLon": 127.0,
+                "geoLat": 37.27455854791513,
+                "geoLon": 127.50946893739612,
                 "address": "경기 고양시 일산동구 강송로 170 현대프라자"
             }
             """
@@ -400,6 +400,44 @@ class NetworkManager {
             } catch {
                 single(.failure(NetworkError.parsing))
             }
+
+            return Disposables.create()
+        }
+    }
+    
+    // MARK: Bookmark
+
+    func addBookmark(_ id: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
+//            AF
+//                .request(url, method: .post, parameters: nil, headers: NetworkManager.headers)
+//                .validate(statusCode: 200 ..< 300)
+//                .response(completionHandler: { response in
+//                    switch response.result {
+//                    case .success:
+//                        single(.success(true))
+//                    case .failure:
+//                        single(.success(false))
+//                    }
+//                })
+//                .resume()
+            
+            return Disposables.create()
+        }
+    }
+
+    func deleteBookmark(_ id: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
 
             return Disposables.create()
         }

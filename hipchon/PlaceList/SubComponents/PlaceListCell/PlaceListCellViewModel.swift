@@ -17,7 +17,7 @@ class PlaceListCellViewModel {
     let secondHashtagVM = RoundLabelViewModel()
     let thirdHashtagVM = RoundLabelViewModel()
 
-    // MARK: viewModel -> voew
+    // MARK: viewModel -> view
 
     let placeImageURLs: Driver<[URL]>
     let title: Driver<String>
@@ -26,8 +26,10 @@ class PlaceListCellViewModel {
     let priceDes: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
-
     let imageCount: Driver<Int>
+    
+    // MARK: view -> viewModel
+    let bookmarkButtonTapped = PublishRelay<Void>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -40,10 +42,6 @@ class PlaceListCellViewModel {
         title = place
             .compactMap { $0.placeTitle }
             .asDriver(onErrorJustReturn: "")
-        
-        bookmarkYn = place
-            .compactMap { $0.bookmarkYn }
-            .asDriver(onErrorJustReturn: false)
 
         priceDes = place
             .compactMap { $0.priceDes }
@@ -85,5 +83,53 @@ class PlaceListCellViewModel {
             .compactMap { $0[2] }
             .bind(to: thirdHashtagVM.content)
             .disposed(by: bag)
+        
+        
+        // MARK: bookmark
+    
+        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
+        
+        bookmarkYn = bookmarked
+            .asDriver(onErrorJustReturn: false)
+        
+        let addBookmark = PublishSubject<Void>()
+        let deleteBookmark = PublishSubject<Void>()
+
+        bookmarkButtonTapped
+            .withLatestFrom(bookmarked)
+            .subscribe(onNext: {
+                switch $0 {
+                case true:
+                    deleteBookmark.onNext(())
+                case false:
+                    addBookmark.onNext(())
+                }
+            })
+            .disposed(by: bag)
+
+        addBookmark
+            .do(onNext: { bookmarked.onNext(true) })
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.addBookmark($0) }
+            .subscribe(onNext: {
+                if $0 == true {
+                    // reload
+                }
+            })
+            .disposed(by: bag)
+
+        deleteBookmark
+            .do(onNext: { bookmarked.onNext(false) })
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.deleteBookmark($0) }
+            .subscribe(onNext: {
+                if $0 == true {
+                    // reload
+                }
+            })
+            .disposed(by: bag)
+
     }
 }

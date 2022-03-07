@@ -5,7 +5,7 @@
 //  Created by 김범수 on 2022/02/08.
 //
 
-import Foundation
+import NMapsMap
 
 class PlaceModel: Codable {
     let id: Int?
@@ -49,6 +49,14 @@ class PlaceModel: Codable {
             return nil
         }
         return "\(Int(distance))Km"
+    }
+    
+    var nmgLatLng: NMGLatLng? {
+        guard let geoLat = geoLat,
+              let geoLon = geoLon else {
+            return nil
+        }
+        return NMGLatLng(lat: geoLat, lng: geoLon)
     }
 
     enum CodingKeys: String, CodingKey {

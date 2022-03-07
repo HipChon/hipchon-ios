@@ -14,10 +14,10 @@ class PlaceListViewModel {
     // MARK: subViewModels
 
     let searchNavigationVM = SearchNavigationViewModel()
-
+    
     // MARK: viewModel -> view
 
-    let places: Driver<[PlaceModel]>
+    let placeListCellVMs: Driver<[PlaceListCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     let searchFilterTitle: Driver<String>
     let presentFilterVC: Signal<FilterViewModel>
@@ -26,20 +26,34 @@ class PlaceListViewModel {
 
     // MARK: view -> viewModel
 
-    let selectedPlace = PublishRelay<PlaceModel>()
+    let selectedIdx = PublishRelay<Int>()
+    let changedSearchFilter = PublishSubject<SearchFilterModel>()
+    let sortType = BehaviorSubject<SortType>(value: .review)
 
     init(_ data: SearchFilterModel) {
         let searchFilter = BehaviorSubject<SearchFilterModel>(value: data)
-
-        places = NetworkManager.shared.getPlaces()
+        let places = BehaviorSubject<[PlaceModel]>(value: [])
+        
+        Observable.combineLatest(searchFilter, sortType)
+            .withLatestFrom(NetworkManager.shared.getPlaces())
+            .bind(to: places)
+            .disposed(by: bag)
+        
+        placeListCellVMs = places
+            .map { $0.map { PlaceListCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
         searchFilter
             .compactMap { $0.filterTitle }
             .bind(to: searchNavigationVM.searchFilterTitle)
             .disposed(by: bag)
+        
+        changedSearchFilter
+            .bind(to: searchFilter)
+            .disposed(by: bag)
 
-        pushPlaceDetailVC = selectedPlace
+        pushPlaceDetailVC = selectedIdx
+            .withLatestFrom(places) { $1[$0] }
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
@@ -50,14 +64,15 @@ class PlaceListViewModel {
 
         presentFilterVC = searchNavigationVM
             .searchFilterButtonTapped
-            .map { FilterViewModel() }
+            .map { FilterViewModel(.research) }
             .asSignal(onErrorSignalWith: .empty())
 
         presentSortVC = searchNavigationVM
             .sortButtonTapped
-            .map { SortViewModel() }
+            .withLatestFrom(sortType)
+            .map { SortViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-
+        
         pop = searchNavigationVM.pop
     }
 }

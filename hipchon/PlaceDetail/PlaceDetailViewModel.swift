@@ -7,6 +7,7 @@
 
 import RxCocoa
 import RxSwift
+import NMapsMap
 
 class PlaceDetailViewModel {
     private let bag = DisposeBag()
@@ -14,20 +15,19 @@ class PlaceDetailViewModel {
     // MARK: subViewModels
     let placeDesVM = PlaceDesViewModel()
     let placeMapVM = PlaceMapViewModel()
+    let reviewListVM = ReviewListViewModel()
 
     // MARK: viewModel -> view
 
     let urls: Driver<[URL]>
     let openURL: Signal<URL>
+    let pushReviewDetailVC: Signal<ReviewDetailViewModel>
 
     // MARK: view -> viewModel
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
-        
 
-        
-       
         urls = place
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
@@ -73,6 +73,11 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
         
         place
+            .compactMap { $0.nmgLatLng }
+            .bind(to: placeMapVM.nmgLatLng)
+            .disposed(by: bag)
+        
+        place
             .take(1)
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.getPlaceDetail($0) }
@@ -89,5 +94,9 @@ class PlaceDetailViewModel {
             .compactMap { URL(string: $0) }
             .asSignal(onErrorSignalWith: .empty())
             
+        
+        pushReviewDetailVC = reviewListVM.selectedReview
+            .map { ReviewDetailViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
     }
 }

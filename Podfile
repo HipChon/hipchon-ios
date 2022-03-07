@@ -22,6 +22,6 @@ target 'hipchon' do
   pod 'Kingfisher'
   pod 'MaterialComponents/BottomSheet'
   #pod 'SideMenu'
-  #pod 'NMapsMap'
+  pod 'NMapsMap'
 
 end

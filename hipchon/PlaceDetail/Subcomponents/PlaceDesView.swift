@@ -16,7 +16,7 @@ class PlaceDesView: UIView {
     }
     
     private lazy var callButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "callWhite") ?? UIImage(), for: .normal)
     }
 
     private lazy var callLabel = UILabel().then {
@@ -27,7 +27,7 @@ class PlaceDesView: UIView {
     }
 
     private lazy var shareButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
     }
 
     private lazy var shareLabel = UILabel().then {
@@ -38,7 +38,7 @@ class PlaceDesView: UIView {
     }
     
     private lazy var reviewButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "reviewWhite") ?? UIImage(), for: .normal)
     }
 
     private lazy var reviewLabel = UILabel().then {
@@ -48,7 +48,7 @@ class PlaceDesView: UIView {
     }
     
     private lazy var bookmarkButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "bookmarkWhite") ?? UIImage(), for: .normal)
     }
 
     private lazy var bookmarkLabel = UILabel().then {
@@ -56,21 +56,36 @@ class PlaceDesView: UIView {
         $0.textColor = .black
         $0.textAlignment = .center
     }
+    
+    private lazy var sectorImageView = UIImageView().then {
+        $0.image = UIImage(named: "cupGray") ?? UIImage()
+    }
    
     private lazy var sectorLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
         $0.textColor = .gray05
+        $0.textAlignment = .left
+    }
+    
+    private lazy var businessHoursImageView = UIImageView().then {
+        $0.image = UIImage(named: "clockGray") ?? UIImage()
     }
     
     private lazy var businessHoursLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
         $0.textColor = .gray05
+        $0.textAlignment = .left
+    }
+    
+    private lazy var descriptionImageView = UIImageView().then {
+        $0.image = UIImage(named: "houseGray") ?? UIImage()
     }
     
     private lazy var descriptionLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
         $0.textColor = .gray05
-        $0.numberOfLines = 2
+        $0.numberOfLines = 1
+        $0.textAlignment = .left
     }
     
     private lazy var linkButton = UIButton().then {
@@ -178,9 +193,26 @@ class PlaceDesView: UIView {
         buttonStackView.spacing = 0.0
         
         
-        let textStackView = UIStackView(arrangedSubviews: [sectorLabel,
-                                                          businessHoursLabel,
-                                                           descriptionLabel
+        let sectorStackView = UIStackView(arrangedSubviews: [sectorImageView,
+                                                             sectorLabel])
+        let businessHoursStackView = UIStackView(arrangedSubviews: [businessHoursImageView,
+                                                                    businessHoursLabel])
+        let descriptionStackView = UIStackView(arrangedSubviews: [descriptionImageView,
+                                                                  descriptionImageView])
+        [
+            sectorStackView,
+            businessHoursStackView,
+            descriptionStackView
+        ].forEach {
+            $0.axis = .horizontal
+            $0.alignment = .fill
+            $0.distribution = .equalSpacing
+            $0.spacing = 4.0
+        }
+        
+        let textStackView = UIStackView(arrangedSubviews: [sectorStackView,
+                                                           businessHoursStackView,
+                                                           descriptionStackView
                                                           ])
         textStackView.axis = .vertical
         textStackView.alignment = .fill
@@ -203,7 +235,7 @@ class PlaceDesView: UIView {
         }
         
         buttonStackView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.leading.trailing.equalToSuperview().inset(40.0)
             $0.top.equalTo(placeNameLabel.snp.bottom).offset(24.0)
             $0.height.equalTo(60.0)
         }

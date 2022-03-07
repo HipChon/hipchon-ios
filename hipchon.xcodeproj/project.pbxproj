@@ -67,6 +67,9 @@
 		D84B352327CBA90500BF1A63 /* BestReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84B352227CBA90500BF1A63 /* BestReviewViewModel.swift */; };
 		D866678C27CE01520098A1EA /* GmarketSansTTFBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */; };
 		D866678D27CE01520098A1EA /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */; };
+		D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */; };
+		D86CC50D27D3438D004B74EA /* ReviewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50C27D3438D004B74EA /* ReviewListView.swift */; };
+		D86CC50F27D343EB004B74EA /* ReviewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50E27D343EB004B74EA /* ReviewListViewModel.swift */; };
 		D871F4A827BD111300CCDE4D /* HipsterPickCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871F4A727BD111300CCDE4D /* HipsterPickCell.swift */; };
 		D871F4AA27BD111900CCDE4D /* HipsterPickCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871F4A927BD111900CCDE4D /* HipsterPickCellViewModel.swift */; };
 		D871F4AC27BD11CF00CCDE4D /* HipsterPickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D871F4AB27BD11CF00CCDE4D /* HipsterPickView.swift */; };
@@ -170,6 +173,9 @@
 		D84B352227CBA90500BF1A63 /* BestReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewViewModel.swift; sourceTree = "<group>"; };
 		D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFBold.ttf; sourceTree = "<group>"; };
 		D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
+		D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxNMFMapView+.swift"; sourceTree = "<group>"; };
+		D86CC50C27D3438D004B74EA /* ReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListView.swift; sourceTree = "<group>"; };
+		D86CC50E27D343EB004B74EA /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
 		D871F4A727BD111300CCDE4D /* HipsterPickCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HipsterPickCell.swift; sourceTree = "<group>"; };
 		D871F4A927BD111900CCDE4D /* HipsterPickCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HipsterPickCellViewModel.swift; sourceTree = "<group>"; };
 		D871F4AB27BD11CF00CCDE4D /* HipsterPickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HipsterPickView.swift; sourceTree = "<group>"; };
@@ -339,6 +345,8 @@
 				D83257D927CFA3F600129E50 /* PlaceDesViewModel.swift */,
 				D83257DB27CFBF2F00129E50 /* PlaceMapView.swift */,
 				D83257DD27CFBF3500129E50 /* PlaceMapViewModel.swift */,
+				D86CC50C27D3438D004B74EA /* ReviewListView.swift */,
+				D86CC50E27D343EB004B74EA /* ReviewListViewModel.swift */,
 			);
 			path = Subcomponents;
 			sourceTree = "<group>";
@@ -351,6 +359,7 @@
 				D840813427C5414300FA9D1B /* RxButton+.swift */,
 				D8C72E9927CE026E007C160A /* UIColor+.swift */,
 				D8C72E9B27CE069F007C160A /* UIFont+.swift */,
+				D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -784,6 +793,7 @@
 				D8237DEA27B9304400238387 /* CategoryModel.swift in Sources */,
 				D8A3031627C9F6250013E71A /* HashtagView.swift in Sources */,
 				D8C72EBB27CE3B68007C160A /* RoundLabelView.swift in Sources */,
+				D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */,
 				D88FAF9127A689B500E41F4F /* LoginViewModel.swift in Sources */,
 				D809200B27B28831000F057E /* ReviewListCell.swift in Sources */,
 				D8C72E9C27CE069F007C160A /* UIFont+.swift in Sources */,
@@ -837,6 +847,7 @@
 				D84B352327CBA90500BF1A63 /* BestReviewViewModel.swift in Sources */,
 				D840813127C52CC500FA9D1B /* RegisterViewModel.swift in Sources */,
 				D871F4A827BD111300CCDE4D /* HipsterPickCell.swift in Sources */,
+				D86CC50F27D343EB004B74EA /* ReviewListViewModel.swift in Sources */,
 				D8237DEC27B9361800238387 /* PlaceImageCell.swift in Sources */,
 				D84B351B27CB9A6900BF1A63 /* SortViewController.swift in Sources */,
 				D83257D027CF9FFE00129E50 /* BestReviewCellViewModel.swift in Sources */,
@@ -848,6 +859,7 @@
 				D88FAF9527A68AD500E41F4F /* HomeViewController.swift in Sources */,
 				D809201027B28C3F000F057E /* ReviewDetailViewController.swift in Sources */,
 				D871F4B627BD18E300CCDE4D /* HipPlaceCellViewModel.swift in Sources */,
+				D86CC50D27D3438D004B74EA /* ReviewListView.swift in Sources */,
 				D871F4BA27BD240100CCDE4D /* MyPlaceCellViewModel.swift in Sources */,
 				D809200927B2872D000F057E /* ReviewModel.swift in Sources */,
 				D8C72EA627CE0C31007C160A /* CustomerServiceViewModel.swift in Sources */,
@@ -1006,7 +1018,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = beomsoo.hipchon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1034,7 +1046,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = beomsoo.hipchon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

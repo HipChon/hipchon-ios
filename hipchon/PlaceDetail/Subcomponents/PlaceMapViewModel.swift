@@ -7,6 +7,7 @@
 
 import RxSwift
 import RxCocoa
+import NMapsMap
 
 class PlaceMapViewModel {
     
@@ -15,13 +16,18 @@ class PlaceMapViewModel {
     // MARK: viewModel -> view
     
     let setAddress: Driver<String>
+    let setNMGLatLng: Driver<NMGLatLng>
     
     // MARK: view -> viewModel
     
     let address = BehaviorSubject<String>(value: "")
+    let nmgLatLng = BehaviorSubject<NMGLatLng>(value: NMGLatLng())
     
     init() {
         setAddress = address
             .asDriver(onErrorJustReturn: "")
+        
+        setNMGLatLng = nmgLatLng
+            .asDriver(onErrorDriveWith: .empty())
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import NMapsMap
 
 class PlaceMapView: UIView {
     
@@ -16,8 +17,8 @@ class PlaceMapView: UIView {
         $0.textColor = .black
     }
     
-    private lazy var mapView = UIView().then {
-        $0.backgroundColor = .gray05
+    private lazy var mapView = NMFMapView().then {
+        $0.isUserInteractionEnabled = false
     }
     
     private lazy var addressLabel = UILabel().then {
@@ -40,6 +41,16 @@ class PlaceMapView: UIView {
     func bind(_ viewModel: PlaceMapViewModel) {
         viewModel.setAddress
             .drive(addressLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.setNMGLatLng
+            .drive(mapView.rx.setMapCenterPoint)
+            .disposed(by: bag)
+        
+        viewModel.setNMGLatLng
+            .drive(onNext: { [weak self] in
+                self?.addMarker($0)
+            })
             .disposed(by: bag)
     }
     
@@ -72,6 +83,25 @@ class PlaceMapView: UIView {
         }
         
         
+    }
+    
+    private func addMarker(_ geoLocation: NMGLatLng) {
+        let marker = NMFMarker(position: geoLocation)
+
+//        marker.iconImage = NMFOverlayImage(image: UIImage(named: "nonSelectedMarker")!)
+
+//        marker.touchHandler = { [weak self] (_: NMFOverlay) -> Bool in
+//            guard let self = self else { return false }
+//            if let selectedMarker = self.selectedMarker {
+//                selectedMarker.iconImage = NMFOverlayImage(image: UIImage(named: "nonSelectedMarker")!)
+//            }
+//            marker.iconImage = NMFOverlayImage(image: UIImage(named: "selectedMarker")!)
+//
+//            self.selectedMarker = marker
+//            self.viewModel.selectedStation.accept(station)
+//            return true
+//        }
+        marker.mapView = self.mapView
     }
     
     

@@ -57,9 +57,8 @@ class PlaceDetailViewController: UIViewController {
     
     private lazy var placeMapView = PlaceMapView().then { _ in
     }
-
-    private lazy var marginView = UIView().then {
-        $0.backgroundColor = .gray
+    
+    private lazy var reviewListView = ReviewListView().then { _ in
     }
 
     private let bag = DisposeBag()
@@ -79,6 +78,7 @@ class PlaceDetailViewController: UIViewController {
         // MARK: subViews Binding
         placeDesView.bind(viewModel.placeDesVM)
         placeMapView.bind(viewModel.placeMapVM)
+        reviewListView.bind(viewModel.reviewListVM)
 
         // MARK: view -> viewModel
 
@@ -105,6 +105,15 @@ class PlaceDetailViewController: UIViewController {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: bag)
+        
+        viewModel.pushReviewDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let reviewDetailVC = ReviewDetailViewController()
+                reviewDetailVC.bind(viewModel)
+                self.navigationController?.pushViewController(reviewDetailVC, animated: true)
             })
             .disposed(by: bag)
     }
@@ -139,7 +148,7 @@ class PlaceDetailViewController: UIViewController {
             firstBorderView,
             placeMapView,
             secondBorderView,
-            marginView,
+            reviewListView,
         ].forEach {
             contentView.addSubview($0)
         }
@@ -179,8 +188,8 @@ class PlaceDetailViewController: UIViewController {
             $0.height.equalTo(8.0)
         }
 
-        marginView.snp.makeConstraints {
-            $0.top.equalTo(secondBorderView.snp.bottom).offset(100.0)
+        reviewListView.snp.makeConstraints {
+            $0.top.equalTo(secondBorderView.snp.bottom)
             $0.height.equalTo(1000.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }

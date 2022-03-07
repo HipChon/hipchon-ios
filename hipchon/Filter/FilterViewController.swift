@@ -135,6 +135,7 @@ class FilterViewController: UIViewController {
 
     private let bag = DisposeBag()
     var viewHeight = 600.0
+    var befViewModel: PlaceListViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -265,6 +266,15 @@ class FilterViewController: UIViewController {
                 self.dismiss(animated: true, completion: {
                     tabbarVC.pushViewController(placeListVC, animated: true)
                 })
+            })
+            .disposed(by: bag)
+        
+        viewModel.popToSearchListVC
+            .emit(onNext: { [weak self] filterModel in
+                guard let self = self,
+                      let befViewModel = self.befViewModel else { return }
+                befViewModel.changedSearchFilter.onNext(filterModel)
+                self.dismiss(animated: true, completion: nil)
             })
             .disposed(by: bag)
 

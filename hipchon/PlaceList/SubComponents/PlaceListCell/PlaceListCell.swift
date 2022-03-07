@@ -118,6 +118,13 @@ class PlaceListCell: UITableViewCell {
         firstHashtagView.bind(viewModel.firstHashtagVM)
         secondHashtagView.bind(viewModel.secondHashtagVM)
         thirdHashtagView.bind(viewModel.thirdHashtagVM)
+        
+        // MARK: view -> viewModel
+
+        bookmarkButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.bookmarkButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
