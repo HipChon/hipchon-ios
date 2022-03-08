@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import RxSwift
 
-class CustomerServiewView: UIView {
+class CustomerServiceView: UIView {
     
     private lazy var counselingLabel = UILabel().then {
         $0.text = "어디서 살지 못 정하셨나요?"
@@ -53,8 +53,16 @@ class CustomerServiewView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func bind(_ viewModel: CustomerServiewViewModel) {
+    func bind(_ viewModel: CustomerServiceViewModel) {
+        counselingButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.counselingButtonTapped)
+            .disposed(by: bag)
         
+        placeRegisterButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.placeRegisterButtonTapped)
+            .disposed(by: bag)
     }
     
     private func attribute() {

@@ -18,20 +18,20 @@ class TabBarViewController: UITabBarController {
 
         let homeViewController = HomeViewController()
         homeViewController.tabBarItem = UITabBarItem(title: "홈",
-                                                     image: UIImage(systemName: "list.bullet"),
-                                                     selectedImage: UIImage(systemName: "list.bullet"))
+                                                     image: UIImage(named: "homeUnselected") ?? UIImage(),
+                                                     selectedImage: UIImage(named: "homeSelected") ?? UIImage())
         homeViewController.bind(homeViewModel)
 
         let feedViewController = FeedViewController()
         feedViewController.tabBarItem = UITabBarItem(title: "피드",
-                                                     image: UIImage(systemName: "list.bullet"),
-                                                     selectedImage: UIImage(systemName: "list.bullet"))
+                                                     image: UIImage(named: "feedUnselected") ?? UIImage(),
+                                                     selectedImage: UIImage(named: "feedSelected") ?? UIImage())
         feedViewController.bind(feedViewModel)
 
         let myPlaceViewController = MyPlaceViewController()
-        myPlaceViewController.tabBarItem = UITabBarItem(title: "장소",
-                                                        image: UIImage(systemName: "list.bullet"),
-                                                        selectedImage: UIImage(systemName: "list.bullet"))
+        myPlaceViewController.tabBarItem = UITabBarItem(title: "저장",
+                                                        image: UIImage(named: "bookmarkUnselected") ?? UIImage(),
+                                                        selectedImage: UIImage(named: "bookmarkSelected") ?? UIImage())
         myPlaceViewController.bind(myPlaceViewModel)
 
         let profileViewController = ProfileViewController()
@@ -39,9 +39,18 @@ class TabBarViewController: UITabBarController {
                                                         image: UIImage(systemName: "person"),
                                                         selectedImage: UIImage(systemName: "person.fill"))
         profileViewController.bind(profileViewModel)
+        
+        [
+            homeViewController,
+            feedViewController,
+            myPlaceViewController,
+            profileViewController
+        ].forEach {
+            $0.tabBarItem.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
+            $0.tabBarItem.setTitleTextAttributes([.foregroundColor: UIColor.gray04], for: .normal)
+            $0.tabBarItem.imageInsets = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
+        }
 
-        [homeViewController,
-         profileViewController].forEach { $0?.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0) }
         view.backgroundColor = .white
         tabBar.backgroundColor = .white
 

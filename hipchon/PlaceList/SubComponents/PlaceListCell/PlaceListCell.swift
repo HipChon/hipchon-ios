@@ -34,10 +34,10 @@ class PlaceListCell: UITableViewCell {
         $0.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
 
-    private lazy var pageControl = UIPageControl().then { _ in
-    }
-
     private lazy var bookmarkButton = UIButton().then { _ in
+    }
+    
+    private lazy var pageCountView = PageCountView().then { _ in
     }
 
     private lazy var titleLabel = UILabel().then {
@@ -115,6 +115,7 @@ class PlaceListCell: UITableViewCell {
     func bind(_ viewModel: PlaceListCellViewModel) {
         // MARK: subViewModels
 
+        pageCountView.bind(viewModel.pageCountVM)
         firstHashtagView.bind(viewModel.firstHashtagVM)
         secondHashtagView.bind(viewModel.secondHashtagVM)
         thirdHashtagView.bind(viewModel.thirdHashtagVM)
@@ -124,6 +125,12 @@ class PlaceListCell: UITableViewCell {
         bookmarkButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.bookmarkButtonTapped)
+            .disposed(by: bag)
+        
+        placeImageCollectView.rx.contentOffset
+            .compactMap { [unowned self] in Int(($0.x + self.contentView.frame.width / 2) / self.contentView.frame.width) }
+            .distinctUntilChanged()
+            .bind(to: viewModel.currentIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -136,10 +143,6 @@ class PlaceListCell: UITableViewCell {
                 cell.bind(viewModel)
                 return cell
             }
-            .disposed(by: bag)
-
-        viewModel.imageCount
-            .drive(pageControl.rx.numberOfPages)
             .disposed(by: bag)
 
         viewModel.title
@@ -244,6 +247,7 @@ class PlaceListCell: UITableViewCell {
         
         [
             placeImageCollectView,
+            pageCountView,
             entireStackView,
             bookmarkButton,
 
@@ -255,6 +259,11 @@ class PlaceListCell: UITableViewCell {
             let cellHeight = width * ((280.0 + 16.0) / 330.0)
             let height = cellHeight * (166.0 / 280.0)
             $0.height.equalTo(height)
+        }
+        
+        pageCountView.snp.makeConstraints {
+            $0.trailing.equalTo(placeImageCollectView).inset(16.0)
+            $0.bottom.equalTo(placeImageCollectView).inset(16.0)
         }
 
         bookmarkButton.snp.makeConstraints {

@@ -75,7 +75,7 @@ class HomeViewController: UIViewController {
     private lazy var weelkyHipPlaceView = WeeklyHipPlaceView().then { _ in
     }
     
-    private lazy var customerServiceView = CustomerServiewView().then { _ in
+    private lazy var customerServiceView = CustomerServiceView().then { _ in
     }
 
     private let bag = DisposeBag()
@@ -165,13 +165,13 @@ class HomeViewController: UIViewController {
             })
             .disposed(by: bag)
         
-//        viewModel.pushPlaceDetailVC
-//            .emit(onNext: { [weak self] viewModel in
-//                let placeDetailVC = PlaceDetailViewController()
-//                placeDetailVC.bind(viewModel)
-//                self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
-//            })
-//            .disposed(by: bag)
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
+            .disposed(by: bag)
         
         viewModel.pushHipsterPickDetailVC
             .emit(onNext: { [weak self] viewModel in

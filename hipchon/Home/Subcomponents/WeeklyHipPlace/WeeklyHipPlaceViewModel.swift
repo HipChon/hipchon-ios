@@ -15,11 +15,11 @@ class WeeklyHipPlaceViewModel {
     // MARK: viewModel -> view
 
     let hipPlacesCellVMs: Driver<[HipPlaceCellViewModel]>
-//    let pushHipsterPickDetailVC: Signal<HipsterPickDetailViewModel>
 
     // MARK: view -> viewModel
     
     let selectedIdx = PublishRelay<Int>()
+    let selectedHipPlace = PublishRelay<PlaceModel>()
 
     init() {
         let hipPlaces = BehaviorSubject<[PlaceModel]>(value: [])
@@ -35,9 +35,10 @@ class WeeklyHipPlaceViewModel {
             })
             .disposed(by: bag)
         
-//        pushHipsterPickDetailVC = selectedIdx
-//            .withLatestFrom(hipPlaces) { $1[$0] }
-//            .asSignal(onErrorSignalWith: .empty())
+        selectedIdx
+            .withLatestFrom(hipPlaces) { $1[$0] }
+            .bind(to: selectedHipPlace)
+            .disposed(by: bag)
             
     }
 }

@@ -22,7 +22,7 @@ class MyPlaceViewController: UIViewController {
     private lazy var placeList = UITableView().then {
         $0.backgroundColor = .white
         $0.register(MyPlaceCell.self, forCellReuseIdentifier: MyPlaceCell.identyfier)
-        $0.rowHeight = 197.0
+        $0.rowHeight = 211.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }

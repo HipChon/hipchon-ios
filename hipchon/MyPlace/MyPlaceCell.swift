@@ -15,16 +15,21 @@ class MyPlaceCell: UITableViewCell {
         $0.layer.masksToBounds = true
     }
 
-    private lazy var nameLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 18.0, weight: .bold)
+    private lazy var placeNameLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
     }
 
-    private lazy var categoryLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+    private lazy var sectorLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
     }
 
     private lazy var addressLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
+    }
+    
+    private lazy var memoButton = UIButton().then {
+        $0.layer.cornerRadius = 2.0
+        $0.backgroundColor = .primary_green
     }
 
     private lazy var boundaryView = UIView().then {
@@ -51,11 +56,11 @@ class MyPlaceCell: UITableViewCell {
             .disposed(by: bag)
 
         viewModel.name
-            .drive(nameLabel.rx.text)
+            .drive(placeNameLabel.rx.text)
             .disposed(by: bag)
 
         viewModel.category
-            .drive(categoryLabel.rx.text)
+            .drive(sectorLabel.rx.text)
             .disposed(by: bag)
 
         viewModel.address
@@ -70,33 +75,41 @@ class MyPlaceCell: UITableViewCell {
     private func layout() {
         [
             placeImageView,
-            nameLabel,
+            placeNameLabel,
             addressLabel,
-            categoryLabel,
+            sectorLabel,
+            memoButton,
             boundaryView,
         ].forEach { contentView.addSubview($0) }
 
         placeImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(18.0)
+            $0.top.equalToSuperview().inset(20.0)
             $0.trailing.equalToSuperview().inset(20.0)
-            $0.width.height.equalTo(112.0)
+            $0.width.height.equalTo(120.0)
         }
 
-        nameLabel.snp.makeConstraints {
-            $0.leading.top.equalToSuperview().inset(22.0)
-            $0.height.equalTo(20.0)
-        }
-
-        categoryLabel.snp.makeConstraints {
+        placeNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(22.0)
-            $0.top.equalTo(nameLabel.snp.bottom).offset(31.0)
-            $0.height.equalTo(15.0)
+            $0.top.equalToSuperview().inset(20.0)
+            $0.height.equalTo(19.0)
+        }
+
+        sectorLabel.snp.makeConstraints {
+            $0.leading.equalTo(placeNameLabel)
+            $0.top.equalTo(placeNameLabel.snp.bottom).offset(20.0)
+            $0.height.equalTo(17.0)
         }
 
         addressLabel.snp.makeConstraints {
-            $0.centerY.equalTo(categoryLabel.snp.centerY)
-            $0.leading.equalTo(categoryLabel.snp.trailing).offset(24.0)
-            $0.height.equalTo(15.0)
+            $0.leading.equalTo(placeNameLabel)
+            $0.top.equalTo(sectorLabel.snp.bottom).offset(208)
+            $0.height.equalTo(17.0)
+        }
+        
+        memoButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(placeImageView.snp.bottom).offset(13.0)
+            $0.height.equalTo(40.0)
         }
 
         boundaryView.snp.makeConstraints {

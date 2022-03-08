@@ -17,7 +17,7 @@ class HomeViewModel {
     let hipsterPickVM = HipsterPickViewModel()
     let weeklyHipPlaceVM = WeeklyHipPlaceViewModel()
     let bestReviewVM = BestReviewViewModel()
-    let customerServiceVM = CustomerServiewViewModel()
+    let customerServiceVM = CustomerServiceViewModel()
 
     // MARK: viewModel -> view
 
@@ -26,7 +26,7 @@ class HomeViewModel {
     let pushPlaceListVC: Signal<PlaceListViewModel>
     let presentFilterVC: Signal<FilterViewModel>
     let openURL: Signal<URL>
-//    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     let pushHipsterPickDetailVC: Signal<HipsterPickDetailViewModel>
 
     // MARK: view -> viewModel
@@ -50,15 +50,16 @@ class HomeViewModel {
             .map { FilterViewModel(.search) }
             .asSignal(onErrorSignalWith: .empty())
         
-        openURL = selectedBanner
-            .compactMap { $0.linkURL }
+        openURL = Observable.merge(
+            selectedBanner.compactMap { $0.linkURL },
+            customerServiceVM.selectedURLStr
+        )
             .compactMap { URL(string: $0) }
             .asSignal(onErrorSignalWith: .empty())
         
-//        pushPlaceDetailVC = weeklyHipPlaceVM.selectedIdx
-//            .withLatestFrom(wee)
-//            .map { PlaceDetailViewModel($0) }
-//            .asSignal(onErrorSignalWith: .empty())
+        pushPlaceDetailVC = weeklyHipPlaceVM.selectedHipPlace
+            .map { PlaceDetailViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
         
         pushHipsterPickDetailVC = hipsterPickVM.selectedHipsterPickModel
             .map { HipsterPickDetailViewModel($0) }

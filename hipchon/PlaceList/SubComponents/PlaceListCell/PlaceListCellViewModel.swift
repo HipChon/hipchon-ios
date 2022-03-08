@@ -13,6 +13,7 @@ class PlaceListCellViewModel {
 
     // MARK: subViewModels
 
+    let pageCountVM = PageCountViewModel()
     let firstHashtagVM = RoundLabelViewModel()
     let secondHashtagVM = RoundLabelViewModel()
     let thirdHashtagVM = RoundLabelViewModel()
@@ -26,10 +27,10 @@ class PlaceListCellViewModel {
     let priceDes: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
-    let imageCount: Driver<Int>
     
     // MARK: view -> viewModel
     let bookmarkButtonTapped = PublishRelay<Void>()
+    let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -59,9 +60,16 @@ class PlaceListCellViewModel {
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
 
-        imageCount = place
+        place
             .compactMap { $0.imageURLs?.count }
-            .asDriver(onErrorJustReturn: 0)
+            .bind(to: pageCountVM.entireIdx)
+            .disposed(by: bag)
+        
+        currentIdx
+            .map { $0 + 1 }
+            .bind(to: pageCountVM.currentIdx)
+            .disposed(by: bag)
+        
 
         place
             .compactMap { $0.hashtags }
