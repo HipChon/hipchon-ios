@@ -22,6 +22,7 @@ class PlaceMapViewModel {
     
     let address = BehaviorSubject<String>(value: "")
     let nmgLatLng = BehaviorSubject<NMGLatLng>(value: NMGLatLng())
+    let copyButtonTapped = PublishRelay<Void>()
     
     init() {
         setAddress = address

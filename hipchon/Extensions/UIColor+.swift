@@ -20,6 +20,7 @@ extension UIColor {
     static var gray05: UIColor { return UIColor(hexString: "#6C6E78")! }
     static var gray06: UIColor { return UIColor(hexString: "#484950")! }
     static var gray07: UIColor { return UIColor(hexString: "#36373C")! }
+    static var gray_inside: UIColor { return UIColor(hexString: "#F8F8FA")! }
     static var gray_background: UIColor { return UIColor(hexString: "#F5F5F5")! }
     static var gray_border: UIColor { return UIColor(hexString: "#E4E5EB")! }
     static var typography_secondary: UIColor { return UIColor(hexString: "#6C6E78")! }

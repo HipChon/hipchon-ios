@@ -24,7 +24,7 @@ class PlaceListCell: UITableViewCell {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.identyfier)
+        $0.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
@@ -137,9 +137,9 @@ class PlaceListCell: UITableViewCell {
 
         viewModel.placeImageURLs
             .drive(placeImageCollectView.rx.items) { tv, row, data in
-                guard let cell = tv.dequeueReusableCell(withReuseIdentifier: PhotoCell.identyfier,
-                                                        for: IndexPath(row: row, section: 0)) as? PhotoCell else { return UICollectionViewCell() }
-                let viewModel = PhotoCellViewModel(data)
+                guard let cell = tv.dequeueReusableCell(withReuseIdentifier: ImageCell.identyfier,
+                                                        for: IndexPath(row: row, section: 0)) as? ImageCell else { return UICollectionViewCell() }
+                let viewModel = ImageCellViewModel(data)
                 cell.bind(viewModel)
                 return cell
             }

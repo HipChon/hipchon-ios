@@ -57,6 +57,10 @@ class PlaceDesView: UIView {
         $0.textAlignment = .center
     }
     
+    private lazy var boundaryView = UIView().then {
+        $0.backgroundColor = .gray02
+    }
+    
     private lazy var sectorImageView = UIImageView().then {
         $0.image = UIImage(named: "cupGray") ?? UIImage()
     }
@@ -84,16 +88,23 @@ class PlaceDesView: UIView {
     private lazy var descriptionLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
         $0.textColor = .gray05
-        $0.numberOfLines = 1
+        $0.numberOfLines = 2
         $0.textAlignment = .left
     }
     
     private lazy var linkButton = UIButton().then {
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
-        $0.titleLabel?.textColor = .primary_green
-        $0.backgroundColor = .gray05
+        $0.setTitleColor(.primary_green, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.cornerRadius = 22.0
         $0.layer.masksToBounds = true
+        $0.addShadow(offset: CGSize(width: 2.0, height: 2.0))
+        $0.contentHorizontalAlignment = .left
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 0.0)
+    }
+    
+    private lazy var arrowImageView = UIImageView().then {
+        $0.image = UIImage(named: "arrowGray") ?? UIImage()
     }
     
     private let bag = DisposeBag()
@@ -111,6 +122,26 @@ class PlaceDesView: UIView {
     func bind(_ viewModel: PlaceDesViewModel) {
         
         // MARK: view -> viewModel
+        callButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.callButtonTapped)
+            .disposed(by: bag)
+        
+        shareButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.sharedButtonTapped)
+            .disposed(by: bag)
+        
+        reviewButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.reviewButtonTapped)
+            .disposed(by: bag)
+        
+        bookmarkButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.bookmarkButtonTapped)
+            .disposed(by: bag)
+        
         linkButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.linkButtonTapped)
@@ -129,6 +160,11 @@ class PlaceDesView: UIView {
         viewModel.setBookmarkCount
             .map { "\($0)" }
             .drive(bookmarkLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.setBookmarkYn
+            .compactMap { $0 == true ? UIImage(named: "bookmarkY") ?? UIImage() : UIImage(named: "bookmarkN") ?? UIImage() }
+            .drive(bookmarkButton.rx.image)
             .disposed(by: bag)
         
         viewModel.setSector
@@ -150,7 +186,9 @@ class PlaceDesView: UIView {
     
     private func attribute() {
         backgroundColor = .white
-//        roundCorners(corners: [.topLeft, .topRight], radius: 15.0)
+        clipsToBounds = true
+        layer.cornerRadius = 15.0
+        layer.maskedCorners = CACornerMask(arrayLiteral: .layerMinXMinYCorner, .layerMaxXMinYCorner)
     }
     
     private func layout() {
@@ -210,21 +248,18 @@ class PlaceDesView: UIView {
             $0.spacing = 4.0
         }
         
-        let textStackView = UIStackView(arrangedSubviews: [sectorStackView,
-                                                           businessHoursStackView,
-                                                           descriptionStackView
-                                                          ])
-        textStackView.axis = .vertical
-        textStackView.alignment = .fill
-        textStackView.distribution = .fill
-        textStackView.spacing = 25.0
-        
-        
         [
             placeNameLabel,
             buttonStackView,
-            textStackView,
-            linkButton
+            boundaryView,
+            sectorImageView,
+            sectorLabel,
+            businessHoursImageView,
+            businessHoursLabel,
+            descriptionImageView,
+            descriptionLabel,
+            linkButton,
+            arrowImageView
         ].forEach {
             addSubview($0)
         }
@@ -240,15 +275,59 @@ class PlaceDesView: UIView {
             $0.height.equalTo(60.0)
         }
         
-        textStackView.snp.makeConstraints {
+        boundaryView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(buttonStackView.snp.bottom).offset(20.0)
+            $0.height.equalTo(1.0)
         }
         
+        sectorImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(boundaryView.snp.bottom).offset(20.0)
+            $0.height.width.equalTo(25.0)
+        }
+        
+        sectorLabel.snp.makeConstraints {
+            $0.leading.equalTo(sectorImageView.snp.trailing).offset(8.0)
+            $0.top.equalTo(sectorImageView)
+            $0.trailing.equalToSuperview().inset(20.0)
+        }
+        
+        businessHoursImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(sectorImageView.snp.bottom).offset(20.0)
+            $0.height.width.equalTo(25.0)
+        }
+        
+        businessHoursLabel.snp.makeConstraints {
+            $0.leading.equalTo(businessHoursImageView.snp.trailing).offset(8.0)
+            $0.top.equalTo(businessHoursImageView)
+            $0.trailing.equalToSuperview().inset(20.0)
+        }
+        
+        descriptionImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(businessHoursImageView.snp.bottom).offset(20.0)
+            $0.height.width.equalTo(25.0)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.leading.equalTo(descriptionImageView.snp.trailing).offset(8.0)
+            $0.top.equalTo(descriptionImageView)
+            $0.trailing.equalToSuperview().inset(20.0)
+        }
+
         linkButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.top.equalTo(textStackView.snp.bottom).offset(20.0)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(16.0)
             $0.height.equalTo(44.0)
+        }
+        
+        arrowImageView.snp.makeConstraints {
+            $0.trailing.equalTo(linkButton.snp.trailing).inset(16.0)
+            $0.centerY.equalTo(linkButton)
+            $0.width.equalTo(6.0)
+            $0.height.equalTo(12.0)
         }
         
     }

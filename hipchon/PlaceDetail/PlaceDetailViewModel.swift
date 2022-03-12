@@ -13,90 +13,55 @@ class PlaceDetailViewModel {
     private let bag = DisposeBag()
 
     // MARK: subViewModels
-    let placeDesVM = PlaceDesViewModel()
-    let placeMapVM = PlaceMapViewModel()
-    let reviewListVM = ReviewListViewModel()
 
     // MARK: viewModel -> view
 
-    let urls: Driver<[URL]>
+    let placeReviewListCellVMs: Driver<[PlaceReviewCellViewModel]>
+    let placeDetailHeaderVM: Driver<PlaceDetailHeaderViewModel>
     let openURL: Signal<URL>
-    let pushReviewDetailVC: Signal<ReviewDetailViewModel>
+    let share: Signal<Void>
+//    let pushReviewDetailVC: Signal<ReviewDetailViewModel>
+    let pushPostReviewVC: Signal<PostReviewViewModel>
 
     // MARK: view -> viewModel
+    
+    let selectedReview = PublishRelay<ReviewModel>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
-
-        urls = place
-            .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
+        let reviews = BehaviorSubject<[ReviewModel]>(value: [])
+        
+        place
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.getReviews() }
+            .asObservable()
+            .bind(to: reviews)
+            .disposed(by: bag)
+        
+        placeDetailHeaderVM = place
+            .map { PlaceDetailHeaderViewModel($0) }
+            .asDriver(onErrorDriveWith: .empty())
+        
+        placeReviewListCellVMs = reviews
+            .map { $0.map { PlaceReviewCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
         
-        place
-            .compactMap { $0.name }
-            .bind(to: placeDesVM.placeName)
-            .disposed(by: bag)
         
-        place
-            .compactMap { $0.reviewCount }
-            .bind(to: placeDesVM.reviewCount)
-            .disposed(by: bag)
+        openURL = placeDetailHeaderVM
+            .flatMap { $0.openURL }
+
+        share = placeDetailHeaderVM
+            .flatMap { $0.share }
         
-        place
-            .compactMap { $0.bookmarkCount }
-            .bind(to: placeDesVM.bookmarkCount)
-            .disposed(by: bag)
-        
-        place
-            .compactMap { $0.sector }
-            .bind(to: placeDesVM.sector)
-            .disposed(by: bag)
-        
-        place
-            .compactMap { $0.businessHours }
-            .bind(to: placeDesVM.businessHours)
-            .disposed(by: bag)
-        
-        place
-            .compactMap { $0.description }
-            .bind(to: placeDesVM.description)
-            .disposed(by: bag)
-        
-        place
-            .compactMap { $0.link }
-            .bind(to: placeDesVM.link)
-            .disposed(by: bag)
-        
-        place
-            .compactMap { $0.address }
-            .bind(to: placeMapVM.address)
-            .disposed(by: bag)
-        
-        place
-            .compactMap { $0.nmgLatLng }
-            .bind(to: placeMapVM.nmgLatLng)
-            .disposed(by: bag)
-        
-        place
-            .take(1)
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.getPlaceDetail($0) }
+        pushPostReviewVC = placeDetailHeaderVM
             .asObservable()
-            .subscribe(onNext: {
-                place.onNext($0)
-            })
-            .disposed(by: bag)
-        
-        
-        openURL = placeDesVM.linkButtonTapped
+            .flatMap { $0.placeDesVM.reviewButtonTapped }
             .withLatestFrom(place)
-            .compactMap { $0.link }
-            .compactMap { URL(string: $0) }
+            .map { PostReviewViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-            
         
-        pushReviewDetailVC = reviewListVM.selectedReview
-            .map { ReviewDetailViewModel($0) }
-            .asSignal(onErrorSignalWith: .empty())
+//        pushReviewDetailVC = reviewListVM.selectedReview
+//            .map { ReviewDetailViewModel($0) }
+//            .asSignal(onErrorSignalWith: .empty())
     }
 }

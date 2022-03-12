@@ -14,8 +14,10 @@ class ReviewModel: Codable {
     let imageURLs: [String]?
     let user: UserModel?
     let place: PlaceModel?
+    let likeCount: Int?
+    let commentCount: Int?
 
     enum Codingkeys: String, CodingKey {
-        case id, content, postDt, imageURLs, user, place
+        case id, content, postDt, imageURLs, user, place, compliments, likeCount, commentCount
     }
 }

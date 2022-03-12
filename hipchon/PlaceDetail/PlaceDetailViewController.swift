@@ -10,61 +10,47 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
+import RxDataSources
 
 class PlaceDetailViewController: UIViewController {
     // MARK: Property
 
-    private lazy var scrollView = UIScrollView().then { _ in
-    }
-
-    private lazy var contentView = UIView().then { _ in
-    }
-
     private lazy var backButton = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.left"), for: .normal)
     }
-
-    private lazy var imageCollectView = UICollectionView(frame: .zero,
-                                                         collectionViewLayout: UICollectionViewFlowLayout()).then {
+    
+    private lazy var entireCollectionView = UICollectionView(frame: .zero,
+                                                             collectionViewLayout: UICollectionViewFlowLayout()).then {
+        
+        $0.delegate = nil
+        $0.dataSource = nil
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 0.0
         let width = view.frame.width
-        let height = width * (263.0 / 390.0)
-
+        let height = 440.0
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        layout.scrollDirection = .horizontal
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        layout.scrollDirection = .vertical
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
+        layout.headerReferenceSize = CGSize(width: width, height: 1261.0) 
         $0.collectionViewLayout = layout
-
-        $0.register(PlaceImageCell.self, forCellWithReuseIdentifier: PlaceImageCell.identyfier)
-        $0.showsHorizontalScrollIndicator = false
+        
+        $0.register(PlaceReviewCell.self, forCellWithReuseIdentifier: PlaceReviewCell.identyfier)
+        $0.register(PlaceDetailHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PlaceDetailHeaderView.identyfier)
+        $0.showsVerticalScrollIndicator = false
         $0.bounces = false
-        $0.isPagingEnabled = true
-    }
-    
-    private lazy var placeDesView = PlaceDesView().then { _ in
-    }
-    
-    private lazy var firstBorderView = UIView().then {
-        $0.backgroundColor = .gray_border
-    }
-    
-    private lazy var secondBorderView = UIView().then {
-        $0.backgroundColor = .gray_border
-    }
-    
-    private lazy var placeMapView = PlaceMapView().then { _ in
-    }
-    
-    private lazy var reviewListView = ReviewListView().then { _ in
+        $0.isPagingEnabled = false
     }
 
-    private let bag = DisposeBag()
+    typealias PlaceSectionModel = SectionModel<PlaceDetailHeaderViewModel, PlaceReviewCellViewModel>
+    typealias PlaceDataSource = RxCollectionViewSectionedReloadDataSource<PlaceSectionModel>
+    private var bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        entireCollectionView.delegate = nil
+        entireCollectionView.dataSource = nil
         attribute()
         layout()
     }
@@ -75,45 +61,88 @@ class PlaceDetailViewController: UIViewController {
     }
 
     func bind(_ viewModel: PlaceDetailViewModel) {
-        // MARK: subViews Binding
-        placeDesView.bind(viewModel.placeDesVM)
-        placeMapView.bind(viewModel.placeMapVM)
-        reviewListView.bind(viewModel.reviewListVM)
 
+        entireCollectionView.delegate = nil
+        entireCollectionView.dataSource = nil
+        
         // MARK: view -> viewModel
 
-        // MARK: viewModel -> view
-
-        viewModel.urls
-            .drive(imageCollectView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: PlaceImageCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceImageCell else { return UICollectionViewCell() }
-                let placeImageCellVM = PlaceImageCellViewModel(data)
-                cell.bind(placeImageCellVM)
-                return cell
-            }
+        entireCollectionView.rx.modelSelected(ReviewModel.self)
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.selectedReview)
             .disposed(by: bag)
+
+        // MARK: viewModel -> view
+     
+        let dataSource = RxCollectionViewSectionedReloadDataSource<PlaceSectionModel>(configureCell: { _, collectionView, indexPath, viewModel in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceReviewCell.identyfier,
+                                                                for: indexPath) as? PlaceReviewCell else { return UICollectionViewCell() }
+            cell.bind(viewModel)
+            return cell
+        })
+        
+        dataSource.configureSupplementaryView = { ds, collectionView, kind, indexPath -> UICollectionReusableView in
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                               withReuseIdentifier: PlaceDetailHeaderView.identyfier, for: indexPath) as? PlaceDetailHeaderView
+            else {
+                return UICollectionReusableView()
+            }
+            let viewModel = ds.sectionModels[indexPath.row].model
+            header.bind(viewModel)
+            return header
+        }
+
+        Driver.combineLatest(viewModel.placeDetailHeaderVM, viewModel.placeReviewListCellVMs)
+            .do(onNext: { _ in
+                self.entireCollectionView.delegate = nil
+                self.entireCollectionView.delegate = nil
+                self.bag = DisposeBag()
+            })
+            .map { [PlaceSectionModel(model: $0, items: $1)] }
+            .drive(entireCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: bag)
+
 
         // MARK: scene
         
         viewModel.openURL
             .emit(onNext: {
-                UIApplication.shared.open($0, options: [:])
-            })
-            .disposed(by: bag)
-
-        backButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
+                UIApplication.shared.open($0, options: [:], completionHandler: nil)
             })
             .disposed(by: bag)
         
-        viewModel.pushReviewDetailVC
+        viewModel.share
+            .emit(onNext: { [weak self] in
+                let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                                                          applicationActivities: nil)
+                activityVC.popoverPresentationController?.sourceView = self?.view
+                self?.present(activityVC, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+
+//
+//        backButton.rx.tap
+//            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] in
+//                self?.navigationController?.popViewController(animated: true)
+//            })
+//            .disposed(by: bag)
+//
+//        viewModel.pushReviewDetailVC
+//            .emit(onNext: { [weak self] viewModel in
+//                guard let self = self else { return }
+//                let reviewDetailVC = ReviewDetailViewController()
+//                reviewDetailVC.bind(viewModel)
+//                self.navigationController?.pushViewController(reviewDetailVC, animated: true)
+//            })
+//            .disposed(by: bag)
+        
+        viewModel.pushPostReviewVC
             .emit(onNext: { [weak self] viewModel in
                 guard let self = self else { return }
-                let reviewDetailVC = ReviewDetailViewController()
-                reviewDetailVC.bind(viewModel)
-                self.navigationController?.pushViewController(reviewDetailVC, animated: true)
+                let postReviewVC = PostReviewViewController()
+                postReviewVC.bind(viewModel)
+                self.navigationController?.pushViewController(postReviewVC, animated: true)
             })
             .disposed(by: bag)
     }
@@ -123,76 +152,35 @@ class PlaceDetailViewController: UIViewController {
     }
 
     func layout() {
-        // MARK: scroll
-
-        view.addSubview(scrollView)
-
-        scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-
-        scrollView.addSubview(contentView)
-
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalToSuperview()
-        }
-
-        // MARK: make constraints
 
         [
-            
-            imageCollectView,
-            backButton,
-            placeDesView,
-            firstBorderView,
-            placeMapView,
-            secondBorderView,
-            reviewListView,
+            entireCollectionView
         ].forEach {
-            contentView.addSubview($0)
+            view.addSubview($0)
         }
         
-        imageCollectView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
+        entireCollectionView.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.height.equalTo(view.frame.width * (263.0 / 390.0))
-        }
-
-        backButton.snp.makeConstraints {
-            $0.leading.top.equalToSuperview().offset(30.0)
-            $0.height.width.equalTo(30.0)
-        }
-
-        placeDesView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(imageCollectView.snp.bottom).offset(-15.0)
-            $0.height.equalTo(444.0)
-        }
-        
-        firstBorderView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(placeDesView.snp.bottom)
-            $0.height.equalTo(8.0)
-        }
-        
-        placeMapView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(firstBorderView.snp.bottom)
-            $0.height.equalTo(285.0)
-        }
-        
-        secondBorderView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(placeMapView.snp.bottom)
-            $0.height.equalTo(8.0)
-        }
-
-        reviewListView.snp.makeConstraints {
-            $0.top.equalTo(secondBorderView.snp.bottom)
-            $0.height.equalTo(1000.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
+    }
+}
+
+extension PlaceDetailViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, sizeForItemAt _: IndexPath) -> CGSize {
+        let width = view.frame.width
+        let height = 440.0
+        return CGSize(width: width, height: height)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let width = view.frame.width
+        let height = 1261.0
+        return CGSize(width: width, height: height)
     }
 }

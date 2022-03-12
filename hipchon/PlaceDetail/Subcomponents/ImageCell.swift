@@ -1,5 +1,5 @@
 //
-//  PlaceImageCell.swift
+//  ImageCell.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/13.
@@ -9,13 +9,13 @@ import Foundation
 import RxSwift
 import UIKit
 
-class PlaceImageCell: UICollectionViewCell {
+class ImageCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
     }
 
-    public static let identyfier = "PlaceImageCell"
-    private let bag = DisposeBag()
+    public static let identyfier = "ImageCell"
+    var bag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,14 +27,21 @@ class PlaceImageCell: UICollectionViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
+    }
 
-    func bind(_ viewModel: PlaceImageCellViewModel) {
+    func bind(_ viewModel: ImageCellViewModel) {
         viewModel.url
             .drive(imageView.rx.setImageKF)
             .disposed(by: bag)
     }
 
-    private func attribute() {}
+    private func attribute() {
+        backgroundColor = .white
+    }
 
     private func layout() {
         [

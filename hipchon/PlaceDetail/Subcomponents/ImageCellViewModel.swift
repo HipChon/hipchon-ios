@@ -8,7 +8,7 @@
 import Foundation
 import RxCocoa
 
-class PlaceImageCellViewModel {
+class ImageCellViewModel {
     // MARK: viewModel -> view
 
     let url: Driver<URL>

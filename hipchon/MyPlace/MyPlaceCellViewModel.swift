@@ -17,6 +17,8 @@ class MyPlaceCellViewModel {
     let name: Driver<String>
     let category: Driver<String>
     let address: Driver<String>
+    let bookmarkCount: Driver<Int>
+    let reviewCount: Driver<Int>
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -37,5 +39,13 @@ class MyPlaceCellViewModel {
         address = place
             .compactMap { $0.region }
             .asDriver(onErrorJustReturn: "")
+        
+        bookmarkCount = place
+            .compactMap { $0.bookmarkCount }
+            .asDriver(onErrorJustReturn: 0)
+        
+        reviewCount = place
+            .compactMap { $0.reviewCount }
+            .asDriver(onErrorJustReturn: 0)
     }
 }

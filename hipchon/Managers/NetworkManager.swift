@@ -246,14 +246,18 @@ class NetworkManager {
                     "user": {
                         "id": 1,
                         "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                        "reviewCount": 12
                     },
                     "place": {
                         "id": 1,
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
-                        "category": "맛집"
-                    }
+                        "sector": "맛집",
+                        "bookmarkYn": false
+                    },
+                    "likeCount": 23,
+                    "commentCount": 12
                 },
                 {
                     "id": 1,
@@ -265,14 +269,18 @@ class NetworkManager {
                     "user": {
                         "id": 1,
                         "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                        "reviewCount": 12
                     },
                     "place": {
                         "id": 1,
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
-                        "category": "맛집"
-                    }
+                        "sector": "맛집",
+                        "bookmarkYn": true
+                    },
+                    "likeCount": 23,
+                    "commentCount": 12
                 },
                 {
                     "id": 1,
@@ -284,14 +292,18 @@ class NetworkManager {
                     "user": {
                         "id": 1,
                         "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                        "reviewCount": 12
                     },
                     "place": {
                         "id": 1,
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
-                        "category": "맛집"
-                    }
+                        "sector": "맛집",
+                        "bookmarkYn": false
+                    },
+                    "likeCount": 23,
+                    "commentCount": 12
                 }
             ]
             """
@@ -328,7 +340,7 @@ class NetworkManager {
                     ],
                     "hashtags": ["3인가능", "반려동물", "핫플"],
                     "bookmarkCount": 32,
-                    "reviewCount": 12
+                    "reviewCount": 12,
                 },
                  {
                      "id": 1,
@@ -390,7 +402,22 @@ class NetworkManager {
                 "link": "http://www.naver.com",
                 "geoLat": 37.27455854791513,
                 "geoLon": 127.50946893739612,
-                "address": "경기 고양시 일산동구 강송로 170 현대프라자"
+                "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                "number": "01073787605",
+                "compliments": [
+                    {
+                        "content": "화장실이 청결해요",
+                        "count": 35
+                    },
+                    {
+                        "content": "단체모임 하기 좋아요",
+                        "count": 31
+                    },
+                    {
+                        "content": "여자/남자친구가 좋아해요",
+                        "count": 28
+                    }
+                ]
             }
             """
     

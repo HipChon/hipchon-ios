@@ -40,8 +40,8 @@ class PhotoCell: UICollectionViewCell {
             imageView,
         ].forEach { addSubview($0) }
 
-        imageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+//        imageView.snp.makeConstraints {
+//            $0.edges.equalToSuperview()
+//        }
     }
 }
