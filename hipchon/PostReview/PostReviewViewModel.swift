@@ -10,12 +10,19 @@ import RxCocoa
 
 class PostReviewViewModel {
     
+    // MARK: subViewModels
     let navigtionVM = NavigationViewModel()
     
+    // MARK: viewModel -> view
     let placeImageURL: Driver<URL>
     let placeName: Driver<String>
-    
+    let photoCellVMs: Driver<[PhotoCellViewModel]>
+    let photoCollectionViewHidden: Driver<Bool>
     let pop: Signal<Void>
+    
+    // MARK: view -> viewModel
+    let selectedPhotos = PublishSubject<[UIImage]>()
+    
     
     init(_ data: PlaceModel) {
         
@@ -29,6 +36,14 @@ class PostReviewViewModel {
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
+        
+        photoCellVMs = selectedPhotos
+            .map { $0.map { PhotoCellViewModel($0) } }
+            .asDriver(onErrorJustReturn: [])
+        
+        photoCollectionViewHidden = selectedPhotos
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: true)
         
         
         pop = navigtionVM.pop

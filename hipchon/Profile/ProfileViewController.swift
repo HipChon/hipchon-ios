@@ -19,6 +19,10 @@ class ProfileViewController: UIViewController {
         $0.image = UIImage(named: "profile") ?? UIImage()
         $0.layer.cornerRadius = $0.frame.width / 2
     }
+    
+    private lazy var profileImageButton = UIButton().then { _ in
+        
+    }
 
     private lazy var nameLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 20.0, type: .bold)
@@ -54,9 +58,14 @@ class ProfileViewController: UIViewController {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.settingButtonTapped)
             .disposed(by: bag)
+        
+        profileImageButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.profileImageButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
-
+        
         // MARK: scene
 
         viewModel.pushSettingVC
@@ -64,6 +73,14 @@ class ProfileViewController: UIViewController {
                 let settingVC = SettingViewController()
                 settingVC.bind(viewModel)
                 self?.navigationController?.pushViewController(settingVC, animated: true)
+            })
+            .disposed(by: bag)
+        
+        viewModel.pushEditProfileVC
+            .emit(onNext: { [weak self] viewModel in
+                let editProfileVC = EditProfileViewController()
+                editProfileVC.bind(viewModel)
+                self?.navigationController?.pushViewController(editProfileVC, animated: true)
             })
             .disposed(by: bag)
     }
@@ -76,6 +93,7 @@ class ProfileViewController: UIViewController {
     func layout() {
         [
             profileImageView,
+            profileImageButton,
             nameLabel,
             settingButton,
         ].forEach { view.addSubview($0) }
@@ -84,6 +102,10 @@ class ProfileViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
             $0.leading.equalToSuperview().inset(20.0)
             $0.width.height.equalTo(79.0)
+        }
+        
+        profileImageButton.snp.makeConstraints {
+            $0.edges.equalTo(profileImageView)
         }
         
         nameLabel.snp.makeConstraints {

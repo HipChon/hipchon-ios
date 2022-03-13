@@ -33,7 +33,7 @@ class KeywordButton: UIButton {
         addShadow(offset: CGSize(width: 2.0, height: 2.0))
         layer.cornerRadius = 5.0
         layer.masksToBounds = true
-        backgroundColor = .primary_green
+        backgroundColor = .white
     }
     
     private func layout() {

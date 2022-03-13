@@ -19,7 +19,7 @@ class MyPlaceViewController: UIViewController {
         $0.font = UIFont.boldSystemFont(ofSize: 24.0)
     }
 
-    private lazy var placeList = UITableView().then {
+    private lazy var placeCollectionView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(MyPlaceCell.self, forCellReuseIdentifier: MyPlaceCell.identyfier)
         $0.rowHeight = 211.0
@@ -47,11 +47,15 @@ class MyPlaceViewController: UIViewController {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
+        placeCollectionView.rx.modelSelected(PlaceModel.self)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.selectedPlace)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
         viewModel.places
-            .drive(placeList.rx.items) { tv, idx, data in
+            .drive(placeCollectionView.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: MyPlaceCell.identyfier, for: IndexPath(row: idx, section: 0)) as? MyPlaceCell else { return UITableViewCell() }
                 let myPlaceCellViewModel = MyPlaceCellViewModel(data)
                 cell.bind(myPlaceCellViewModel)
@@ -60,6 +64,14 @@ class MyPlaceViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
+        
+        viewModel.pushPlaceDetailVC
+            .emit(onNext:{ [weak self] viewModel in
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {
@@ -70,7 +82,7 @@ class MyPlaceViewController: UIViewController {
     func layout() {
         [
             titleLabel,
-            placeList,
+            placeCollectionView,
         ].forEach { view.addSubview($0) }
 
         titleLabel.snp.makeConstraints {
@@ -79,7 +91,7 @@ class MyPlaceViewController: UIViewController {
             $0.height.equalTo(25.0)
         }
 
-        placeList.snp.makeConstraints {
+        placeCollectionView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(72.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }

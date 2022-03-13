@@ -79,7 +79,7 @@ class MyPlaceCell: UITableViewCell {
             .drive(placeNameLabel.rx.text)
             .disposed(by: bag)
 
-        viewModel.category
+        viewModel.sector
             .drive(sectorLabel.rx.text)
             .disposed(by: bag)
 
@@ -144,18 +144,19 @@ class MyPlaceCell: UITableViewCell {
 
         placeNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(22.0)
+            $0.trailing.equalTo(placeImageView.snp.leading).offset(-16.0)
             $0.top.equalToSuperview().inset(20.0)
             $0.height.equalTo(19.0)
         }
 
         sectorLabel.snp.makeConstraints {
-            $0.leading.equalTo(placeNameLabel)
+            $0.leading.trailing.equalTo(placeNameLabel)
             $0.top.equalTo(placeNameLabel.snp.bottom).offset(20.0)
             $0.height.equalTo(17.0)
         }
 
         addressLabel.snp.makeConstraints {
-            $0.leading.equalTo(placeNameLabel)
+            $0.leading.trailing.equalTo(placeNameLabel)
             $0.top.equalTo(sectorLabel.snp.bottom).offset(8)
             $0.height.equalTo(17.0)
         }

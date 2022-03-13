@@ -24,4 +24,5 @@ target 'hipchon' do
   #pod 'SideMenu'
   pod 'NMapsMap'
 
+  pod 'YPImagePicker'
 end

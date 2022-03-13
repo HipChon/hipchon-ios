@@ -15,7 +15,7 @@ class MyPlaceCellViewModel {
 
     let imageURL: Driver<URL>
     let name: Driver<String>
-    let category: Driver<String>
+    let sector: Driver<String>
     let address: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
@@ -32,12 +32,12 @@ class MyPlaceCellViewModel {
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
 
-        category = place
-            .compactMap { $0.priceDes }
+        sector = place
+            .compactMap { $0.sector }
             .asDriver(onErrorJustReturn: "")
 
         address = place
-            .compactMap { $0.region }
+            .compactMap { $0.address }
             .asDriver(onErrorJustReturn: "")
         
         bookmarkCount = place

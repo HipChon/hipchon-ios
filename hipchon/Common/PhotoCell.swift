@@ -2,7 +2,7 @@
 //  PhotoCell.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/02/16.
+//  Created by 김범수 on 2022/03/13.
 //
 
 import RxSwift
@@ -14,7 +14,7 @@ class PhotoCell: UICollectionViewCell {
     }
 
     public static let identyfier = "PhotoCell"
-    private let bag = DisposeBag()
+    var bag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,22 +26,29 @@ class PhotoCell: UICollectionViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
+    }
 
     func bind(_ viewModel: PhotoCellViewModel) {
-        viewModel.url
-            .drive(imageView.rx.setImageKF)
+        viewModel.image
+            .drive(imageView.rx.image)
             .disposed(by: bag)
     }
 
-    private func attribute() {}
+    private func attribute() {
+        backgroundColor = .white
+    }
 
     private func layout() {
         [
             imageView,
         ].forEach { addSubview($0) }
 
-//        imageView.snp.makeConstraints {
-//            $0.edges.equalToSuperview()
-//        }
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 }
