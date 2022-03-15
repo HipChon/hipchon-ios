@@ -12,8 +12,9 @@ class ReviewDetailViewModel {
     private let bag = DisposeBag()
 
     // MARK: subviewModels
+
     let reviewPlaceVM: Driver<ReviewPlaceViewModel>
-    
+
     // MARK: viewModel -> view
 
     let placeName: Driver<String>
@@ -30,16 +31,17 @@ class ReviewDetailViewModel {
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
     // MARK: view -> viewModel
+
     let likeButtonTapped = PublishRelay<Void>()
 
     init(_ data: ReviewModel) {
         let review = BehaviorSubject<ReviewModel>(value: data)
-        
+
         reviewPlaceVM = review
             .compactMap { $0.place }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         placeName = review
             .compactMap { $0.place?.name }
             .asDriver(onErrorJustReturn: "")
@@ -52,11 +54,11 @@ class ReviewDetailViewModel {
         userName = review
             .compactMap { $0.user?.name }
             .asDriver(onErrorJustReturn: "")
-        
+
         userReviewCount = review
             .compactMap { $0.user?.reviewCount }
             .asDriver(onErrorJustReturn: 0)
-        
+
         postDate = review
             .compactMap { $0.postDt }
             .asDriver(onErrorJustReturn: "")
@@ -64,7 +66,7 @@ class ReviewDetailViewModel {
         reviewImageURLs = review
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
-        
+
         commentCount = review
             .compactMap { $0.commentCount }
             .asDriver(onErrorJustReturn: 0)
@@ -72,22 +74,23 @@ class ReviewDetailViewModel {
         content = review
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
-        
+
         // MARK: comment
+
         let comments = BehaviorSubject<[CommentModel]>(value: [])
-        
+
         commentCellVMs = comments
             .map { $0.map { CommentCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
-        
+
         review
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.getComments($0) }
             .bind(to: comments)
             .disposed(by: bag)
-        
+
         // MARK: like
-        
+
         let liked = BehaviorSubject<Bool>(value: data.likeYn ?? false)
         let likeCounted = BehaviorSubject<Int>(value: data.likeCount ?? 0)
         let addLike = PublishSubject<Void>()
@@ -95,17 +98,17 @@ class ReviewDetailViewModel {
 
         likeYn = liked
             .asDriver(onErrorJustReturn: false)
-        
+
         likeCount = likeCounted
             .asDriver(onErrorJustReturn: 0)
-        
+
         likeButtonTapped
             .withLatestFrom(liked)
             .subscribe(onNext: {
                 $0 ? deleteLike.onNext(()) : addLike.onNext(())
             })
             .disposed(by: bag)
-        
+
         addLike
             .withLatestFrom(likeCounted)
             .do(onNext: {
@@ -137,10 +140,9 @@ class ReviewDetailViewModel {
                 }
             })
             .disposed(by: bag)
-     
-        
+
         // MARK: scene
-        
+
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
     }

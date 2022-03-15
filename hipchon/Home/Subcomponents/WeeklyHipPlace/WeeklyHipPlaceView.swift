@@ -52,17 +52,16 @@ class WeeklyHipPlaceView: UIView {
     }
 
     func bind(_ viewModel: WeeklyHipPlaceViewModel) {
-        
         // MARK: view -> viewModel
-        
+
         hipPlaceCollectionView.rx.itemSelected
             .map { $0.row }
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.selectedIdx)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.hipPlacesCellVMs
             .drive(hipPlaceCollectionView.rx.items) { col, idx, vm in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: HipPlaceCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HipPlaceCell else { return UICollectionViewCell() }

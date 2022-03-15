@@ -8,9 +8,5 @@
 import Foundation
 
 class KeywordListCellViewModel {
-    
-    init() {
-        
-    }
-    
+    init() {}
 }

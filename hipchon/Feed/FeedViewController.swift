@@ -16,19 +16,19 @@ class FeedViewController: UIViewController {
     // MARK: Property
 
     private let bag = DisposeBag()
-    
+
     private lazy var reviewLabel = UILabel().then {
         $0.text = "후기"
         $0.font = .GmarketSans(size: 24.0, type: .medium)
     }
-    
+
     private lazy var sortButton = UIButton().then {
         $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
     }
 
     private lazy var searchNavigationView = SearchNavigationView().then { _ in
     }
-    
+
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
@@ -66,7 +66,7 @@ class FeedViewController: UIViewController {
         searchNavigationView.bind(viewModel.searchNavigationVM)
 
         // MARK: view -> viewModel
-        
+
         rx.viewWillAppear
             .map { _ in () }
             .bind(to: viewModel.viewAppear)
@@ -85,7 +85,7 @@ class FeedViewController: UIViewController {
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
                 cell.bind(viewModel)
-                
+
                 viewModel.pushPlaceDetailVC
                     .emit(onNext: {
                         let placeDetailVC = PlaceDetailViewController()
@@ -93,11 +93,11 @@ class FeedViewController: UIViewController {
                         self.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
                     })
                     .disposed(by: self.bag)
-                
+
                 return cell
             }
             .disposed(by: bag)
-        
+
         // MARK: scene
 
         viewModel.pushReviewDetailVC
@@ -143,19 +143,19 @@ class FeedViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(18.0)
             $0.height.equalTo(24.0)
         }
-        
+
         sortButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(26.0)
             $0.centerY.equalTo(reviewLabel)
             $0.width.height.equalTo(15.0)
         }
-        
+
         boundaryView.snp.makeConstraints {
             $0.top.equalTo(reviewLabel.snp.bottom).offset(30.0)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1.0)
         }
-        
+
         reviewTableView.snp.makeConstraints {
             $0.top.equalTo(boundaryView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()

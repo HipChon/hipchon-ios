@@ -37,7 +37,6 @@ class HomeViewModel {
     let bannerCurrentIdx = BehaviorRelay<Int>(value: 1)
 
     init() {
-        
         cateogorys = Driver.just(CategoryModel.tmpModels)
 
         pushPlaceListVC = selectedCategory
@@ -47,35 +46,35 @@ class HomeViewModel {
 
         banners = NetworkManager.shared.getBanners()
             .asDriver(onErrorJustReturn: [])
-        
+
         banners
             .map { $0.count }
             .asObservable()
             .bind(to: bannerPageCountVM.entireIdx)
             .disposed(by: bag)
-        
+
         bannerCurrentIdx
             .map { $0 + 1 }
             .bind(to: bannerPageCountVM.currentIdx)
             .disposed(by: bag)
-        
+
         // MARK: scene
 
         presentFilterVC = homeSearchVM.searchButtonTapped
             .map { FilterViewModel(.search) }
             .asSignal(onErrorSignalWith: .empty())
-        
+
         openURL = Observable.merge(
             selectedBanner.compactMap { $0.linkURL },
             customerServiceVM.selectedURLStr
         )
-            .compactMap { URL(string: $0) }
-            .asSignal(onErrorSignalWith: .empty())
-        
+        .compactMap { URL(string: $0) }
+        .asSignal(onErrorSignalWith: .empty())
+
         pushPlaceDetailVC = weeklyHipPlaceVM.selectedHipPlace
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-        
+
         pushHipsterPickDetailVC = localHipsterPickVM.selectedLocalHipsterPick
             .map { HipsterPickDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())

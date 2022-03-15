@@ -36,7 +36,7 @@ class PlaceListCell: UITableViewCell {
 
     private lazy var bookmarkButton = UIButton().then { _ in
     }
-    
+
     private lazy var pageCountView = PageCountView().then { _ in
     }
 
@@ -119,14 +119,14 @@ class PlaceListCell: UITableViewCell {
         firstHashtagView.bind(viewModel.firstHashtagVM)
         secondHashtagView.bind(viewModel.secondHashtagVM)
         thirdHashtagView.bind(viewModel.thirdHashtagVM)
-        
+
         // MARK: view -> viewModel
 
         bookmarkButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.bookmarkButtonTapped)
             .disposed(by: bag)
-        
+
         placeImageCollectView.rx.contentOffset
             .compactMap { [unowned self] in Int(($0.x + self.contentView.frame.width / 2) / self.contentView.frame.width) }
             .distinctUntilChanged()
@@ -148,7 +148,7 @@ class PlaceListCell: UITableViewCell {
         viewModel.title
             .drive(titleLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.bookmarkYn
             .compactMap { $0 == true ? UIImage(named: "bookmarkY") ?? UIImage() : UIImage(named: "bookmarkN") ?? UIImage() }
             .drive(bookmarkButton.rx.image)
@@ -182,27 +182,26 @@ class PlaceListCell: UITableViewCell {
     }
 
     private func layout() {
-        
         // MARK: title
-        
+
         let titleSpacingView = UIView()
         titleSpacingView.snp.makeConstraints {
             $0.width.equalTo(frame.width).priority(.low)
         }
-        
+
         let titleStackView = UIStackView(arrangedSubviews: [titleLabel, distanceKmLabel, titleSpacingView])
         titleStackView.axis = .horizontal
         titleStackView.alignment = .fill
         titleStackView.distribution = .fill
         titleStackView.spacing = 9.0
-        
+
         // MARK: hashtag
-        
+
         let hashtagSpacingView = UIView()
         hashtagSpacingView.snp.makeConstraints {
             $0.width.equalTo(frame.width).priority(.low)
         }
-        
+
         let hashtagStackView = UIStackView(arrangedSubviews: [firstHashtagView, secondHashtagView, thirdHashtagView, hashtagSpacingView])
         hashtagStackView.axis = .horizontal
         hashtagStackView.alignment = .fill
@@ -219,7 +218,7 @@ class PlaceListCell: UITableViewCell {
                 $0.width.height.equalTo(20.0)
             }
         }
-        
+
         let countSpacingView = UIView()
         countSpacingView.snp.makeConstraints {
             $0.width.equalTo(frame.width).priority(.low)
@@ -230,21 +229,21 @@ class PlaceListCell: UITableViewCell {
         countStackView.alignment = .fill
         countStackView.distribution = .fill
         countStackView.spacing = 12.0
-        
+
         // MARK: entire
-        
+
         let entireSpacingView = UIView()
-        
+
         entireSpacingView.snp.makeConstraints {
             $0.height.equalTo(0.0)
         }
-        
+
         let entireStackView = UIStackView(arrangedSubviews: [titleStackView, hashtagStackView, entireSpacingView, countStackView])
         entireStackView.axis = .vertical
         entireStackView.alignment = .fill
         entireStackView.distribution = .equalSpacing
         entireStackView.spacing = 0.0
-        
+
         [
             placeImageCollectView,
             pageCountView,
@@ -260,7 +259,7 @@ class PlaceListCell: UITableViewCell {
             let height = cellHeight * (166.0 / 280.0)
             $0.height.equalTo(height)
         }
-        
+
         pageCountView.snp.makeConstraints {
             $0.trailing.equalTo(placeImageCollectView).inset(16.0)
             $0.bottom.equalTo(placeImageCollectView).inset(16.0)

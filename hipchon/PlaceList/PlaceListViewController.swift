@@ -48,7 +48,7 @@ class PlaceListViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         viewModel.placeListCellVMs
             .drive(placeList.rx.items) { tv, idx, vm in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: PlaceListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceListCell else { return UITableViewCell() }

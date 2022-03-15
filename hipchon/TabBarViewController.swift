@@ -39,12 +39,12 @@ class TabBarViewController: UITabBarController {
                                                         image: UIImage(named: "profile") ?? UIImage(),
                                                         selectedImage: UIImage(named: "profile_fill") ?? UIImage())
         profileViewController.bind(profileViewModel)
-        
+
         [
             homeViewController,
             feedViewController,
             myPlaceViewController,
-            profileViewController
+            profileViewController,
         ].forEach {
             $0.tabBarItem.imageInsets = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
             $0.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)

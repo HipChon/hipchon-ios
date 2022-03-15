@@ -5,30 +5,29 @@
 //  Created by 김범수 on 2022/02/27.
 //
 
-import RxViewController
 import RxSwift
+import RxViewController
 import UIKit
 
 class SortViewController: UIViewController {
-    
     private lazy var reviewOrderButton = UIButton().then {
         $0.setTitle("후기순", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .bold)
         $0.setTitleColor(.black, for: .normal)
         $0.backgroundColor = .white
     }
-    
+
     private lazy var reviewCheckImageView = UIImageView().then {
         $0.image = UIImage(named: "checkBlack") ?? UIImage()
     }
-    
+
     private lazy var bookmarkOrderButton = UIButton().then {
         $0.setTitle("저장순", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .bold)
         $0.setTitleColor(.black, for: .normal)
         $0.backgroundColor = .white
     }
-    
+
     private lazy var bookmarkCheckImageView = UIImageView().then {
         $0.image = UIImage(named: "checkBlack") ?? UIImage()
     }
@@ -39,7 +38,7 @@ class SortViewController: UIViewController {
         $0.setTitleColor(.black, for: .normal)
         $0.backgroundColor = .white
     }
-    
+
     private lazy var distanceCheckImageView = UIImageView().then {
         $0.image = UIImage(named: "checkBlack") ?? UIImage()
     }
@@ -74,14 +73,13 @@ class SortViewController: UIViewController {
                 self?.distanceCheckImageView.isHidden = sort != .distance
             })
             .disposed(by: bag)
-        
+
         Observable.merge(reviewOrderButton.rx.tap.map { _ in SortType.review },
                          bookmarkOrderButton.rx.tap.map { _ in SortType.bookmark },
-                         distanceOrderButton.rx.tap.map { _ in SortType.distance }
-        )
+                         distanceOrderButton.rx.tap.map { _ in SortType.distance })
             .bind(to: viewModel.sortType)
             .disposed(by: bag)
-        
+
         searchButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(viewModel.sortType)
@@ -92,8 +90,6 @@ class SortViewController: UIViewController {
                 self.dismiss(animated: true, completion: nil)
             })
             .disposed(by: bag)
-        
-        
     }
 
     private func attribute() {
@@ -125,32 +121,31 @@ class SortViewController: UIViewController {
         }
 
         [
-        
             buttonStackView,
             reviewCheckImageView,
             bookmarkCheckImageView,
-            distanceCheckImageView
+            distanceCheckImageView,
         ].forEach {
             view.addSubview($0)
         }
-        
+
         buttonStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalToSuperview().inset(24.0)
         }
-        
+
         reviewCheckImageView.snp.makeConstraints {
             $0.height.width.equalTo(17.0)
             $0.centerY.equalTo(reviewOrderButton)
             $0.trailing.equalToSuperview().inset(20.0)
         }
-        
+
         bookmarkCheckImageView.snp.makeConstraints {
             $0.height.width.equalTo(reviewCheckImageView)
             $0.centerY.equalTo(bookmarkOrderButton)
             $0.trailing.equalTo(reviewCheckImageView)
         }
-        
+
         distanceCheckImageView.snp.makeConstraints {
             $0.height.width.equalTo(reviewCheckImageView)
             $0.centerY.equalTo(distanceOrderButton)

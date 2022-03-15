@@ -11,9 +11,8 @@ class BestReviewModel: Codable {
     let id: Int?
     let imageURL: String?
     let reviewIds: [Int]?
-    
-    enum CodingKeys: String, CodingKey{
+
+    enum CodingKeys: String, CodingKey {
         case id, imageURL, reviewIds
     }
-    
 }

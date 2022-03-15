@@ -14,7 +14,7 @@ class BannerModel: Codable {
     enum CodingKeys: String, CodingKey {
         case imageURL, linkURL
     }
-    
+
     init(imageURL: String) {
         self.imageURL = imageURL
         linkURL = nil

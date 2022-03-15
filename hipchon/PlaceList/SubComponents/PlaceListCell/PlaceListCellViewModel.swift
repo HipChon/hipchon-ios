@@ -27,8 +27,9 @@ class PlaceListCellViewModel {
     let priceDes: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
-    
+
     // MARK: view -> viewModel
+
     let bookmarkButtonTapped = PublishRelay<Void>()
     let currentIdx = BehaviorRelay<Int>(value: 1)
 
@@ -64,12 +65,12 @@ class PlaceListCellViewModel {
             .compactMap { $0.imageURLs?.count }
             .bind(to: pageCountVM.entireIdx)
             .disposed(by: bag)
-        
+
         currentIdx
             .map { $0 + 1 }
             .bind(to: pageCountVM.currentIdx)
             .disposed(by: bag)
-        
+
         place
             .compactMap { $0.hashtags }
             .filter { $0.count >= 1 }
@@ -90,15 +91,14 @@ class PlaceListCellViewModel {
             .compactMap { $0[2] }
             .bind(to: thirdHashtagVM.content)
             .disposed(by: bag)
-        
-        
+
         // MARK: bookmark
-    
+
         let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
-        
+
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
-        
+
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
 
@@ -137,6 +137,5 @@ class PlaceListCellViewModel {
                 }
             })
             .disposed(by: bag)
-
     }
 }

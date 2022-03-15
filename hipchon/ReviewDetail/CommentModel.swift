@@ -12,7 +12,7 @@ class CommentModel: Codable {
     let user: UserModel?
     let content: String?
     let dateTime: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, user, content, dateTime
     }

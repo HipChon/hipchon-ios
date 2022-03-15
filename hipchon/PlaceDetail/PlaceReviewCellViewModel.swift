@@ -35,7 +35,7 @@ class PlaceReviewCellViewModel {
         reviewCount = review
             .compactMap { $0.user?.reviewCount }
             .asDriver(onErrorJustReturn: 0)
-        
+
         postDt = review
             .compactMap { $0.postDt }
             .asDriver(onErrorJustReturn: "")

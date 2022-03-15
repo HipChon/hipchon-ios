@@ -14,9 +14,8 @@ class LocalHipsterPickModel: Codable {
     let subTitle: String?
     let imageURL: String?
     let hipsterPicks: [HipsterPickModel]?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, region, title, subTitle, imageURL, hipsterPicks
     }
-    
 }

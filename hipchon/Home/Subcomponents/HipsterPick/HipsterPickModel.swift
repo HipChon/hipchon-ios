@@ -12,7 +12,7 @@ class HipsterPickModel: Codable {
     let title: String?
     let content: String?
     let place: PlaceModel?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, title, content, place
     }

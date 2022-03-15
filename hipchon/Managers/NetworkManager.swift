@@ -22,16 +22,16 @@ class NetworkManager {
         "Authorization": "some auth",
         "Accept": "application/json",
     ]
-    
+
     // MARK: Home
-    
+
     func getLocalHipsterPicks() -> Single<[LocalHipsterPickModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/localHipsteropick") else {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-            
+
             let str = """
             [
                 {
@@ -68,8 +68,8 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
-    func getHipsterPicks(_ id: Int) -> Single<[HipsterPickModel]> {
+
+    func getHipsterPicks(_: Int) -> Single<[HipsterPickModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/hipsteropicks") else {
                 single(.failure(NetworkError.uri))
@@ -151,7 +151,7 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
     func getBestReview() -> Single<[BestReviewModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/bestReviews") else {
@@ -223,7 +223,7 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
     func getWeeklyHipPlace() -> Single<[PlaceModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/hipplace") else {
@@ -288,9 +288,9 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
     // MARK: ?
-    
+
     func getReviews() -> Single<[ReviewModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/eco") else {
@@ -503,9 +503,9 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
     // MARK: placeDetail
-    
+
     func getPlaceDetail(_ id: Int) -> Single<PlaceModel> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/place/\(id)") else {
@@ -578,7 +578,7 @@ class NetworkManager {
                 ]
             }
             """
-    
+
             do {
                 let model = try JSONDecoder().decode(PlaceModel.self, from: Data(str.utf8))
                 single(.success(model))
@@ -589,22 +589,10 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
     // MARK: Bookmark
 
-    func addBookmark(_ id: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            single(.success(true))
-            
-            return Disposables.create()
-        }
-    }
-
-    func deleteBookmark(_ id: Int) -> Single<Bool> {
+    func addBookmark(_: Int) -> Single<Bool> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
                 single(.failure(NetworkError.uri))
@@ -615,22 +603,22 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
+    func deleteBookmark(_: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+
     // MARK: Like
 
-    func addLike(_ id: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            single(.success(true))
-            
-            return Disposables.create()
-        }
-    }
-
-    func deleteLike(_ id: Int) -> Single<Bool> {
+    func addLike(_: Int) -> Single<Bool> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
                 single(.failure(NetworkError.uri))
@@ -641,10 +629,22 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
+    func deleteLike(_: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+
     // MARK: comments
-    
-    func getComments(_ id: Int) -> Single<[CommentModel]> {
+
+    func getComments(_: Int) -> Single<[CommentModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/comments") else {
                 single(.failure(NetworkError.uri))
@@ -694,7 +694,7 @@ class NetworkManager {
                 }
             ]
             """
-    
+
             do {
                 let model = try JSONDecoder().decode([CommentModel].self, from: Data(str.utf8))
                 single(.success(model))
@@ -705,5 +705,4 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
 }

@@ -5,48 +5,47 @@
 //  Created by 김범수 on 2022/03/10.
 //
 
-import RxSwift
 import RxCocoa
+import RxSwift
 
 class ReviewPlaceViewModel {
-    
     private let bag = DisposeBag()
-    
+
     // MARK: viewModel -> view
-    
+
     let placeName: Driver<String>
     let address: Driver<String>
     let sector: Driver<String>
     let bookmarkYn: Driver<Bool>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    
+
     // MARK: view -> viewModel
-    
+
     let insideButtonTapped = PublishRelay<Void>()
     let bookmarkButtonTapped = PublishRelay<Void>()
-    
+
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
-        
+
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
-        
+
         address = place
             .compactMap { $0.address }
             .asDriver(onErrorJustReturn: "")
-        
+
         sector = place
             .compactMap { $0.sector }
             .asDriver(onErrorJustReturn: "")
-        
+
         // MARK: bookmark
-    
+
         let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
 
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
-        
+
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
 
@@ -89,11 +88,10 @@ class ReviewPlaceViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         pushPlaceDetailVC = insideButtonTapped
             .withLatestFrom(place)
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }
-    
 }

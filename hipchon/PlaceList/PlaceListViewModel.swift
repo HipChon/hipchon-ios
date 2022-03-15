@@ -14,7 +14,7 @@ class PlaceListViewModel {
     // MARK: subViewModels
 
     let searchNavigationVM = SearchNavigationViewModel()
-    
+
     // MARK: viewModel -> view
 
     let placeListCellVMs: Driver<[PlaceListCellViewModel]>
@@ -33,12 +33,12 @@ class PlaceListViewModel {
     init(_ data: SearchFilterModel) {
         let searchFilter = BehaviorSubject<SearchFilterModel>(value: data)
         let places = BehaviorSubject<[PlaceModel]>(value: [])
-        
+
         Observable.combineLatest(searchFilter, sortType)
             .withLatestFrom(NetworkManager.shared.getPlaces())
             .bind(to: places)
             .disposed(by: bag)
-        
+
         placeListCellVMs = places
             .map { $0.map { PlaceListCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
@@ -47,7 +47,7 @@ class PlaceListViewModel {
             .compactMap { $0.filterTitle }
             .bind(to: searchNavigationVM.searchFilterTitle)
             .disposed(by: bag)
-        
+
         changedSearchFilter
             .bind(to: searchFilter)
             .disposed(by: bag)
@@ -72,7 +72,7 @@ class PlaceListViewModel {
             .withLatestFrom(sortType)
             .map { SortViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-        
+
         pop = searchNavigationVM.pop
     }
 }

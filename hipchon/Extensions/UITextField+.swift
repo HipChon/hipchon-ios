@@ -12,16 +12,16 @@ extension UITextField {
         case left
         case right
     }
-    
+
     func addPadding(location: HorizontalLocation, width: CGFloat) {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: self.frame.height))
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: frame.height))
         switch location {
         case .left:
-            self.leftView = paddingView
-            self.leftViewMode = ViewMode.always
+            leftView = paddingView
+            leftViewMode = ViewMode.always
         case .right:
-            self.rightView = paddingView
-            self.rightViewMode = ViewMode.always
+            rightView = paddingView
+            rightViewMode = ViewMode.always
         }
     }
 }

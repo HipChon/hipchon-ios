@@ -8,11 +8,8 @@
 import RxRelay
 
 class InputCommentViewModel {
-    
     let content = PublishRelay<String>()
     let registerButtonTapped = PublishRelay<Void>()
-    
-    init() {
-        
-    }
+
+    init() {}
 }

@@ -47,6 +47,7 @@ class MyPlaceViewController: UIViewController {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
+
         placeTableView.rx.modelSelected(PlaceModel.self)
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.selectedPlace)
@@ -64,9 +65,9 @@ class MyPlaceViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
-        
+
         viewModel.pushPlaceDetailVC
-            .emit(onNext:{ [weak self] viewModel in
+            .emit(onNext: { [weak self] viewModel in
                 let placeDetailVC = PlaceDetailViewController()
                 placeDetailVC.bind(viewModel)
                 self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)

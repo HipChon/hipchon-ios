@@ -27,7 +27,7 @@ class ProfileViewModel {
         pushSettingVC = settingButtonTapped
             .map { SettingViewModel() }
             .asSignal(onErrorSignalWith: .empty())
-        
+
         pushEditProfileVC = profileImageButtonTapped
             .map { EditProfileViewModel() }
             .asSignal(onErrorSignalWith: .empty())

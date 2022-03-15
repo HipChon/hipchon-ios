@@ -18,7 +18,7 @@ class PlaceModel: Codable {
     let hashtags: [String]?
     let bookmarkCount: Int?
     let reviewCount: Int?
-    
+
     // detail
     let sector: String?
     let businessHours: String?
@@ -54,10 +54,11 @@ class PlaceModel: Codable {
         }
         return "\(Int(distance))Km"
     }
-    
+
     var nmgLatLng: NMGLatLng? {
         guard let geoLat = geoLat,
-              let geoLon = geoLon else {
+              let geoLon = geoLon
+        else {
             return nil
         }
         return NMGLatLng(lat: geoLat, lng: geoLon)

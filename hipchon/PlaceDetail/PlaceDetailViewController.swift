@@ -6,11 +6,11 @@
 //
 
 import RxCocoa
+import RxDataSources
 import RxSwift
 import SnapKit
 import Then
 import UIKit
-import RxDataSources
 
 class PlaceDetailViewController: UIViewController {
     // MARK: Property
@@ -18,7 +18,7 @@ class PlaceDetailViewController: UIViewController {
     private lazy var backButton = UIButton().then {
         $0.setImage(UIImage(named: "back"), for: .normal)
     }
-    
+
     private lazy var entireTableView = UITableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .white
         $0.register(PlaceDetailHeaderView.self, forHeaderFooterViewReuseIdentifier: PlaceDetailHeaderView.identyfier)
@@ -44,31 +44,32 @@ class PlaceDetailViewController: UIViewController {
     func bind(_ viewModel: PlaceDetailViewModel) {
         self.viewModel = viewModel
         entireTableView.rx.setDelegate(self).disposed(by: bag)
-        
+
         // MARK: view -> viewModel
+
         entireTableView.rx.itemSelected
             .map { $0.row }
             .bind(to: viewModel.selectedReviewIdx)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.reviewCellVms
-            .drive(entireTableView.rx.items) { tv, idx, viewModel in
+            .drive(entireTableView.rx.items) { tv, _, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
                 cell.bind(viewModel)
                 return cell
             }
             .disposed(by: bag)
-        
+
         // MARK: scene
-        
+
         viewModel.openURL
             .emit(onNext: {
                 UIApplication.shared.open($0, options: [:], completionHandler: nil)
             })
             .disposed(by: bag)
-        
+
         viewModel.share
             .emit(onNext: { [weak self] in
                 let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
@@ -77,7 +78,7 @@ class PlaceDetailViewController: UIViewController {
                 self?.present(activityVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        
+
         viewModel.pushReviewDetailVC
             .emit(onNext: { [weak self] viewModel in
                 guard let self = self else { return }
@@ -86,7 +87,7 @@ class PlaceDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(reviewDetailVC, animated: true)
             })
             .disposed(by: bag)
-        
+
         viewModel.pushPostReviewVC
             .emit(onNext: { [weak self] viewModel in
                 guard let self = self else { return }
@@ -109,30 +110,28 @@ class PlaceDetailViewController: UIViewController {
     }
 
     func layout() {
-
         [
             entireTableView,
             backButton,
         ].forEach {
             view.addSubview($0)
         }
-        
+
         backButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(26.0)
             $0.top.equalToSuperview().inset(26.0)
             $0.width.height.equalTo(28.0)
         }
-        
+
         entireTableView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.trailing.bottom.equalToSuperview()
         }
-
     }
 }
 
 extension PlaceDetailViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_: UITableView, viewForHeaderInSection _: Int) -> UIView? {
         // TODO: reuse
         guard let viewModel = viewModel,
               let headerVM = viewModel.headerVM else { return UIView() }
@@ -140,12 +139,12 @@ extension PlaceDetailViewController: UITableViewDelegate {
         header.bind(headerVM)
         return header
     }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+
+    func tableView(_: UITableView, estimatedHeightForHeaderInSection _: Int) -> CGFloat {
         return 1650.0
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+    func tableView(_: UITableView, heightForRowAt _: IndexPath) -> CGFloat {
         return 393.0
     }
 }

@@ -268,7 +268,7 @@ class FilterViewController: UIViewController {
                 })
             })
             .disposed(by: bag)
-        
+
         viewModel.popToSearchListVC
             .emit(onNext: { [weak self] filterModel in
                 guard let self = self,
@@ -383,7 +383,7 @@ class FilterViewController: UIViewController {
             $0.top.equalTo(categoryLabel.snp.bottom).offset(19.0)
             $0.height.equalTo(33.0)
         }
-        
+
         resetButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(categoryCollectionView.snp.bottom)

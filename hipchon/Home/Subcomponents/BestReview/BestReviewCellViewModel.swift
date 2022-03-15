@@ -17,7 +17,7 @@ class BestReviewCellViewModel {
 
     init(_ data: BestReviewModel) {
         let bestReview = BehaviorSubject<BestReviewModel>(value: data)
-        
+
         url = bestReview
             .compactMap { $0.imageURL }
             .compactMap { URL(string: $0) }

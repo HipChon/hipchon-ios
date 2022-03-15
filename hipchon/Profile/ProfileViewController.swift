@@ -13,7 +13,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     // MARK: Property
-    
+
     private lazy var profileImageButton = UIButton().then {
         $0.setImage(UIImage(named: "default_profile"), for: .normal)
         $0.layer.masksToBounds = true
@@ -23,7 +23,7 @@ class ProfileViewController: UIViewController {
         $0.font = .AppleSDGothicNeo(size: 20.0, type: .bold)
         $0.text = "김범수"
     }
-    
+
     private lazy var settingButton = UIButton().then {
         $0.setImage(UIImage(named: "setting") ?? UIImage(), for: .normal)
     }
@@ -56,14 +56,14 @@ class ProfileViewController: UIViewController {
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.settingButtonTapped)
             .disposed(by: bag)
-        
+
         profileImageButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.profileImageButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         // MARK: scene
 
         viewModel.pushSettingVC
@@ -73,7 +73,7 @@ class ProfileViewController: UIViewController {
                 self?.navigationController?.pushViewController(settingVC, animated: true)
             })
             .disposed(by: bag)
-        
+
         viewModel.pushEditProfileVC
             .emit(onNext: { [weak self] viewModel in
                 let editProfileVC = EditProfileViewController()
@@ -99,19 +99,16 @@ class ProfileViewController: UIViewController {
             $0.leading.equalToSuperview().inset(20.0)
             $0.width.height.equalTo(79.0)
         }
-        
+
         nameLabel.snp.makeConstraints {
             $0.centerY.equalTo(profileImageButton)
             $0.leading.equalTo(profileImageButton.snp.trailing).offset(16.0)
         }
-        
+
         settingButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
             $0.width.height.equalTo(28.0)
         }
-
-
-
     }
 }

@@ -15,7 +15,7 @@ class PhotoCellViewModel {
     // MARK: view -> viewModel
 
     let cancleButtonTapped = PublishRelay<Void>()
-    
+
     init(_ data: UIImage) {
         image = Driver.just(data)
     }

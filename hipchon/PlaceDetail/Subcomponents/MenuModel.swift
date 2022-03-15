@@ -12,7 +12,7 @@ class MenuModel: Codable {
     let name: String?
     let price: Int?
     let imageURL: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, name, price, imageURL
     }

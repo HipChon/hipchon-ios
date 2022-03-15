@@ -19,7 +19,7 @@ class BestReviewView: UIView {
     }
 
     private lazy var reviewsCollectionView = UICollectionView(frame: .zero,
-                                                            collectionViewLayout: UICollectionViewFlowLayout()).then {
+                                                              collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing = 0.0
         let width = 330.0
@@ -83,6 +83,5 @@ class BestReviewView: UIView {
             $0.width.equalTo(330.0)
             $0.height.equalTo(88.0)
         }
-        
     }
 }

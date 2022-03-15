@@ -39,11 +39,11 @@ class MyPlaceCellViewModel {
         address = place
             .compactMap { $0.address }
             .asDriver(onErrorJustReturn: "")
-        
+
         bookmarkCount = place
             .compactMap { $0.bookmarkCount }
             .asDriver(onErrorJustReturn: 0)
-        
+
         reviewCount = place
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)

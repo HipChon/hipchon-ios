@@ -29,7 +29,7 @@ class ReviewCell: UITableViewCell {
     }
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
-                                                  collectionViewLayout: UICollectionViewLayout()).then {
+                                                                  collectionViewLayout: UICollectionViewLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 173.0
@@ -42,7 +42,7 @@ class ReviewCell: UITableViewCell {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        
+
         $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
@@ -55,7 +55,6 @@ class ReviewCell: UITableViewCell {
 
     private lazy var likeButton = UIButton().then {
         $0.setImage(UIImage(named: "likeN") ?? UIImage(), for: .normal)
-        
     }
 
     private lazy var likeCountLabel = UILabel().then {
@@ -77,7 +76,7 @@ class ReviewCell: UITableViewCell {
 
     private lazy var reviewPlaceView = ReviewPlaceView().then { _ in
     }
-    
+
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
@@ -95,7 +94,7 @@ class ReviewCell: UITableViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         bag = DisposeBag()
@@ -107,19 +106,18 @@ class ReviewCell: UITableViewCell {
     }
 
     func bind(_ viewModel: ReviewCellViewModel) {
-        
         viewModel.reviewPlaceVM
             .drive(onNext: { [weak self] in
                 self?.reviewPlaceView.bind($0)
             })
             .disposed(by: bag)
-        
+
         // MARK: view -> viewModel
-        
+
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
 
         viewModel.profileImageURL
@@ -134,31 +132,31 @@ class ReviewCell: UITableViewCell {
             .map { "\($0)번째 리뷰" }
             .drive(userReviewCountLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.postDate
             .drive(postDateLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.reviewImageURLs
             .drive(reviewImageCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
-                                                        for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                                                         for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
                 let vm = ImageURLCellViewModel(data)
                 cell.bind(vm)
                 return cell
             }
             .disposed(by: bag)
-        
+
         viewModel.likeYn
             .compactMap { $0 ? UIImage(named: "likeY") : UIImage(named: "likeN") }
             .drive(likeButton.rx.image)
             .disposed(by: bag)
-        
+
         viewModel.likeCount
             .map { "\($0)" }
             .drive(likeCountLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.commentCount
             .map { "\($0)" }
             .drive(commentCountLabel.rx.text)
@@ -174,7 +172,6 @@ class ReviewCell: UITableViewCell {
     }
 
     private func layout() {
-        
         [
             profileImageView,
             userNameLabel,
@@ -187,7 +184,7 @@ class ReviewCell: UITableViewCell {
             commentCountLabel,
             contentLabel,
             reviewPlaceView,
-            boundaryView
+            boundaryView,
         ].forEach { contentView.addSubview($0) }
 
         profileImageView.snp.makeConstraints {
@@ -219,23 +216,23 @@ class ReviewCell: UITableViewCell {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(110.0)
         }
-        
+
         likeButton.snp.makeConstraints {
             $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(17.0)
             $0.leading.equalToSuperview().inset(24.0)
             $0.width.height.equalTo(20.0)
         }
-        
+
         likeCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(likeButton)
             $0.leading.equalTo(likeButton.snp.trailing).offset(12.0)
         }
-        
+
         commentButton.snp.makeConstraints {
             $0.centerY.equalTo(likeCountLabel)
             $0.leading.equalTo(likeCountLabel.snp.trailing).offset(12.0)
         }
-        
+
         commentCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(commentButton)
             $0.leading.equalTo(commentButton.snp.trailing).offset(12.0)
@@ -252,7 +249,7 @@ class ReviewCell: UITableViewCell {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.height.equalTo(57.0)
         }
-        
+
         boundaryView.snp.makeConstraints {
             $0.height.equalTo(1.0)
             $0.bottom.equalToSuperview()

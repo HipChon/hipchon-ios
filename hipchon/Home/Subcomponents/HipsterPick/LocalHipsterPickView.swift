@@ -19,7 +19,7 @@ class LocalHipsterPickView: UIView {
     }
 
     private lazy var localHipsterPickCollectionView = UICollectionView(frame: .zero,
-                                                            collectionViewLayout: UICollectionViewFlowLayout()).then {
+                                                                       collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing = 8.0
         let width = 230.0
@@ -38,7 +38,7 @@ class LocalHipsterPickView: UIView {
         $0.isPagingEnabled = false
         $0.backgroundColor = .gray_background
     }
-    
+
     private lazy var selectView = UIView().then {
         $0.backgroundColor = .black
     }
@@ -55,15 +55,14 @@ class LocalHipsterPickView: UIView {
     }
 
     func bind(_ viewModel: LocalHipsterPickViewModel) {
-        
         // MARK: view -> viewModel
-        
+
         localHipsterPickCollectionView.rx.modelSelected(LocalHipsterPickModel.self)
             .bind(to: viewModel.selectedLocalHipsterPick)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.localHipsterPicks
             .drive(localHipsterPickCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: LocalHipsterPickCell.identyfier, for: IndexPath(row: idx, section: 0)) as? LocalHipsterPickCell else { return UICollectionViewCell() }
@@ -82,7 +81,7 @@ class LocalHipsterPickView: UIView {
         [
             titleLabel,
             localHipsterPickCollectionView,
-            selectView
+            selectView,
         ].forEach { addSubview($0) }
 
         titleLabel.snp.makeConstraints {
@@ -95,7 +94,7 @@ class LocalHipsterPickView: UIView {
             $0.top.equalTo(titleLabel.snp.bottom).offset(10.0)
             $0.height.equalTo(284.0)
         }
-        
+
         selectView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
             $0.top.equalTo(localHipsterPickCollectionView.snp.bottom).offset(33.0)

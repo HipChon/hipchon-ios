@@ -17,8 +17,9 @@ class LocalHipsterPickViewModel {
     let localHipsterPicks: Driver<[LocalHipsterPickModel]>
 
     // MARK: view -> viewModel
+
     let selectedLocalHipsterPick = PublishRelay<LocalHipsterPickModel>()
-    
+
     init() {
         localHipsterPicks = NetworkManager.shared.getLocalHipsterPicks()
             .asDriver(onErrorJustReturn: [])

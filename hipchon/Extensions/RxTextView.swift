@@ -9,7 +9,7 @@ import RxSwift
 
 extension Reactive where Base: UITextView {
     var firstEditing: Binder<Void> {
-        return Binder(base) { base, point in
+        return Binder(base) { base, _ in
             base.text = ""
             base.textColor = .black
         }

@@ -147,7 +147,7 @@ class FilterViewModel {
                                                      }))
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-        
+
         popToSearchListVC = searchButtonTapped
             .filter { befViewType == .research }
             .withLatestFrom(Observable.combineLatest(personnel.asObservable(),

@@ -29,7 +29,7 @@ class ReviewDetailViewController: UIViewController {
     private lazy var placeNameLabel = UILabel().then {
         $0.font = .GmarketSans(size: 22.0, type: .medium)
     }
-    
+
     private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
@@ -50,12 +50,12 @@ class ReviewDetailViewController: UIViewController {
     }
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
-                                                  collectionViewLayout: UICollectionViewLayout()).then {
+                                                                  collectionViewLayout: UICollectionViewLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 300.0
         let height = 191.0
-        
+
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
         layout.scrollDirection = .horizontal
@@ -96,11 +96,11 @@ class ReviewDetailViewController: UIViewController {
 
     private lazy var reviewPlaceView = ReviewPlaceView().then { _ in
     }
-    
+
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
-    
+
     private lazy var commentTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identyfier)
@@ -109,7 +109,7 @@ class ReviewDetailViewController: UIViewController {
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }
-    
+
     private lazy var inputCommentView = InputCommentView().then { _ in
     }
 
@@ -132,9 +132,8 @@ class ReviewDetailViewController: UIViewController {
     }
 
     func bind(_ viewModel: ReviewDetailViewModel) {
-        
         // MARK: subViewModels
-        
+
         viewModel.reviewPlaceVM
             .drive(onNext: {
                 self.reviewPlaceView.bind($0)
@@ -142,13 +141,13 @@ class ReviewDetailViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: view -> viewModel
-        
+
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
- 
+
         // MARK: viewModel -> view
-        
+
         viewModel.placeName
             .drive(placeNameLabel.rx.text)
             .disposed(by: bag)
@@ -165,7 +164,7 @@ class ReviewDetailViewController: UIViewController {
             .map { "\($0)번째 리뷰" }
             .drive(userReviewCountLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.postDate
             .drive(postDateLabel.rx.text)
             .disposed(by: bag)
@@ -173,23 +172,23 @@ class ReviewDetailViewController: UIViewController {
         viewModel.reviewImageURLs
             .drive(reviewImageCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
-                                                        for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                                                         for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
                 let viewModel = ImageURLCellViewModel(data)
                 cell.bind(viewModel)
                 return cell
             }
             .disposed(by: bag)
-        
+
         viewModel.likeYn
             .compactMap { $0 ? UIImage(named: "likeY") : UIImage(named: "likeN") }
             .drive(likeButton.rx.image)
             .disposed(by: bag)
-        
+
         viewModel.likeCount
             .map { "\($0)" }
             .drive(likeCountLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.commentCount
             .map { "\($0)" }
             .drive(commentCountLabel.rx.text)
@@ -198,7 +197,7 @@ class ReviewDetailViewController: UIViewController {
         viewModel.content
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.commentCellVMs
             .drive(commentTableView.rx.items) { tv, idx, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: CommentCell.identyfier,
@@ -207,18 +206,17 @@ class ReviewDetailViewController: UIViewController {
                 return cell
             }
             .disposed(by: bag)
-        
-        
+
         // MARK: scene
-        
+
         viewModel.pushPlaceDetailVC
-            .emit(onNext:{ [weak self] viewModel in
+            .emit(onNext: { [weak self] viewModel in
                 let placeDetailVC = PlaceDetailViewController()
                 placeDetailVC.bind(viewModel)
                 self?.navigationController?.pushViewController(placeDetailVC, animated: true)
             })
             .disposed(by: bag)
- 
+
         backButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
@@ -235,9 +233,10 @@ class ReviewDetailViewController: UIViewController {
 
     func layout() {
         // MARK: scroll
+
         [
             scrollView,
-            inputCommentView
+            inputCommentView,
         ].forEach {
             view.addSubview($0)
         }
@@ -245,7 +244,7 @@ class ReviewDetailViewController: UIViewController {
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         inputCommentView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(102.0)
@@ -273,7 +272,7 @@ class ReviewDetailViewController: UIViewController {
             contentLabel,
             reviewPlaceView,
             boundaryView,
-            commentTableView
+            commentTableView,
         ].forEach {
             contentView.addSubview($0)
         }
@@ -283,12 +282,12 @@ class ReviewDetailViewController: UIViewController {
             $0.top.equalTo(26.0)
             $0.width.height.equalTo(28.0)
         }
-        
+
         placeNameLabel.snp.makeConstraints {
             $0.top.equalTo(backButton.snp.bottom).offset(20.0)
             $0.leading.equalToSuperview().inset(20.0)
         }
-        
+
         profileImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
             $0.top.equalTo(placeNameLabel.snp.bottom).offset(40.0)
@@ -318,34 +317,34 @@ class ReviewDetailViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(191.0)
         }
-        
+
         contentLabel.snp.makeConstraints {
             $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(20.0)
             $0.leading.trailing.equalToSuperview().inset(20.0)
         }
-        
+
         reviewPlaceView.snp.makeConstraints {
             $0.top.equalTo(contentLabel.snp.bottom).offset(20.0)
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.height.equalTo(57.0)
         }
-        
+
         likeButton.snp.makeConstraints {
             $0.top.equalTo(reviewPlaceView.snp.bottom).offset(32.0)
             $0.leading.equalToSuperview().inset(24.0)
             $0.width.height.equalTo(20.0)
         }
-        
+
         likeCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(likeButton)
             $0.leading.equalTo(likeButton.snp.trailing).offset(12.0)
         }
-        
+
         commentButton.snp.makeConstraints {
             $0.centerY.equalTo(likeCountLabel)
             $0.leading.equalTo(likeCountLabel.snp.trailing).offset(12.0)
         }
-        
+
         commentCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(commentButton)
             $0.leading.equalTo(commentButton.snp.trailing).offset(12.0)
@@ -356,7 +355,7 @@ class ReviewDetailViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().offset(20.0)
             $0.height.equalTo(1.0)
         }
-        
+
         commentTableView.snp.makeConstraints {
             $0.top.equalTo(boundaryView.snp.bottom).offset(21.0)
             $0.leading.trailing.equalToSuperview()
@@ -367,7 +366,6 @@ class ReviewDetailViewController: UIViewController {
 }
 
 private extension ReviewDetailViewController {
-
     // 입력 시 키보드만큼 뷰 이동
     private func addKeyboardNotification() {
         NotificationCenter.default.addObserver(

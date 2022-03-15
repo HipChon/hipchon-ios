@@ -53,17 +53,17 @@ class CategoryCell: UICollectionViewCell {
     private func layout() {
         [
             imageView,
-            label
+            label,
         ].forEach {
             addSubview($0)
         }
-        
+
         imageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(20.0)
             $0.width.height.equalTo(45.0)
         }
-        
+
         label.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(imageView.snp.bottom).offset(8.0)

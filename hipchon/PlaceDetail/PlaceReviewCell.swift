@@ -46,7 +46,6 @@ class PlaceReviewCell: UICollectionViewCell {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
-    
 
     private lazy var likeButton = UIButton().then {
         $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
@@ -97,18 +96,18 @@ class PlaceReviewCell: UICollectionViewCell {
 
     public static let identyfier = "PlaceReviewCell"
     private var bag = DisposeBag()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
         layout()
     }
-    
+
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         print("CELL REUSE")
@@ -132,10 +131,10 @@ class PlaceReviewCell: UICollectionViewCell {
             .disposed(by: bag)
 
         viewModel.reviewCount
-            .map { "리뷰 수 \($0)"}
+            .map { "리뷰 수 \($0)" }
             .drive(reviewCountLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.postDt
             .drive(postDtLabel.rx.text)
             .disposed(by: bag)

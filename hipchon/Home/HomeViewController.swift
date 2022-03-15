@@ -22,10 +22,9 @@ class HomeViewController: UIViewController {
 
     private lazy var contentView = UIView().then { _ in
     }
-    
+
     private lazy var homeSearchView = HomeSearchView().then { _ in
     }
-
 
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
                                                                collectionViewLayout: UICollectionViewFlowLayout()).then {
@@ -48,7 +47,7 @@ class HomeViewController: UIViewController {
 
     private lazy var localHipsterPickView = LocalHipsterPickView().then { _ in
     }
-    
+
     private lazy var bestReviewView = BestReviewView().then { _ in
     }
 
@@ -71,13 +70,13 @@ class HomeViewController: UIViewController {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
-    
+
     private lazy var bannerPageCountView = PageCountView().then { _ in
     }
-    
+
     private lazy var weelkyHipPlaceView = WeeklyHipPlaceView().then { _ in
     }
-    
+
     private lazy var customerServiceView = CustomerServiceView().then { _ in
     }
 
@@ -108,16 +107,16 @@ class HomeViewController: UIViewController {
         customerServiceView.bind(viewModel.customerServiceVM)
 
         // MARK: view -> viewModel
-        
+
         categoryCollectionView.rx.modelSelected(CategoryModel.self)
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.selectedCategory)
             .disposed(by: bag)
-        
+
         bannerCollectionView.rx.modelSelected(BannerModel.self)
             .bind(to: viewModel.selectedBanner)
             .disposed(by: bag)
-        
+
         bannerCollectionView.rx.contentOffset
             .compactMap { [unowned self] in Int(($0.x + self.view.frame.width / 2) / self.view.frame.width) }
             .distinctUntilChanged()
@@ -168,13 +167,13 @@ class HomeViewController: UIViewController {
                 self.present(bottomSheet, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        
+
         viewModel.openURL
             .emit(onNext: {
                 UIApplication.shared.open($0, options: [:])
             })
             .disposed(by: bag)
-        
+
         viewModel.pushPlaceDetailVC
             .emit(onNext: { [weak self] viewModel in
                 let placeDetailVC = PlaceDetailViewController()
@@ -182,7 +181,7 @@ class HomeViewController: UIViewController {
                 self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
             })
             .disposed(by: bag)
-        
+
         viewModel.pushHipsterPickDetailVC
             .emit(onNext: { [weak self] viewModel in
                 let hipsterPickDetailVC = HipsterPickDetailViewController()
@@ -219,7 +218,7 @@ class HomeViewController: UIViewController {
             bannerCollectionView,
             bannerPageCountView,
             weelkyHipPlaceView,
-            customerServiceView
+            customerServiceView,
         ].forEach {
             contentView.addSubview($0)
         }
@@ -241,20 +240,20 @@ class HomeViewController: UIViewController {
             $0.top.equalTo(categoryCollectionView.snp.bottom)
             $0.height.equalTo(394.0)
         }
-        
+
         bestReviewView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(localHipsterPickView.snp.bottom)
             $0.height.equalTo(162.0)
         }
-        
+
         bannerCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(bestReviewView.snp.bottom)
             let height = view.frame.width * (137.0 / 390.0)
             $0.height.equalTo(height)
         }
-        
+
         bannerPageCountView.snp.makeConstraints {
             $0.trailing.equalTo(bannerCollectionView).inset(16.0)
             $0.bottom.equalTo(bannerCollectionView).inset(16.0)
@@ -265,7 +264,7 @@ class HomeViewController: UIViewController {
             $0.top.equalTo(bannerCollectionView.snp.bottom)
             $0.height.equalTo(229.0)
         }
-        
+
         customerServiceView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(weelkyHipPlaceView.snp.bottom)
