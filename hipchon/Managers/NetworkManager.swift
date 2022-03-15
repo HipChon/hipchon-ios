@@ -25,9 +25,53 @@ class NetworkManager {
     
     // MARK: Home
     
-    func getHipsterPick() -> Single<[HipsterPickModel]> {
+    func getLocalHipsterPicks() -> Single<[LocalHipsterPickModel]> {
         return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/hipsteropick") else {
+            guard let url = URL(string: "\(NetworkManager.uri)/api/localHipsteropick") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            
+            let str = """
+            [
+                {
+                    "id": 1,
+                    "region": "제주",
+                    "title": "제주의 맛맛맛",
+                    "subTitle": "제주 해녀의 부억 5곳 외",
+                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                },
+                {
+                    "id": 1,
+                    "region": "제주",
+                    "title": "제주의 맛맛맛",
+                    "subTitle": "제주 해녀의 부억 5곳 외",
+                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                },
+                {
+                    "id": 1,
+                    "region": "제주",
+                    "title": "제주의 맛맛맛",
+                    "subTitle": "제주 해녀의 부억 5곳 외",
+                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                }
+            ]
+            """
+
+            do {
+                let model = try JSONDecoder().decode([LocalHipsterPickModel].self, from: Data(str.utf8))
+                single(.success(model))
+            } catch {
+                single(.failure(NetworkError.parsing))
+            }
+
+            return Disposables.create()
+        }
+    }
+    
+    func getHipsterPicks(_ id: Int) -> Single<[HipsterPickModel]> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/hipsteropicks") else {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
@@ -36,25 +80,64 @@ class NetworkManager {
             [
                 {
                     "id": 1,
-                    "region": "제주",
-                    "title": "제주의 맛맛맛",
-                    "content": "제주 해녀의 부억 5곳 외",
-                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    "title": "첫번째. 해녀의 부엌",
+                    "content": "공연과 이야기, 식사가 있는 국내 최초 <제주 해녀 다이닝> '해녀 이야기'는 90세 최고령 해녀, 권영희 할머니를 비롯하여 40년 넘게 물질해 온 해녀들을 직접 만나는 공연입니다. 해녀의 삶을 담은 연극 공연과 직접 잡아온 해산물로 만든 식사가 제공됩니다.",
+                    "place": {
+                        "id": 1,
+                        "name": "해녀의 부억",
+                        "region": "제주도",
+                        "address": "제주특별자치도 서귀포시",
+                        "sector": "음식점",
+                        "bookmarkYn": true,
+                        "distance": 50.4,
+                        "price": 100000.0,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
                 },
                 {
                     "id": 1,
-                    "region": "제주",
-                    "title": "제주의 맛맛맛",
-                    "content": "제주 해녀의 부억 5곳 외",
-                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    "title": "첫번째. 해녀의 부엌",
+                    "content": "공연과 이야기, 식사가 있는 국내 최초 <제주 해녀 다이닝> '해녀 이야기'는 90세 최고령 해녀, 권영희 할머니를 비롯하여 40년 넘게 물질해 온 해녀들을 직접 만나는 공연입니다. 해녀의 삶을 담은 연극 공연과 직접 잡아온 해산물로 만든 식사가 제공됩니다.",
+                    "place": {
+                        "id": 1,
+                        "name": "해녀의 부억",
+                        "region": "제주도",
+                        "address": "제주특별자치도 서귀포시",
+                        "sector": "음식점",
+                        "bookmarkYn": true,
+                        "distance": 50.4,
+                        "price": 100000.0,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
                 },
                 {
                     "id": 1,
-                    "region": "제주",
-                    "title": "제주의 맛맛맛",
-                    "content": "제주 해녀의 부억 5곳 외",
-                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                }
+                    "title": "첫번째. 해녀의 부엌",
+                    "content": "공연과 이야기, 식사가 있는 국내 최초 <제주 해녀 다이닝> '해녀 이야기'는 90세 최고령 해녀, 권영희 할머니를 비롯하여 40년 넘게 물질해 온 해녀들을 직접 만나는 공연입니다. 해녀의 삶을 담은 연극 공연과 직접 잡아온 해산물로 만든 식사가 제공됩니다.",
+                    "place": {
+                        "id": 1,
+                        "name": "해녀의 부억",
+                        "region": "제주도",
+                        "address": "제주특별자치도 서귀포시",
+                        "sector": "음식점",
+                        "bookmarkYn": true,
+                        "distance": 50.4,
+                        "price": 100000.0,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
+                },
             ]
             """
 
@@ -257,7 +340,8 @@ class NetworkManager {
                         "bookmarkYn": false
                     },
                     "likeCount": 23,
-                    "commentCount": 12
+                    "commentCount": 12,
+                    "likeYn": true
                 },
                 {
                     "id": 1,
@@ -280,7 +364,8 @@ class NetworkManager {
                         "bookmarkYn": true
                     },
                     "likeCount": 23,
-                    "commentCount": 12
+                    "commentCount": 12,
+                    "likeYn": false
                 },
                 {
                     "id": 1,
@@ -303,7 +388,8 @@ class NetworkManager {
                         "bookmarkYn": false
                     },
                     "likeCount": 23,
-                    "commentCount": 12
+                    "commentCount": 12,
+                    "likeYn": true
                 }
             ]
             """
@@ -463,6 +549,32 @@ class NetworkManager {
                         "content": "여자/남자친구가 좋아해요",
                         "count": 28
                     }
+                ],
+                "menus": [
+                    {
+                        "id": 1,
+                        "name": "감자옹심이",
+                        "price": 12000,
+                        "imageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    {
+                        "id": 1,
+                        "name": "감자옹심이",
+                        "price": 12000,
+                        "imageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    {
+                        "id": 1,
+                        "name": "감자옹심이",
+                        "price": 12000,
+                        "imageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    {
+                        "id": 1,
+                        "name": "감자옹심이",
+                        "price": 12000,
+                        "imageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    }
                 ]
             }
             """
@@ -487,18 +599,6 @@ class NetworkManager {
                 return Disposables.create()
             }
             single(.success(true))
-//            AF
-//                .request(url, method: .post, parameters: nil, headers: NetworkManager.headers)
-//                .validate(statusCode: 200 ..< 300)
-//                .response(completionHandler: { response in
-//                    switch response.result {
-//                    case .success:
-//                        single(.success(true))
-//                    case .failure:
-//                        single(.success(false))
-//                    }
-//                })
-//                .resume()
             
             return Disposables.create()
         }
@@ -515,4 +615,95 @@ class NetworkManager {
             return Disposables.create()
         }
     }
+    
+    // MARK: Like
+
+    func addLike(_ id: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
+            
+            return Disposables.create()
+        }
+    }
+
+    func deleteLike(_ id: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+    
+    // MARK: comments
+    
+    func getComments(_ id: Int) -> Single<[CommentModel]> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/comments") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            let str = """
+            [
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-02-03-24-00-00-00"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2022-02-03-24-00-00-00"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2022-02-03-24-00-00-00"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2022-02-03-24-00-00-00"
+                }
+            ]
+            """
+    
+            do {
+                let model = try JSONDecoder().decode([CommentModel].self, from: Data(str.utf8))
+                single(.success(model))
+            } catch {
+                single(.failure(NetworkError.parsing))
+            }
+
+            return Disposables.create()
+        }
+    }
+    
 }

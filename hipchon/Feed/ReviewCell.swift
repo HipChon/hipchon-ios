@@ -1,5 +1,5 @@
 //
-//  ReviewListCell.swift
+//  ReviewCell.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/08.
@@ -8,7 +8,7 @@
 import RxSwift
 import UIKit
 
-class ReviewListCell: UITableViewCell {
+class ReviewCell: UITableViewCell {
     private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
@@ -43,17 +43,18 @@ class ReviewListCell: UITableViewCell {
 
         $0.collectionViewLayout = layout
         
-        $0.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identyfier)
+        $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
 
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 2.0
+        $0.backgroundColor = .white
     }
 
     private lazy var likeButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "likeN") ?? UIImage(), for: .normal)
         
     }
 
@@ -81,7 +82,7 @@ class ReviewListCell: UITableViewCell {
         $0.backgroundColor = .gray02
     }
 
-    public static let identyfier = "ReviewListCell"
+    public static let identyfier = "ReviewCell"
     private var bag = DisposeBag()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -105,12 +106,18 @@ class ReviewListCell: UITableViewCell {
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
     }
 
-    func bind(_ viewModel: ReviewListCellViewModel) {
+    func bind(_ viewModel: ReviewCellViewModel) {
         
         viewModel.reviewPlaceVM
-            .drive(onNext: {
-                self.reviewPlaceView.bind($0)
+            .drive(onNext: { [weak self] in
+                self?.reviewPlaceView.bind($0)
             })
+            .disposed(by: bag)
+        
+        // MARK: view -> viewModel
+        
+        likeButton.rx.tap
+            .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
         
         // MARK: viewModel -> view
@@ -134,12 +141,17 @@ class ReviewListCell: UITableViewCell {
         
         viewModel.reviewImageURLs
             .drive(reviewImageCollectionView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageCell.identyfier,
-                                                        for: IndexPath(row: idx, section: 0)) as? ImageCell else { return UICollectionViewCell() }
-                let vm = ImageCellViewModel(data)
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
+                                                        for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                let vm = ImageURLCellViewModel(data)
                 cell.bind(vm)
                 return cell
             }
+            .disposed(by: bag)
+        
+        viewModel.likeYn
+            .compactMap { $0 ? UIImage(named: "likeY") : UIImage(named: "likeN") }
+            .drive(likeButton.rx.image)
             .disposed(by: bag)
         
         viewModel.likeCount

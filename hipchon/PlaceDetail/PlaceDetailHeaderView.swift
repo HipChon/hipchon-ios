@@ -9,14 +9,14 @@ import Foundation
 import UIKit
 import RxSwift
 
-class PlaceDetailHeaderView: UICollectionReusableView {
+class PlaceDetailHeaderView: UITableViewHeaderFooterView {
     
     
     private lazy var imageCollectView = UICollectionView(frame: .zero,
                                                          collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 0.0
-        let width = self.frame.width
+        let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
         let height = width * (263.0 / 390.0)
 
         layout.itemSize = CGSize(width: width, height: height)
@@ -28,7 +28,7 @@ class PlaceDetailHeaderView: UICollectionReusableView {
 
         $0.dataSource = nil
         $0.delegate = nil
-        $0.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identyfier)
+        $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
@@ -41,11 +41,18 @@ class PlaceDetailHeaderView: UICollectionReusableView {
         $0.backgroundColor = .gray_border
     }
     
+    private lazy var menuListView = MenuListView().then { _ in
+    }
+    
     private lazy var secondBorderView = UIView().then {
         $0.backgroundColor = .gray_border
     }
     
     private lazy var placeMapView = PlaceMapView().then { _ in
+    }
+    
+    private lazy var thirdBorderView = UIView().then {
+        $0.backgroundColor = .gray_border
     }
     
     private lazy var reviewComplimentListView = ReviewComplimentListView().then { _ in
@@ -54,10 +61,8 @@ class PlaceDetailHeaderView: UICollectionReusableView {
     public static let identyfier = "PlaceDetailHeaderView"
     private var bag = DisposeBag()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        imageCollectView.delegate = nil
-        imageCollectView.dataSource = nil
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         attribute()
         layout()
     }
@@ -76,6 +81,12 @@ class PlaceDetailHeaderView: UICollectionReusableView {
         placeDesView.bind(viewModel.placeDesVM)
         placeMapView.bind(viewModel.placeMapVM)
         
+        viewModel.menuListVM
+            .emit(onNext: { [weak self] in
+                self?.menuListView.bind($0)
+            })
+            .disposed(by: bag)
+        
         viewModel.reviewComplimentListVM
             .emit(onNext: { [weak self] in
                 self?.reviewComplimentListView.bind($0)
@@ -85,11 +96,15 @@ class PlaceDetailHeaderView: UICollectionReusableView {
         // MARK: view -> viewModel
 
         // MARK: viewModel -> view
+        
+        viewModel.menuListViewHidden
+            .drive(menuListView.rx.isHidden)
+            .disposed(by: bag)
 
         viewModel.urls
             .drive(imageCollectView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ImageCell else { return UICollectionViewCell() }
-                let placeImageCellVM = ImageCellViewModel(data)
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                let placeImageCellVM = ImageURLCellViewModel(data)
                 cell.bind(placeImageCellVM)
                 return cell
             }
@@ -108,8 +123,10 @@ class PlaceDetailHeaderView: UICollectionReusableView {
             imageCollectView,
             placeDesView,
             firstBorderView,
-            placeMapView,
+            menuListView,
             secondBorderView,
+            placeMapView,
+            thirdBorderView,
             reviewComplimentListView
         ].forEach {
             addSubview($0)
@@ -118,7 +135,9 @@ class PlaceDetailHeaderView: UICollectionReusableView {
         imageCollectView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalToSuperview()
-            $0.height.equalTo(self.frame.width * (263.0 / 390.0))
+            let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
+            let height = width * (263.0 / 390.0)
+            $0.height.equalTo(height)
         }
 
         placeDesView.snp.makeConstraints {
@@ -133,13 +152,24 @@ class PlaceDetailHeaderView: UICollectionReusableView {
             $0.height.equalTo(8.0)
         }
         
-        placeMapView.snp.makeConstraints {
+        menuListView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(firstBorderView.snp.bottom)
+        }
+
+        secondBorderView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(menuListView.snp.bottom)
+            $0.height.equalTo(8.0)
+        }
+        
+        placeMapView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(secondBorderView.snp.bottom)
             $0.height.equalTo(285.0)
         }
         
-        secondBorderView.snp.makeConstraints {
+        thirdBorderView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(placeMapView.snp.bottom)
             $0.height.equalTo(8.0)
@@ -147,8 +177,9 @@ class PlaceDetailHeaderView: UICollectionReusableView {
         
         reviewComplimentListView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(secondBorderView.snp.bottom)
+            $0.top.equalTo(thirdBorderView.snp.bottom)
             $0.height.equalTo(275.0)
+            $0.bottom.equalToSuperview()
         }
     }
 }

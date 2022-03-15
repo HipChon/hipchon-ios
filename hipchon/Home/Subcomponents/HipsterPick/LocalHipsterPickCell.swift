@@ -1,5 +1,5 @@
 //
-//  HipsterPickCell.swift
+//  LocalHipsterPickCell.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/16.
@@ -8,7 +8,7 @@
 import RxSwift
 import UIKit
 
-class HipsterPickCell: UICollectionViewCell {
+class LocalHipsterPickCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
     }
@@ -24,13 +24,13 @@ class HipsterPickCell: UICollectionViewCell {
         $0.textAlignment = .left
     }
     
-    private lazy var contentLabel = UILabel().then {
+    private lazy var subTitleLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 12.0, type: .medium)
         $0.textColor = .white
         $0.textAlignment = .left
     }
 
-    public static let identyfier = "HipsterPickCell"
+    public static let identyfier = "LocalHipsterPickCell"
     private let bag = DisposeBag()
 
     override init(frame: CGRect) {
@@ -44,7 +44,7 @@ class HipsterPickCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: HipsterPickCellViewModel) {
+    func bind(_ viewModel: LocalHipsterPickCellViewModel) {
         
         regionLabelView.bind(viewModel.regionLabelVM)
         
@@ -58,8 +58,8 @@ class HipsterPickCell: UICollectionViewCell {
             .drive(titleLabel.rx.text)
             .disposed(by: bag)
         
-        viewModel.content
-            .drive(contentLabel.rx.text)
+        viewModel.subTitle
+            .drive(subTitleLabel.rx.text)
             .disposed(by: bag)
     }
 
@@ -73,7 +73,7 @@ class HipsterPickCell: UICollectionViewCell {
             imageView,
             regionLabelView,
             titleLabel,
-            contentLabel
+            subTitleLabel
         ].forEach { addSubview($0) }
 
         imageView.snp.makeConstraints {
@@ -86,10 +86,10 @@ class HipsterPickCell: UICollectionViewCell {
         
         titleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(16.0)
-            $0.bottom.equalTo(contentLabel.snp.top).offset(8.0)
+            $0.bottom.equalTo(subTitleLabel.snp.top).offset(-8.0)
         }
         
-        contentLabel.snp.makeConstraints {
+        subTitleLabel.snp.makeConstraints {
             $0.leading.equalTo(titleLabel)
             $0.bottom.equalToSuperview().inset(16.0)
         }

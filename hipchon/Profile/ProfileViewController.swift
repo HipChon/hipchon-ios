@@ -13,15 +13,10 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     // MARK: Property
-
-    private lazy var profileImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-        $0.image = UIImage(named: "profile") ?? UIImage()
-        $0.layer.cornerRadius = $0.frame.width / 2
-    }
     
-    private lazy var profileImageButton = UIButton().then { _ in
-        
+    private lazy var profileImageButton = UIButton().then {
+        $0.setImage(UIImage(named: "default_profile"), for: .normal)
+        $0.layer.masksToBounds = true
     }
 
     private lazy var nameLabel = UILabel().then {
@@ -37,6 +32,7 @@ class ProfileViewController: UIViewController {
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        attribute()
         layout()
     }
 
@@ -46,7 +42,9 @@ class ProfileViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        attribute()
+        super.viewDidLayoutSubviews()
+        navigationController?.isNavigationBarHidden = true
+        profileImageButton.layer.cornerRadius = profileImageButton.frame.width / 2
     }
 
     func bind(_ viewModel: ProfileViewModel) {
@@ -87,30 +85,24 @@ class ProfileViewController: UIViewController {
 
     func attribute() {
         view.backgroundColor = .white
-        navigationController?.isNavigationBarHidden = true
     }
 
     func layout() {
         [
-            profileImageView,
             profileImageButton,
             nameLabel,
             settingButton,
         ].forEach { view.addSubview($0) }
 
-        profileImageView.snp.makeConstraints {
+        profileImageButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
             $0.leading.equalToSuperview().inset(20.0)
             $0.width.height.equalTo(79.0)
         }
         
-        profileImageButton.snp.makeConstraints {
-            $0.edges.equalTo(profileImageView)
-        }
-        
         nameLabel.snp.makeConstraints {
-            $0.centerY.equalTo(profileImageView)
-            $0.leading.equalTo(profileImageView.snp.trailing).offset(16.0)
+            $0.centerY.equalTo(profileImageButton)
+            $0.leading.equalTo(profileImageButton.snp.trailing).offset(16.0)
         }
         
         settingButton.snp.makeConstraints {

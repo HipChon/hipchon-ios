@@ -1,5 +1,5 @@
 //
-//  PlaceImageCellViewModel.swift
+//  ImageCellURLViewModel.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/13.
@@ -8,7 +8,7 @@
 import Foundation
 import RxCocoa
 
-class ImageCellViewModel {
+class ImageURLCellViewModel {
     // MARK: viewModel -> view
 
     let url: Driver<URL>

@@ -46,7 +46,7 @@ class HomeViewController: UIViewController {
         $0.backgroundColor = .white
     }
 
-    private lazy var hipsterPickView = HipsterPickView().then { _ in
+    private lazy var localHipsterPickView = LocalHipsterPickView().then { _ in
     }
     
     private lazy var bestReviewView = BestReviewView().then { _ in
@@ -70,6 +70,9 @@ class HomeViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
+    }
+    
+    private lazy var bannerPageCountView = PageCountView().then { _ in
     }
     
     private lazy var weelkyHipPlaceView = WeeklyHipPlaceView().then { _ in
@@ -98,8 +101,9 @@ class HomeViewController: UIViewController {
         // MARK: subViews Binding
 
         homeSearchView.bind(viewModel.homeSearchVM)
-        hipsterPickView.bind(viewModel.hipsterPickVM)
+        localHipsterPickView.bind(viewModel.localHipsterPickVM)
         bestReviewView.bind(viewModel.bestReviewVM)
+        bannerPageCountView.bind(viewModel.bannerPageCountVM)
         weelkyHipPlaceView.bind(viewModel.weeklyHipPlaceVM)
         customerServiceView.bind(viewModel.customerServiceVM)
 
@@ -112,6 +116,12 @@ class HomeViewController: UIViewController {
         
         bannerCollectionView.rx.modelSelected(BannerModel.self)
             .bind(to: viewModel.selectedBanner)
+            .disposed(by: bag)
+        
+        bannerCollectionView.rx.contentOffset
+            .compactMap { [unowned self] in Int(($0.x + self.view.frame.width / 2) / self.view.frame.width) }
+            .distinctUntilChanged()
+            .bind(to: viewModel.bannerCurrentIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -204,9 +214,10 @@ class HomeViewController: UIViewController {
         [
             homeSearchView,
             categoryCollectionView,
-            hipsterPickView,
+            localHipsterPickView,
             bestReviewView,
             bannerCollectionView,
+            bannerPageCountView,
             weelkyHipPlaceView,
             customerServiceView
         ].forEach {
@@ -225,7 +236,7 @@ class HomeViewController: UIViewController {
             $0.height.equalTo(106.0)
         }
 
-        hipsterPickView.snp.makeConstraints {
+        localHipsterPickView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(categoryCollectionView.snp.bottom)
             $0.height.equalTo(394.0)
@@ -233,7 +244,7 @@ class HomeViewController: UIViewController {
         
         bestReviewView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(hipsterPickView.snp.bottom)
+            $0.top.equalTo(localHipsterPickView.snp.bottom)
             $0.height.equalTo(162.0)
         }
         
@@ -242,6 +253,11 @@ class HomeViewController: UIViewController {
             $0.top.equalTo(bestReviewView.snp.bottom)
             let height = view.frame.width * (137.0 / 390.0)
             $0.height.equalTo(height)
+        }
+        
+        bannerPageCountView.snp.makeConstraints {
+            $0.trailing.equalTo(bannerCollectionView).inset(16.0)
+            $0.bottom.equalTo(bannerCollectionView).inset(16.0)
         }
 
         weelkyHipPlaceView.snp.makeConstraints {

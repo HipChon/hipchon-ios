@@ -14,10 +14,12 @@ class PlaceDetailHeaderViewModel {
     // MARK: subViewModels
     let placeDesVM = PlaceDesViewModel()
     let placeMapVM = PlaceMapViewModel()
+    let menuListVM: Signal<MenuListViewModel>
+    let reviewComplimentListVM: Signal<ReviewComplimentListViewModel>
 
     // MARK: viewModel -> view
 
-    let reviewComplimentListVM: Signal<ReviewComplimentListViewModel>
+    let menuListViewHidden: Driver<Bool>
     let urls: Driver<[URL]>
     let openURL: Signal<URL>
     let share: Signal<Void>
@@ -27,6 +29,11 @@ class PlaceDetailHeaderViewModel {
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
+        
+        menuListViewHidden = place
+            .compactMap { $0.menus }
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: true)
 
         urls = place
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
@@ -95,25 +102,13 @@ class PlaceDetailHeaderViewModel {
             .bind(to: placeDesVM.bookmarkCount)
             .disposed(by: bag)
         
-        place
-            .compactMap { $0.bookmarkCount }
-            .subscribe(onNext :{
-                bookmarkCount.onNext($0)
-            })
-            .disposed(by: bag)
-        
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
 
         placeDesVM.bookmarkButtonTapped
             .withLatestFrom(bookmarked)
             .subscribe(onNext: {
-                switch $0 {
-                case true:
-                    deleteBookmark.onNext(())
-                case false:
-                    addBookmark.onNext(())
-                }
+                $0 ? deleteBookmark.onNext(()) : addBookmark.onNext(())
             })
             .disposed(by: bag)
 
@@ -148,6 +143,11 @@ class PlaceDetailHeaderViewModel {
                 }
             })
             .disposed(by: bag)
+        
+        menuListVM = place
+            .compactMap { $0.menus }
+            .map { MenuListViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
         
         reviewComplimentListVM = place
             .compactMap { $0.compliments }

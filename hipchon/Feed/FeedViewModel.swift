@@ -17,19 +17,32 @@ class FeedViewModel {
 
     // MARK: viewModel -> view
 
-    let reviews: Driver<[ReviewModel]>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
     let presentFilterVC: Signal<FilterViewModel>
+//    let pushPlaceDetailVC: Signal<ReviewPlaceViewModel>
 
+    let reviewCellVMs: Driver<[ReviewCellViewModel]>
+    
     // MARK: view -> viewModel
 
-    let selectedReview = PublishRelay<ReviewModel>()
+    let viewAppear = PublishRelay<Void>()
+    let selectedReviewIdx = PublishRelay<Int>()
 
     init() {
-        reviews = NetworkManager.shared.getReviews()
-            .asDriver(onErrorJustReturn: [])
+        let reviews = BehaviorSubject<[ReviewModel]>(value: [])
 
-        pushReviewDetailVC = selectedReview
+        reviewCellVMs = reviews
+            .map { $0.map { ReviewCellViewModel($0) } }
+            .asDriver(onErrorJustReturn: [])
+        
+        viewAppear
+            .flatMap { NetworkManager.shared.getReviews() }
+            .asObservable()
+            .bind(to: reviews)
+            .disposed(by: bag)
+            
+        pushReviewDetailVC = selectedReviewIdx
+            .withLatestFrom(reviews) { $1[$0] }
             .map { ReviewDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
@@ -37,5 +50,6 @@ class FeedViewModel {
             .searchFilterButtonTapped
             .map { FilterViewModel(.search) }
             .asSignal(onErrorSignalWith: .empty())
+        
     }
 }

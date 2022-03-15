@@ -1,19 +1,20 @@
 //
-//  PhotoCell.swift
+//  ImageURLCell.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/03/13.
+//  Created by 김범수 on 2022/02/13.
 //
 
+import Foundation
 import RxSwift
 import UIKit
 
-class PhotoCell: UICollectionViewCell {
+class ImageURLCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleToFill
     }
 
-    public static let identyfier = "PhotoCell"
+    public static let identyfier = "ImageURLCell"
     var bag = DisposeBag()
 
     override init(frame: CGRect) {
@@ -32,9 +33,9 @@ class PhotoCell: UICollectionViewCell {
         bag = DisposeBag()
     }
 
-    func bind(_ viewModel: PhotoCellViewModel) {
-        viewModel.image
-            .drive(imageView.rx.image)
+    func bind(_ viewModel: ImageURLCellViewModel) {
+        viewModel.url
+            .drive(imageView.rx.setImageKF)
             .disposed(by: bag)
     }
 

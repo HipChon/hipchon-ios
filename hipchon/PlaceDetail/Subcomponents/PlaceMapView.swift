@@ -161,6 +161,7 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
 //            self.viewModel.selectedStation.accept(station)
 //            return true
 //        }
+        marker.iconImage = NMFOverlayImage(image: UIImage(named: "marker") ?? UIImage())
         marker.mapView = self.mapView
     }
     

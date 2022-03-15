@@ -1,5 +1,5 @@
 //
-//  ReviewPlaceView.swift
+//  ReviewPlaceButton.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/03/10.
@@ -10,6 +10,9 @@ import UIKit
 import RxSwift
 
 class ReviewPlaceView: UIView {
+    
+    private lazy var insideButton = UIButton().then { _ in
+    }
     
     private lazy var placeNameLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .semibold)
@@ -31,7 +34,7 @@ class ReviewPlaceView: UIView {
     }
     
     private lazy var shareButton = UIButton().then {
-        $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "share") ?? UIImage(), for: .normal)
     }
     
     private lazy var shareLabel = UILabel().then {
@@ -54,10 +57,17 @@ class ReviewPlaceView: UIView {
     
     func bind(_ viewModel: ReviewPlaceViewModel) {
         
+        // MARK: view -> viewModel
+        insideButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.insideButtonTapped)
+            .disposed(by: bag)
+        
         bookmarkButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.bookmarkButtonTapped)
             .disposed(by: bag)
+        
+        // MARK: viewModel -> view
         
         viewModel.placeName
             .drive(placeNameLabel.rx.text)
@@ -110,6 +120,7 @@ class ReviewPlaceView: UIView {
         
         [
             labelStackView,
+            insideButton,
             bookmarkStackView,
             shareStackView
         ].forEach {
@@ -121,6 +132,10 @@ class ReviewPlaceView: UIView {
             $0.trailing.equalTo(bookmarkStackView.snp.leading).offset(5.0)
             $0.top.equalToSuperview().inset(12.0)
             $0.bottom.equalToSuperview().inset(10.0)
+        }
+        
+        insideButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
         bookmarkStackView.snp.makeConstraints {

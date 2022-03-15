@@ -1,5 +1,5 @@
 //
-//  HipsterPickView.swift
+//  LocalHipsterPickView.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/16.
@@ -10,7 +10,7 @@ import RxSwift
 import Then
 import UIKit
 
-class HipsterPickView: UIView {
+class LocalHipsterPickView: UIView {
     private let bag = DisposeBag()
 
     private lazy var titleLabel = UILabel().then {
@@ -18,7 +18,7 @@ class HipsterPickView: UIView {
         $0.font = .GmarketSans(size: 20.0, type: .medium)
     }
 
-    private lazy var hipsterPickCollectionView = UICollectionView(frame: .zero,
+    private lazy var localHipsterPickCollectionView = UICollectionView(frame: .zero,
                                                             collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing = 8.0
@@ -32,7 +32,7 @@ class HipsterPickView: UIView {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(HipsterPickCell.self, forCellWithReuseIdentifier: HipsterPickCell.identyfier)
+        $0.register(LocalHipsterPickCell.self, forCellWithReuseIdentifier: LocalHipsterPickCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = false
@@ -54,21 +54,21 @@ class HipsterPickView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: HipsterPickViewModel) {
+    func bind(_ viewModel: LocalHipsterPickViewModel) {
         
         // MARK: view -> viewModel
         
-        hipsterPickCollectionView.rx.modelSelected(HipsterPickModel.self)
-            .bind(to: viewModel.selectedHipsterPickModel)
+        localHipsterPickCollectionView.rx.modelSelected(LocalHipsterPickModel.self)
+            .bind(to: viewModel.selectedLocalHipsterPick)
             .disposed(by: bag)
         
         // MARK: viewModel -> view
         
-        viewModel.hipsterPicks
-            .drive(hipsterPickCollectionView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: HipsterPickCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HipsterPickCell else { return UICollectionViewCell() }
-                let pickCellViewModel = HipsterPickCellViewModel(data)
-                cell.bind(pickCellViewModel)
+        viewModel.localHipsterPicks
+            .drive(localHipsterPickCollectionView.rx.items) { col, idx, data in
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: LocalHipsterPickCell.identyfier, for: IndexPath(row: idx, section: 0)) as? LocalHipsterPickCell else { return UICollectionViewCell() }
+                let viewModel = LocalHipsterPickCellViewModel(data)
+                cell.bind(viewModel)
                 return cell
             }
             .disposed(by: bag)
@@ -81,7 +81,7 @@ class HipsterPickView: UIView {
     private func layout() {
         [
             titleLabel,
-            hipsterPickCollectionView,
+            localHipsterPickCollectionView,
             selectView
         ].forEach { addSubview($0) }
 
@@ -90,7 +90,7 @@ class HipsterPickView: UIView {
             $0.top.equalToSuperview().inset(20.0)
         }
 
-        hipsterPickCollectionView.snp.makeConstraints {
+        localHipsterPickCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(titleLabel.snp.bottom).offset(10.0)
             $0.height.equalTo(284.0)
@@ -98,7 +98,7 @@ class HipsterPickView: UIView {
         
         selectView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
-            $0.top.equalTo(hipsterPickCollectionView.snp.bottom).offset(33.0)
+            $0.top.equalTo(localHipsterPickCollectionView.snp.bottom).offset(33.0)
             $0.height.equalTo(2.0)
         }
     }

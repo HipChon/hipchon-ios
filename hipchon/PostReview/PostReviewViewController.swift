@@ -90,6 +90,7 @@ class PostReviewViewController: UIViewController {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
         $0.textColor = .gray05
         $0.text = "내용을 입력하세요"
+        $0.showsVerticalScrollIndicator = false
     }
     
     private lazy var contentCountLabel = UILabel().then {
@@ -136,42 +137,6 @@ class PostReviewViewController: UIViewController {
         $0.isPagingEnabled = true
     }
     
-    private lazy var picker: YPImagePicker = {
-        var config = YPImagePickerConfiguration()
-        config.isScrollToChangeModesEnabled = true
-        config.onlySquareImagesFromCamera = true
-        config.usesFrontCamera = false
-        config.showsPhotoFilters = true
-        config.showsVideoTrimmer = true
-        config.shouldSaveNewPicturesToAlbum = true
-        config.albumName = "DefaultYPImagePickerAlbumName"
-        config.startOnScreen = YPPickerScreen.library
-        config.screens = [.library, .photo]
-        config.showsCrop = .none
-        config.targetImageSize = YPImageSize.original
-        config.overlayView = UIView()
-        config.hidesStatusBar = false
-        config.hidesBottomBar = false
-        config.hidesCancelButton = false
-        config.preferredStatusBarStyle = UIStatusBarStyle.default
-        config.bottomMenuItemSelectedTextColour = UIColor(red: 38, green: 38, blue: 38)
-        config.bottomMenuItemUnSelectedTextColour = UIColor(red: 153, green: 153, blue: 153)
-        config.maxCameraZoomFactor = 1.0
-        config.library.maxNumberOfItems = 3 // 최대 사진 수
-        
-        config.wordings.libraryTitle = "갤러리"
-        config.wordings.cameraTitle = "카메라"
-        config.wordings.next = "다음"
-        config.wordings.cancel = "취소"
-        config.wordings.albumsTitle = "앨범"
-        config.wordings.filter = "필터"
-        config.wordings.done = "확인"
-        config.wordings.warningMaxItemsLimit = "사진은 3장까지만 등록 가능합니다!"
-        
-        let picker = YPImagePicker(configuration: config)
-        return picker
-    }()
-    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
@@ -189,6 +154,10 @@ class PostReviewViewController: UIViewController {
         
         // MARK: view -> viewModel
         
+        contentTextView.rx.text.orEmpty
+            .bind(to: viewModel.content)
+            .disposed(by: bag)
+        
         // MARK: view -> view
         
         contentTextView.rx.didBeginEditing
@@ -200,24 +169,60 @@ class PostReviewViewController: UIViewController {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                self.present(self.picker, animated: true, completion: nil)
+                
+                var config = YPImagePickerConfiguration()
+                config.isScrollToChangeModesEnabled = true
+                config.onlySquareImagesFromCamera = true
+                config.usesFrontCamera = false
+                config.showsPhotoFilters = true
+                config.showsVideoTrimmer = true
+                config.shouldSaveNewPicturesToAlbum = true
+                config.albumName = "DefaultYPImagePickerAlbumName"
+                config.startOnScreen = YPPickerScreen.library
+                config.screens = [.library, .photo]
+                config.showsCrop = .none
+                config.targetImageSize = YPImageSize.original
+                config.overlayView = UIView()
+                config.hidesStatusBar = false
+                config.hidesBottomBar = false
+                config.hidesCancelButton = false
+                config.preferredStatusBarStyle = UIStatusBarStyle.default
+                config.bottomMenuItemSelectedTextColour = UIColor(red: 38, green: 38, blue: 38)
+                config.bottomMenuItemUnSelectedTextColour = UIColor(red: 153, green: 153, blue: 153)
+                config.maxCameraZoomFactor = 1.0
+                config.library.maxNumberOfItems = 3 // 최대 사진 수
+                
+                config.wordings.libraryTitle = "갤러리"
+                config.wordings.cameraTitle = "카메라"
+                config.wordings.next = "다음"
+                config.wordings.cancel = "취소"
+                config.wordings.albumsTitle = "앨범"
+                config.wordings.filter = "필터"
+                config.wordings.done = "확인"
+                config.wordings.warningMaxItemsLimit = "사진은 3장까지만 등록 가능합니다!"
+                
+                let picker = YPImagePicker(configuration: config)
+                
+                picker.didFinishPicking { [unowned picker] items, cancelled in
+                    var photos: [UIImage] = []
+                    for item in items {
+                        switch item {
+                        case .photo(let photo):
+                            print("photo", photo)
+                            photos.append(photo.image)
+                        case .video(let video):
+                            print("video", video)
+                        }
+                    }
+                    viewModel.selectedPhotos.onNext(photos)
+                    picker.dismiss(animated: true, completion: nil)
+                }
+                
+                self.present(picker, animated: true, completion: nil)
             })
             .disposed(by: bag)
         
-        picker.didFinishPicking { [unowned picker] items, cancelled in
-            var photos: [UIImage] = []
-            for item in items {
-                switch item {
-                case .photo(let photo):
-                    print("photo", photo)
-                    photos.append(photo.image)
-                case .video(let video):
-                    print("video", video)
-                }
-            }
-            viewModel.selectedPhotos.onNext(photos)
-            picker.dismiss(animated: true, completion: nil)
-        }
+
         
         // MARK: viewModel -> view
         
@@ -243,6 +248,11 @@ class PostReviewViewController: UIViewController {
             }
             .disposed(by: bag)
         
+        viewModel.contentCount
+            .map { "\($0) / 200" }
+            .drive(contentCountLabel.rx.text)
+            .disposed(by: bag)
+        
         viewModel.photoCellVMs
             .drive(photoCollectView.rx.items) { col, idx, viewModel in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: PhotoCell.identyfier,
@@ -256,12 +266,11 @@ class PostReviewViewController: UIViewController {
 
         viewModel.photoCollectionViewHidden
             .map { $0 ? 0.0 : 110.0 }
-            .drive(onNext: { height in
-                self.photoCollectView.snp.makeConstraints {
+            .drive(onNext: { [weak self] height in
+                self?.photoCollectView.snp.makeConstraints {
                     $0.height.equalTo(height)
                 }
             })
-//            .drive(photoCollectView.rx.heightAnchor)
             .disposed(by: bag)
         
         // MARK: scene
@@ -276,6 +285,7 @@ class PostReviewViewController: UIViewController {
     private func attribute() {
         hideKeyboardWhenTappedAround()
         view.backgroundColor = .white
+        contentTextView.delegate = self
     }
     
     private func layout() {
@@ -445,3 +455,13 @@ private extension PostReviewViewController {
         view.endEditing(true)
     }
 }
+
+// MARK: TextView Delegate
+extension PostReviewViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let str = textView.text else { return true }
+        let newLength = str.count + text.count - range.length
+        return newLength <= 200
+    }
+}
+

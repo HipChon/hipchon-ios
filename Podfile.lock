@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.5.0)
   - Differentiator (5.0.0)
-  - Kingfisher (7.1.2)
+  - Kingfisher (7.2.0)
   - MaterialComponents/Availability (124.2.0)
   - MaterialComponents/BottomSheet (124.2.0):
     - MaterialComponents/Elevation
@@ -31,7 +31,7 @@ PODS:
     - MaterialComponents/private/Color
     - MaterialComponents/private/Math
     - MaterialComponents/ShadowLayer
-  - NMapsMap (3.14.0)
+  - NMapsMap (3.14.1)
   - PryntTrimmerView (4.0.2)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
@@ -87,9 +87,9 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
-  Kingfisher: 44ed6a8504763f27bab46163adfac83f5deb240c
+  Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
-  NMapsMap: 61c2abfc409bbcdc91583ccc455a5b6f64c7414e
+  NMapsMap: 79bae4e0d7cc5214dd6dabdb95687a1356616556
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf

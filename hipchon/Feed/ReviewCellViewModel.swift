@@ -1,5 +1,5 @@
 //
-//  ReviewDetailViewModel.swift
+//  ReviewListCellViewModel.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/08.
@@ -8,7 +8,7 @@
 import RxCocoa
 import RxSwift
 
-class ReviewDetailViewModel {
+class ReviewCellViewModel {
     private let bag = DisposeBag()
 
     // MARK: subviewModels
@@ -16,7 +16,6 @@ class ReviewDetailViewModel {
     
     // MARK: viewModel -> view
 
-    let placeName: Driver<String>
     let profileImageURL: Driver<URL>
     let userName: Driver<String>
     let userReviewCount: Driver<Int>
@@ -26,10 +25,10 @@ class ReviewDetailViewModel {
     let likeCount: Driver<Int>
     let commentCount: Driver<Int>
     let content: Driver<String>
-    let commentCellVMs: Driver<[CommentCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-
+    
     // MARK: view -> viewModel
+    
     let likeButtonTapped = PublishRelay<Void>()
 
     init(_ data: ReviewModel) {
@@ -39,10 +38,6 @@ class ReviewDetailViewModel {
             .compactMap { $0.place }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
-        
-        placeName = review
-            .compactMap { $0.place?.name }
-            .asDriver(onErrorJustReturn: "")
 
         profileImageURL = review
             .compactMap { $0.user?.profileImageURL }
@@ -72,19 +67,6 @@ class ReviewDetailViewModel {
         content = review
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
-        
-        // MARK: comment
-        let comments = BehaviorSubject<[CommentModel]>(value: [])
-        
-        commentCellVMs = comments
-            .map { $0.map { CommentCellViewModel($0) } }
-            .asDriver(onErrorJustReturn: [])
-        
-        review
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.getComments($0) }
-            .bind(to: comments)
-            .disposed(by: bag)
         
         // MARK: like
         
@@ -137,9 +119,6 @@ class ReviewDetailViewModel {
                 }
             })
             .disposed(by: bag)
-     
-        
-        // MARK: scene
         
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }

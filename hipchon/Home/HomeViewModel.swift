@@ -14,8 +14,9 @@ class HomeViewModel {
     // MARK: subViewModels
 
     let homeSearchVM = HomeSearchViewModel()
-    let hipsterPickVM = HipsterPickViewModel()
+    let localHipsterPickVM = LocalHipsterPickViewModel()
     let weeklyHipPlaceVM = WeeklyHipPlaceViewModel()
+    let bannerPageCountVM = PageCountViewModel()
     let bestReviewVM = BestReviewViewModel()
     let customerServiceVM = CustomerServiceViewModel()
 
@@ -33,6 +34,7 @@ class HomeViewModel {
 
     let selectedCategory = PublishRelay<CategoryModel>()
     let selectedBanner = PublishRelay<BannerModel>()
+    let bannerCurrentIdx = BehaviorRelay<Int>(value: 1)
 
     init() {
         
@@ -45,6 +47,19 @@ class HomeViewModel {
 
         banners = NetworkManager.shared.getBanners()
             .asDriver(onErrorJustReturn: [])
+        
+        banners
+            .map { $0.count }
+            .asObservable()
+            .bind(to: bannerPageCountVM.entireIdx)
+            .disposed(by: bag)
+        
+        bannerCurrentIdx
+            .map { $0 + 1 }
+            .bind(to: bannerPageCountVM.currentIdx)
+            .disposed(by: bag)
+        
+        // MARK: scene
 
         presentFilterVC = homeSearchVM.searchButtonTapped
             .map { FilterViewModel(.search) }
@@ -61,7 +76,7 @@ class HomeViewModel {
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
         
-        pushHipsterPickDetailVC = hipsterPickVM.selectedHipsterPickModel
+        pushHipsterPickDetailVC = localHipsterPickVM.selectedLocalHipsterPick
             .map { HipsterPickDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }

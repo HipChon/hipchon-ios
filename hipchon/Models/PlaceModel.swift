@@ -30,6 +30,7 @@ class PlaceModel: Codable {
     let number: String?
     let reviews: [ReviewModel]?
     let compliments: [ComplimentModel]?
+    let menus: [MenuModel]?
 
     var placeTitle: String? {
         guard let region = region,
@@ -64,6 +65,6 @@ class PlaceModel: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, name, region, bookmarkYn, distance, price, imageURLs, hashtags, bookmarkCount, reviewCount
-        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, compliments
+        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, compliments, menus
     }
 }

@@ -9,6 +9,7 @@ import RxSwift
 import RxCocoa
 
 class PostReviewViewModel {
+    private let bag = DisposeBag()
     
     // MARK: subViewModels
     let navigtionVM = NavigationViewModel()
@@ -16,13 +17,14 @@ class PostReviewViewModel {
     // MARK: viewModel -> view
     let placeImageURL: Driver<URL>
     let placeName: Driver<String>
+    let contentCount: Driver<Int>
     let photoCellVMs: Driver<[PhotoCellViewModel]>
     let photoCollectionViewHidden: Driver<Bool>
     let pop: Signal<Void>
     
     // MARK: view -> viewModel
     let selectedPhotos = PublishSubject<[UIImage]>()
-    
+    let content = PublishRelay<String>()
     
     init(_ data: PlaceModel) {
         
@@ -37,6 +39,10 @@ class PostReviewViewModel {
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
         
+        contentCount = content
+            .map { $0.count }
+            .asDriver(onErrorJustReturn: 0)
+        
         photoCellVMs = selectedPhotos
             .map { $0.map { PhotoCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
@@ -44,8 +50,7 @@ class PostReviewViewModel {
         photoCollectionViewHidden = selectedPhotos
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: true)
-        
-        
+
         pop = navigtionVM.pop
     }
     

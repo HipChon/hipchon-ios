@@ -41,7 +41,7 @@ class PlaceReviewCell: UICollectionViewCell {
         layout.minimumInteritemSpacing = itemSpacing
         $0.collectionViewLayout = layout
         $0.backgroundColor = .white
-        $0.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identyfier)
+        $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
@@ -67,7 +67,7 @@ class PlaceReviewCell: UICollectionViewCell {
     }
 
     private lazy var messageButton = UIButton().then {
-        $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "share") ?? UIImage(), for: .normal)
     }
 
     private lazy var messageCountLabel = UILabel().then {
@@ -111,7 +111,8 @@ class PlaceReviewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        bag = DisposeBag()
+        print("CELL REUSE")
+//        bag = DisposeBag()
     }
 
     override func layoutSubviews() {
@@ -141,8 +142,8 @@ class PlaceReviewCell: UICollectionViewCell {
 
         viewModel.reviewImageURLs
             .drive(imageCollectView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ImageCell else { return UICollectionViewCell() }
-                let imageCellVM = ImageCellViewModel(data)
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                let imageCellVM = ImageURLCellViewModel(data)
                 cell.bind(imageCellVM)
                 return cell
             }

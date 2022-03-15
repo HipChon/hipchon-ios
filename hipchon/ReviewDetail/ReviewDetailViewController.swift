@@ -63,18 +63,18 @@ class ReviewDetailViewController: UIViewController {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identyfier)
+        $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
 
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 2.0
+        $0.backgroundColor = .white
     }
 
     private lazy var likeButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal)
-        
+        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal) // Todo
     }
 
     private lazy var likeCountLabel = UILabel().then {
@@ -100,11 +100,18 @@ class ReviewDetailViewController: UIViewController {
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
-
     
-    private lazy var marginView = UIView().then { _ in
+    private lazy var commentTableView = UITableView().then {
+        $0.backgroundColor = .white
+        $0.register(CommentCell.self, forCellReuseIdentifier: CommentCell.identyfier)
+        $0.estimatedRowHeight = 120.0
+//        $0.rowHeight = 200.0
+        $0.showsVerticalScrollIndicator = false
+        $0.separatorStyle = .none
     }
     
+    private lazy var inputCommentView = InputCommentView().then { _ in
+    }
 
     private let bag = DisposeBag()
 
@@ -125,12 +132,21 @@ class ReviewDetailViewController: UIViewController {
     }
 
     func bind(_ viewModel: ReviewDetailViewModel) {
+        
+        // MARK: subViewModels
+        
         viewModel.reviewPlaceVM
             .drive(onNext: {
                 self.reviewPlaceView.bind($0)
             })
             .disposed(by: bag)
+
+        // MARK: view -> viewModel
         
+        likeButton.rx.tap
+            .bind(to: viewModel.likeButtonTapped)
+            .disposed(by: bag)
+ 
         // MARK: viewModel -> view
         
         viewModel.placeName
@@ -156,12 +172,17 @@ class ReviewDetailViewController: UIViewController {
 
         viewModel.reviewImageURLs
             .drive(reviewImageCollectionView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageCell.identyfier,
-                                                        for: IndexPath(row: idx, section: 0)) as? ImageCell else { return UICollectionViewCell() }
-                let viewModel = ImageCellViewModel(data)
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
+                                                        for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                let viewModel = ImageURLCellViewModel(data)
                 cell.bind(viewModel)
                 return cell
             }
+            .disposed(by: bag)
+        
+        viewModel.likeYn
+            .compactMap { $0 ? UIImage(named: "likeY") : UIImage(named: "likeN") }
+            .drive(likeButton.rx.image)
             .disposed(by: bag)
         
         viewModel.likeCount
@@ -178,8 +199,28 @@ class ReviewDetailViewController: UIViewController {
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
         
+        viewModel.commentCellVMs
+            .drive(commentTableView.rx.items) { tv, idx, viewModel in
+                guard let cell = tv.dequeueReusableCell(withIdentifier: CommentCell.identyfier,
+                                                        for: IndexPath(row: idx, section: 0)) as? CommentCell else { return UITableViewCell() }
+                cell.bind(viewModel)
+                return cell
+            }
+            .disposed(by: bag)
+        
+        
+        // MARK: scene
+        
+        viewModel.pushPlaceDetailVC
+            .emit(onNext:{ [weak self] viewModel in
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                self?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
+            .disposed(by: bag)
+ 
         backButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
             })
@@ -188,15 +229,26 @@ class ReviewDetailViewController: UIViewController {
 
     func attribute() {
         view.backgroundColor = .white
+        hideKeyboardWhenTappedAround()
+        addKeyboardNotification()
     }
 
     func layout() {
         // MARK: scroll
-
-        view.addSubview(scrollView)
+        [
+            scrollView,
+            inputCommentView
+        ].forEach {
+            view.addSubview($0)
+        }
 
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        inputCommentView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(102.0)
         }
 
         scrollView.addSubview(contentView)
@@ -221,7 +273,7 @@ class ReviewDetailViewController: UIViewController {
             contentLabel,
             reviewPlaceView,
             boundaryView,
-            marginView
+            commentTableView
         ].forEach {
             contentView.addSubview($0)
         }
@@ -305,11 +357,58 @@ class ReviewDetailViewController: UIViewController {
             $0.height.equalTo(1.0)
         }
         
-        marginView.snp.makeConstraints {
-            $0.height.equalTo(1000.0)
-            $0.top.equalTo(boundaryView.snp.bottom)
+        commentTableView.snp.makeConstraints {
+            $0.top.equalTo(boundaryView.snp.bottom).offset(21.0)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(200.0)
+            $0.height.equalTo(1000.0)
         }
+    }
+}
+
+private extension ReviewDetailViewController {
+
+    // 입력 시 키보드만큼 뷰 이동
+    private func addKeyboardNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            print(keyboardSize.height)
+            inputCommentView.snp.makeConstraints {
+                $0.bottom.equalToSuperview().inset(keyboardSize.height)
+            }
+        }
+    }
+
+    @objc private func keyboardWillHide(_: Notification) {
+        print("@@@@")
+        inputCommentView.snp.makeConstraints {
+            $0.bottom.equalToSuperview().inset(0.0)
+        }
+    }
+
+    // 주변 터치시 키보드 내림
+    private func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

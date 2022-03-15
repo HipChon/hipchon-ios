@@ -12,11 +12,17 @@ class ReviewPlaceViewModel {
     
     private let bag = DisposeBag()
     
+    // MARK: viewModel -> view
+    
     let placeName: Driver<String>
     let address: Driver<String>
     let sector: Driver<String>
     let bookmarkYn: Driver<Bool>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     
+    // MARK: view -> viewModel
+    
+    let insideButtonTapped = PublishRelay<Void>()
     let bookmarkButtonTapped = PublishRelay<Void>()
     
     init(_ data: PlaceModel) {
@@ -83,6 +89,11 @@ class ReviewPlaceViewModel {
                 }
             })
             .disposed(by: bag)
+        
+        pushPlaceDetailVC = insideButtonTapped
+            .withLatestFrom(place)
+            .map { PlaceDetailViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
     }
     
 }

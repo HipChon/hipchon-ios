@@ -8,7 +8,7 @@
 import RxCocoa
 import RxSwift
 
-class HipsterPickCellViewModel {
+class LocalHipsterPickCellViewModel {
     
     private let bag = DisposeBag()
     
@@ -19,29 +19,29 @@ class HipsterPickCellViewModel {
 
     let imageURL: Driver<URL>
     let title: Driver<String>
-    let content: Driver<String>
+    let subTitle: Driver<String>
 
     // MARK: view -> viewModel
 
-    init(_ data: HipsterPickModel) {
-        let hipsterPick = BehaviorSubject<HipsterPickModel>(value: data)
+    init(_ data: LocalHipsterPickModel) {
+        let localHipsterPick = BehaviorSubject<LocalHipsterPickModel>(value: data)
         
-        imageURL = hipsterPick
+        imageURL = localHipsterPick
             .compactMap { $0.imageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
         
-        hipsterPick
+        localHipsterPick
             .compactMap { $0.region }
             .bind(to: regionLabelVM.content)
             .disposed(by: bag)
         
-        title = hipsterPick
+        title = localHipsterPick
             .compactMap { $0.title }
             .asDriver(onErrorJustReturn: "")
         
-        content = hipsterPick
-            .compactMap { $0.content }
+        subTitle = localHipsterPick
+            .compactMap { $0.subTitle }
             .asDriver(onErrorJustReturn: "")
         
     }

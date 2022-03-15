@@ -9,12 +9,11 @@ import Foundation
 
 class HipsterPickModel: Codable {
     let id: Int?
-    let region: String?
     let title: String?
     let content: String?
-    let imageURL: String?
+    let place: PlaceModel?
     
     enum CodingKeys: String, CodingKey {
-        case id, region, title, content, imageURL
+        case id, title, content, place
     }
 }

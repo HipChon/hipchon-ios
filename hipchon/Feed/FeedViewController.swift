@@ -33,9 +33,9 @@ class FeedViewController: UIViewController {
         $0.backgroundColor = .gray02
     }
 
-    private lazy var reviewList = UITableView().then {
+    private lazy var reviewTableView = UITableView().then {
         $0.backgroundColor = .white
-        $0.register(ReviewListCell.self, forCellReuseIdentifier: ReviewListCell.identyfier)
+        $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
         $0.rowHeight = 393.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
@@ -66,24 +66,38 @@ class FeedViewController: UIViewController {
         searchNavigationView.bind(viewModel.searchNavigationVM)
 
         // MARK: view -> viewModel
+        
+        rx.viewWillAppear
+            .map { _ in () }
+            .bind(to: viewModel.viewAppear)
+            .disposed(by: bag)
 
-        reviewList.rx.modelSelected(ReviewModel.self)
+        reviewTableView.rx.itemSelected
+            .map { $0.row }
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.selectedReview)
+            .bind(to: viewModel.selectedReviewIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
 
-        viewModel.reviews
-            .drive(reviewList.rx.items) { tv, idx, data in
-                guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ReviewListCell else { return UITableViewCell() }
-                let reviewListCellModel = ReviewListCellViewModel(data)
-                cell.bind(reviewListCellModel)
-
+        viewModel.reviewCellVMs
+            .drive(reviewTableView.rx.items) { tv, idx, viewModel in
+                guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
+                                                        for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
+                cell.bind(viewModel)
+                
+                viewModel.pushPlaceDetailVC
+                    .emit(onNext: {
+                        let placeDetailVC = PlaceDetailViewController()
+                        placeDetailVC.bind($0)
+                        self.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                    })
+                    .disposed(by: self.bag)
+                
                 return cell
             }
             .disposed(by: bag)
-
+        
         // MARK: scene
 
         viewModel.pushReviewDetailVC
@@ -91,7 +105,7 @@ class FeedViewController: UIViewController {
                 guard let self = self else { return }
                 let reviewDetailVC = ReviewDetailViewController()
                 reviewDetailVC.bind(viewModel)
-                self.navigationController?.pushViewController(reviewDetailVC, animated: true)
+                self.tabBarController?.navigationController?.pushViewController(reviewDetailVC, animated: true)
             })
             .disposed(by: bag)
 
@@ -120,7 +134,7 @@ class FeedViewController: UIViewController {
             reviewLabel,
             sortButton,
             boundaryView,
-            reviewList,
+            reviewTableView,
             uploadButton,
         ].forEach { view.addSubview($0) }
 
@@ -142,7 +156,7 @@ class FeedViewController: UIViewController {
             $0.height.equalTo(1.0)
         }
         
-        reviewList.snp.makeConstraints {
+        reviewTableView.snp.makeConstraints {
             $0.top.equalTo(boundaryView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }

@@ -19,7 +19,7 @@ class MyPlaceViewController: UIViewController {
         $0.font = UIFont.boldSystemFont(ofSize: 24.0)
     }
 
-    private lazy var placeCollectionView = UITableView().then {
+    private lazy var placeTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(MyPlaceCell.self, forCellReuseIdentifier: MyPlaceCell.identyfier)
         $0.rowHeight = 211.0
@@ -47,7 +47,7 @@ class MyPlaceViewController: UIViewController {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
-        placeCollectionView.rx.modelSelected(PlaceModel.self)
+        placeTableView.rx.modelSelected(PlaceModel.self)
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.selectedPlace)
             .disposed(by: bag)
@@ -55,7 +55,7 @@ class MyPlaceViewController: UIViewController {
         // MARK: viewModel -> view
 
         viewModel.places
-            .drive(placeCollectionView.rx.items) { tv, idx, data in
+            .drive(placeTableView.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: MyPlaceCell.identyfier, for: IndexPath(row: idx, section: 0)) as? MyPlaceCell else { return UITableViewCell() }
                 let myPlaceCellViewModel = MyPlaceCellViewModel(data)
                 cell.bind(myPlaceCellViewModel)
@@ -82,7 +82,7 @@ class MyPlaceViewController: UIViewController {
     func layout() {
         [
             titleLabel,
-            placeCollectionView,
+            placeTableView,
         ].forEach { view.addSubview($0) }
 
         titleLabel.snp.makeConstraints {
@@ -91,7 +91,7 @@ class MyPlaceViewController: UIViewController {
             $0.height.equalTo(25.0)
         }
 
-        placeCollectionView.snp.makeConstraints {
+        placeTableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(72.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }

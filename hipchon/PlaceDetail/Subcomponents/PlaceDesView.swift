@@ -27,7 +27,7 @@ class PlaceDesView: UIView {
     }
 
     private lazy var shareButton = UIButton().then {
-        $0.setImage(UIImage(named: "message") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "share") ?? UIImage(), for: .normal)
     }
 
     private lazy var shareLabel = UILabel().then {

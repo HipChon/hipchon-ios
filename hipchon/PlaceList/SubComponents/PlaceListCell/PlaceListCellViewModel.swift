@@ -70,7 +70,6 @@ class PlaceListCellViewModel {
             .bind(to: pageCountVM.currentIdx)
             .disposed(by: bag)
         
-
         place
             .compactMap { $0.hashtags }
             .filter { $0.count >= 1 }

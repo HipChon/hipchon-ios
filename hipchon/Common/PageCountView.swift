@@ -41,7 +41,7 @@ class PageCountView: UIView {
     
     private func attribute() {
         backgroundColor = .black
-//        alpha = 0.9
+//        alpha = 0.5
     }
     
     private func layout() {
