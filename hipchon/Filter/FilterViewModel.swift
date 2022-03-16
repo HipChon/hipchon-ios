@@ -9,6 +9,10 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
+enum FilterSearchType {
+    case search, research
+}
+
 enum SelectedButtonType {
     case plus, minus, non
 }
@@ -29,6 +33,7 @@ class FilterViewModel {
     let setRegion: Driver<FilterCellModel>
     let setCategory: Driver<FilterCellModel>
     let pushPlaceListVC: Signal<PlaceListViewModel>
+    let popToSearchListVC: Signal<SearchFilterModel>
 
     // MARK: view -> viewModel
 
@@ -41,7 +46,7 @@ class FilterViewModel {
     let resetButtonTapped = PublishRelay<Void>()
     let searchButtonTapped = PublishRelay<Void>()
 
-    init() {
+    init(_ befViewType: FilterSearchType) {
         personnels = Driver.just(FilterCellModel.tmpModels)
         regions = Driver.just(FilterCellModel.regionModels)
         categorys = Driver.just(FilterCellModel.categoryModels)
@@ -132,6 +137,7 @@ class FilterViewModel {
         // MARK: 검색
 
         pushPlaceListVC = searchButtonTapped
+            .filter { befViewType == .search }
             .withLatestFrom(Observable.combineLatest(personnel.asObservable(),
                                                      pet.asObservable(),
                                                      region.asObservable(),
@@ -140,6 +146,17 @@ class FilterViewModel {
                                                          SearchFilterModel(personnel: $0, pet: $1, region: $2.name, category: $3.name)
                                                      }))
             .map { PlaceListViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
+
+        popToSearchListVC = searchButtonTapped
+            .filter { befViewType == .research }
+            .withLatestFrom(Observable.combineLatest(personnel.asObservable(),
+                                                     pet.asObservable(),
+                                                     region.asObservable(),
+                                                     category.asObservable(),
+                                                     resultSelector: {
+                                                         SearchFilterModel(personnel: $0, pet: $1, region: $2.name, category: $3.name)
+                                                     }))
             .asSignal(onErrorSignalWith: .empty())
     }
 }

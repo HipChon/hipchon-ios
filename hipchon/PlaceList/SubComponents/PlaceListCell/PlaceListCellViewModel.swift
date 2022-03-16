@@ -13,11 +13,12 @@ class PlaceListCellViewModel {
 
     // MARK: subViewModels
 
-    let firstHashtagVM = HashtagViewModel()
-    let secondHashtagVM = HashtagViewModel()
-    let thirdHashtagVM = HashtagViewModel()
+    let pageCountVM = PageCountViewModel()
+    let firstHashtagVM = RoundLabelViewModel()
+    let secondHashtagVM = RoundLabelViewModel()
+    let thirdHashtagVM = RoundLabelViewModel()
 
-    // MARK: viewModel -> voew
+    // MARK: viewModel -> view
 
     let placeImageURLs: Driver<[URL]>
     let title: Driver<String>
@@ -27,7 +28,10 @@ class PlaceListCellViewModel {
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
 
-    let imageCount: Driver<Int>
+    // MARK: view -> viewModel
+
+    let bookmarkButtonTapped = PublishRelay<Void>()
+    let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -40,10 +44,6 @@ class PlaceListCellViewModel {
         title = place
             .compactMap { $0.placeTitle }
             .asDriver(onErrorJustReturn: "")
-        
-        bookmarkYn = place
-            .compactMap { $0.bookmarkYn }
-            .asDriver(onErrorJustReturn: false)
 
         priceDes = place
             .compactMap { $0.priceDes }
@@ -61,29 +61,81 @@ class PlaceListCellViewModel {
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
 
-        imageCount = place
+        place
             .compactMap { $0.imageURLs?.count }
-            .asDriver(onErrorJustReturn: 0)
+            .bind(to: pageCountVM.entireIdx)
+            .disposed(by: bag)
+
+        currentIdx
+            .map { $0 + 1 }
+            .bind(to: pageCountVM.currentIdx)
+            .disposed(by: bag)
 
         place
             .compactMap { $0.hashtags }
             .filter { $0.count >= 1 }
             .compactMap { $0[0] }
-            .bind(to: firstHashtagVM.hashtag)
+            .bind(to: firstHashtagVM.content)
             .disposed(by: bag)
 
         place
             .compactMap { $0.hashtags }
             .filter { $0.count >= 2 }
             .compactMap { $0[1] }
-            .bind(to: secondHashtagVM.hashtag)
+            .bind(to: secondHashtagVM.content)
             .disposed(by: bag)
 
         place
             .compactMap { $0.hashtags }
             .filter { $0.count >= 3 }
             .compactMap { $0[2] }
-            .bind(to: thirdHashtagVM.hashtag)
+            .bind(to: thirdHashtagVM.content)
+            .disposed(by: bag)
+
+        // MARK: bookmark
+
+        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
+
+        bookmarkYn = bookmarked
+            .asDriver(onErrorJustReturn: false)
+
+        let addBookmark = PublishSubject<Void>()
+        let deleteBookmark = PublishSubject<Void>()
+
+        bookmarkButtonTapped
+            .withLatestFrom(bookmarked)
+            .subscribe(onNext: {
+                switch $0 {
+                case true:
+                    deleteBookmark.onNext(())
+                case false:
+                    addBookmark.onNext(())
+                }
+            })
+            .disposed(by: bag)
+
+        addBookmark
+            .do(onNext: { bookmarked.onNext(true) })
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.addBookmark($0) }
+            .subscribe(onNext: {
+                if $0 == true {
+                    // reload
+                }
+            })
+            .disposed(by: bag)
+
+        deleteBookmark
+            .do(onNext: { bookmarked.onNext(false) })
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .flatMap { NetworkManager.shared.deleteBookmark($0) }
+            .subscribe(onNext: {
+                if $0 == true {
+                    // reload
+                }
+            })
             .disposed(by: bag)
     }
 }

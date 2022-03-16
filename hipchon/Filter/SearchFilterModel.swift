@@ -27,7 +27,8 @@ class SearchFilterModel: Codable {
     var filterTitle: String? {
         var titles: [String] = []
         if let personnel = personnel,
-           personnel != 0 {
+           personnel != 0
+        {
             titles.append("\(personnel)인")
         }
         if let pet = pet,

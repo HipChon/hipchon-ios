@@ -24,7 +24,7 @@ class PlaceListCell: UITableViewCell {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.identyfier)
+        $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
@@ -34,10 +34,10 @@ class PlaceListCell: UITableViewCell {
         $0.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
 
-    private lazy var pageControl = UIPageControl().then { _ in
+    private lazy var bookmarkButton = UIButton().then { _ in
     }
 
-    private lazy var bookmarkButton = UIButton().then { _ in
+    private lazy var pageCountView = PageCountView().then { _ in
     }
 
     private lazy var titleLabel = UILabel().then {
@@ -51,16 +51,22 @@ class PlaceListCell: UITableViewCell {
         $0.textAlignment = .left
     }
 
-    private lazy var firstHashtagView = HashtagView(frame: .zero).then {
+    private lazy var firstHashtagView = RoundLabelView().then {
+        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
+        $0.label.textColor = .black
         $0.backgroundColor = .secondary_yellow
     }
 
-    private lazy var secondHashtagView = HashtagView(frame: .zero).then {
-        $0.backgroundColor = .secondary_yellow
+    private lazy var secondHashtagView = RoundLabelView().then {
+        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
+        $0.label.textColor = .black
+        $0.backgroundColor = .secondary_red
     }
 
-    private lazy var thirdHashtagView = HashtagView(frame: .zero).then {
-        $0.backgroundColor = .secondary_yellow
+    private lazy var thirdHashtagView = RoundLabelView().then {
+        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
+        $0.label.textColor = .black
+        $0.backgroundColor = .secondary_blue
     }
 
     private lazy var bookmarkCountImageView = UIImageView().then {
@@ -109,30 +115,40 @@ class PlaceListCell: UITableViewCell {
     func bind(_ viewModel: PlaceListCellViewModel) {
         // MARK: subViewModels
 
+        pageCountView.bind(viewModel.pageCountVM)
         firstHashtagView.bind(viewModel.firstHashtagVM)
         secondHashtagView.bind(viewModel.secondHashtagVM)
         thirdHashtagView.bind(viewModel.thirdHashtagVM)
+
+        // MARK: view -> viewModel
+
+        bookmarkButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.bookmarkButtonTapped)
+            .disposed(by: bag)
+
+        placeImageCollectView.rx.contentOffset
+            .compactMap { [unowned self] in Int(($0.x + self.contentView.frame.width / 2) / self.contentView.frame.width) }
+            .distinctUntilChanged()
+            .bind(to: viewModel.currentIdx)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
         viewModel.placeImageURLs
             .drive(placeImageCollectView.rx.items) { tv, row, data in
-                guard let cell = tv.dequeueReusableCell(withReuseIdentifier: PhotoCell.identyfier,
-                                                        for: IndexPath(row: row, section: 0)) as? PhotoCell else { return UICollectionViewCell() }
-                let viewModel = PhotoCellViewModel(data)
+                guard let cell = tv.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
+                                                        for: IndexPath(row: row, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
+                let viewModel = ImageURLCellViewModel(data)
                 cell.bind(viewModel)
                 return cell
             }
             .disposed(by: bag)
 
-        viewModel.imageCount
-            .drive(pageControl.rx.numberOfPages)
-            .disposed(by: bag)
-
         viewModel.title
             .drive(titleLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.bookmarkYn
             .compactMap { $0 == true ? UIImage(named: "bookmarkY") ?? UIImage() : UIImage(named: "bookmarkN") ?? UIImage() }
             .drive(bookmarkButton.rx.image)
@@ -166,34 +182,26 @@ class PlaceListCell: UITableViewCell {
     }
 
     private func layout() {
-        
         // MARK: title
-        
+
         let titleSpacingView = UIView()
         titleSpacingView.snp.makeConstraints {
-            $0.width.equalTo(0.0).priority(.low)
+            $0.width.equalTo(frame.width).priority(.low)
         }
-        
+
         let titleStackView = UIStackView(arrangedSubviews: [titleLabel, distanceKmLabel, titleSpacingView])
         titleStackView.axis = .horizontal
         titleStackView.alignment = .fill
         titleStackView.distribution = .fill
         titleStackView.spacing = 9.0
-        
+
         // MARK: hashtag
 
-        [firstHashtagView, secondHashtagView, thirdHashtagView].forEach {
-            $0.snp.makeConstraints {
-                $0.width.equalTo(51.0)
-                $0.height.equalTo(20.0)
-            }
-        }
-        
         let hashtagSpacingView = UIView()
         hashtagSpacingView.snp.makeConstraints {
-            $0.width.equalTo(0.0).priority(.low)
+            $0.width.equalTo(frame.width).priority(.low)
         }
-        
+
         let hashtagStackView = UIStackView(arrangedSubviews: [firstHashtagView, secondHashtagView, thirdHashtagView, hashtagSpacingView])
         hashtagStackView.axis = .horizontal
         hashtagStackView.alignment = .fill
@@ -210,34 +218,35 @@ class PlaceListCell: UITableViewCell {
                 $0.width.height.equalTo(20.0)
             }
         }
-        
+
         let countSpacingView = UIView()
         countSpacingView.snp.makeConstraints {
-            $0.width.equalTo(0.0).priority(.low)
+            $0.width.equalTo(frame.width).priority(.low)
         }
 
         let countStackView = UIStackView(arrangedSubviews: [bookmarkCountImageView, bookmarkCountLabel, reviewCountImageView, reviewCountLabel, countSpacingView, priceDesLabel])
         countStackView.axis = .horizontal
         countStackView.alignment = .fill
-        countStackView.distribution = .fillProportionally
+        countStackView.distribution = .fill
         countStackView.spacing = 12.0
-        
+
         // MARK: entire
-        
+
         let entireSpacingView = UIView()
-        
+
         entireSpacingView.snp.makeConstraints {
-            $0.height.equalTo(0.0).priority(.low)
+            $0.height.equalTo(0.0)
         }
-        
+
         let entireStackView = UIStackView(arrangedSubviews: [titleStackView, hashtagStackView, entireSpacingView, countStackView])
         entireStackView.axis = .vertical
         entireStackView.alignment = .fill
         entireStackView.distribution = .equalSpacing
         entireStackView.spacing = 0.0
-        
+
         [
             placeImageCollectView,
+            pageCountView,
             entireStackView,
             bookmarkButton,
 
@@ -251,6 +260,11 @@ class PlaceListCell: UITableViewCell {
             $0.height.equalTo(height)
         }
 
+        pageCountView.snp.makeConstraints {
+            $0.trailing.equalTo(placeImageCollectView).inset(16.0)
+            $0.bottom.equalTo(placeImageCollectView).inset(16.0)
+        }
+
         bookmarkButton.snp.makeConstraints {
             $0.top.equalTo(placeImageCollectView.snp.top).offset(15.0)
             $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)
@@ -261,64 +275,6 @@ class PlaceListCell: UITableViewCell {
             $0.top.equalTo(placeImageCollectView.snp.bottom).offset(16.0)
             $0.leading.trailing.bottom.equalToSuperview().inset(16.0)
         }
-
-        
-        
-        
-//        [
-//            placeImageCollectView,
-//            pageControl,
-//            bookmarkButton,
-//            titleLabel,
-//            distanceKmLabel,
-//            hashtagStackView,
-//            countStackView,
-//            priceDesLabel,
-//
-//        ].forEach { contentView.addSubview($0) }
-//
-//        placeImageCollectView.snp.makeConstraints {
-//            $0.top.leading.trailing.equalToSuperview()
-//            let width = UIScreen.main.bounds.size.width - 30.0 * 2
-//            let cellHeight = width * ((280.0 + 16.0) / 330.0)
-//            let height = cellHeight * (166.0 / 280.0)
-//            $0.height.equalTo(height)
-//        }
-//
-//        pageControl.snp.makeConstraints {
-//            $0.width.equalTo(40.0)
-//            $0.centerX.equalToSuperview()
-//            $0.bottom.equalToSuperview().offset(40.0)
-//        }
-//
-//        bookmarkButton.snp.makeConstraints {
-//            $0.top.equalTo(placeImageCollectView.snp.top).offset(15.0)
-//            $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)
-//            $0.width.height.equalTo(25.0)
-//        }
-//
-//        titleLabel.snp.makeConstraints {
-//            $0.top.equalTo(placeImageCollectView.snp.bottom).offset(16.0)
-//            $0.leading.equalToSuperview().inset(16.0)
-//        }
-//
-//        distanceKmLabel.snp.makeConstraints {
-//            $0.leading.equalTo(titleLabel.snp.trailing).offset(9.0)
-//            $0.centerY.equalTo(titleLabel)
-//        }
-//
-//        hashtagStackView.snp.makeConstraints {
-//            $0.top.equalTo(titleLabel.snp.bottom).offset(8.0)
-//            $0.leading.equalTo(titleLabel.snp.leading)
-//        }
-//
-//        countStackView.snp.makeConstraints {
-//            $0.bottom.leading.equalToSuperview().inset(16.0)
-//        }
-//
-//        priceDesLabel.snp.makeConstraints {
-//            $0.bottom.trailing.equalToSuperview().inset(16.0)
-//        }
     }
 }
 

@@ -15,20 +15,45 @@ class MyPlaceCell: UITableViewCell {
         $0.layer.masksToBounds = true
     }
 
-    private lazy var nameLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 18.0, weight: .bold)
+    private lazy var placeNameLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
     }
 
-    private lazy var categoryLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+    private lazy var sectorLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
+        $0.textColor = .gray06
     }
 
     private lazy var addressLabel = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
+        $0.textColor = .gray06
+    }
+
+    private lazy var bookmarkImageView = UIImageView().then {
+        $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
+    }
+
+    private lazy var bookmarkCountLabel = UILabel().then {
+        $0.font = .GmarketSans(size: 12.0, type: .medium)
+        $0.textColor = .gray04
+    }
+
+    private lazy var reviewImageView = UIImageView().then {
+        $0.image = UIImage(named: "reviewCount") ?? UIImage()
+    }
+
+    private lazy var reviewCountLabel = UILabel().then {
+        $0.font = .GmarketSans(size: 12.0, type: .medium)
+        $0.textColor = .gray04
+    }
+
+    private lazy var memoButton = UIButton().then {
+        $0.layer.cornerRadius = 2.0
+        $0.backgroundColor = .primary_green
     }
 
     private lazy var boundaryView = UIView().then {
-        $0.backgroundColor = .lightGray
+        $0.backgroundColor = .gray02
     }
 
     public static let identyfier = "ReviewListCell"
@@ -46,20 +71,57 @@ class MyPlaceCell: UITableViewCell {
     }
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
+        
+        // MARK: view -> viewModel
+        
+        memoButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.memoButtonTapped)
+            .disposed(by: bag)
+        
+        // MARK: viewModel -> view
+        
         viewModel.imageURL
             .drive(placeImageView.rx.setImageKF)
             .disposed(by: bag)
 
         viewModel.name
-            .drive(nameLabel.rx.text)
+            .drive(placeNameLabel.rx.text)
             .disposed(by: bag)
 
-        viewModel.category
-            .drive(categoryLabel.rx.text)
+        viewModel.sector
+            .drive(sectorLabel.rx.text)
             .disposed(by: bag)
 
         viewModel.address
             .drive(addressLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.bookmarkCount
+            .map { "\($0)" }
+            .drive(bookmarkCountLabel.rx.text)
+            .disposed(by: bag)
+
+        viewModel.reviewCount
+            .map { "\($0)" }
+            .drive(reviewCountLabel.rx.text)
+            .disposed(by: bag)
+        
+        // MARK: scene
+        
+        viewModel.presentMemoVC
+            .emit(onNext: { viewModel in
+                guard let topVC = UIApplication.topViewController() else { return }
+                let memoVC = MemoViewController()
+                memoVC.bind(viewModel)
+                
+                memoVC.providesPresentationContextTransitionStyle = true
+                memoVC.definesPresentationContext = true
+                memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
+                memoVC.view.backgroundColor = UIColor.init(white: 0.4, alpha: 0.3)
+                
+                topVC.tabBarController?.present(memoVC, animated: true, completion: nil)
+            })
             .disposed(by: bag)
     }
 
@@ -68,35 +130,73 @@ class MyPlaceCell: UITableViewCell {
     }
 
     private func layout() {
+        // MARK: count
+
+        [
+            bookmarkImageView,
+            reviewImageView,
+        ].forEach {
+            $0.snp.makeConstraints {
+                $0.width.height.equalTo(20.0)
+            }
+        }
+
+        let countSpacingView = UIView()
+        countSpacingView.snp.makeConstraints {
+            $0.width.equalTo(frame.width).priority(.low)
+        }
+
+        let countStackView = UIStackView(arrangedSubviews: [bookmarkImageView, bookmarkCountLabel, reviewImageView, reviewCountLabel])
+        countStackView.axis = .horizontal
+        countStackView.alignment = .fill
+        countStackView.distribution = .fill
+        countStackView.spacing = 12.0
+
         [
             placeImageView,
-            nameLabel,
+            placeNameLabel,
+            sectorLabel,
             addressLabel,
-            categoryLabel,
+            countStackView,
+            memoButton,
             boundaryView,
         ].forEach { contentView.addSubview($0) }
 
         placeImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(18.0)
+            $0.top.equalToSuperview().inset(20.0)
             $0.trailing.equalToSuperview().inset(20.0)
-            $0.width.height.equalTo(112.0)
+            $0.width.height.equalTo(120.0)
         }
 
-        nameLabel.snp.makeConstraints {
-            $0.leading.top.equalToSuperview().inset(22.0)
-            $0.height.equalTo(20.0)
-        }
-
-        categoryLabel.snp.makeConstraints {
+        placeNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(22.0)
-            $0.top.equalTo(nameLabel.snp.bottom).offset(31.0)
-            $0.height.equalTo(15.0)
+            $0.trailing.equalTo(placeImageView.snp.leading).offset(-16.0)
+            $0.top.equalToSuperview().inset(20.0)
+            $0.height.equalTo(19.0)
+        }
+
+        sectorLabel.snp.makeConstraints {
+            $0.leading.trailing.equalTo(placeNameLabel)
+            $0.top.equalTo(placeNameLabel.snp.bottom).offset(20.0)
+            $0.height.equalTo(17.0)
         }
 
         addressLabel.snp.makeConstraints {
-            $0.centerY.equalTo(categoryLabel.snp.centerY)
-            $0.leading.equalTo(categoryLabel.snp.trailing).offset(24.0)
-            $0.height.equalTo(15.0)
+            $0.leading.trailing.equalTo(placeNameLabel)
+            $0.top.equalTo(sectorLabel.snp.bottom).offset(8)
+            $0.height.equalTo(17.0)
+        }
+
+        countStackView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(addressLabel.snp.bottom).offset(8.0)
+            $0.height.equalTo(20.0)
+        }
+
+        memoButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(placeImageView.snp.bottom).offset(13.0)
+            $0.height.equalTo(40.0)
         }
 
         boundaryView.snp.makeConstraints {

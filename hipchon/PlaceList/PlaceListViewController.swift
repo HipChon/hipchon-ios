@@ -41,19 +41,18 @@ class PlaceListViewController: UIViewController {
 
         // MARK: view -> viewModel
 
-        placeList.rx.modelSelected(PlaceModel.self)
+        placeList.rx.itemSelected
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.selectedPlace)
+            .map { $0.row }
+            .bind(to: viewModel.selectedIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
 
-        viewModel.places
-            .drive(placeList.rx.items) { tv, idx, data in
+        viewModel.placeListCellVMs
+            .drive(placeList.rx.items) { tv, idx, vm in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: PlaceListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceListCell else { return UITableViewCell() }
-                let placeListCellViewModel = PlaceListCellViewModel(data)
-                cell.bind(placeListCellViewModel)
-
+                cell.bind(vm)
                 return cell
             }
             .disposed(by: bag)
@@ -70,10 +69,11 @@ class PlaceListViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.presentFilterVC
-            .emit(onNext: { [weak self] viewModel in
+            .emit(onNext: { [weak self] filterVM in
                 guard let self = self else { return }
                 let filterVC = FilterViewController()
-                filterVC.bind(viewModel)
+                filterVC.befViewModel = viewModel
+                filterVC.bind(filterVM)
 
                 // MDC 바텀 시트로 설정
                 let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
@@ -84,10 +84,11 @@ class PlaceListViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.presentSortVC
-            .emit(onNext: { [weak self] viewModel in
+            .emit(onNext: { [weak self] sortVM in
                 guard let self = self else { return }
                 let sortVC = SortViewController()
-                sortVC.bind(viewModel)
+                sortVC.befViewModel = viewModel
+                sortVC.bind(sortVM)
 
                 // MDC 바텀 시트로 설정
                 let bottomSheet: MDCBottomSheetController = .init(contentViewController: sortVC)

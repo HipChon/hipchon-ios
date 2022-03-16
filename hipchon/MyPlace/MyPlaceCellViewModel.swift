@@ -15,8 +15,14 @@ class MyPlaceCellViewModel {
 
     let imageURL: Driver<URL>
     let name: Driver<String>
-    let category: Driver<String>
+    let sector: Driver<String>
     let address: Driver<String>
+    let bookmarkCount: Driver<Int>
+    let reviewCount: Driver<Int>
+    let presentMemoVC: Signal<MemoViewModel>
+    
+    // MARK: view -> viewModel
+    let memoButtonTapped = PublishRelay<Void>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -30,12 +36,24 @@ class MyPlaceCellViewModel {
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
 
-        category = place
-            .compactMap { $0.priceDes }
+        sector = place
+            .compactMap { $0.sector }
             .asDriver(onErrorJustReturn: "")
 
         address = place
-            .compactMap { $0.region }
+            .compactMap { $0.address }
             .asDriver(onErrorJustReturn: "")
+
+        bookmarkCount = place
+            .compactMap { $0.bookmarkCount }
+            .asDriver(onErrorJustReturn: 0)
+
+        reviewCount = place
+            .compactMap { $0.reviewCount }
+            .asDriver(onErrorJustReturn: 0)
+        
+        presentMemoVC = memoButtonTapped
+            .map { MemoViewModel() }
+            .asSignal(onErrorSignalWith: .empty())
     }
 }

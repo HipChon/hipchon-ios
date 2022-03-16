@@ -17,13 +17,26 @@ class FeedViewController: UIViewController {
 
     private let bag = DisposeBag()
 
+    private lazy var reviewLabel = UILabel().then {
+        $0.text = "후기"
+        $0.font = .GmarketSans(size: 24.0, type: .medium)
+    }
+
+    private lazy var sortButton = UIButton().then {
+        $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
+    }
+
     private lazy var searchNavigationView = SearchNavigationView().then { _ in
     }
 
-    private lazy var reviewList = UITableView().then {
+    private lazy var boundaryView = UIView().then {
+        $0.backgroundColor = .gray02
+    }
+
+    private lazy var reviewTableView = UITableView().then {
         $0.backgroundColor = .white
-        $0.register(ReviewListCell.self, forCellReuseIdentifier: ReviewListCell.identyfier)
-        $0.rowHeight = 440.0
+        $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
+        $0.rowHeight = 393.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }
@@ -54,18 +67,32 @@ class FeedViewController: UIViewController {
 
         // MARK: view -> viewModel
 
-        reviewList.rx.modelSelected(ReviewModel.self)
+        rx.viewWillAppear
+            .map { _ in () }
+            .bind(to: viewModel.viewAppear)
+            .disposed(by: bag)
+
+        reviewTableView.rx.itemSelected
+            .map { $0.row }
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.selectedReview)
+            .bind(to: viewModel.selectedReviewIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
 
-        viewModel.reviews
-            .drive(reviewList.rx.items) { tv, idx, data in
-                guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? ReviewListCell else { return UITableViewCell() }
-                let reviewListCellModel = ReviewListCellViewModel(data)
-                cell.bind(reviewListCellModel)
+        viewModel.reviewCellVMs
+            .drive(reviewTableView.rx.items) { tv, idx, viewModel in
+                guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
+                                                        for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
+                cell.bind(viewModel)
+
+                viewModel.pushPlaceDetailVC
+                    .emit(onNext: {
+                        let placeDetailVC = PlaceDetailViewController()
+                        placeDetailVC.bind($0)
+                        self.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                    })
+                    .disposed(by: self.bag)
 
                 return cell
             }
@@ -78,7 +105,7 @@ class FeedViewController: UIViewController {
                 guard let self = self else { return }
                 let reviewDetailVC = ReviewDetailViewController()
                 reviewDetailVC.bind(viewModel)
-                self.navigationController?.pushViewController(reviewDetailVC, animated: true)
+                self.tabBarController?.navigationController?.pushViewController(reviewDetailVC, animated: true)
             })
             .disposed(by: bag)
 
@@ -104,19 +131,33 @@ class FeedViewController: UIViewController {
 
     private func layout() {
         [
-            searchNavigationView,
-            reviewList,
+            reviewLabel,
+            sortButton,
+            boundaryView,
+            reviewTableView,
             uploadButton,
         ].forEach { view.addSubview($0) }
 
-        searchNavigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+        reviewLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(18.0)
+            $0.height.equalTo(24.0)
         }
 
-        reviewList.snp.makeConstraints {
-            $0.top.equalTo(searchNavigationView.snp.bottom)
+        sortButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(26.0)
+            $0.centerY.equalTo(reviewLabel)
+            $0.width.height.equalTo(15.0)
+        }
+
+        boundaryView.snp.makeConstraints {
+            $0.top.equalTo(reviewLabel.snp.bottom).offset(30.0)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1.0)
+        }
+
+        reviewTableView.snp.makeConstraints {
+            $0.top.equalTo(boundaryView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }
 

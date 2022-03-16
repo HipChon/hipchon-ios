@@ -9,10 +9,7 @@ import Foundation
 import RxRelay
 
 class HomeSearchViewModel {
-    
     let searchButtonTapped = PublishRelay<Void>()
-    
-    init() {
-        
-    }
+
+    init() {}
 }

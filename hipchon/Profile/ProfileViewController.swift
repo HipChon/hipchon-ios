@@ -14,29 +14,25 @@ import UIKit
 class ProfileViewController: UIViewController {
     // MARK: Property
 
-    private lazy var settingButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "house"), for: .normal)
-    }
-
-    private lazy var backgroundImageView = UIImageView().then {
-        $0.backgroundColor = .gray
-    }
-
-    private lazy var profileImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-        $0.image = UIImage(named: "profile") ?? UIImage()
-        $0.layer.cornerRadius = $0.frame.width / 2
+    private lazy var profileImageButton = UIButton().then {
+        $0.setImage(UIImage(named: "default_profile"), for: .normal)
+        $0.layer.masksToBounds = true
     }
 
     private lazy var nameLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+        $0.font = .AppleSDGothicNeo(size: 20.0, type: .bold)
         $0.text = "김범수"
+    }
+
+    private lazy var settingButton = UIButton().then {
+        $0.setImage(UIImage(named: "setting") ?? UIImage(), for: .normal)
     }
 
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        attribute()
         layout()
     }
 
@@ -46,7 +42,9 @@ class ProfileViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        attribute()
+        super.viewDidLayoutSubviews()
+        navigationController?.isNavigationBarHidden = true
+        profileImageButton.layer.cornerRadius = profileImageButton.frame.width / 2
     }
 
     func bind(_ viewModel: ProfileViewModel) {
@@ -57,6 +55,11 @@ class ProfileViewController: UIViewController {
         settingButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.settingButtonTapped)
+            .disposed(by: bag)
+
+        profileImageButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.profileImageButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -70,36 +73,42 @@ class ProfileViewController: UIViewController {
                 self?.navigationController?.pushViewController(settingVC, animated: true)
             })
             .disposed(by: bag)
+
+        viewModel.pushEditProfileVC
+            .emit(onNext: { [weak self] viewModel in
+                let editProfileVC = EditProfileViewController()
+                editProfileVC.bind(viewModel)
+                self?.navigationController?.pushViewController(editProfileVC, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {
         view.backgroundColor = .white
-        navigationController?.isNavigationBarHidden = true
     }
 
     func layout() {
         [
-            backgroundImageView,
-            settingButton,
-            profileImageView,
+            profileImageButton,
             nameLabel,
+            settingButton,
         ].forEach { view.addSubview($0) }
 
+        profileImageButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.width.height.equalTo(79.0)
+        }
+
+        nameLabel.snp.makeConstraints {
+            $0.centerY.equalTo(profileImageButton)
+            $0.leading.equalTo(profileImageButton.snp.trailing).offset(16.0)
+        }
+
         settingButton.snp.makeConstraints {
-            $0.height.width.equalTo(30.0)
-            $0.top.trailing.equalToSuperview().inset(30)
-        }
-
-        backgroundImageView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(view.snp.width).multipliedBy(186.0 / 390.0)
-        }
-
-        profileImageView.snp.makeConstraints {
-            $0.width.equalTo(view.snp.width).multipliedBy(106.0 / 390.0)
-            $0.height.equalTo(profileImageView.snp.width)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(backgroundImageView.snp.bottom).offset(26.0)
+            $0.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
+            $0.width.height.equalTo(28.0)
         }
     }
 }

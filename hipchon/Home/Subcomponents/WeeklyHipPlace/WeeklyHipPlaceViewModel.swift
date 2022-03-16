@@ -14,14 +14,30 @@ class WeeklyHipPlaceViewModel {
 
     // MARK: viewModel -> view
 
-    let hipPlaces: Driver<[PlaceModel]>
+    let hipPlacesCellVMs: Driver<[HipPlaceCellViewModel]>
 
     // MARK: view -> viewModel
 
+    let selectedIdx = PublishRelay<Int>()
+    let selectedHipPlace = PublishRelay<PlaceModel>()
+
     init() {
-        
-        hipPlaces = HomeNetworkManager.shared.getWeeklyHipPlace()
+        let hipPlaces = BehaviorSubject<[PlaceModel]>(value: [])
+
+        hipPlacesCellVMs = hipPlaces
+            .map { $0.map { HipPlaceCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
+        NetworkManager.shared.getWeeklyHipPlace()
+            .asObservable()
+            .subscribe(onNext: {
+                hipPlaces.onNext($0)
+            })
+            .disposed(by: bag)
+
+        selectedIdx
+            .withLatestFrom(hipPlaces) { $1[$0] }
+            .bind(to: selectedHipPlace)
+            .disposed(by: bag)
     }
 }

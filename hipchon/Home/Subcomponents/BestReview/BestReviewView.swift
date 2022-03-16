@@ -19,7 +19,7 @@ class BestReviewView: UIView {
     }
 
     private lazy var reviewsCollectionView = UICollectionView(frame: .zero,
-                                                            collectionViewLayout: UICollectionViewFlowLayout()).then {
+                                                              collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing = 0.0
         let width = 330.0
@@ -32,7 +32,7 @@ class BestReviewView: UIView {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.identyfier)
+        $0.register(BestReviewCell.self, forCellWithReuseIdentifier: BestReviewCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
@@ -54,9 +54,9 @@ class BestReviewView: UIView {
     func bind(_ viewModel: BestReviewViewModel) {
         viewModel.reviews
             .drive(reviewsCollectionView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: BannerCell.identyfier, for: IndexPath(row: idx, section: 0)) as? BannerCell else { return UICollectionViewCell() }
-                let bannerCellViewModel = BannerCellViewModel(data)
-                cell.bind(bannerCellViewModel)
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: BestReviewCell.identyfier, for: IndexPath(row: idx, section: 0)) as? BestReviewCell else { return UICollectionViewCell() }
+                let bestReviewCellVM = BestReviewCellViewModel(data)
+                cell.bind(bestReviewCellVM)
                 return cell
             }
             .disposed(by: bag)
@@ -83,6 +83,5 @@ class BestReviewView: UIView {
             $0.width.equalTo(330.0)
             $0.height.equalTo(88.0)
         }
-        
     }
 }

@@ -13,31 +13,30 @@ extension UIFont {
     static func GmarketSans(size: CGFloat, type: FontType) -> UIFont {
         var fontName = ""
         switch type {
-            case .medium:
+        case .medium:
             fontName = "GmarketSansTTFMedium"
-            case .bold:
+        case .bold:
             fontName = "GmarketSansTTFBold"
-            default:
+        default:
             fontName = "GmarketSansTTFMedium"
         }
         return UIFont(name: fontName, size: size) ?? UIFont.systemFont(ofSize: size)
     }
-    
+
     static func AppleSDGothicNeo(size: CGFloat, type: FontType) -> UIFont {
         var fontName = ""
         switch type {
-            case .regular:
+        case .regular:
             fontName = "AppleSDGothicNeo-Regular"
-            case .light:
+        case .light:
             fontName = "AppleSDGothicNeo-Light"
-            case .medium:
+        case .medium:
             fontName = "AppleSDGothicNeo-Medium"
-            case .semibold:
+        case .semibold:
             fontName = "AppleSDGothicNeo-SemiBold"
-            case .bold:
+        case .bold:
             fontName = "AppleSDGothicNeo-Bold"
         }
         return UIFont(name: fontName, size: size) ?? UIFont.systemFont(ofSize: size)
     }
 }
-

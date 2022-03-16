@@ -16,11 +16,18 @@ class MyPlaceViewModel {
     // MARK: viewModel -> view
 
     let places: Driver<[PlaceModel]>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
     // MARK: view -> viewModel
+
+    let selectedPlace = PublishRelay<PlaceModel>()
 
     init() {
         places = NetworkManager.shared.getPlaces()
             .asDriver(onErrorJustReturn: [])
+
+        pushPlaceDetailVC = selectedPlace
+            .map { PlaceDetailViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
     }
 }

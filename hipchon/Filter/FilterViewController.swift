@@ -135,6 +135,7 @@ class FilterViewController: UIViewController {
 
     private let bag = DisposeBag()
     var viewHeight = 600.0
+    var befViewModel: PlaceListViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -268,6 +269,15 @@ class FilterViewController: UIViewController {
             })
             .disposed(by: bag)
 
+        viewModel.popToSearchListVC
+            .emit(onNext: { [weak self] filterModel in
+                guard let self = self,
+                      let befViewModel = self.befViewModel else { return }
+                befViewModel.changedSearchFilter.onNext(filterModel)
+                self.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+
         cancleButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
@@ -373,7 +383,7 @@ class FilterViewController: UIViewController {
             $0.top.equalTo(categoryLabel.snp.bottom).offset(19.0)
             $0.height.equalTo(33.0)
         }
-        
+
         resetButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(categoryCollectionView.snp.bottom)

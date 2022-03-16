@@ -8,8 +8,6 @@
 import RxCocoa
 import RxSwift
 import SnapKit
-import Then
-import UIKit
 
 class DefaultViewController: UIViewController {
     // MARK: Property

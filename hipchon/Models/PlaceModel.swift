@@ -5,7 +5,7 @@
 //  Created by 김범수 on 2022/02/08.
 //
 
-import Foundation
+import NMapsMap
 
 class PlaceModel: Codable {
     let id: Int?
@@ -18,6 +18,19 @@ class PlaceModel: Codable {
     let hashtags: [String]?
     let bookmarkCount: Int?
     let reviewCount: Int?
+
+    // detail
+    let sector: String?
+    let businessHours: String?
+    let description: String?
+    let link: String?
+    let geoLat: Double?
+    let geoLon: Double?
+    let address: String?
+    let number: String?
+    let reviews: [ReviewModel]?
+    let keywords: [KeywordModel]?
+    let menus: [MenuModel]?
 
     var placeTitle: String? {
         guard let region = region,
@@ -42,7 +55,17 @@ class PlaceModel: Codable {
         return "\(Int(distance))Km"
     }
 
+    var nmgLatLng: NMGLatLng? {
+        guard let geoLat = geoLat,
+              let geoLon = geoLon
+        else {
+            return nil
+        }
+        return NMGLatLng(lat: geoLat, lng: geoLon)
+    }
+
     enum CodingKeys: String, CodingKey {
         case id, name, region, bookmarkYn, distance, price, imageURLs, hashtags, bookmarkCount, reviewCount
+        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus
     }
 }
