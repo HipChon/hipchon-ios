@@ -16,7 +16,7 @@ class PlaceDetailHeaderViewModel {
     let placeDesVM = PlaceDesViewModel()
     let placeMapVM = PlaceMapViewModel()
     let menuListVM: Signal<MenuListViewModel>
-    let reviewComplimentListVM: Signal<ReviewComplimentListViewModel>
+    let reviewKeywordListVM: Signal<ReviewKeywordListViewModel>
 
     // MARK: viewModel -> view
 
@@ -150,9 +150,9 @@ class PlaceDetailHeaderViewModel {
             .map { MenuListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        reviewComplimentListVM = place
-            .compactMap { $0.compliments }
-            .map { ReviewComplimentListViewModel($0) }
+        reviewKeywordListVM = place
+            .compactMap { $0.keywords }
+            .map { ReviewKeywordListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
         openURL = Observable.merge(

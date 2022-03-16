@@ -71,6 +71,16 @@ class MyPlaceCell: UITableViewCell {
     }
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
+        
+        // MARK: view -> viewModel
+        
+        memoButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.memoButtonTapped)
+            .disposed(by: bag)
+        
+        // MARK: viewModel -> view
+        
         viewModel.imageURL
             .drive(placeImageView.rx.setImageKF)
             .disposed(by: bag)
@@ -95,6 +105,23 @@ class MyPlaceCell: UITableViewCell {
         viewModel.reviewCount
             .map { "\($0)" }
             .drive(reviewCountLabel.rx.text)
+            .disposed(by: bag)
+        
+        // MARK: scene
+        
+        viewModel.presentMemoVC
+            .emit(onNext: { viewModel in
+                guard let topVC = UIApplication.topViewController() else { return }
+                let memoVC = MemoViewController()
+                memoVC.bind(viewModel)
+                
+                memoVC.providesPresentationContextTransitionStyle = true
+                memoVC.definesPresentationContext = true
+                memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
+                memoVC.view.backgroundColor = UIColor.init(white: 0.4, alpha: 0.3)
+                
+                topVC.tabBarController?.present(memoVC, animated: true, completion: nil)
+            })
             .disposed(by: bag)
     }
 

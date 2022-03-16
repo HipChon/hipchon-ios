@@ -5,19 +5,19 @@
 //  Created by 김범수 on 2022/03/12.
 //
 
-import Foundation
 import UIKit
+import RxSwift
 
 class KeywordButton: UIButton {
-    private lazy var logoImageView = UIImageView().then {
-        $0.image = UIImage(named: "setting") ?? UIImage()
+    public lazy var logoImageView = UIImageView().then { _ in
     }
 
-    private lazy var contentLabel = UILabel().then {
+    public lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
-        $0.text = "시설이 깨끗해요"
     }
-
+    
+    private let bag = DisposeBag()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
@@ -30,10 +30,9 @@ class KeywordButton: UIButton {
     }
 
     private func attribute() {
+        backgroundColor = .white
         addShadow(offset: CGSize(width: 2.0, height: 2.0))
         layer.cornerRadius = 5.0
-        layer.masksToBounds = true
-        backgroundColor = .white
     }
 
     private func layout() {

@@ -53,7 +53,7 @@ class PlaceDetailHeaderView: UITableViewHeaderFooterView {
         $0.backgroundColor = .gray_border
     }
 
-    private lazy var reviewComplimentListView = ReviewComplimentListView().then { _ in
+    private lazy var reviewKeywordListView = ReviewKeywordListView().then { _ in
     }
 
     public static let identyfier = "PlaceDetailHeaderView"
@@ -87,9 +87,9 @@ class PlaceDetailHeaderView: UITableViewHeaderFooterView {
             })
             .disposed(by: bag)
 
-        viewModel.reviewComplimentListVM
+        viewModel.reviewKeywordListVM
             .emit(onNext: { [weak self] in
-                self?.reviewComplimentListView.bind($0)
+                self?.reviewKeywordListView.bind($0)
             })
             .disposed(by: bag)
 
@@ -126,7 +126,7 @@ class PlaceDetailHeaderView: UITableViewHeaderFooterView {
             secondBorderView,
             placeMapView,
             thirdBorderView,
-            reviewComplimentListView,
+            reviewKeywordListView,
         ].forEach {
             addSubview($0)
         }
@@ -174,7 +174,7 @@ class PlaceDetailHeaderView: UITableViewHeaderFooterView {
             $0.height.equalTo(8.0)
         }
 
-        reviewComplimentListView.snp.makeConstraints {
+        reviewKeywordListView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(thirdBorderView.snp.bottom)
             $0.height.equalTo(275.0)

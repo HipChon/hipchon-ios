@@ -231,16 +231,13 @@ class PostReviewViewController: UIViewController {
             .drive(placeNameLabel.rx.text)
             .disposed(by: bag)
 
-        let a = Driver.just(["", "", "", "", ""])
-
-        a
-            .drive(keywordListCollectionView.rx.items) { col, idx, _ in
+        viewModel.keywordListCellVMs
+            .drive(keywordListCollectionView.rx.items) { col, idx, viewModel in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: KeywordListCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? KeywordListCell
                 else {
                     return UICollectionViewCell()
                 }
-                let viewModel = KeywordListCellViewModel()
                 cell.bind(viewModel)
                 return cell
             }

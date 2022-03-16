@@ -7,11 +7,11 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 class KeywordListCell: UICollectionViewCell {
     private lazy var titleLabel = UILabel().then {
         $0.font = .GmarketSans(size: 16.0, type: .medium)
-        $0.text = "시설"
     }
 
     private lazy var firstKeywordButton = KeywordButton().then { _ in
@@ -30,7 +30,8 @@ class KeywordListCell: UICollectionViewCell {
     }
 
     public static let identyfier = "KeywordListCell"
-
+    private var bag = DisposeBag()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
@@ -41,10 +42,122 @@ class KeywordListCell: UICollectionViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
+    }
 
-    func bind(_: KeywordListCellViewModel) {}
+    func bind(_ viewModel: KeywordListCellViewModel) {
+        viewModel.title
+            .drive(titleLabel.rx.text)
+            .disposed(by: bag)
+        
+        // first
 
-    private func attribute() {}
+        viewModel.firstKeyword
+            .compactMap { $0.content }
+            .drive(firstKeywordButton.contentLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.firstKeyword
+            .compactMap { $0.iconImage }
+            .drive(firstKeywordButton.logoImageView.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.firstKeywordButtonColor
+            .drive(firstKeywordButton.rx.backgroundColor)
+            .disposed(by: bag)
+        
+        firstKeywordButton.rx.tap
+            .bind(to: viewModel.firstKeywordButtonTapped)
+            .disposed(by: bag)
+        
+        // second
+
+        viewModel.secondKeyword
+            .compactMap { $0.content }
+            .drive(secondKeywordButton.contentLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.secondKeyword
+            .compactMap { $0.iconImage }
+            .drive(secondKeywordButton.logoImageView.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.secondKeywordButtonColor
+            .drive(secondKeywordButton.rx.backgroundColor)
+            .disposed(by: bag)
+        
+        secondKeywordButton.rx.tap
+            .bind(to: viewModel.secondKeywordButtonTapped)
+            .disposed(by: bag)
+        
+        // third
+
+        viewModel.thirdKeyword
+            .compactMap { $0.content }
+            .drive(thirdKeywordButton.contentLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.thirdKeyword
+            .compactMap { $0.iconImage }
+            .drive(thirdKeywordButton.logoImageView.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.thirdKeywordButtonColor
+            .drive(thirdKeywordButton.rx.backgroundColor)
+            .disposed(by: bag)
+        
+        thirdKeywordButton.rx.tap
+            .bind(to: viewModel.thirdKeywordButtonTapped)
+            .disposed(by: bag)
+        
+        // fourth
+
+        viewModel.fourthKeyword
+            .compactMap { $0.content }
+            .drive(fourthKeywordButton.contentLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.fourthKeyword
+            .compactMap { $0.iconImage }
+            .drive(fourthKeywordButton.logoImageView.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.fourthKeywordButtonColor
+            .drive(fourthKeywordButton.rx.backgroundColor)
+            .disposed(by: bag)
+        
+        fourthKeywordButton.rx.tap
+            .bind(to: viewModel.fourthKeywordButtonTapped)
+            .disposed(by: bag)
+        
+        // fifth
+
+        viewModel.fifthKeyword
+            .compactMap { $0.content }
+            .drive(fifthKeywordButton.contentLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.fifthKeyword
+            .compactMap { $0.iconImage }
+            .drive(fifthKeywordButton.logoImageView.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.fifthKeywordButtonColor
+            .drive(fifthKeywordButton.rx.backgroundColor)
+            .disposed(by: bag)
+        
+        fifthKeywordButton.rx.tap
+            .bind(to: viewModel.fifthKeywordButtonTapped)
+            .disposed(by: bag)
+        
+    }
+
+    private func attribute() {
+        backgroundColor = .white
+    }
 
     private func layout() {
         [

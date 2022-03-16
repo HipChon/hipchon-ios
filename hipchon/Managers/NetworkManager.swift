@@ -436,7 +436,7 @@ class NetworkManager {
                     "geoLon": 127.50946893739612,
                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
                     "number": "01073787605",
-                    "compliments": [
+                    "keywords": [
                         {
                             "content": "화장실이 청결해요",
                             "count": 35
@@ -473,7 +473,7 @@ class NetworkManager {
                      "geoLon": 127.50946893739612,
                      "address": "경기 고양시 일산동구 강송로 170 현대프라자",
                      "number": "01073787605",
-                     "compliments": [
+                     "keywords": [
                          {
                              "content": "화장실이 청결해요",
                              "count": 35
@@ -536,7 +536,7 @@ class NetworkManager {
                 "geoLon": 127.50946893739612,
                 "address": "경기 고양시 일산동구 강송로 170 현대프라자",
                 "number": "01073787605",
-                "compliments": [
+                "keywords": [
                     {
                         "content": "화장실이 청결해요",
                         "count": 35

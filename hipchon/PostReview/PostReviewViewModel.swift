@@ -23,6 +23,7 @@ class PostReviewViewModel {
     let photoCellVMs: Driver<[PhotoCellViewModel]>
     let photoCollectionViewHidden: Driver<Bool>
     let pop: Signal<Void>
+    let keywordListCellVMs: Driver<[KeywordListCellViewModel]>
 
     // MARK: view -> viewModel
 
@@ -52,6 +53,10 @@ class PostReviewViewModel {
         photoCollectionViewHidden = selectedPhotos
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: true)
+        
+        keywordListCellVMs = Observable.just(KeywordListModel.model)
+            .map { $0.map { KeywordListCellViewModel($0) } }
+            .asDriver(onErrorJustReturn: [])
 
         pop = navigtionVM.pop
     }
