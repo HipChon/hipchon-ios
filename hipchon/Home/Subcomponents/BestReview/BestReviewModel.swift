@@ -10,9 +10,9 @@ import Foundation
 class BestReviewModel: Codable {
     let id: Int?
     let imageURL: String?
-    let reviewIds: [Int]?
+    let review: ReviewModel?
 
     enum CodingKeys: String, CodingKey {
-        case id, imageURL, reviewIds
+        case id, imageURL, review
     }
 }

@@ -52,6 +52,16 @@ class BestReviewView: UIView {
     }
 
     func bind(_ viewModel: BestReviewViewModel) {
+        
+        // MARK: view -> viewModel
+        
+        reviewsCollectionView.rx.modelSelected(BestReviewModel.self)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.selectedBestReview)
+            .disposed(by: bag)
+        
+        
+        // MARK: viewModel -> view
         viewModel.reviews
             .drive(reviewsCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: BestReviewCell.identyfier, for: IndexPath(row: idx, section: 0)) as? BestReviewCell else { return UICollectionViewCell() }
@@ -59,6 +69,16 @@ class BestReviewView: UIView {
                 cell.bind(bestReviewCellVM)
                 return cell
             }
+            .disposed(by: bag)
+        
+        // MARK: scene
+        viewModel.pushReviewDetailVC
+            .emit(onNext: { viewModel in
+                guard let topVC = UIApplication.topViewController() else { return }
+                let reviewDetailVC = ReviewDetailViewController()
+                reviewDetailVC.bind(viewModel)
+                topVC.tabBarController?.navigationController?.pushViewController(reviewDetailVC, animated: true)
+            })
             .disposed(by: bag)
     }
 
