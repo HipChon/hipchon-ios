@@ -9,6 +9,8 @@ import RxCocoa
 import RxSwift
 
 class HipsterPickDetailCellViewModel {
+    private let bag = DisposeBag()
+    
     // MARK: subViewModels
 
     let reviewPlaceVM: Driver<ReviewPlaceViewModel>
@@ -39,5 +41,6 @@ class HipsterPickDetailCellViewModel {
             .compactMap { $0.place }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
+        
     }
 }

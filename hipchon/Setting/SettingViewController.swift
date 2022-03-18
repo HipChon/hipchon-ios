@@ -13,6 +13,9 @@ import UIKit
 
 class SettingViewController: UIViewController {
     // MARK: Property
+    
+    private lazy var navigationView = NavigationView().then { _ in
+    }
 
     private let bag = DisposeBag()
 
@@ -27,17 +30,32 @@ class SettingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_: SettingViewModel) {
+    func bind(_ viewModel: SettingViewModel) {
         // MARK: subViews Binding
-
+ 
         // MARK: view -> viewModel
 
         // MARK: viewModel -> view
 
         // MARK: scene
+
     }
 
-    func attribute() {}
+    func attribute() {
+        view.backgroundColor = .white
+    }
 
-    func layout() {}
+    func layout() {
+        [
+            navigationView
+        ].forEach {
+            view.addSubview($0)
+        }
+        
+        navigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(68.0)
+        }
+    }
 }

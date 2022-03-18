@@ -22,8 +22,7 @@ class ReviewDetailViewController: UIViewController {
     private lazy var contentView = UIView().then { _ in
     }
 
-    private lazy var backButton = UIButton().then {
-        $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
+    private lazy var navigationView = NavigationView().then { _ in
     }
 
     private lazy var placeNameLabel = UILabel().then {
@@ -174,6 +173,7 @@ class ReviewDetailViewController: UIViewController {
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
                 let viewModel = ImageURLCellViewModel(data)
+                cell.imageView.contentMode = .scaleAspectFill
                 cell.bind(viewModel)
                 return cell
             }
@@ -216,13 +216,6 @@ class ReviewDetailViewController: UIViewController {
                 self?.navigationController?.pushViewController(placeDetailVC, animated: true)
             })
             .disposed(by: bag)
-
-        backButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: bag)
     }
 
     func attribute() {
@@ -235,14 +228,22 @@ class ReviewDetailViewController: UIViewController {
         // MARK: scroll
 
         [
+            navigationView,
             scrollView,
             inputCommentView,
         ].forEach {
             view.addSubview($0)
         }
+        
+        navigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(navigationView.viewHeight)
+        }
 
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.leading.bottom.trailing.equalToSuperview()
+            $0.top.equalTo(navigationView.snp.bottom)
         }
 
         inputCommentView.snp.makeConstraints {
@@ -258,7 +259,6 @@ class ReviewDetailViewController: UIViewController {
         }
 
         [
-            backButton,
             placeNameLabel,
             profileImageView,
             userNameLabel,
@@ -277,14 +277,8 @@ class ReviewDetailViewController: UIViewController {
             contentView.addSubview($0)
         }
 
-        backButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(26.0)
-            $0.top.equalTo(26.0)
-            $0.width.height.equalTo(28.0)
-        }
-
         placeNameLabel.snp.makeConstraints {
-            $0.top.equalTo(backButton.snp.bottom).offset(20.0)
+            $0.top.equalToSuperview().inset(7.0)
             $0.leading.equalToSuperview().inset(20.0)
         }
 

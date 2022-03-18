@@ -8,10 +8,11 @@
 import RxCocoa
 import RxSwift
 import SnapKit
-import Then
 import UIKit
+import Tabman
+import Pageboy
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: TabmanViewController {
     // MARK: Property
 
     private lazy var profileImageButton = UIButton().then {
@@ -27,13 +28,52 @@ class ProfileViewController: UIViewController {
     private lazy var settingButton = UIButton().then {
         $0.setImage(UIImage(named: "setting") ?? UIImage(), for: .normal)
     }
+    
+    private lazy var topBarPositionView = UIView().then { _ in
+    }
+    
+    private lazy var borderView = UIView().then {
+        $0.backgroundColor = .gray_border
+    }
+    
+    private lazy var topBar = TMBar.ButtonBar().then { bar in
+        bar.backgroundView.style = .blur(style: .regular)
+        bar.layout.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        bar.buttons.customize { (button) in
+            button.tintColor = .gray03
+            button.selectedTintColor = .black
+            button.selectedFont = .GmarketSans(size: 16.0, type: .medium)
+        }
+        // 인디케이터 조정
+        bar.indicator.weight = .medium
+        bar.indicator.tintColor = .black
+        bar.indicator.overscrollBehavior = .compress
+        bar.layout.alignment = .centerDistributed
+        bar.layout.contentMode = .fit
+        bar.layout.interButtonSpacing = 0
+        bar.backgroundColor = .white
+    
+        bar.layout.transitionStyle = .progressive
+    }
+    
+    private lazy var viewControllers: [UIViewController] = {
+        let entirePlaceVC = SectorPlaceViewController()
+        entirePlaceVC.bind(SectorPlaceViewModel(.entire))
+        let cafePlaceVC = SectorPlaceViewController()
+        cafePlaceVC.bind(SectorPlaceViewModel(.cafe))
+        let foodPlaceVC = SectorPlaceViewController()
+        foodPlaceVC.bind(SectorPlaceViewModel(.food))
+        return [entirePlaceVC, cafePlaceVC, foodPlaceVC]
+    }()
 
+    
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
         layout()
+        setTopBar()
     }
 
     @available(*, unavailable)
@@ -62,10 +102,13 @@ class ProfileViewController: UIViewController {
             .bind(to: viewModel.profileImageButtonTapped)
             .disposed(by: bag)
 
+        // MARK: view -> viewModel
+
+ 
         // MARK: viewModel -> view
 
         // MARK: scene
-
+        
         viewModel.pushSettingVC
             .emit(onNext: { [weak self] viewModel in
                 let settingVC = SettingViewController()
@@ -92,6 +135,8 @@ class ProfileViewController: UIViewController {
             profileImageButton,
             nameLabel,
             settingButton,
+            topBarPositionView,
+            borderView
         ].forEach { view.addSubview($0) }
 
         profileImageButton.snp.makeConstraints {
@@ -110,5 +155,54 @@ class ProfileViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
             $0.width.height.equalTo(28.0)
         }
+        
+        topBarPositionView.snp.makeConstraints {
+            $0.top.equalTo(profileImageButton.snp.bottom).offset(21.0)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50.0)
+        }
+        
+        borderView.snp.makeConstraints {
+            $0.leading.bottom.trailing.equalTo(topBarPositionView)
+            $0.height.equalTo(1.0)
+        }
+        
+    }
+    
+    private func setTopBar() {
+        self.dataSource = self
+        addBar(topBar, dataSource: self, at: .custom(view: topBarPositionView, layout: nil))
     }
 }
+
+extension ProfileViewController: PageboyViewControllerDataSource, TMBarDataSource {
+
+    func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
+        return viewControllers.count
+    }
+
+    func viewController(for pageboyViewController: PageboyViewController,
+                        at index: PageboyViewController.PageIndex) -> UIViewController? {
+        return viewControllers[index]
+    }
+
+    func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {
+        return .at(index: 0)
+    }
+
+    func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
+        var title = ""
+        switch index {
+        case 0:
+            title = "내가 심은 모"
+        case 1:
+            title = "좋아요 한 모"
+        case 2:
+            title = "내가 쓴 댓글"
+        default:
+            title = ""
+        }
+        return TMBarItem(title: title)
+    }
+}
+

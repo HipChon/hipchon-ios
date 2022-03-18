@@ -10,8 +10,7 @@ import RxSwift
 import UIKit
 
 class ImageURLCell: UICollectionViewCell {
-    private lazy var imageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+    public lazy var imageView = UIImageView().then { _ in
     }
 
     public static let identyfier = "ImageURLCell"

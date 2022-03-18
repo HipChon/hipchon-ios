@@ -132,6 +132,10 @@ class FilterViewController: UIViewController {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
     }
+    
+    private lazy var marginSearchButton = UIButton().then {
+        $0.backgroundColor = .black
+    }
 
     private let bag = DisposeBag()
     var viewHeight = 600.0
@@ -179,7 +183,10 @@ class FilterViewController: UIViewController {
             .bind(to: viewModel.resetButtonTapped)
             .disposed(by: bag)
 
-        searchButton.rx.tap
+        Observable.merge(
+            searchButton.rx.tap.map { _ in () },
+            marginSearchButton.rx.tap.map { _ in () }
+            )
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.searchButtonTapped)
             .disposed(by: bag)
@@ -328,6 +335,7 @@ class FilterViewController: UIViewController {
             categoryCollectionView,
             resetButton,
             searchButton,
+            marginSearchButton,
         ].forEach {
             view.addSubview($0)
         }
@@ -394,6 +402,12 @@ class FilterViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(resetButton.snp.bottom)
             $0.height.equalTo(54.0)
+        }
+        
+        marginSearchButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(searchButton.snp.bottom)
+            $0.bottom.equalToSuperview()
         }
     }
 }

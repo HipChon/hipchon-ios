@@ -97,11 +97,7 @@ class PlaceListViewController: UIViewController {
                 self.present(bottomSheet, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        viewModel.pop
-            .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: bag)
+
     }
 
     private func attribute() {

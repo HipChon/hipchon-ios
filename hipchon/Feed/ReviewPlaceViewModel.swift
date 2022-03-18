@@ -18,11 +18,13 @@ class ReviewPlaceViewModel {
     let sector: Driver<String>
     let bookmarkYn: Driver<Bool>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let share: Signal<Void>
 
     // MARK: view -> viewModel
 
     let insideButtonTapped = PublishRelay<Void>()
     let bookmarkButtonTapped = PublishRelay<Void>()
+    let shareButtonTapped = PublishRelay<Void>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -38,6 +40,9 @@ class ReviewPlaceViewModel {
         sector = place
             .compactMap { $0.sector }
             .asDriver(onErrorJustReturn: "")
+        
+        share = shareButtonTapped // TODO
+            .asSignal()
 
         // MARK: bookmark
 

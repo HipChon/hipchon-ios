@@ -65,6 +65,7 @@ class HipsterPickDetailCell: UITableViewCell {
             .disposed(by: bag)
 
         // MARK: view -> viewModel
+        
 
         // MARK: viewModel -> view
 

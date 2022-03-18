@@ -15,8 +15,7 @@ import YPImagePicker
 class EditProfileViewController: UIViewController {
     // MARK: Property
 
-    private lazy var backButton = UIButton().then {
-        $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
+    private lazy var navigationView = NavigationView().then { _ in
     }
 
     private lazy var setNickNameLabel = UILabel().then {
@@ -71,7 +70,7 @@ class EditProfileViewController: UIViewController {
         profileImageButton.layer.cornerRadius = profileImageButton.frame.width / 2
     }
 
-    func bind(_: EditProfileViewModel) {
+    func bind(_ viewModel: EditProfileViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
@@ -126,14 +125,6 @@ class EditProfileViewController: UIViewController {
 
         // MARK: viewModel -> view
 
-        // MARK: scene
-
-        backButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: bag)
     }
 
     func attribute() {
@@ -143,7 +134,7 @@ class EditProfileViewController: UIViewController {
 
     func layout() {
         [
-            backButton,
+            navigationView,
             setNickNameLabel,
             profileImageButton,
             nickNameTextField,
@@ -154,14 +145,15 @@ class EditProfileViewController: UIViewController {
             view.addSubview($0)
         }
 
-        backButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(26.0)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(13.0)
-            $0.width.height.equalTo(28.0)
+        navigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         setNickNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(navigationView.snp.bottom).offset(45.0)
             $0.bottom.equalTo(profileImageButton.snp.top).offset(-55.0)
         }
 

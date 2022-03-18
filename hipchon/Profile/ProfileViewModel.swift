@@ -24,6 +24,8 @@ class ProfileViewModel {
     let profileImageButtonTapped = PublishRelay<Void>()
 
     init() {
+
+
         pushSettingVC = settingButtonTapped
             .map { SettingViewModel() }
             .asSignal(onErrorSignalWith: .empty())

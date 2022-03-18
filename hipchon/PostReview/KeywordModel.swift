@@ -23,7 +23,7 @@ struct KeywordModel: Codable {
     var iconImage: UIImage? {
         switch self.content {
         default:
-            return UIImage(named: "setting")
+            return UIImage(named: "tmp")
         }
     }
     

@@ -1,5 +1,5 @@
 //
-//  MyPlaceViewController.swift
+//  SectorPlaceViewController.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/08.
@@ -11,13 +11,8 @@ import SnapKit
 import Then
 import UIKit
 
-class MyPlaceViewController: UIViewController {
+class SectorPlaceViewController: UIViewController {
     // MARK: Property
-
-    private lazy var titleLabel = UILabel().then {
-        $0.text = "저장"
-        $0.font = UIFont.boldSystemFont(ofSize: 24.0)
-    }
 
     private lazy var placeTableView = UITableView().then {
         $0.backgroundColor = .white
@@ -43,7 +38,7 @@ class MyPlaceViewController: UIViewController {
         attribute()
     }
 
-    func bind(_ viewModel: MyPlaceViewModel) {
+    func bind(_ viewModel: SectorPlaceViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
@@ -82,18 +77,11 @@ class MyPlaceViewController: UIViewController {
 
     func layout() {
         [
-            titleLabel,
             placeTableView,
         ].forEach { view.addSubview($0) }
 
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(17.0)
-            $0.leading.equalToSuperview().inset(35.0)
-            $0.height.equalTo(25.0)
-        }
-
         placeTableView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(72.0)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(121.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }

@@ -40,8 +40,6 @@ class HipsterPickDetailViewController: UIViewController {
     func bind(_ viewModel: HipsterPickDetailViewModel) {
         // MARK: subViewModels
 
-        navigationView.bind(viewModel.navigationVM)
-
         // MARK: view -> viewModel
 
         rx.viewWillAppear
@@ -64,13 +62,6 @@ class HipsterPickDetailViewController: UIViewController {
             }
             .disposed(by: bag)
 
-        // MARK: scene
-
-        viewModel.pop
-            .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -89,7 +80,7 @@ class HipsterPickDetailViewController: UIViewController {
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         titleLabel.snp.makeConstraints {

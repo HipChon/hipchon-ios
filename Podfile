@@ -23,6 +23,6 @@ target 'hipchon' do
   pod 'MaterialComponents/BottomSheet'
   #pod 'SideMenu'
   pod 'NMapsMap'
-
+  pod 'Tabman', '~> 2.12'
   pod 'YPImagePicker'
 end

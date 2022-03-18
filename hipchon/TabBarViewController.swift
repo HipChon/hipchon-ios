@@ -10,7 +10,6 @@ import UIKit
 class TabBarViewController: UITabBarController {
     let homeViewModel = HomeViewModel()
     let feedViewModel = FeedViewModel()
-    let myPlaceViewModel = MyPlaceViewModel()
     let profileViewModel = ProfileViewModel()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -28,12 +27,11 @@ class TabBarViewController: UITabBarController {
                                                      selectedImage: UIImage(named: "feed_fill") ?? UIImage())
         feedViewController.bind(feedViewModel)
 
-        let myPlaceViewController = MyPlaceViewController()
-        myPlaceViewController.tabBarItem = UITabBarItem(title: "저장",
+        let storagePlaceViewController = StoragePlaceViewController()
+        storagePlaceViewController.tabBarItem = UITabBarItem(title: "저장",
                                                         image: UIImage(named: "bookmark") ?? UIImage(),
                                                         selectedImage: UIImage(named: "bookmark_fill") ?? UIImage())
-        myPlaceViewController.bind(myPlaceViewModel)
-
+        
         let profileViewController = ProfileViewController()
         profileViewController.tabBarItem = UITabBarItem(title: "프로필",
                                                         image: UIImage(named: "profile") ?? UIImage(),
@@ -43,7 +41,7 @@ class TabBarViewController: UITabBarController {
         [
             homeViewController,
             feedViewController,
-            myPlaceViewController,
+            storagePlaceViewController,
             profileViewController,
         ].forEach {
             $0.tabBarItem.imageInsets = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
@@ -64,7 +62,7 @@ class TabBarViewController: UITabBarController {
         viewControllers = [
             UINavigationController(rootViewController: homeViewController),
             UINavigationController(rootViewController: feedViewController),
-            UINavigationController(rootViewController: myPlaceViewController),
+            UINavigationController(rootViewController: storagePlaceViewController),
             UINavigationController(rootViewController: profileViewController),
         ]
     }

@@ -12,9 +12,13 @@ class NavigationView: UIView {
     private lazy var backButton = UIButton().then {
         $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
     }
+    
+    private let bag = DisposeBag()
+    public let viewHeight = 68.0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        bind()
         attribute()
         layout()
     }
@@ -23,13 +27,14 @@ class NavigationView: UIView {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    private let bag = DisposeBag()
-
-    func bind(_ viewModel: NavigationViewModel) {
+    func bind() {
         backButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.backButtonTapped)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .asSignal(onErrorJustReturn: ())
+            .emit(onNext: {
+                guard let topVC = UIApplication.topViewController() else { return }
+                topVC.navigationController?.popViewController(animated: true)
+            })
             .disposed(by: bag)
     }
 

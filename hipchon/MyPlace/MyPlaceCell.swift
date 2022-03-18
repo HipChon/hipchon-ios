@@ -31,6 +31,7 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var bookmarkImageView = UIImageView().then {
         $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
+        $0.contentMode = .center
     }
 
     private lazy var bookmarkCountLabel = UILabel().then {
@@ -40,6 +41,7 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var reviewImageView = UIImageView().then {
         $0.image = UIImage(named: "reviewCount") ?? UIImage()
+        $0.contentMode = .center
     }
 
     private lazy var reviewCountLabel = UILabel().then {
@@ -133,31 +135,14 @@ class MyPlaceCell: UITableViewCell {
         // MARK: count
 
         [
-            bookmarkImageView,
-            reviewImageView,
-        ].forEach {
-            $0.snp.makeConstraints {
-                $0.width.height.equalTo(20.0)
-            }
-        }
-
-        let countSpacingView = UIView()
-        countSpacingView.snp.makeConstraints {
-            $0.width.equalTo(frame.width).priority(.low)
-        }
-
-        let countStackView = UIStackView(arrangedSubviews: [bookmarkImageView, bookmarkCountLabel, reviewImageView, reviewCountLabel])
-        countStackView.axis = .horizontal
-        countStackView.alignment = .fill
-        countStackView.distribution = .fill
-        countStackView.spacing = 12.0
-
-        [
             placeImageView,
             placeNameLabel,
             sectorLabel,
             addressLabel,
-            countStackView,
+            bookmarkImageView,
+            bookmarkCountLabel,
+            reviewImageView,
+            reviewCountLabel,
             memoButton,
             boundaryView,
         ].forEach { contentView.addSubview($0) }
@@ -187,10 +172,26 @@ class MyPlaceCell: UITableViewCell {
             $0.height.equalTo(17.0)
         }
 
-        countStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(20.0)
-            $0.top.equalTo(addressLabel.snp.bottom).offset(8.0)
-            $0.height.equalTo(20.0)
+        bookmarkImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(23.0)
+            $0.top.equalTo(addressLabel.snp.bottom).offset(12.0)
+            $0.width.height.equalTo(20.0)
+        }
+        
+        bookmarkCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(bookmarkImageView.snp.trailing).offset(12.0)
+            $0.centerY.equalTo(bookmarkImageView)
+        }
+        
+        reviewImageView.snp.makeConstraints {
+            $0.leading.equalTo(bookmarkCountLabel.snp.trailing).offset(12.0)
+            $0.centerY.equalTo(bookmarkImageView)
+            $0.width.height.equalTo(20.0)
+        }
+        
+        reviewCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(reviewImageView.snp.trailing).offset(12.0)
+            $0.centerY.equalTo(bookmarkImageView)
         }
 
         memoButton.snp.makeConstraints {

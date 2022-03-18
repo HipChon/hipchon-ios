@@ -66,6 +66,11 @@ class ReviewPlaceView: UIView {
         bookmarkButton.rx.tap
             .bind(to: viewModel.bookmarkButtonTapped)
             .disposed(by: bag)
+        
+        shareButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.shareButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -81,6 +86,27 @@ class ReviewPlaceView: UIView {
         viewModel.bookmarkYn
             .compactMap { $0 ? UIImage(named: "bookmarkY") : UIImage(named: "bookmarkN") }
             .drive(bookmarkButton.rx.image)
+            .disposed(by: bag)
+        
+        // MARK: scene
+        
+        viewModel.share
+            .emit(onNext: {
+                guard let topVC = UIApplication.topViewController() else { return }
+                let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                                                          applicationActivities: nil)
+                activityVC.popoverPresentationController?.sourceView = topVC.view
+                topVC.present(activityVC, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+        
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { viewModel in
+                guard let topVC = UIApplication.topViewController() else { return }
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                topVC.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
             .disposed(by: bag)
     }
 
@@ -103,7 +129,7 @@ class ReviewPlaceView: UIView {
             shareButton,
         ].forEach {
             $0.snp.makeConstraints {
-                $0.height.width.equalTo(24.0)
+                $0.height.width.equalTo(22.0)
             }
         }
 

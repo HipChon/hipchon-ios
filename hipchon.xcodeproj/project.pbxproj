@@ -10,8 +10,8 @@
 		3A7D358079476DF3ECF3F75A /* Pods_hipchon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D95E75F856206A0F1A096E8 /* Pods_hipchon.framework */; };
 		D8091FF727B28034000F057E /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FF627B28034000F057E /* FeedViewController.swift */; };
 		D8091FF927B2803E000F057E /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FF827B2803E000F057E /* FeedViewModel.swift */; };
-		D8091FFC27B28095000F057E /* MyPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFB27B28095000F057E /* MyPlaceViewController.swift */; };
-		D8091FFE27B280A1000F057E /* MyPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFD27B280A1000F057E /* MyPlaceViewModel.swift */; };
+		D8091FFC27B28095000F057E /* SectorPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFB27B28095000F057E /* SectorPlaceViewController.swift */; };
+		D8091FFE27B280A1000F057E /* SectorPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */; };
 		D809200127B28332000F057E /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809200027B28332000F057E /* PlaceDetailViewController.swift */; };
 		D809200327B28368000F057E /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809200227B28368000F057E /* PlaceDetailViewModel.swift */; };
 		D809200627B286FF000F057E /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809200527B286FF000F057E /* PlaceModel.swift */; };
@@ -22,6 +22,7 @@
 		D809201227B28C46000F057E /* ReviewDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809201127B28C46000F057E /* ReviewDetailViewModel.swift */; };
 		D80967B927BA83310015E7EF /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80967B827BA83310015E7EF /* UserModel.swift */; };
 		D80967BC27BA847E0015E7EF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80967BB27BA847E0015E7EF /* NetworkManager.swift */; };
+		D811612927E3898500E6A0A4 /* StoragePlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D811612827E3898500E6A0A4 /* StoragePlaceViewController.swift */; };
 		D813C34527D7822C00193384 /* PlaceDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34427D7822C00193384 /* PlaceDetailHeaderView.swift */; };
 		D813C34727D7823F00193384 /* PlaceDetailHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34627D7823F00193384 /* PlaceDetailHeaderViewModel.swift */; };
 		D813C34927D78B9E00193384 /* PlaceReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34827D78B9E00193384 /* PlaceReviewCell.swift */; };
@@ -74,7 +75,6 @@
 		D840813B27C545D300FA9D1B /* FilterCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840813A27C545D300FA9D1B /* FilterCellModel.swift */; };
 		D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86D27A6C224005B8C25 /* UIView+.swift */; };
 		D841C87027A6C554005B8C25 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D841C86F27A6C552005B8C25 /* CategoryCell.swift */; };
-		D84A3F7E27D7C3E900B1EBF7 /* ComplimentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84A3F7D27D7C3E900B1EBF7 /* ComplimentModel.swift */; };
 		D84B351B27CB9A6900BF1A63 /* SortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84B351A27CB9A6900BF1A63 /* SortViewController.swift */; };
 		D84B351D27CB9BC200BF1A63 /* SortViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84B351C27CB9BC200BF1A63 /* SortViewModel.swift */; };
 		D84B352127CBA8FE00BF1A63 /* BestReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84B352027CBA8FE00BF1A63 /* BestReviewView.swift */; };
@@ -114,7 +114,6 @@
 		D890250E27DA353B0099FACA /* ReviewPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890250D27DA353B0099FACA /* ReviewPlaceView.swift */; };
 		D890251027DA35450099FACA /* ReviewPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890250F27DA35450099FACA /* ReviewPlaceViewModel.swift */; };
 		D890251227DA55AE0099FACA /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890251127DA55AE0099FACA /* NavigationView.swift */; };
-		D890251427DA56440099FACA /* NavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890251327DA56440099FACA /* NavigationViewModel.swift */; };
 		D890251927DA58480099FACA /* PostReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890251827DA58480099FACA /* PostReviewViewController.swift */; };
 		D890251B27DA584C0099FACA /* PostReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890251A27DA584C0099FACA /* PostReviewViewModel.swift */; };
 		D89E8B7727DDC0F300090C5B /* RxTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B7627DDC0F300090C5B /* RxTextView.swift */; };
@@ -156,8 +155,8 @@
 		7E0ABCC1241B3D083244BD37 /* Pods-hipchon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hipchon.debug.xcconfig"; path = "Target Support Files/Pods-hipchon/Pods-hipchon.debug.xcconfig"; sourceTree = "<group>"; };
 		D8091FF627B28034000F057E /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		D8091FF827B2803E000F057E /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
-		D8091FFB27B28095000F057E /* MyPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaceViewController.swift; sourceTree = "<group>"; };
-		D8091FFD27B280A1000F057E /* MyPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlaceViewModel.swift; sourceTree = "<group>"; };
+		D8091FFB27B28095000F057E /* SectorPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorPlaceViewController.swift; sourceTree = "<group>"; };
+		D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorPlaceViewModel.swift; sourceTree = "<group>"; };
 		D809200027B28332000F057E /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		D809200227B28368000F057E /* PlaceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewModel.swift; sourceTree = "<group>"; };
 		D809200527B286FF000F057E /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
@@ -168,6 +167,7 @@
 		D809201127B28C46000F057E /* ReviewDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDetailViewModel.swift; sourceTree = "<group>"; };
 		D80967B827BA83310015E7EF /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		D80967BB27BA847E0015E7EF /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		D811612827E3898500E6A0A4 /* StoragePlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePlaceViewController.swift; sourceTree = "<group>"; };
 		D813C34427D7822C00193384 /* PlaceDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailHeaderView.swift; sourceTree = "<group>"; };
 		D813C34627D7823F00193384 /* PlaceDetailHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailHeaderViewModel.swift; sourceTree = "<group>"; };
 		D813C34827D78B9E00193384 /* PlaceReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewCell.swift; sourceTree = "<group>"; };
@@ -220,7 +220,6 @@
 		D840813A27C545D300FA9D1B /* FilterCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCellModel.swift; sourceTree = "<group>"; };
 		D841C86D27A6C224005B8C25 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		D841C86F27A6C552005B8C25 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
-		D84A3F7D27D7C3E900B1EBF7 /* ComplimentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplimentModel.swift; sourceTree = "<group>"; };
 		D84B351A27CB9A6900BF1A63 /* SortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortViewController.swift; sourceTree = "<group>"; };
 		D84B351C27CB9BC200BF1A63 /* SortViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortViewModel.swift; sourceTree = "<group>"; };
 		D84B352027CBA8FE00BF1A63 /* BestReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewView.swift; sourceTree = "<group>"; };
@@ -262,7 +261,6 @@
 		D890250D27DA353B0099FACA /* ReviewPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPlaceView.swift; sourceTree = "<group>"; };
 		D890250F27DA35450099FACA /* ReviewPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPlaceViewModel.swift; sourceTree = "<group>"; };
 		D890251127DA55AE0099FACA /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
-		D890251327DA56440099FACA /* NavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewModel.swift; sourceTree = "<group>"; };
 		D890251827DA58480099FACA /* PostReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReviewViewController.swift; sourceTree = "<group>"; };
 		D890251A27DA584C0099FACA /* PostReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReviewViewModel.swift; sourceTree = "<group>"; };
 		D89E8B7627DDC0F300090C5B /* RxTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxTextView.swift; sourceTree = "<group>"; };
@@ -354,8 +352,9 @@
 		D8091FFF27B280BD000F057E /* MyPlace */ = {
 			isa = PBXGroup;
 			children = (
-				D8091FFB27B28095000F057E /* MyPlaceViewController.swift */,
-				D8091FFD27B280A1000F057E /* MyPlaceViewModel.swift */,
+				D811612827E3898500E6A0A4 /* StoragePlaceViewController.swift */,
+				D8091FFB27B28095000F057E /* SectorPlaceViewController.swift */,
+				D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */,
 				D871F4B727BD23F800CCDE4D /* MyPlaceCell.swift */,
 				D871F4B927BD240100CCDE4D /* MyPlaceCellViewModel.swift */,
 				D8B86CCA27E24261004EBFD9 /* MemoViewController.swift */,
@@ -385,7 +384,6 @@
 				D809200527B286FF000F057E /* PlaceModel.swift */,
 				D809200827B2872D000F057E /* ReviewModel.swift */,
 				D80967B827BA83310015E7EF /* UserModel.swift */,
-				D84A3F7D27D7C3E900B1EBF7 /* ComplimentModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -605,15 +603,14 @@
 				D8EBA6B927D65B9F00305CB5 /* Common */,
 				D841C86C27A6B613005B8C25 /* Home */,
 				D871E0DC27DF726F00072522 /* HipsterPickDetail */,
-				D8091FFF27B280BD000F057E /* MyPlace */,
 				D8091FFA27B28071000F057E /* Feed */,
+				D8091FFF27B280BD000F057E /* MyPlace */,
 				D809200E27B28C2C000F057E /* ReviewDetail */,
 				D8091FF527B28003000F057E /* Profile */,
 				D89E8B7827DDC3E000090C5B /* EditProfile */,
 				D8237DE027B921A900238387 /* Setting */,
 				D83E539127AA6D010047A05C /* PlaceList */,
 				D809200427B28381000F057E /* PlaceDetail */,
-				D8E019DC27C0D49600A167CA /* Filter */,
 				D83C67B427DA58CD00AEAB8F /* PostReview */,
 			);
 			path = hipchon;
@@ -742,9 +739,9 @@
 				D8EBA6BF27D6612500305CB5 /* PageCountView.swift */,
 				D8EBA6C127D6612E00305CB5 /* PageCountViewModel.swift */,
 				D890251127DA55AE0099FACA /* NavigationView.swift */,
-				D890251327DA56440099FACA /* NavigationViewModel.swift */,
 				D8237DEB27B9361800238387 /* ImageURLCell.swift */,
 				D8237DED27B9362800238387 /* ImageURLCellViewModel.swift */,
+				D8E019DC27C0D49600A167CA /* Filter */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -876,7 +873,7 @@
 				D890251227DA55AE0099FACA /* NavigationView.swift in Sources */,
 				D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */,
 				D83304E227AC1A43008E7DB7 /* ProfileViewModel.swift in Sources */,
-				D8091FFE27B280A1000F057E /* MyPlaceViewModel.swift in Sources */,
+				D8091FFE27B280A1000F057E /* SectorPlaceViewModel.swift in Sources */,
 				D84B352127CBA8FE00BF1A63 /* BestReviewView.swift in Sources */,
 				D80967BC27BA847E0015E7EF /* NetworkManager.swift in Sources */,
 				D8A3031227C9E6750013E71A /* SearchFilterModel.swift in Sources */,
@@ -910,7 +907,6 @@
 				D83304E527AC1AAA008E7DB7 /* DefaultViewController.swift in Sources */,
 				D871F4AA27BD111900CCDE4D /* LocalHipsterPickCellViewModel.swift in Sources */,
 				D8EBA6C227D6612E00305CB5 /* PageCountViewModel.swift in Sources */,
-				D890251427DA56440099FACA /* NavigationViewModel.swift in Sources */,
 				D8237DE227B9245A00238387 /* BannerCell.swift in Sources */,
 				D82A28DB27DC9FBB00E7C898 /* KeywordListCellViewModel.swift in Sources */,
 				D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */,
@@ -949,10 +945,11 @@
 				D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */,
 				D890251027DA35450099FACA /* ReviewPlaceViewModel.swift in Sources */,
 				D88FAF8127A67D6F00E41F4F /* LoginViewController.swift in Sources */,
-				D8091FFC27B28095000F057E /* MyPlaceViewController.swift in Sources */,
+				D8091FFC27B28095000F057E /* SectorPlaceViewController.swift in Sources */,
 				D813C34927D78B9E00193384 /* PlaceReviewCell.swift in Sources */,
 				D83257DC27CFBF2F00129E50 /* PlaceMapView.swift in Sources */,
 				D871E0DE27DF736500072522 /* HipsterPickDetailCell.swift in Sources */,
+				D811612927E3898500E6A0A4 /* StoragePlaceViewController.swift in Sources */,
 				D8237DDD27B920C400238387 /* SettingViewModel.swift in Sources */,
 				D840779427DE0B8A0029C17E /* CommentModel.swift in Sources */,
 				D84B351D27CB9BC200BF1A63 /* SortViewModel.swift in Sources */,
@@ -980,7 +977,6 @@
 				D840779627DE0F100029C17E /* CommectCell.swift in Sources */,
 				D86CC50F27D343EB004B74EA /* ReviewKeywordListViewModel.swift in Sources */,
 				D840779827DE0F160029C17E /* CommentCellViewModel.swift in Sources */,
-				D84A3F7E27D7C3E900B1EBF7 /* ComplimentModel.swift in Sources */,
 				D8237DEC27B9361800238387 /* ImageURLCell.swift in Sources */,
 				D84B351B27CB9A6900BF1A63 /* SortViewController.swift in Sources */,
 				D83257D027CF9FFE00129E50 /* BestReviewCellViewModel.swift in Sources */,

@@ -39,21 +39,21 @@ class NetworkManager {
                     "region": "제주",
                     "title": "제주의 맛맛맛",
                     "subTitle": "제주 해녀의 부억 5곳 외",
-                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc9622447-fb9f-4b6e-80d7-dd56cbe3caf5%2Fimage_29.png?table=block&id=eda48d8f-f246-4e1c-86b4-6bd14dac7f88&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                 },
                 {
                     "id": 1,
                     "region": "제주",
                     "title": "제주의 맛맛맛",
                     "subTitle": "제주 해녀의 부억 5곳 외",
-                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc9622447-fb9f-4b6e-80d7-dd56cbe3caf5%2Fimage_29.png?table=block&id=eda48d8f-f246-4e1c-86b4-6bd14dac7f88&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                 },
                 {
                     "id": 1,
                     "region": "제주",
                     "title": "제주의 맛맛맛",
                     "subTitle": "제주 해녀의 부억 5곳 외",
-                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    "imageURL": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc9622447-fb9f-4b6e-80d7-dd56cbe3caf5%2Fimage_29.png?table=block&id=eda48d8f-f246-4e1c-86b4-6bd14dac7f88&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                 }
             ]
             """
@@ -92,19 +92,19 @@ class NetworkManager {
                         "distance": 50.4,
                         "price": 100000.0,
                         "imageURLs": [
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                      "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc9622447-fb9f-4b6e-80d7-dd56cbe3caf5%2Fimage_29.png?table=block&id=eda48d8f-f246-4e1c-86b4-6bd14dac7f88&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc9622447-fb9f-4b6e-80d7-dd56cbe3caf5%2Fimage_29.png?table=block&id=eda48d8f-f246-4e1c-86b4-6bd14dac7f88&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc9622447-fb9f-4b6e-80d7-dd56cbe3caf5%2Fimage_29.png?table=block&id=eda48d8f-f246-4e1c-86b4-6bd14dac7f88&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                         ]
                     }
                 },
                 {
                     "id": 1,
-                    "title": "첫번째. 해녀의 부엌",
-                    "content": "공연과 이야기, 식사가 있는 국내 최초 <제주 해녀 다이닝> '해녀 이야기'는 90세 최고령 해녀, 권영희 할머니를 비롯하여 40년 넘게 물질해 온 해녀들을 직접 만나는 공연입니다. 해녀의 삶을 담은 연극 공연과 직접 잡아온 해산물로 만든 식사가 제공됩니다.",
+                    "title": "두번째. 말고기 연구소",
+                    "content": "제주바다 보며 가볍게 즐기는 말고기. 제주에서만 맛볼 수 있는 말고기를 누구나 부담없이 맛있게 먹을 수 있도록 메뉴를 개발하고 연구합니다. 국내 최초 말고기 100%로 만든 독일식 수제 말고기 소시지부터 입안에서 사르르 녹아내리는 말고기 초밥을 판매하고 있습니다.",
                     "place": {
                         "id": 1,
-                        "name": "해녀의 부억",
+                        "name": "말고기 연구소",
                         "region": "제주도",
                         "address": "제주특별자치도 서귀포시",
                         "sector": "음식점",
@@ -112,29 +112,9 @@ class NetworkManager {
                         "distance": 50.4,
                         "price": 100000.0,
                         "imageURLs": [
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                        ]
-                    }
-                },
-                {
-                    "id": 1,
-                    "title": "첫번째. 해녀의 부엌",
-                    "content": "공연과 이야기, 식사가 있는 국내 최초 <제주 해녀 다이닝> '해녀 이야기'는 90세 최고령 해녀, 권영희 할머니를 비롯하여 40년 넘게 물질해 온 해녀들을 직접 만나는 공연입니다. 해녀의 삶을 담은 연극 공연과 직접 잡아온 해산물로 만든 식사가 제공됩니다.",
-                    "place": {
-                        "id": 1,
-                        "name": "해녀의 부억",
-                        "region": "제주도",
-                        "address": "제주특별자치도 서귀포시",
-                        "sector": "음식점",
-                        "bookmarkYn": true,
-                        "distance": 50.4,
-                        "price": 100000.0,
-                        "imageURLs": [
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcd80fd32-d1cd-4788-b805-b4a0e6f8d93d%2FUntitled.png?table=block&id=174817c5-00c5-43cc-be70-4473d98a7fa5&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=1380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                      "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb02f5c02-0567-48a3-859c-2de39c5d28f7%2F%E1%84%86%E1%85%A1%E1%86%AF%E1%84%80%E1%85%A9%E1%84%80%E1%85%B5%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%80%E1%85%AE%E1%84%89%E1%85%A91.png?table=block&id=1bb1be64-fb50-4f3b-99c6-1a155a11dab9&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                      "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb02f5c02-0567-48a3-859c-2de39c5d28f7%2F%E1%84%86%E1%85%A1%E1%86%AF%E1%84%80%E1%85%A9%E1%84%80%E1%85%B5%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%80%E1%85%AE%E1%84%89%E1%85%A91.png?table=block&id=1bb1be64-fb50-4f3b-99c6-1a155a11dab9&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                      "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb02f5c02-0567-48a3-859c-2de39c5d28f7%2F%E1%84%86%E1%85%A1%E1%86%AF%E1%84%80%E1%85%A9%E1%84%80%E1%85%B5%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%80%E1%85%AE%E1%84%89%E1%85%A91.png?table=block&id=1bb1be64-fb50-4f3b-99c6-1a155a11dab9&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                         ]
                     }
                 },
@@ -324,7 +304,7 @@ class NetworkManager {
                     "content": "탁 트인 뷰를 보면서 간만에 힐링했습니다.",
                     "postDt": "2022-01-01-24-00-00",
                     "imageURLs": [
-            "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+            "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     ],
                     "user": {
                         "id": 1,
@@ -348,7 +328,7 @@ class NetworkManager {
                     "content": "탁 트인 뷰를 보면서 간만에 힐링했습니다.",
                     "postDt": "2022-01-01-24-00-00",
                     "imageURLs": [
-            "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+            "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     ],
                     "user": {
                         "id": 1,
@@ -372,7 +352,7 @@ class NetworkManager {
                     "content": "탁 트인 뷰를 보면서 간만에 힐링했습니다.",
                     "postDt": "2022-01-01-24-00-00",
                     "imageURLs": [
-            "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+            "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     ],
                     "user": {
                         "id": 1,
@@ -422,13 +402,14 @@ class NetworkManager {
                     "distance": 50.4,
                     "price": 100000.0,
                     "imageURLs": [
-                    "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95",
-                    "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
                     "hashtags": ["3인가능", "반려동물", "핫플"],
                     "bookmarkCount": 32,
                     "reviewCount": 12,
-                    "sector": "카페/식당",
+                    "sector": "카페",
                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
                     "link": "http://www.naver.com",
@@ -458,14 +439,91 @@ class NetworkManager {
                      "bookmarkYn": true,
                      "distance": 50.4,
                      "price": 100000.0,
-                     "imageURLs": [
-                     "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95",
-                     "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                     ],
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
                      "hashtags": ["3인가능", "반려동물", "핫플"],
                      "bookmarkCount": 32,
                      "reviewCount": 12,
-                     "sector": "카페/식당",
+                     "sector": "식당",
+                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                     "link": "http://www.naver.com",
+                     "geoLat": 37.27455854791513,
+                     "geoLon": 127.50946893739612,
+                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                     "number": "01073787605",
+                     "keywords": [
+                         {
+                             "content": "화장실이 청결해요",
+                             "count": 35
+                         },
+                         {
+                             "content": "단체모임 하기 좋아요",
+                             "count": 31
+                         },
+                         {
+                             "content": "여자/남자친구가 좋아해요",
+                             "count": 28
+                         }
+                     ]
+                 },
+                 {
+                     "id": 1,
+                     "name": "옹심이네",
+                     "region": "서울",
+                     "bookmarkYn": true,
+                     "distance": 50.4,
+                     "price": 100000.0,
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
+                     "hashtags": ["3인가능", "반려동물", "핫플"],
+                     "bookmarkCount": 32,
+                     "reviewCount": 12,
+                     "sector": "활동",
+                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                     "link": "http://www.naver.com",
+                     "geoLat": 37.27455854791513,
+                     "geoLon": 127.50946893739612,
+                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                     "number": "01073787605",
+                     "keywords": [
+                         {
+                             "content": "화장실이 청결해요",
+                             "count": 35
+                         },
+                         {
+                             "content": "단체모임 하기 좋아요",
+                             "count": 31
+                         },
+                         {
+                             "content": "여자/남자친구가 좋아해요",
+                             "count": 28
+                         }
+                     ]
+                 },
+                 {
+                     "id": 1,
+                     "name": "옹심이네",
+                     "region": "서울",
+                     "bookmarkYn": true,
+                     "distance": 50.4,
+                     "price": 100000.0,
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
+                     "hashtags": ["3인가능", "반려동물", "핫플"],
+                     "bookmarkCount": 32,
+                     "reviewCount": 12,
+                     "sector": "자연",
                      "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
                      "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
                      "link": "http://www.naver.com",
@@ -522,8 +580,9 @@ class NetworkManager {
                 "distance": 50.4,
                 "price": 100000.0,
                 "imageURLs": [
-                "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F1?alt=media&token=b73a9623-b2be-4e2f-87bc-6b0f7b4a6a95",
-                "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F2?alt=media&token=dd211d8a-de72-4802-80b8-83237994318a", "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                 ],
                 "hashtags": ["3인가능", "반려동물", "핫플"],
                 "bookmarkCount": 32,

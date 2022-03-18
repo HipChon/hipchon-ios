@@ -149,7 +149,6 @@ class PostReviewViewController: UIViewController {
     private let bag = DisposeBag()
 
     func bind(_ viewModel: PostReviewViewModel) {
-        navigationView.bind(viewModel.navigtionVM)
 
         // MARK: view -> viewModel
 
@@ -271,11 +270,6 @@ class PostReviewViewController: UIViewController {
 
         // MARK: scene
 
-        viewModel.pop
-            .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -295,7 +289,7 @@ class PostReviewViewController: UIViewController {
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         scrollView.snp.makeConstraints {

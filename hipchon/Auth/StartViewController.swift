@@ -65,9 +65,12 @@ class StartViewController: UIViewController {
 
         viewModel.pushLoginVC
             .emit(onNext: { [weak self] viewModel in
-                let loginVC = LoginViewController()
-                loginVC.bind(viewModel)
-                self?.navigationController?.pushViewController(loginVC, animated: true)
+//                let loginVC = LoginViewController()
+//                loginVC.bind(viewModel)
+//                self?.navigationController?.pushViewController(loginVC, animated: true)
+                
+                let tapBarViewController = TabBarViewController()
+                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
             })
             .disposed(by: bag)
     }

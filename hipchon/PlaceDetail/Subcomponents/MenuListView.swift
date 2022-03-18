@@ -24,7 +24,7 @@ class MenuListView: UIView {
                                                            collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 11.0
-        let width = 170.0
+        let width = ((UIApplication.shared.windows.first?.frame.width ?? 0.0) - 2 * 22.0 - itemSpacing) / 2
         let height = 170.0
 
         layout.itemSize = CGSize(width: width, height: height)

@@ -13,8 +13,6 @@ class PostReviewViewModel {
 
     // MARK: subViewModels
 
-    let navigtionVM = NavigationViewModel()
-
     // MARK: viewModel -> view
 
     let placeImageURL: Driver<URL>
@@ -22,7 +20,6 @@ class PostReviewViewModel {
     let contentCount: Driver<Int>
     let photoCellVMs: Driver<[PhotoCellViewModel]>
     let photoCollectionViewHidden: Driver<Bool>
-    let pop: Signal<Void>
     let keywordListCellVMs: Driver<[KeywordListCellViewModel]>
 
     // MARK: view -> viewModel
@@ -58,6 +55,5 @@ class PostReviewViewModel {
             .map { $0.map { KeywordListCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
-        pop = navigtionVM.pop
     }
 }

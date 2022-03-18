@@ -32,6 +32,7 @@ PODS:
     - MaterialComponents/private/Math
     - MaterialComponents/ShadowLayer
   - NMapsMap (3.14.1)
+  - Pageboy (3.6.2)
   - PryntTrimmerView (4.0.2)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
@@ -48,6 +49,8 @@ PODS:
     - RxSwift (~> 6.0)
   - SnapKit (5.0.1)
   - SteviaLayout (4.7.3)
+  - Tabman (2.12.0):
+    - Pageboy (~> 3.6.0)
   - Then (2.7.0)
   - YPImagePicker (5.2.1):
     - PryntTrimmerView (= 4.0.2)
@@ -63,6 +66,7 @@ DEPENDENCIES:
   - RxSwift
   - RxViewController
   - SnapKit
+  - Tabman (~> 2.12)
   - Then
   - YPImagePicker
 
@@ -73,6 +77,7 @@ SPEC REPOS:
     - Kingfisher
     - MaterialComponents
     - NMapsMap
+    - Pageboy
     - PryntTrimmerView
     - RxCocoa
     - RxDataSources
@@ -81,6 +86,7 @@ SPEC REPOS:
     - RxViewController
     - SnapKit
     - SteviaLayout
+    - Tabman
     - Then
     - YPImagePicker
 
@@ -90,6 +96,7 @@ SPEC CHECKSUMS:
   Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   NMapsMap: 79bae4e0d7cc5214dd6dabdb95687a1356616556
+  Pageboy: cf121b9dd48c63f3f281b2a9ec93d02e0f23879b
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
@@ -98,9 +105,10 @@ SPEC CHECKSUMS:
   RxViewController: 56486fa0afd629a1d6b5ba077f3b8cd9dc31b5d2
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SteviaLayout: c2ecdcff57d44e38fd2f65e54ad52aeae28ca0c4
+  Tabman: 447a50447ed2869c39ab3b1a779327e43e067c4e
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
   YPImagePicker: f36043210c10b0783034eb1947d6e06e31c461e4
 
-PODFILE CHECKSUM: a0c9445845e4fe86c40e6dead753690e68f86880
+PODFILE CHECKSUM: b866c4c0259d79eb0b35eb7c603035730ecab2da
 
 COCOAPODS: 1.11.2

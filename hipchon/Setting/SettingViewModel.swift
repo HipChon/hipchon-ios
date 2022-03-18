@@ -15,7 +15,6 @@ class SettingViewModel {
 
     // MARK: viewModel -> view
 
-    // MARK: view -> viewModel
-
-    init() {}
+    init() {
+    }
 }

@@ -14,7 +14,6 @@ class SearchNavigationViewModel {
 
     // MARK: viewModel -> view
 
-    let pop: Signal<Void>
     let setSearchFilterTitle: Driver<String>
 
     // MARK: view -> viewModel
@@ -28,7 +27,5 @@ class SearchNavigationViewModel {
         setSearchFilterTitle = searchFilterTitle
             .asDriver(onErrorJustReturn: "")
 
-        pop = backButtonTapped
-            .asSignal()
     }
 }

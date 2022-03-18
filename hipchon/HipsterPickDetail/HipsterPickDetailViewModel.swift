@@ -14,13 +14,10 @@ class HipsterPickDetailViewModel {
 
     // MARK: subViewModels
 
-    let navigationVM = NavigationViewModel()
-
     // MARK: viewModel -> view
 
     let title: Driver<String>
     let hipsterPickDetailCellVMs: Driver<[HipsterPickDetailCellViewModel]>
-    let pop: Signal<Void>
 
     // MARK: view -> viewModel
 
@@ -42,6 +39,5 @@ class HipsterPickDetailViewModel {
             .bind(to: hipsterPicks)
 //            .disposed(by: bag)
 
-        pop = navigationVM.pop
     }
 }

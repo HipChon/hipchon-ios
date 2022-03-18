@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SortViewController.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/27.
@@ -49,6 +49,10 @@ class SortViewController: UIViewController {
         $0.setTitleColor(.white, for: .normal)
         $0.backgroundColor = .black
     }
+    
+    private lazy var marginSearchButton = UIButton().then {
+        $0.backgroundColor = .black
+    }
 
     private let bag = DisposeBag()
     var befViewModel: PlaceListViewModel?
@@ -80,7 +84,11 @@ class SortViewController: UIViewController {
             .bind(to: viewModel.sortType)
             .disposed(by: bag)
 
-        searchButton.rx.tap
+ 
+        Observable.merge(
+            searchButton.rx.tap.map { _ in () },
+            marginSearchButton.rx.tap.map { _ in () }
+        )
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(viewModel.sortType)
             .subscribe(onNext: { [weak self] in
@@ -122,6 +130,7 @@ class SortViewController: UIViewController {
 
         [
             buttonStackView,
+            marginSearchButton,
             reviewCheckImageView,
             bookmarkCheckImageView,
             distanceCheckImageView,
@@ -132,6 +141,12 @@ class SortViewController: UIViewController {
         buttonStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalToSuperview().inset(24.0)
+        }
+        
+        marginSearchButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(buttonStackView.snp.bottom)
+            $0.bottom.equalToSuperview()
         }
 
         reviewCheckImageView.snp.makeConstraints {

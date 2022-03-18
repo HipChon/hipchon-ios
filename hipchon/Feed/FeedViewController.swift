@@ -85,15 +85,6 @@ class FeedViewController: UIViewController {
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
                 cell.bind(viewModel)
-
-                viewModel.pushPlaceDetailVC
-                    .emit(onNext: {
-                        let placeDetailVC = PlaceDetailViewController()
-                        placeDetailVC.bind($0)
-                        self.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
-                    })
-                    .disposed(by: self.bag)
-
                 return cell
             }
             .disposed(by: bag)

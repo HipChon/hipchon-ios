@@ -8,7 +8,15 @@
 import RxCocoa
 import RxSwift
 
-class MyPlaceViewModel {
+enum SectorType: String {
+    case entire = "전체"
+    case cafe = "카페"
+    case food = "미식"
+    case activity = "활동"
+    case natural = "자연"
+}
+
+class SectorPlaceViewModel {
     private let bag = DisposeBag()
 
     // MARK: subViewModels
@@ -22,8 +30,8 @@ class MyPlaceViewModel {
 
     let selectedPlace = PublishRelay<PlaceModel>()
 
-    init() {
-        places = NetworkManager.shared.getPlaces()
+    init(_ data: SectorType) {
+        places = NetworkManager.shared.getPlaces() // TODO: sectorType
             .asDriver(onErrorJustReturn: [])
 
         pushPlaceDetailVC = selectedPlace

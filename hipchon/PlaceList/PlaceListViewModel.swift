@@ -22,7 +22,6 @@ class PlaceListViewModel {
     let searchFilterTitle: Driver<String>
     let presentFilterVC: Signal<FilterViewModel>
     let presentSortVC: Signal<SortViewModel>
-    let pop: Signal<Void>
 
     // MARK: view -> viewModel
 
@@ -73,6 +72,5 @@ class PlaceListViewModel {
             .map { SortViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        pop = searchNavigationVM.pop
     }
 }
