@@ -15,6 +15,7 @@ class ProfileViewModel {
 
     // MARK: viewModel -> view
 
+    let profileImageURL: Driver<URL>
     let pushSettingVC: Signal<SettingViewModel>
     let pushEditProfileVC: Signal<EditProfileViewModel>
 
@@ -25,6 +26,10 @@ class ProfileViewModel {
 
     init() {
 
+        profileImageURL = UserModel.currentUser
+            .compactMap { $0.profileImageURL }
+            .compactMap { URL(string: $0) }
+            .asDriver(onErrorDriveWith: .empty())
 
         pushSettingVC = settingButtonTapped
             .map { SettingViewModel() }

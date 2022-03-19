@@ -113,7 +113,7 @@ class EditProfileViewController: UIViewController {
 
                 picker.didFinishPicking { [unowned picker] items, _ in
                     if let photo = items.singlePhoto {
-                        self.profileImageButton.setImage(photo.image, for: .normal)
+                        viewModel.changedImage.onNext(photo.image)
                     }
                     picker.dismiss(animated: true, completion: nil)
                 }
@@ -124,6 +124,14 @@ class EditProfileViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
+        
+        viewModel.profileImageURL
+            .drive(profileImageButton.rx.setImageKF)
+            .disposed(by: bag)
+        
+        viewModel.setChangedImage
+            .emit(to: profileImageButton.rx.image)
+            .disposed(by: bag)
 
     }
 

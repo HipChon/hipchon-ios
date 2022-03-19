@@ -371,7 +371,9 @@ private extension ReviewDetailViewController {
     @objc private func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             print(keyboardSize.height)
-            inputCommentView.snp.makeConstraints {
+            inputCommentView.snp.remakeConstraints {
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(102.0)
                 $0.bottom.equalToSuperview().inset(keyboardSize.height)
             }
         }
@@ -379,8 +381,10 @@ private extension ReviewDetailViewController {
 
     @objc private func keyboardWillHide(_: Notification) {
         print("@@@@")
-        inputCommentView.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(0.0)
+        inputCommentView.snp.remakeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(102.0)
+            $0.bottom.equalToSuperview()
         }
     }
 

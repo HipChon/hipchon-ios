@@ -106,6 +106,10 @@ class ProfileViewController: TabmanViewController {
 
  
         // MARK: viewModel -> view
+        
+        viewModel.profileImageURL
+            .drive(profileImageButton.rx.setImageKF)
+            .disposed(by: bag)
 
         // MARK: scene
         

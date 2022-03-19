@@ -50,6 +50,9 @@ class InputCommentView: UIView {
     }
 
     func bind(_ viewModel: InputCommentViewModel) {
+        
+        // MARK: view -> viewModel
+        
         contentTextField.rx.text.orEmpty
             .bind(to: viewModel.content)
             .disposed(by: bag)
@@ -57,6 +60,12 @@ class InputCommentView: UIView {
         registerButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.registerButtonTapped)
+            .disposed(by: bag)
+        
+        // MARK: viewModel -> view
+        
+        viewModel.profileImageURL
+            .drive(profileImageView.rx.setImageKF)
             .disposed(by: bag)
     }
 

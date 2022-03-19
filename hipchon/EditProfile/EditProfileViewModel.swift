@@ -14,8 +14,20 @@ class EditProfileViewModel {
     // MARK: subViewModels
 
     // MARK: viewModel -> view
+    
+    let profileImageURL: Driver<URL>
+    let setChangedImage: Signal<UIImage>
 
     // MARK: view -> viewModel
+    let changedImage = PublishSubject<UIImage>()
 
-    init() {}
+    init() {
+        profileImageURL = UserModel.currentUser
+            .compactMap { $0.profileImageURL }
+            .compactMap { URL(string: $0) }
+            .asDriver(onErrorDriveWith: .empty())
+        
+        setChangedImage = changedImage
+            .asSignal(onErrorSignalWith: .empty())
+    }
 }

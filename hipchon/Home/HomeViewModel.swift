@@ -37,6 +37,14 @@ class HomeViewModel {
     let bannerCurrentIdx = BehaviorRelay<Int>(value: 1)
 
     init() {
+        
+        // TODO: User
+        NetworkManager.shared.getUser()
+            .subscribe(onSuccess: {
+                UserModel.currentUser.onNext($0)
+            })
+            .disposed(by: bag)
+        
         cateogorys = Driver.just(CategoryModel.tmpModels)
 
         pushPlaceListVC = selectedCategory

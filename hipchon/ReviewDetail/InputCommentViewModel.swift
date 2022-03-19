@@ -6,10 +6,25 @@
 //
 
 import RxRelay
+import RxCocoa
 
 class InputCommentViewModel {
+    
+    // MARK: viewModel -> view
+    
+    let profileImageURL: Driver<URL>
+    
+    
+    // MARK: view -> viewModel
+    
     let content = PublishRelay<String>()
     let registerButtonTapped = PublishRelay<Void>()
 
-    init() {}
+    init() {
+        
+        profileImageURL = UserModel.currentUser
+            .compactMap { $0.profileImageURL }
+            .compactMap { URL(string: $0) }
+            .asDriver(onErrorDriveWith: .empty())
+    }
 }
