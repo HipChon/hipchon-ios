@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.5.0)
+  - AnyFormatKit (2.5.2)
   - Differentiator (5.0.0)
   - Kingfisher (7.2.0)
   - MaterialComponents/Availability (124.2.0)
@@ -58,6 +59,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - AnyFormatKit
   - Kingfisher
   - MaterialComponents/BottomSheet
   - NMapsMap
@@ -73,6 +75,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - AnyFormatKit
     - Differentiator
     - Kingfisher
     - MaterialComponents
@@ -92,6 +95,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  AnyFormatKit: b0dbb2a5f2fe7a0fc97f401f8a219a47ee63a335
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
@@ -109,6 +113,6 @@ SPEC CHECKSUMS:
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
   YPImagePicker: f36043210c10b0783034eb1947d6e06e31c461e4
 
-PODFILE CHECKSUM: b866c4c0259d79eb0b35eb7c603035730ecab2da
+PODFILE CHECKSUM: 1ca49234e734a85a3318db6ee190fc0ddd050909
 
 COCOAPODS: 1.11.2

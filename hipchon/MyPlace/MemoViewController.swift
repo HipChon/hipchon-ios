@@ -19,6 +19,7 @@ class MemoViewController: UIViewController {
     }
     
     private lazy var contentTextView = UITextView().then {
+        $0.delegate = self
         $0.backgroundColor = .gray01
         $0.isEditable = true
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
@@ -193,5 +194,16 @@ class MemoViewController: UIViewController {
             $0.bottom.equalToSuperview().inset(21.0)
         }
         
+    }
+}
+
+// MARK: TextField Delegate
+
+extension MemoViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let text = textView.text else {
+            return false
+        }
+        return text.count <= 30
     }
 }

@@ -16,6 +16,7 @@ class InputCommentView: UIView {
     }
 
     private lazy var contentTextField = UITextField().then {
+        $0.delegate = self
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
         $0.placeholder = "댓글 달기 ..."
         $0.layer.cornerRadius = 25.0
@@ -101,5 +102,14 @@ class InputCommentView: UIView {
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(25.0)
         }
+    }
+}
+
+// MARK: TextField Delegate
+
+extension InputCommentView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        return text.count <= 100
     }
 }

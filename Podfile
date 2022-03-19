@@ -25,4 +25,5 @@ target 'hipchon' do
   pod 'NMapsMap'
   pod 'Tabman', '~> 2.12'
   pod 'YPImagePicker'
+  pod 'AnyFormatKit'
 end

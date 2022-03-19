@@ -29,6 +29,7 @@ class EditProfileViewController: UIViewController {
     }
 
     private lazy var nickNameTextField = UITextField().then {
+        $0.delegate = self
         $0.font = .GmarketSans(size: 16.0, type: .medium)
         $0.textAlignment = .center
         $0.borderStyle = .none
@@ -235,5 +236,14 @@ private extension EditProfileViewController {
 
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: TextField Delegate
+
+extension EditProfileViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        return text.count <= 10
     }
 }
