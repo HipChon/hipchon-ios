@@ -16,4 +16,11 @@ class CommentModel: Codable {
     enum CodingKeys: String, CodingKey {
         case id, user, content, dateTime
     }
+    
+    var relatedDT: String? {
+        guard let dateTime = dateTime else {
+            return nil
+        }
+        return dateTime.strToDate().relativeTime
+    }
 }

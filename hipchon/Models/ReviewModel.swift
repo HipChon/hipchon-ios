@@ -21,4 +21,12 @@ class ReviewModel: Codable {
     enum Codingkeys: String, CodingKey {
         case id, content, postDt, imageURLs, user, place, compliments, likeCount, commentCount, likeYn
     }
+    
+    var formattedPostDate: String? {
+        guard let postDt = postDt else {
+            return nil
+        }
+        let date = postDt.strToDate()
+        return date.dateToStr(dateFormat: "yyyy.MM.dd")
+    }
 }

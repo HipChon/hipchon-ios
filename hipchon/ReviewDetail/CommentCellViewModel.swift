@@ -32,7 +32,7 @@ class CommentCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         timeForNow = comment
-            .compactMap { $0.dateTime }
+            .compactMap { $0.relatedDT }
             .asDriver(onErrorJustReturn: "")
     }
 }

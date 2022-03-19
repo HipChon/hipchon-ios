@@ -37,7 +37,7 @@ class PlaceReviewCellViewModel {
             .asDriver(onErrorJustReturn: 0)
 
         postDt = review
-            .compactMap { $0.postDt }
+            .compactMap { $0.formattedPostDate }
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review

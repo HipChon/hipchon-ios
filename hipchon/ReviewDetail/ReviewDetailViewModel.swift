@@ -59,7 +59,7 @@ class ReviewDetailViewModel {
             .asDriver(onErrorJustReturn: 0)
 
         postDate = review
-            .compactMap { $0.postDt }
+            .compactMap { $0.formattedPostDate }
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
