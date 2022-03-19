@@ -30,6 +30,7 @@ class PlaceListViewModel {
     let changedSearchFilter = PublishSubject<SearchFilterModel>()
     let sortType = BehaviorSubject<SortType>(value: .review)
     let reload = PublishRelay<Void>()
+    let moreFetching = PublishRelay<Void>()
 
     init(_ data: SearchFilterModel) {
         let searchFilter = BehaviorSubject<SearchFilterModel>(value: data)
@@ -52,6 +53,14 @@ class PlaceListViewModel {
             .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
             .flatMap { _ in NetworkManager.shared.getPlaces() }
             .do(onNext: { _ in activatingState.onNext(false) })
+            .bind(to: places)
+            .disposed(by: bag)
+                
+        // more fetching
+                
+        moreFetching
+            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .withLatestFrom(places) { $1 + $0 }
             .bind(to: places)
             .disposed(by: bag)
         

@@ -91,12 +91,19 @@ class FeedViewController: UIViewController {
 
         viewModel.activating
             .distinctUntilChanged()
-            .map { !$0 }
-            .filter { $0 == false }
-            .emit(onNext: { [weak self] _ in
-                self?.reviewTableView.refreshControl?.endRefreshing()
-            })
+            .emit(to: reviewTableView.refreshControl!.rx.isRefreshing)
             .disposed(by: bag)
+        
+        // more fetching
+        
+        reviewTableView.rx.contentOffset
+            .map { [unowned self] in reviewTableView.isNearTheBottomEdge($0) }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .map { _ in () }
+            .bind(to: viewModel.moreFetching)
+            .disposed(by: bag)
+
         
         // data binding
 

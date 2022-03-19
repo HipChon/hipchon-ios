@@ -68,6 +68,16 @@ class PlaceListViewController: UIViewController {
                 self?.placeTableView.refreshControl?.endRefreshing()
             })
             .disposed(by: bag)
+        
+        // more fetching
+        
+        placeTableView.rx.contentOffset
+            .map { [unowned self] in placeTableView.isNearTheBottomEdge($0) }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .map { _ in () }
+            .bind(to: viewModel.moreFetching)
+            .disposed(by: bag)
 
         viewModel.placeListCellVMs
             .drive(placeTableView.rx.items) { tv, idx, vm in

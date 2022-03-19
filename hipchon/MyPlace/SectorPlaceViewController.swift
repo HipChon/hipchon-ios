@@ -61,11 +61,17 @@ class SectorPlaceViewController: UIViewController {
 
         viewModel.activating
             .distinctUntilChanged()
-            .map { !$0 }
-            .filter { $0 == false }
-            .emit(onNext: { [weak self] _ in
-                self?.placeTableView.refreshControl?.endRefreshing()
-            })
+            .emit(to: placeTableView.refreshControl!.rx.isRefreshing)
+            .disposed(by: bag)
+        
+        // more fetching
+        
+        placeTableView.rx.contentOffset
+            .map { [unowned self] in placeTableView.isNearTheBottomEdge($0) }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .map { _ in () }
+            .bind(to: viewModel.moreFetching)
             .disposed(by: bag)
         
         // data binding

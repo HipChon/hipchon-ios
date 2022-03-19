@@ -28,6 +28,7 @@ class FeedViewModel {
 
     let viewAppear = PublishRelay<Void>()
     let reload = PublishRelay<Void>()
+    let moreFetching = PublishRelay<Void>()
     let selectedReviewIdx = PublishRelay<Int>()
 
     init() {
@@ -57,6 +58,16 @@ class FeedViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .bind(to: reviews)
             .disposed(by: bag)
+                
+        // more fetching
+                
+        moreFetching
+            .flatMap { _ in NetworkManager.shared.getReviews() }
+            .withLatestFrom(reviews) { $1 + $0 }
+            .bind(to: reviews)
+            .disposed(by: bag)
+        
+        // scene
 
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }

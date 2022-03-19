@@ -30,6 +30,7 @@ class SectorPlaceViewModel {
     // MARK: view -> viewModel
 
     let reload = PublishRelay<Void>()
+    let moreFetching = PublishRelay<Void>()
     let selectedPlace = PublishRelay<PlaceModel>()
 
     init(_ data: SectorType) {
@@ -56,6 +57,14 @@ class SectorPlaceViewModel {
             .withLatestFrom(sector)
             .flatMap { _ in NetworkManager.shared.getPlaces() }
             .do(onNext: { _ in activatingState.onNext(false) })
+            .bind(to: placeDatas)
+            .disposed(by: bag)
+                
+        // more fetching
+                
+        moreFetching
+            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .withLatestFrom(placeDatas) { $1 + $0 }
             .bind(to: placeDatas)
             .disposed(by: bag)
 
