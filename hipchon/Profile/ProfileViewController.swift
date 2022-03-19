@@ -146,7 +146,7 @@ class ProfileViewController: TabmanViewController {
         profileImageButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(18.0)
             $0.leading.equalToSuperview().inset(20.0)
-            $0.width.height.equalTo(79.0)
+            $0.width.height.equalTo(view.frame.width * (79.0 / 390.0))
         }
 
         nameLabel.snp.makeConstraints {

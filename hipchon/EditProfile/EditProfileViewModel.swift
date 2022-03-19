@@ -16,6 +16,7 @@ class EditProfileViewModel {
     // MARK: viewModel -> view
     
     let profileImageURL: Driver<URL>
+    let name: Driver<String>
     let setChangedImage: Signal<UIImage>
 
     // MARK: view -> viewModel
@@ -26,6 +27,10 @@ class EditProfileViewModel {
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
+        
+        name = UserModel.currentUser
+            .compactMap { $0.name }
+            .asDriver(onErrorJustReturn: "")
         
         setChangedImage = changedImage
             .asSignal(onErrorSignalWith: .empty())

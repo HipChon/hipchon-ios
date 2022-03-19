@@ -380,7 +380,6 @@ private extension ReviewDetailViewController {
     }
 
     @objc private func keyboardWillHide(_: Notification) {
-        print("@@@@")
         inputCommentView.snp.remakeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(102.0)

@@ -129,6 +129,10 @@ class EditProfileViewController: UIViewController {
             .drive(profileImageButton.rx.setImageKF)
             .disposed(by: bag)
         
+        viewModel.name
+            .drive(nickNameTextField.rx.text)
+            .disposed(by: bag)
+        
         viewModel.setChangedImage
             .emit(to: profileImageButton.rx.image)
             .disposed(by: bag)
@@ -138,6 +142,7 @@ class EditProfileViewController: UIViewController {
     func attribute() {
         view.backgroundColor = .white
         hideKeyboardWhenTappedAround()
+        addKeyboardNotification()
     }
 
     func layout() {
@@ -162,13 +167,12 @@ class EditProfileViewController: UIViewController {
         setNickNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
             $0.top.equalTo(navigationView.snp.bottom).offset(45.0)
-            $0.bottom.equalTo(profileImageButton.snp.top).offset(-55.0)
         }
 
         profileImageButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview().multipliedBy(0.8)
+            $0.top.equalTo(setNickNameLabel.snp.bottom).offset(54.0)
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(100.0)
+            $0.width.height.equalTo(view.frame.width * (100.0 / 390.0))
         }
 
         nickNameTextField.snp.makeConstraints {
@@ -178,7 +182,7 @@ class EditProfileViewController: UIViewController {
 
         bottomLineView.snp.makeConstraints {
             $0.leading.trailing.equalTo(nickNameTextField)
-            $0.top.equalTo(nickNameTextField.snp.bottom)
+            $0.top.equalTo(nickNameTextField.snp.bottom).offset(2.0)
             $0.height.equalTo(1.0)
         }
 
@@ -214,16 +218,12 @@ private extension EditProfileViewController {
         )
     }
 
-    @objc private func keyboardWillShow(_: Notification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            keyboardHeight.onNext(keyboardSize.height + UITextField.keyboardUpBottomHeight)
-//            navigationBottomHeight.onNext(16.0 - keyboardSize.height)
-//        }
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        }
     }
 
     @objc private func keyboardWillHide(_: Notification) {
-//        keyboardHeight.onNext(UITextField.keyboardDownBottomHeight)
-//        navigationBottomHeight.onNext(16.0)
     }
 
     // 주변 터치시 키보드 내림
