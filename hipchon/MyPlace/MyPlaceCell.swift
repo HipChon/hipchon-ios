@@ -51,7 +51,12 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var memoButton = UIButton().then {
         $0.layer.cornerRadius = 2.0
-        $0.backgroundColor = .primary_green
+        $0.backgroundColor = .gray01
+        $0.setTitle("메모", for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
+        $0.setTitleColor(.gray05, for: .normal)
+        $0.contentHorizontalAlignment = .left
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
     }
 
     private lazy var boundaryView = UIView().then {
@@ -107,6 +112,19 @@ class MyPlaceCell: UITableViewCell {
         viewModel.reviewCount
             .map { "\($0)" }
             .drive(reviewCountLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.memoContent
+            .drive(memoButton.rx.title())
+            .disposed(by: bag)
+        
+        viewModel.memoContent
+            .map { _ in UIColor.black }
+            .drive(memoButton.rx.titleColor)
+            .disposed(by: bag)
+        
+        viewModel.memoColor
+            .drive(memoButton.rx.backgroundColor)
             .disposed(by: bag)
         
         // MARK: scene

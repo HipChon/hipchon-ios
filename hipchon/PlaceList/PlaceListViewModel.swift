@@ -20,6 +20,7 @@ class PlaceListViewModel {
     let placeListCellVMs: Driver<[PlaceListCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     let searchFilterTitle: Driver<String>
+    let activating: Signal<Bool>
     let presentFilterVC: Signal<FilterViewModel>
     let presentSortVC: Signal<SortViewModel>
 
@@ -28,16 +29,32 @@ class PlaceListViewModel {
     let selectedIdx = PublishRelay<Int>()
     let changedSearchFilter = PublishSubject<SearchFilterModel>()
     let sortType = BehaviorSubject<SortType>(value: .review)
+    let reload = PublishRelay<Void>()
 
     init(_ data: SearchFilterModel) {
         let searchFilter = BehaviorSubject<SearchFilterModel>(value: data)
         let places = BehaviorSubject<[PlaceModel]>(value: [])
 
+        // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
             .withLatestFrom(NetworkManager.shared.getPlaces())
             .bind(to: places)
             .disposed(by: bag)
-
+        
+        // refresh
+        let activatingState = PublishSubject<Bool>()
+        
+        activating = activatingState
+            .asSignal(onErrorJustReturn: false)
+        
+        reload
+            .do(onNext: { activatingState.onNext(true) })
+            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
+            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .do(onNext: { _ in activatingState.onNext(false) })
+            .bind(to: places)
+            .disposed(by: bag)
+        
         placeListCellVMs = places
             .map { $0.map { PlaceListCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])

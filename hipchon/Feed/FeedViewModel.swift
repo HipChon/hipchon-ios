@@ -17,6 +17,7 @@ class FeedViewModel {
 
     // MARK: viewModel -> view
 
+    let activating: Signal<Bool>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
     let presentFilterVC: Signal<FilterViewModel>
 //    let pushPlaceDetailVC: Signal<ReviewPlaceViewModel>
@@ -26,6 +27,7 @@ class FeedViewModel {
     // MARK: view -> viewModel
 
     let viewAppear = PublishRelay<Void>()
+    let reload = PublishRelay<Void>()
     let selectedReviewIdx = PublishRelay<Int>()
 
     init() {
@@ -35,9 +37,24 @@ class FeedViewModel {
             .map { $0.map { ReviewCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
+        // 첫 load, sorting
         viewAppear
             .flatMap { NetworkManager.shared.getReviews() }
             .asObservable()
+            .bind(to: reviews)
+            .disposed(by: bag)
+        
+        // refresh
+        let activatingState = PublishSubject<Bool>()
+        
+        activating = activatingState
+            .asSignal(onErrorJustReturn: false)
+        
+        reload
+            .do(onNext: { activatingState.onNext(true) })
+//            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
+            .flatMap { _ in NetworkManager.shared.getReviews() }
+            .do(onNext: { _ in activatingState.onNext(false) })
             .bind(to: reviews)
             .disposed(by: bag)
 

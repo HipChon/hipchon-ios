@@ -502,7 +502,11 @@ class NetworkManager {
                             "content": "여자/남자친구가 좋아해요",
                             "count": 28
                         }
-                    ]
+                    ],
+                    "memo": {
+                        "content": "빵, 과일 먹으러 갈 곳",
+                        "color": "green"
+                    }
                 },
                  {
                      "id": 1,

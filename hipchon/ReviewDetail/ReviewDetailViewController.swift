@@ -15,7 +15,7 @@ class ReviewDetailViewController: UIViewController {
     // MARK: Property
 
     private lazy var scrollView = UIScrollView().then {
-        $0.bounces = true
+        $0.bounces = false
         $0.showsVerticalScrollIndicator = false
     }
 
@@ -207,15 +207,6 @@ class ReviewDetailViewController: UIViewController {
             }
             .disposed(by: bag)
 
-        // MARK: scene
-
-        viewModel.pushPlaceDetailVC
-            .emit(onNext: { [weak self] viewModel in
-                let placeDetailVC = PlaceDetailViewController()
-                placeDetailVC.bind(viewModel)
-                self?.navigationController?.pushViewController(placeDetailVC, animated: true)
-            })
-            .disposed(by: bag)
     }
 
     func attribute() {

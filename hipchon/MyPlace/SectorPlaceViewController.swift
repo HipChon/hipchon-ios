@@ -49,6 +49,26 @@ class SectorPlaceViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
+        
+        // refresh
+        placeTableView.refreshControl = UIRefreshControl()
+
+        placeTableView.refreshControl?.rx
+            .controlEvent(.valueChanged)
+            .map { _ in () }
+            .bind(to: viewModel.reload)
+            .disposed(by: bag)
+
+        viewModel.activating
+            .distinctUntilChanged()
+            .map { !$0 }
+            .filter { $0 == false }
+            .emit(onNext: { [weak self] _ in
+                self?.placeTableView.refreshControl?.endRefreshing()
+            })
+            .disposed(by: bag)
+        
+        // data binding
 
         viewModel.places
             .drive(placeTableView.rx.items) { tv, idx, data in

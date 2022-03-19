@@ -28,7 +28,6 @@ class ReviewDetailViewModel {
     let commentCount: Driver<Int>
     let content: Driver<String>
     let commentCellVMs: Driver<[CommentCellViewModel]>
-    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
     // MARK: view -> viewModel
 
@@ -140,10 +139,5 @@ class ReviewDetailViewModel {
                 }
             })
             .disposed(by: bag)
-
-        // MARK: scene
-
-        pushPlaceDetailVC = reviewPlaceVM
-            .flatMap { $0.pushPlaceDetailVC }
     }
 }

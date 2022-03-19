@@ -79,6 +79,26 @@ class FeedViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
+        
+        // refresh
+        reviewTableView.refreshControl = UIRefreshControl()
+
+        reviewTableView.refreshControl?.rx
+            .controlEvent(.valueChanged)
+            .map { _ in () }
+            .bind(to: viewModel.reload)
+            .disposed(by: bag)
+
+        viewModel.activating
+            .distinctUntilChanged()
+            .map { !$0 }
+            .filter { $0 == false }
+            .emit(onNext: { [weak self] _ in
+                self?.reviewTableView.refreshControl?.endRefreshing()
+            })
+            .disposed(by: bag)
+        
+        // data binding
 
         viewModel.reviewCellVMs
             .drive(reviewTableView.rx.items) { tv, idx, viewModel in

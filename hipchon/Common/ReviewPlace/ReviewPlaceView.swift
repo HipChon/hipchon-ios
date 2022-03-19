@@ -105,7 +105,13 @@ class ReviewPlaceView: UIView {
                 guard let topVC = UIApplication.topViewController() else { return }
                 let placeDetailVC = PlaceDetailViewController()
                 placeDetailVC.bind(viewModel)
-                topVC.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                
+                if let tabBarNavVC = topVC.tabBarController?.navigationController {
+                    tabBarNavVC.pushViewController(placeDetailVC, animated: true)
+                } else if let navVC = topVC.navigationController {
+                    navVC.pushViewController(placeDetailVC, animated: true)
+                }
+                
             })
             .disposed(by: bag)
     }

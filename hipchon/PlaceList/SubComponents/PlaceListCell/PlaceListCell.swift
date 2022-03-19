@@ -115,6 +115,8 @@ class PlaceListCell: UITableViewCell {
     func bind(_ viewModel: PlaceListCellViewModel) {
         // MARK: subViewModels
 
+        placeImageCollectView.dataSource = nil
+        placeImageCollectView.delegate = nil
         pageCountView.bind(viewModel.pageCountVM)
         firstHashtagView.bind(viewModel.firstHashtagVM)
         secondHashtagView.bind(viewModel.secondHashtagVM)

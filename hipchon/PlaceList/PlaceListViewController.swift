@@ -13,7 +13,7 @@ class PlaceListViewController: UIViewController {
     private lazy var searchNavigationView = SearchNavigationView().then { _ in
     }
 
-    private lazy var placeList = UITableView().then {
+    private lazy var placeTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
         $0.rowHeight = (view.frame.width - 60.0) * ((280.0 + 16.0) / 330.0)
@@ -37,20 +37,40 @@ class PlaceListViewController: UIViewController {
     func bind(_ viewModel: PlaceListViewModel) {
         // MARK: subviewModels
 
+        placeTableView.delegate = nil
+        placeTableView.dataSource = nil
         searchNavigationView.bind(viewModel.searchNavigationVM)
 
         // MARK: view -> viewModel
 
-        placeList.rx.itemSelected
+        placeTableView.rx.itemSelected
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .map { $0.row }
             .bind(to: viewModel.selectedIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
+        
+        // refresh
+        placeTableView.refreshControl = UIRefreshControl()
+
+        placeTableView.refreshControl?.rx
+            .controlEvent(.valueChanged)
+            .map { _ in () }
+            .bind(to: viewModel.reload)
+            .disposed(by: bag)
+
+        viewModel.activating
+            .distinctUntilChanged()
+            .map { !$0 }
+            .filter { $0 == false }
+            .emit(onNext: { [weak self] _ in
+                self?.placeTableView.refreshControl?.endRefreshing()
+            })
+            .disposed(by: bag)
 
         viewModel.placeListCellVMs
-            .drive(placeList.rx.items) { tv, idx, vm in
+            .drive(placeTableView.rx.items) { tv, idx, vm in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: PlaceListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceListCell else { return UITableViewCell() }
                 cell.bind(vm)
                 return cell
@@ -108,7 +128,7 @@ class PlaceListViewController: UIViewController {
     private func layout() {
         [
             searchNavigationView,
-            placeList,
+            placeTableView,
         ].forEach { view.addSubview($0) }
 
         searchNavigationView.snp.makeConstraints {
@@ -117,7 +137,7 @@ class PlaceListViewController: UIViewController {
             $0.height.equalTo(74.0)
         }
 
-        placeList.snp.makeConstraints {
+        placeTableView.snp.makeConstraints {
             $0.top.equalTo(searchNavigationView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }

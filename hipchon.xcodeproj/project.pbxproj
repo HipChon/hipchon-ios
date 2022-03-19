@@ -84,6 +84,7 @@
 		D84CFBF227E0EF5300FF3AA4 /* MenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBF127E0EF5300FF3AA4 /* MenuModel.swift */; };
 		D84CFBF427E0EF9B00FF3AA4 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBF327E0EF9B00FF3AA4 /* MenuCell.swift */; };
 		D84CFBF627E0EFEA00FF3AA4 /* MenuCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBF527E0EFEA00FF3AA4 /* MenuCellViewModel.swift */; };
+		D85B6A8F27E4E909002DC7B1 /* MemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */; };
 		D866678C27CE01520098A1EA /* GmarketSansTTFBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */; };
 		D866678D27CE01520098A1EA /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */; };
 		D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */; };
@@ -229,6 +230,7 @@
 		D84CFBF127E0EF5300FF3AA4 /* MenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModel.swift; sourceTree = "<group>"; };
 		D84CFBF327E0EF9B00FF3AA4 /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
 		D84CFBF527E0EFEA00FF3AA4 /* MenuCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellViewModel.swift; sourceTree = "<group>"; };
+		D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoModel.swift; sourceTree = "<group>"; };
 		D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFBold.ttf; sourceTree = "<group>"; };
 		D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
 		D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxNMFMapView+.swift"; sourceTree = "<group>"; };
@@ -341,8 +343,6 @@
 				D8091FF827B2803E000F057E /* FeedViewModel.swift */,
 				D809200A27B28831000F057E /* ReviewCell.swift */,
 				D809200C27B28AD9000F057E /* ReviewCellViewModel.swift */,
-				D890250D27DA353B0099FACA /* ReviewPlaceView.swift */,
-				D890250F27DA35450099FACA /* ReviewPlaceViewModel.swift */,
 				D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */,
 				D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */,
 			);
@@ -357,6 +357,7 @@
 				D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */,
 				D871F4B727BD23F800CCDE4D /* MyPlaceCell.swift */,
 				D871F4B927BD240100CCDE4D /* MyPlaceCellViewModel.swift */,
+				D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */,
 				D8B86CCA27E24261004EBFD9 /* MemoViewController.swift */,
 				D8B86CCC27E242C1004EBFD9 /* MemoViewModel.swift */,
 			);
@@ -523,6 +524,15 @@
 				D8C72EA727CE0C37007C160A /* CustomerService */,
 			);
 			path = Subcomponents;
+			sourceTree = "<group>";
+		};
+		D85B6A8D27E4E4C8002DC7B1 /* ReviewPlace */ = {
+			isa = PBXGroup;
+			children = (
+				D890250D27DA353B0099FACA /* ReviewPlaceView.swift */,
+				D890250F27DA35450099FACA /* ReviewPlaceViewModel.swift */,
+			);
+			path = ReviewPlace;
 			sourceTree = "<group>";
 		};
 		D866677527CE00D80098A1EA /* Resources */ = {
@@ -741,6 +751,7 @@
 				D890251127DA55AE0099FACA /* NavigationView.swift */,
 				D8237DEB27B9361800238387 /* ImageURLCell.swift */,
 				D8237DED27B9362800238387 /* ImageURLCellViewModel.swift */,
+				D85B6A8D27E4E4C8002DC7B1 /* ReviewPlace */,
 				D8E019DC27C0D49600A167CA /* Filter */,
 			);
 			path = Common;
@@ -983,6 +994,7 @@
 				D8B86CC827E23DD5004EBFD9 /* KeywordDetailView.swift in Sources */,
 				D83257DA27CFA3F600129E50 /* PlaceDesViewModel.swift in Sources */,
 				D809200627B286FF000F057E /* PlaceModel.swift in Sources */,
+				D85B6A8F27E4E909002DC7B1 /* MemoModel.swift in Sources */,
 				D8E019D927C0CFA600A167CA /* SearchNavigationView.swift in Sources */,
 				D89E8B7C27DDC3F900090C5B /* EditProfileViewModel.swift in Sources */,
 				D88FAF7F27A67D6F00E41F4F /* SceneDelegate.swift in Sources */,
