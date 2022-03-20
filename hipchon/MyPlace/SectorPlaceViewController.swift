@@ -7,8 +7,6 @@
 
 import RxCocoa
 import RxSwift
-import SnapKit
-import Then
 import UIKit
 
 class SectorPlaceViewController: UIViewController {

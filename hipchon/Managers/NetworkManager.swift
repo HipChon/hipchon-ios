@@ -473,6 +473,78 @@ class NetworkManager {
                     "likeCount": 23,
                     "commentCount": 12,
                     "likeYn": true
+                },
+                {
+                    "id": 1,
+                    "content": "탁 트인 뷰를 보면서 간만에 힐링했습니다.",
+                    "postDt": "2022-03-19T11:02:11.111",
+                    "imageURLs": [
+            "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    ],
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                        "reviewCount": 12
+                    },
+                    "place": {
+                        "id": 1,
+                        "name": "러스틱 카페",
+                        "address": "서울특별시 용산구 서빙고",
+                        "sector": "맛집",
+                        "bookmarkYn": false
+                    },
+                    "likeCount": 23,
+                    "commentCount": 12,
+                    "likeYn": true
+                },
+                {
+                    "id": 1,
+                    "content": "탁 트인 뷰를 보면서 간만에 힐링했습니다.",
+                    "postDt": "2022-03-19T11:02:11.111",
+                    "imageURLs": [
+            "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    ],
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                        "reviewCount": 12
+                    },
+                    "place": {
+                        "id": 1,
+                        "name": "러스틱 카페",
+                        "address": "서울특별시 용산구 서빙고",
+                        "sector": "맛집",
+                        "bookmarkYn": true
+                    },
+                    "likeCount": 23,
+                    "commentCount": 12,
+                    "likeYn": false
+                },
+                {
+                    "id": 1,
+                    "content": "탁 트인 뷰를 보면서 간만에 힐링했습니다.",
+                    "postDt": "2022-03-19T11:02:11.111",
+                    "imageURLs": [
+            "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    ],
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                        "reviewCount": 12
+                    },
+                    "place": {
+                        "id": 1,
+                        "name": "러스틱 카페",
+                        "address": "서울특별시 용산구 서빙고",
+                        "sector": "맛집",
+                        "bookmarkYn": false
+                    },
+                    "likeCount": 23,
+                    "commentCount": 12,
+                    "likeYn": true
                 }
             ]
             """
@@ -857,6 +929,124 @@ class NetworkManager {
                     },
                     "content": "완전 재밌었겠네용!!",
                     "dateTime": "2020-03-19T11:02:11.111"
+                }
+            ]
+            """
+
+            do {
+                let model = try JSONDecoder().decode([CommentModel].self, from: Data(str.utf8))
+                single(.success(model))
+            } catch {
+                single(.failure(NetworkError.parsing))
+            }
+
+            return Disposables.create()
+        }
+    }
+    
+    func getMyComments() -> Single<[CommentModel]> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/comments") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            let str = """
+            [
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111",
+                    "review": {
+                        "id": 1,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111",
+                    "review": {
+                        "id": 1,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111",
+                    "review": {
+                        "id": 1,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111",
+                    "review": {
+                        "id": 1,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111",
+                    "review": {
+                        "id": 1,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111",
+                    "review": {
+                        "id": 1,
+                        "imageURLs": [
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62c315d4-1c35-4b5d-b07d-238552d59886%2F%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-02-26_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.39_1.png?table=block&id=a88d842e-a8e4-4075-b935-7fdb9d97dfe6&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        ]
+                    }
                 }
             ]
             """

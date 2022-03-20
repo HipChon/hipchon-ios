@@ -38,6 +38,7 @@ class MenuListView: UIView {
         $0.showsVerticalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
+        $0.backgroundColor = .white
     }
 
     private let bag = DisposeBag()

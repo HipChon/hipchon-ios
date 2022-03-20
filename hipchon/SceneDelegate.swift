@@ -18,12 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .systemBackground
 
-        let startViewController = StartViewController()
-        startViewController.bind(startViewModel)
-        window?.rootViewController = UINavigationController(rootViewController: startViewController)
+//        let startViewController = StartViewController()
+//        startViewController.bind(startViewModel)
+//        window?.rootViewController = UINavigationController(rootViewController: startViewController)
 
-//        let tapBarViewController = TabBarViewController()
-//        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
+        let tapBarViewController = TabBarViewController()
+        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
 
         window?.makeKeyAndVisible()
     }

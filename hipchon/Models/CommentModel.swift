@@ -12,9 +12,10 @@ class CommentModel: Codable {
     let user: UserModel?
     let content: String?
     let dateTime: String?
+    let review: ReviewModel?
 
     enum CodingKeys: String, CodingKey {
-        case id, user, content, dateTime
+        case id, user, content, dateTime, review
     }
     
     var relatedDT: String? {
@@ -22,5 +23,13 @@ class CommentModel: Codable {
             return nil
         }
         return dateTime.strToDate().relativeTime
+    }
+    
+    var formattedDate: String? {
+        guard let dateTime = dateTime else {
+            return nil
+        }
+        let date = dateTime.strToDate()
+        return date.dateToStr(dateFormat: "yyyy.MM.dd")
     }
 }

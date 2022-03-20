@@ -12,15 +12,12 @@ import RxSwift
 class PlaceDetailViewModel {
     private let bag = DisposeBag()
 
-    var headerVM: PlaceDetailHeaderViewModel?
-
     // MARK: subViewModels
 
     let placeDesVM = PlaceDesViewModel()
     let placeMapVM = PlaceMapViewModel()
     let menuListVM: Signal<MenuListViewModel>
     let reviewKeywordListVM: Signal<ReviewKeywordListViewModel>
-    let placeDetailHeaderVM: Driver<PlaceDetailHeaderViewModel>
     let reviewCellVms: Driver<[ReviewCellViewModel]>
     
     // MARK: viewModel -> view
@@ -55,10 +52,6 @@ class PlaceDetailViewModel {
         reviewCellVms = reviews
             .map { $0.map { ReviewCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
-
-        placeDetailHeaderVM = place
-            .map { PlaceDetailHeaderViewModel($0) }
-            .asDriver(onErrorDriveWith: .empty())
 
         // MARK: data
         
@@ -211,11 +204,11 @@ class PlaceDetailViewModel {
             .map { ReviewDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        placeDetailHeaderVM
-            .drive(onNext: { [weak self] in
-                self?.headerVM = $0
-            })
-            .disposed(by: bag)
+//        placeDetailHeaderVM
+//            .drive(onNext: { [weak self] in
+//                self?.headerVM = $0
+//            })
+//            .disposed(by: bag)
         
         // MARK: API
         

@@ -57,13 +57,14 @@ class ProfileViewController: TabmanViewController {
     }
     
     private lazy var viewControllers: [UIViewController] = {
-        let entirePlaceVC = SectorPlaceViewController()
-        entirePlaceVC.bind(SectorPlaceViewModel(.entire))
-        let cafePlaceVC = SectorPlaceViewController()
-        cafePlaceVC.bind(SectorPlaceViewModel(.cafe))
-        let foodPlaceVC = SectorPlaceViewController()
-        foodPlaceVC.bind(SectorPlaceViewModel(.food))
-        return [entirePlaceVC, cafePlaceVC, foodPlaceVC]
+        let myReviewVC = HashtagReviewViewController()
+        myReviewVC.bind(HashtagReviewViewModel(.myReview))
+        let likeReviewVC = HashtagReviewViewController()
+        likeReviewVC.bind(HashtagReviewViewModel(.likeReview))
+        let myCommentVC = MyCommentViewController()
+        myCommentVC.bind(MyCommentViewModel(0))
+        
+        return [myReviewVC, likeReviewVC, myCommentVC]
     }()
 
     
