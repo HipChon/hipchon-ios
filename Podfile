@@ -26,4 +26,7 @@ target 'hipchon' do
   pod 'Tabman', '~> 2.12'
   pod 'YPImagePicker'
   pod 'AnyFormatKit'
+
+  # For SNS
+  pod 'KakaoSDK'
 end

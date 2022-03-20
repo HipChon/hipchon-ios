@@ -51,12 +51,12 @@ class StartViewController: UIViewController {
     }
     
     private lazy var appleLoginButton = UIButton().then {
-        $0.backgroundColor = .black
+        $0.backgroundColor = .white
         $0.layer.cornerRadius = 5.0
         $0.layer.masksToBounds = true
         $0.setImage(UIImage(named: "apple"), for: .normal)
-        $0.setTitle("애플 계정으로 시작하기", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
+        $0.setTitle("애플 아이디로 시작하기", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
     }
 
@@ -81,15 +81,15 @@ class StartViewController: UIViewController {
     func bind(_ viewModel: StartViewModel) {
         // MARK: view -> viewModel
 
-//        loginButton.rx.tap
-//            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-//            .bind(to: viewModel.loginButtonTapped)
-//            .disposed(by: bag)
-//
-//        registerButton.rx.tap
-//            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-//            .bind(to: viewModel.registerButtonTapped)
-//            .disposed(by: bag)
+        kakaoLoginButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.kakaoLoginButtonTapped)
+            .disposed(by: bag)
+
+        appleLoginButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.appleLoginButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -101,12 +101,8 @@ class StartViewController: UIViewController {
             })
             .disposed(by: bag)
 
-        viewModel.pushLoginVC
-            .emit(onNext: { [weak self] viewModel in
-//                let loginVC = LoginViewController()
-//                loginVC.bind(viewModel)
-//                self?.navigationController?.pushViewController(loginVC, animated: true)
-                
+        viewModel.pushMainVC
+            .emit(onNext: { [weak self] in 
                 let tapBarViewController = TabBarViewController()
                 self?.navigationController?.pushViewController(tapBarViewController, animated: true)
             })

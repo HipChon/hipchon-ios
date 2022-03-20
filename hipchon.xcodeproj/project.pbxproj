@@ -42,6 +42,7 @@
 		D828B38D27E6F52C007C2487 /* MyCommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B38C27E6F52C007C2487 /* MyCommentViewModel.swift */; };
 		D828B38F27E6F532007C2487 /* MyCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B38E27E6F532007C2487 /* MyCommentCell.swift */; };
 		D828B39127E6F539007C2487 /* MyCommentCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39027E6F539007C2487 /* MyCommentCellViewModel.swift */; };
+		D828B39327E78163007C2487 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39227E78163007C2487 /* AuthManager.swift */; };
 		D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */; };
 		D82A28DB27DC9FBB00E7C898 /* KeywordListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28DA27DC9FBB00E7C898 /* KeywordListCellViewModel.swift */; };
 		D82A28DD27DCA08400E7C898 /* KeywordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28DC27DCA08400E7C898 /* KeywordButton.swift */; };
@@ -197,6 +198,7 @@
 		D828B38C27E6F52C007C2487 /* MyCommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentViewModel.swift; sourceTree = "<group>"; };
 		D828B38E27E6F532007C2487 /* MyCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentCell.swift; sourceTree = "<group>"; };
 		D828B39027E6F539007C2487 /* MyCommentCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentCellViewModel.swift; sourceTree = "<group>"; };
+		D828B39227E78163007C2487 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListCell.swift; sourceTree = "<group>"; };
 		D82A28DA27DC9FBB00E7C898 /* KeywordListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListCellViewModel.swift; sourceTree = "<group>"; };
 		D82A28DC27DCA08400E7C898 /* KeywordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordButton.swift; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 			isa = PBXGroup;
 			children = (
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
+				D828B39227E78163007C2487 /* AuthManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -945,6 +948,7 @@
 				D8091FF927B2803E000F057E /* FeedViewModel.swift in Sources */,
 				D809200127B28332000F057E /* PlaceDetailViewController.swift in Sources */,
 				D809200327B28368000F057E /* PlaceDetailViewModel.swift in Sources */,
+				D828B39327E78163007C2487 /* AuthManager.swift in Sources */,
 				D8B86CCF27E244BA004EBFD9 /* UIApplication+.swift in Sources */,
 				D809200D27B28AD9000F057E /* ReviewCellViewModel.swift in Sources */,
 				D8237DEA27B9304400238387 /* CategoryModel.swift in Sources */,
@@ -1205,6 +1209,9 @@
 				DEVELOPMENT_TEAM = SPJ3VZVK78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "애플리케이션 '힙촌'에서 마이크 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1233,6 +1240,9 @@
 				DEVELOPMENT_TEAM = SPJ3VZVK78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "애플리케이션 '힙촌'에서 마이크 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
