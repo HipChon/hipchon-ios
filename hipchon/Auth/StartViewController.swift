@@ -10,21 +10,54 @@ import RxSwift
 import UIKit
 
 class StartViewController: UIViewController {
-    private lazy var logoImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-        $0.image = UIImage(named: "loginLogo") ?? UIImage()
-    }
+    
+    private lazy var mainTitleLabel = UILabel().then {
+        let text = """
+촌스러운 것이
+힙하다
+"""
+        $0.text = text
 
-    private lazy var registerButton = UIButton().then {
-        $0.layer.cornerRadius = 30.0
-        $0.backgroundColor = .systemGreen
-        $0.setTitle("회원가입", for: .normal)
-    }
+        $0.numberOfLines = 2
+        $0.textColor = .white
+        $0.font = .GmarketSans(size: 40.0, type: .medium)
+        
 
-    private lazy var loginButton = UIButton().then {
-        $0.layer.cornerRadius = 30.0
-        $0.backgroundColor = .systemGreen
-        $0.setTitle("로그인", for: .normal)
+        let attributeText = NSMutableAttributedString(string: text)
+        let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.primary_green]
+        attributeText.addAttributes(attributes, range: NSRange(location: 0, length: 1))
+        attributeText.addAttributes(attributes, range: NSRange(location: 8, length: 1))
+        $0.attributedText = attributeText
+    }
+    
+    private lazy var subTitleLabel = UILabel().then {
+        $0.text = "힙촌과 함께 떠나보아요"
+        $0.textColor = .white
+        $0.font = .GmarketSans(size: 14.0, type: .medium)
+    }
+    
+    private lazy var peopleImageView = UIImageView().then {
+        $0.image = UIImage(named: "people") ?? UIImage()
+    }
+    
+    private lazy var kakaoLoginButton = UIButton().then {
+        $0.backgroundColor = .kakao_yellow
+        $0.layer.cornerRadius = 5.0
+        $0.layer.masksToBounds = true
+        $0.setImage(UIImage(named: "kakao"), for: .normal)
+        $0.setTitle("카카오 계정으로 시작하기", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
+    }
+    
+    private lazy var appleLoginButton = UIButton().then {
+        $0.backgroundColor = .black
+        $0.layer.cornerRadius = 5.0
+        $0.layer.masksToBounds = true
+        $0.setImage(UIImage(named: "apple"), for: .normal)
+        $0.setTitle("애플 계정으로 시작하기", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
     }
 
     private let bag = DisposeBag()
@@ -33,6 +66,11 @@ class StartViewController: UIViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
         layout()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        navigationController?.isNavigationBarHidden = true
     }
 
     @available(*, unavailable)
@@ -43,15 +81,15 @@ class StartViewController: UIViewController {
     func bind(_ viewModel: StartViewModel) {
         // MARK: view -> viewModel
 
-        loginButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.loginButtonTapped)
-            .disposed(by: bag)
-
-        registerButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.registerButtonTapped)
-            .disposed(by: bag)
+//        loginButton.rx.tap
+//            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+//            .bind(to: viewModel.loginButtonTapped)
+//            .disposed(by: bag)
+//
+//        registerButton.rx.tap
+//            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+//            .bind(to: viewModel.registerButtonTapped)
+//            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -82,30 +120,43 @@ class StartViewController: UIViewController {
 
     private func layout() {
         [
-            logoImageView,
-            registerButton,
-            loginButton,
+            mainTitleLabel,
+            subTitleLabel,
+            peopleImageView,
+            kakaoLoginButton,
+            appleLoginButton,
         ].forEach {
             view.addSubview($0)
         }
+        
+        mainTitleLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(30.0)
+            $0.centerY.equalToSuperview().multipliedBy(0.4)
+        }
+        
+        subTitleLabel.snp.makeConstraints {
+            $0.leading.equalTo(mainTitleLabel)
+            $0.top.equalTo(mainTitleLabel.snp.bottom).offset(21.0)
 
-        logoImageView.snp.makeConstraints {
-            $0.width.equalToSuperview().multipliedBy(175.0 / 390.0)
-            $0.height.equalTo(logoImageView.snp.width)
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().multipliedBy(0.8)
         }
 
-        loginButton.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.height.equalTo(60.0)
+        peopleImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(52.0)
+            $0.bottom.equalTo(kakaoLoginButton.snp.top).offset(-8.0)
+            $0.width.equalTo(188.0)
+            $0.height.equalTo(145.0)
         }
-
-        registerButton.snp.makeConstraints {
-            $0.leading.trailing.height.centerX.equalTo(loginButton)
-            $0.bottom.equalTo(loginButton.snp.top).offset(-8.0)
+        
+        kakaoLoginButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(30.0)
+            $0.bottom.equalTo(appleLoginButton.snp.top).offset(-8.0)
+            $0.height.equalTo(50.0)
+        }
+        
+        appleLoginButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(30.0)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(30.0)
+            $0.height.equalTo(50.0)
         }
     }
 }
