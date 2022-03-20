@@ -1,15 +1,15 @@
 //
-//  StartViewController.swift
+//  OnBoardingViewController.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/22.
 //
 
-import Foundation
+import AuthenticationServices
 import RxSwift
 import UIKit
 
-class StartViewController: UIViewController {
+class OnBoardingViewController: UIViewController {
     
     private lazy var mainTitleLabel = UILabel().then {
         let text = """
@@ -48,6 +48,10 @@ class StartViewController: UIViewController {
         $0.setTitle("카카오 계정으로 시작하기", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
+        
+        $0.contentHorizontalAlignment = .left
+        $0.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
     }
     
     private lazy var appleLoginButton = UIButton().then {
@@ -58,12 +62,18 @@ class StartViewController: UIViewController {
         $0.setTitle("애플 아이디로 시작하기", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
+        
+        $0.contentHorizontalAlignment = .left
+        $0.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
     }
 
     private let bag = DisposeBag()
+    let viewModel = OnBoardingViewModel()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        bind()
         attribute()
         layout()
     }
@@ -78,7 +88,7 @@ class StartViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: StartViewModel) {
+    func bind() {
         // MARK: view -> viewModel
 
         kakaoLoginButton.rx.tap
@@ -88,7 +98,18 @@ class StartViewController: UIViewController {
 
         appleLoginButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.appleLoginButtonTapped)
+//            .bind(to: viewModel.appleLoginButtonTapped)
+            .subscribe(onNext: {
+                print("@@@")
+                let appleIDProvider = ASAuthorizationAppleIDProvider()
+                let request = appleIDProvider.createRequest()
+                request.requestedScopes = [.fullName, .email]
+                    
+                let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+                authorizationController.delegate = self
+                authorizationController.presentationContextProvider = self
+                authorizationController.performRequests()
+            })
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -154,5 +175,38 @@ class StartViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(30.0)
             $0.height.equalTo(50.0)
         }
+    }
+}
+
+
+extension OnBoardingViewController: ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
+    //  Apple 로그인을 모달 시트
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    // Apple ID 연동 성공 시
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        // Apple ID
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+                
+            // 계정 정보 가져오기
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+                
+            print("User ID : \(userIdentifier)")
+            print("User Email : \(email ?? "")")
+            print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
+            viewModel.appleUserIdentifier.onNext(userIdentifier)
+        default:
+            break
+        }
+    }
+        
+    // Apple ID 연동 실패 시
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error.
     }
 }

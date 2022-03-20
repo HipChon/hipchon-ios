@@ -1,5 +1,5 @@
 //
-//  StartViewModel.swift
+//  OnBoardingViewModel.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/22.
@@ -9,7 +9,7 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
-class StartViewModel {
+class OnBoardingViewModel {
     private let bag = DisposeBag()
 
     // MARK: viewModel -> view
@@ -21,50 +21,48 @@ class StartViewModel {
 
     let kakaoLoginButtonTapped = PublishRelay<Void>()
     let appleLoginButtonTapped = PublishRelay<Void>()
+    let appleUserIdentifier = PublishSubject<String>()
 
     init() {
-        let token = PublishSubject<String?>()
-        let signup = PublishSubject<Void>()
-        let signinComplete = PublishSubject<Void>()
+        let kakaoAccessToken = PublishSubject<String>()
+        let signupedUser = PublishSubject<Bool>()
         
         kakaoLoginButtonTapped
-            .map { UserDefaults.standard.value(forKey: "token") as? String }
-            .bind(to: token)
-            .disposed(by: bag)
-        
-        token
-            .filter { $0 == nil }
-            .flatMap { _ in AuthManager.shared.kakaoSignup() }
+            .flatMap { AuthManager.shared.kakaoSignup() }
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let accessToken):
-                    UserDefaults.standard.set(accessToken, forKey: "token")
-                    signup.onNext(())
+                    kakaoAccessToken.onNext(accessToken!)
                 case .failure(let error):
                     print(error.description)
                 }
             })
             .disposed(by: bag)
         
-        token
-            .filter { $0 != nil }
-            .flatMap { AuthManager.shared.signin(token: $0!) }
+        Observable.merge(
+            kakaoAccessToken,
+            appleUserIdentifier
+        )
+            .flatMap { AuthManager.shared.signin(token: $0) }
             .subscribe(onNext: { result in
                 switch result {
                 case .success():
-                    signinComplete.onNext(())
+                    signupedUser.onNext(true)
                 case .failure(let error):
                     print(error.description)
+                    signupedUser.onNext(false)
                 }
             })
             .disposed(by: bag)
    
-        pushRegisterVC = signup
-            .map { RegisterViewModel() }
+        pushRegisterVC = signupedUser
+            .filter { $0 == false }
+            .map { _ in RegisterViewModel() }
             .asSignal(onErrorSignalWith: .empty())
         
 
-        pushMainVC = signinComplete
+        pushMainVC = signupedUser
+            .filter { $0 == true }
             .map { _ in () }
             .asSignal(onErrorSignalWith: .empty())
         

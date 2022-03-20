@@ -36,7 +36,7 @@ class AuthManager {
                         if UserApi.isKakaoTalkLoginAvailable() { // 간편 로그인: 카톡 어플 있을 시
                             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                                 if error != nil {  // 로그인 실패
-                                    single(.success(.failure(APIError(statusCode: -1, description: "토큰 O 유효성 X 간편로그인 X"))))
+                                    single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 } else {    // 로그인 성공
                                     single(.success(.success(oauthToken?.accessToken)))
                                 }
@@ -44,7 +44,7 @@ class AuthManager {
                         } else { // 카톡 어플 없을 시
                             UserApi.shared.loginWithKakaoAccount { oauthToken, error in
                                 if error != nil {
-                                    single(.success(.failure(APIError(statusCode: -1, description: "토큰 O 유효성 X 웹로그인 X"))))
+                                    single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 } else {
                                     single(.success(.success(oauthToken?.accessToken)))
                                 }
@@ -58,7 +58,7 @@ class AuthManager {
                 if UserApi.isKakaoTalkLoginAvailable() { // 간편 로그인: 카톡 어플 있을 시
                     UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                         if error != nil {  // 로그인 실패
-                            single(.success(.failure(APIError(statusCode: -1, description: "토큰 O 유효성 X 간편로그인 X"))))
+                            single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                         } else {    // 로그인 성공
                             single(.success(.success(oauthToken?.accessToken)))
                         }
@@ -66,7 +66,7 @@ class AuthManager {
                 } else { // 카톡 어플 없을 시
                     UserApi.shared.loginWithKakaoAccount { oauthToken, error in
                         if error != nil {
-                            single(.success(.failure(APIError(statusCode: -1, description: "토큰 O 유효성 X 웹로그인 X"))))
+                            single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                         } else {
                             single(.success(.success(oauthToken?.accessToken)))
                         }
