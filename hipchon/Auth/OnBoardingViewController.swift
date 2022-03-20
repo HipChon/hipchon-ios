@@ -124,8 +124,13 @@ class OnBoardingViewController: UIViewController {
 
         viewModel.pushMainVC
             .emit(onNext: { [weak self] in 
-                let tapBarViewController = TabBarViewController()
-                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
+//                let tapBarViewController = TabBarViewController()
+//                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
+                
+                let termsVM = TermsViewModel()
+                let termsVC = TermsViewController()
+                termsVC.bind(termsVM)
+                self?.navigationController?.pushViewController(termsVC, animated: true)
             })
             .disposed(by: bag)
     }

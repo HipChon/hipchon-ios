@@ -5,9 +5,13 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="GmarketSansTTFMedium.ttf">
+            <string>GmarketSansTTFMedium</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -16,8 +20,91 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iz6-lt-gb3">
+                                <rect key="frame" x="30" y="141" width="242.5" height="80"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="촌">
+                                        <attributes>
+                                            <color key="NSColor" red="0.46274507050000002" green="0.8392156959" blue="0.54901963470000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="40" name="GmarketSansTTFMedium"/>
+                                            <font key="NSOriginalFont" size="40" name="GmarketSansTTFMedium"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">스러운 것이
+</string>
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <font key="NSFont" size="40" name="GmarketSansTTFMedium"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="힙">
+                                        <attributes>
+                                            <color key="NSColor" red="0.46274507050000002" green="0.8392156959" blue="0.54901963470000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="40" name="GmarketSansTTFMedium"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="하다">
+                                        <attributes>
+                                            <color key="NSColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <font key="NSFont" size="40" name="GmarketSansTTFMedium"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="힙촌과 함께 떠나보아요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kI-Rw-eE3">
+                                <rect key="frame" x="30" y="242" width="143" height="14.5"/>
+                                <fontDescription key="fontDescription" name="GmarketSansTTFMedium" family="Gmarket Sans TTF" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="불멍_런치" translatesAutoresizingMaskIntoConstraints="NO" id="rTi-nl-gBX">
+                                <rect key="frame" x="271.5" y="378" width="119" height="147"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="rTi-nl-gBX" secondAttribute="height" multiplier="17:21" id="ar2-WT-hty"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="벼_런치" translatesAutoresizingMaskIntoConstraints="NO" id="fBI-2S-1BZ">
+                                <rect key="frame" x="87.5" y="742" width="115" height="142"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="fBI-2S-1BZ" secondAttribute="height" multiplier="115:142" id="hPm-a8-tzv"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="힙_런치" translatesAutoresizingMaskIntoConstraints="NO" id="J0l-kO-AyR">
+                                <rect key="frame" x="207" y="586" width="166" height="164"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="J0l-kO-AyR" secondAttribute="height" multiplier="83:82" id="uDV-on-q7V"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="물멍_런치" translatesAutoresizingMaskIntoConstraints="NO" id="c6O-Cb-1Vg">
+                                <rect key="frame" x="26.5" y="515" width="113" height="148"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="c6O-Cb-1Vg" secondAttribute="height" multiplier="113:148" id="stP-cj-S7E"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="c6O-Cb-1Vg" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.272947" id="5Dt-0R-Kwf"/>
+                            <constraint firstItem="fBI-2S-1BZ" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" multiplier="0.7" id="8Gj-jd-4b2"/>
+                            <constraint firstItem="iz6-lt-gb3" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" multiplier="0.4" id="9dW-p5-Sbz"/>
+                            <constraint firstItem="iz6-lt-gb3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="AcJ-kO-cOB"/>
+                            <constraint firstItem="c6O-Cb-1Vg" firstAttribute="top" secondItem="rTi-nl-gBX" secondAttribute="bottom" constant="-10" id="D0q-qe-KZl"/>
+                            <constraint firstItem="J0l-kO-AyR" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" multiplier="1.4" id="H11-X9-31f"/>
+                            <constraint firstItem="fBI-2S-1BZ" firstAttribute="top" secondItem="J0l-kO-AyR" secondAttribute="bottom" constant="-8" id="Ier-EJ-lUs"/>
+                            <constraint firstItem="J0l-kO-AyR" firstAttribute="top" secondItem="c6O-Cb-1Vg" secondAttribute="bottom" constant="-77" id="SZP-SU-eqn"/>
+                            <constraint firstItem="c6O-Cb-1Vg" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" multiplier="0.4" id="agD-c2-uMi"/>
+                            <constraint firstItem="fBI-2S-1BZ" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" constant="-12" id="bX5-zE-UxA"/>
+                            <constraint firstItem="2kI-Rw-eE3" firstAttribute="top" secondItem="iz6-lt-gb3" secondAttribute="bottom" constant="21" id="ea8-vz-vhf"/>
+                            <constraint firstItem="rTi-nl-gBX" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.28744" id="g5i-df-DE1"/>
+                            <constraint firstItem="fBI-2S-1BZ" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.277778" id="hwo-Jj-FMX"/>
+                            <constraint firstItem="2kI-Rw-eE3" firstAttribute="leading" secondItem="iz6-lt-gb3" secondAttribute="leading" id="q3d-eh-ubN"/>
+                            <constraint firstItem="rTi-nl-gBX" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" multiplier="1.6" id="vXs-WH-b9S"/>
+                            <constraint firstItem="J0l-kO-AyR" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.400966" id="vvB-10-qZ6"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -26,8 +113,9 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="물멍_런치" width="113" height="148"/>
+        <image name="벼_런치" width="115" height="142"/>
+        <image name="불멍_런치" width="119" height="147"/>
+        <image name="힙_런치" width="166" height="164"/>
     </resources>
 </document>

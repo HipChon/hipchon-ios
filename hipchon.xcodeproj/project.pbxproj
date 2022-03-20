@@ -43,6 +43,8 @@
 		D828B38F27E6F532007C2487 /* MyCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B38E27E6F532007C2487 /* MyCommentCell.swift */; };
 		D828B39127E6F539007C2487 /* MyCommentCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39027E6F539007C2487 /* MyCommentCellViewModel.swift */; };
 		D828B39327E78163007C2487 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39227E78163007C2487 /* AuthManager.swift */; };
+		D828B39627E79D28007C2487 /* TermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39527E79D28007C2487 /* TermsViewController.swift */; };
+		D828B39827E79D2F007C2487 /* TermsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39727E79D2F007C2487 /* TermsViewModel.swift */; };
 		D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */; };
 		D82A28DB27DC9FBB00E7C898 /* KeywordListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28DA27DC9FBB00E7C898 /* KeywordListCellViewModel.swift */; };
 		D82A28DD27DCA08400E7C898 /* KeywordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28DC27DCA08400E7C898 /* KeywordButton.swift */; };
@@ -200,6 +202,8 @@
 		D828B39027E6F539007C2487 /* MyCommentCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentCellViewModel.swift; sourceTree = "<group>"; };
 		D828B39227E78163007C2487 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		D828B39427E78E79007C2487 /* hipchon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hipchon.entitlements; sourceTree = "<group>"; };
+		D828B39527E79D28007C2487 /* TermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsViewController.swift; sourceTree = "<group>"; };
+		D828B39727E79D2F007C2487 /* TermsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsViewModel.swift; sourceTree = "<group>"; };
 		D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListCell.swift; sourceTree = "<group>"; };
 		D82A28DA27DC9FBB00E7C898 /* KeywordListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListCellViewModel.swift; sourceTree = "<group>"; };
 		D82A28DC27DCA08400E7C898 /* KeywordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordButton.swift; sourceTree = "<group>"; };
@@ -543,6 +547,8 @@
 				D88FAF9227A68A7900E41F4F /* LoginModel.swift */,
 				D840812E27C52C6E00FA9D1B /* RegisterViewController.swift */,
 				D840813027C52CC500FA9D1B /* RegisterViewModel.swift */,
+				D828B39527E79D28007C2487 /* TermsViewController.swift */,
+				D828B39727E79D2F007C2487 /* TermsViewModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -935,6 +941,7 @@
 				D83304E227AC1A43008E7DB7 /* ProfileViewModel.swift in Sources */,
 				D8091FFE27B280A1000F057E /* SectorPlaceViewModel.swift in Sources */,
 				D84B352127CBA8FE00BF1A63 /* BestReviewView.swift in Sources */,
+				D828B39827E79D2F007C2487 /* TermsViewModel.swift in Sources */,
 				D80967BC27BA847E0015E7EF /* NetworkManager.swift in Sources */,
 				D8A3031227C9E6750013E71A /* SearchFilterModel.swift in Sources */,
 				D85B6A9927E5865A002DC7B1 /* String+.swift in Sources */,
@@ -997,6 +1004,7 @@
 				D871F4B427BD18DC00CCDE4D /* HipPlaceCell.swift in Sources */,
 				D83304DE27AC1763008E7DB7 /* TabBarViewController.swift in Sources */,
 				D85B6A9727E5853D002DC7B1 /* Date+.swift in Sources */,
+				D828B39627E79D28007C2487 /* TermsViewController.swift in Sources */,
 				D83257CE27CF9FF600129E50 /* BestReviewCell.swift in Sources */,
 				D84CFBEE27E0ED9800FF3AA4 /* MenuListView.swift in Sources */,
 				D828B38127E6E638007C2487 /* HashtagReviewViewController.swift in Sources */,
