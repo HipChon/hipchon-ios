@@ -80,10 +80,23 @@ class PlaceDetailViewController: UIViewController {
     private lazy var entireTableView = UITableView(frame: .zero).then {
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
-        $0.rowHeight = 393.0
+        $0.rowHeight = 315.0
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
+    }
+    
+    private lazy var moreReviewButton = UIButton().then {
+        $0.setTitle("더보기", for: .normal)
+        $0.setTitleColor(.gray05, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
+        $0.backgroundColor = UIColor(hexString: "#F8F8FA") ?? .white
+        $0.layer.borderWidth = 1.0
+        $0.layer.borderColor = UIColor.gray01.cgColor
+    }
+    
+    private lazy var marginView = UIView().then {
+        $0.backgroundColor = .white
     }
 
     private var bag = DisposeBag()
@@ -147,6 +160,7 @@ class PlaceDetailViewController: UIViewController {
             .drive(entireTableView.rx.items) { tv, _, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
                 cell.imageView?.contentMode = .scaleAspectFill
+                cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)
                 return cell
             }
@@ -226,6 +240,8 @@ class PlaceDetailViewController: UIViewController {
             reviewKeywordListView,
             entireTableView,
             imageCollectView,
+            moreReviewButton,
+            marginView,
         ].forEach {
             contentView.addSubview($0)
         }
@@ -287,7 +303,19 @@ class PlaceDetailViewController: UIViewController {
     
         entireTableView.snp.makeConstraints {
             $0.top.equalTo(reviewKeywordListView.snp.bottom)
-            $0.height.equalTo(393.0 * 3)
+            $0.height.equalTo(315.0 * 3)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        moreReviewButton.snp.makeConstraints {
+            $0.top.equalTo(entireTableView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(48.0)
+        }
+        
+        marginView.snp.makeConstraints {
+            $0.top.equalTo(moreReviewButton.snp.bottom)
+            $0.height.equalTo(100.0)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }

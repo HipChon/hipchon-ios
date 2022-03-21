@@ -13,7 +13,7 @@ class WeeklyHipPlaceViewModel {
     private let bag = DisposeBag()
 
     // MARK: viewModel -> view
-
+    
     let hipPlacesCellVMs: Driver<[HipPlaceCellViewModel]>
 
     // MARK: view -> viewModel

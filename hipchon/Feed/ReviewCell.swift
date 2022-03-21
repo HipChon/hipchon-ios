@@ -74,7 +74,7 @@ class ReviewCell: UITableViewCell {
         $0.numberOfLines = 2
     }
 
-    private lazy var reviewPlaceView = ReviewPlaceView().then { _ in
+    public lazy var reviewPlaceView = ReviewPlaceView().then { _ in
     }
 
     private lazy var boundaryView = UIView().then {
@@ -169,6 +169,7 @@ class ReviewCell: UITableViewCell {
 
     private func attribute() {
         selectionStyle = .none
+        backgroundColor = .white
     }
 
     private func layout() {

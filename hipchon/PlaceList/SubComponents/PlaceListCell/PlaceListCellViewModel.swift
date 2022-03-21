@@ -14,16 +14,14 @@ class PlaceListCellViewModel {
     // MARK: subViewModels
 
     let pageCountVM = PageCountViewModel()
-    let firstHashtagVM = RoundLabelViewModel()
-    let secondHashtagVM = RoundLabelViewModel()
-    let thirdHashtagVM = RoundLabelViewModel()
+    let keywordVM: Driver<KeywordViewModel>
 
     // MARK: viewModel -> view
 
     let placeImageURLs: Driver<[URL]>
-    let title: Driver<String>
+    let name: Driver<String>
     let bookmarkYn: Driver<Bool>
-    let distanceKm: Driver<String>
+    let region: Driver<String>
     let priceDes: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
@@ -36,21 +34,26 @@ class PlaceListCellViewModel {
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
 
+        keywordVM = place
+            .compactMap { $0.keywords?.first }
+            .map { KeywordViewModel($0) }
+            .asDriver(onErrorDriveWith: .empty())
+        
         placeImageURLs = place
             .compactMap { $0.imageURLs }
             .map { $0.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
 
-        title = place
-            .compactMap { $0.placeTitle }
+        name = place
+            .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
 
         priceDes = place
             .compactMap { $0.priceDes }
             .asDriver(onErrorJustReturn: "")
 
-        distanceKm = place
-            .compactMap { $0.distanceKm }
+        region = place
+            .compactMap { $0.region }
             .asDriver(onErrorJustReturn: "")
 
         bookmarkCount = place
@@ -69,27 +72,6 @@ class PlaceListCellViewModel {
         currentIdx
             .map { $0 + 1 }
             .bind(to: pageCountVM.currentIdx)
-            .disposed(by: bag)
-
-        place
-            .compactMap { $0.hashtags }
-            .filter { $0.count >= 1 }
-            .compactMap { $0[0] }
-            .bind(to: firstHashtagVM.content)
-            .disposed(by: bag)
-
-        place
-            .compactMap { $0.hashtags }
-            .filter { $0.count >= 2 }
-            .compactMap { $0[1] }
-            .bind(to: secondHashtagVM.content)
-            .disposed(by: bag)
-
-        place
-            .compactMap { $0.hashtags }
-            .filter { $0.count >= 3 }
-            .compactMap { $0[2] }
-            .bind(to: thirdHashtagVM.content)
             .disposed(by: bag)
 
         // MARK: bookmark

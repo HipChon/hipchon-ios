@@ -13,8 +13,7 @@ class HipPlaceCellViewModel {
 
     // MARK: subViewModels
 
-    let firstHashtagVM = RoundLabelViewModel()
-    let secondHashtagVM = RoundLabelViewModel()
+    let keywordVM: Driver<KeywordViewModel>
 
     // MARK: viewModel -> view
 
@@ -32,6 +31,11 @@ class HipPlaceCellViewModel {
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
 
+        keywordVM = place
+            .compactMap { $0.keywords?.first }
+            .map { KeywordViewModel($0) }
+            .asDriver(onErrorDriveWith: .empty())
+        
         url = place
             .compactMap { $0.imageURLs?.first }
             .compactMap { URL(string: $0) }
@@ -44,20 +48,6 @@ class HipPlaceCellViewModel {
         region = place
             .compactMap { $0.region }
             .asDriver(onErrorJustReturn: "")
-
-        place
-            .compactMap { $0.hashtags }
-            .filter { $0.count >= 0 }
-            .compactMap { $0[0] }
-            .bind(to: firstHashtagVM.content)
-            .disposed(by: bag)
-
-        place
-            .compactMap { $0.hashtags }
-            .filter { $0.count >= 1 }
-            .compactMap { $0[1] }
-            .bind(to: secondHashtagVM.content)
-            .disposed(by: bag)
 
         bookmarkCount = place
             .compactMap { $0.bookmarkCount }

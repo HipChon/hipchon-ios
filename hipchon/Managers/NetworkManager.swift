@@ -326,7 +326,20 @@ class NetworkManager {
                     "imageURLs": [
             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4a5dd5b0-e39c-4ca3-b0c1-3f767367c9ad%2FUntitled.png?table=block&id=dddf5931-e323-47a1-8ee8-fa7267ac1116&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=790&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                    "hashtags": ["3인가능", "반려동물", "핫플"],
+                    "keywords": [
+                        {
+                            "content": "화장실이 청결해요",
+                            "count": 35
+                        },
+                        {
+                            "content": "단체모임 하기 좋아요",
+                            "count": 31
+                        },
+                        {
+                            "content": "여자/남자친구가 좋아해요",
+                            "count": 28
+                        }
+                    ],
                     "bookmarkCount": 32,
                     "reviewCount": 12
                 },
@@ -340,7 +353,20 @@ class NetworkManager {
                     "imageURLs": [
             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4a5dd5b0-e39c-4ca3-b0c1-3f767367c9ad%2FUntitled.png?table=block&id=dddf5931-e323-47a1-8ee8-fa7267ac1116&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=790&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                    "hashtags": ["3인가능", "반려동물", "핫플"],
+                    "keywords": [
+                        {
+                            "content": "화장실이 청결해요",
+                            "count": 35
+                        },
+                        {
+                            "content": "단체모임 하기 좋아요",
+                            "count": 31
+                        },
+                        {
+                            "content": "여자/남자친구가 좋아해요",
+                            "count": 28
+                        }
+                    ],
                     "bookmarkCount": 32,
                     "reviewCount": 12
                 },
@@ -354,7 +380,20 @@ class NetworkManager {
                     "imageURLs": [
             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4a5dd5b0-e39c-4ca3-b0c1-3f767367c9ad%2FUntitled.png?table=block&id=dddf5931-e323-47a1-8ee8-fa7267ac1116&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=790&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                    "hashtags": ["3인가능", "반려동물", "핫플"],
+                    "keywords": [
+                        {
+                            "content": "화장실이 청결해요",
+                            "count": 35
+                        },
+                        {
+                            "content": "단체모임 하기 좋아요",
+                            "count": 31
+                        },
+                        {
+                            "content": "여자/남자친구가 좋아해요",
+                            "count": 28
+                        }
+                    ],
                     "bookmarkCount": 32,
                     "reviewCount": 12
                 }

@@ -90,7 +90,7 @@ class FilterViewController: UIViewController {
     }
 
     private let bag = DisposeBag()
-    var viewHeight = 469.0
+    var viewHeight = 449.0
     var befViewModel: PlaceListViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {

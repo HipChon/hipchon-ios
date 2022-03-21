@@ -16,7 +16,7 @@ class PlaceListViewController: UIViewController {
     private lazy var placeTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
-        $0.rowHeight = (view.frame.width - 60.0) * ((280.0 + 16.0) / 330.0)
+        $0.rowHeight = (view.frame.width - 40.0) * ((255.0 + 16.0) / 351.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }

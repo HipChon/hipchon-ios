@@ -27,21 +27,20 @@ class HipPlaceCell: UICollectionViewCell {
         $0.setImage(UIImage(named: "bookmark") ?? UIImage(), for: .normal)
     }
 
-    private lazy var firstHashtagView = RoundLabelView().then {
-        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
-        $0.label.textColor = .black
-        $0.backgroundColor = .gray02
+    private lazy var keywordView = KeywordView().then { _ in
     }
-
-    private lazy var secondHashtagView = RoundLabelView().then {
-        $0.label.font = .GmarketSans(size: 10.0, type: .medium)
-        $0.label.textColor = .black
-        $0.backgroundColor = .gray02
+    
+    private lazy var bookmarkCountImageView = UIImageView().then {
+        $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
     }
 
     private lazy var bookmarkCountLabel = UILabel().then {
         $0.font = .GmarketSans(size: 12.0, type: .medium)
         $0.textColor = .black
+    }
+    
+    private lazy var reviewCountImageView = UIImageView().then {
+        $0.image = UIImage(named: "reviewCount") ?? UIImage()
     }
 
     private lazy var reviewCountLabel = UILabel().then {
@@ -64,8 +63,12 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
-        firstHashtagView.bind(viewModel.firstHashtagVM)
-        secondHashtagView.bind(viewModel.secondHashtagVM)
+
+        viewModel.keywordVM
+            .drive(onNext: { [weak self] viewModel in
+                self?.keywordView.bind(viewModel)
+            })
+            .disposed(by: bag)
 
         // MARK: view -> viewModel
 
@@ -94,12 +97,12 @@ class HipPlaceCell: UICollectionViewCell {
             .disposed(by: bag)
 
         viewModel.bookmarkCount
-            .map { "저장 \($0)" }
+            .map { "\($0)" }
             .drive(bookmarkCountLabel.rx.text)
             .disposed(by: bag)
 
         viewModel.reviewCount
-            .map { "후기 \($0)" }
+            .map { "\($0)" }
             .drive(reviewCountLabel.rx.text)
             .disposed(by: bag)
     }
@@ -112,15 +115,36 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     private func layout() {
+        
+        // MARK: count
+
+        [
+            bookmarkCountImageView,
+            reviewCountImageView,
+        ].forEach {
+            $0.snp.makeConstraints {
+                $0.width.height.equalTo(16.0)
+            }
+        }
+
+        let countSpacingView = UIView()
+        countSpacingView.snp.makeConstraints {
+            $0.width.equalTo(frame.width).priority(.low)
+        }
+
+        let countStackView = UIStackView(arrangedSubviews: [bookmarkCountImageView, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
+        countStackView.axis = .horizontal
+        countStackView.alignment = .fill
+        countStackView.distribution = .fill
+        countStackView.spacing = 12.0
+        
         [
             imageView,
             nameLabel,
             regionLabel,
             bookmarkButton,
-            firstHashtagView,
-            secondHashtagView,
-            bookmarkCountLabel,
-            reviewCountLabel,
+            keywordView,
+            countStackView
         ].forEach { addSubview($0) }
 
         imageView.snp.makeConstraints {
@@ -144,24 +168,15 @@ class HipPlaceCell: UICollectionViewCell {
             $0.trailing.equalToSuperview().inset(20.0)
         }
 
-        firstHashtagView.snp.makeConstraints {
-            $0.top.equalTo(regionLabel.snp.bottom).offset(8.0)
+        keywordView.snp.makeConstraints {
+            $0.top.equalTo(regionLabel.snp.bottom).offset(12.0)
             $0.leading.equalTo(nameLabel)
+            $0.height.equalTo(28.0)
         }
 
-        secondHashtagView.snp.makeConstraints {
-            $0.top.equalTo(regionLabel.snp.bottom).offset(8.0)
-            $0.leading.equalTo(firstHashtagView.snp.trailing).offset(4.0)
-        }
-
-        bookmarkCountLabel.snp.makeConstraints {
+        countStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(150.0)
             $0.bottom.equalToSuperview().inset(12.0)
-        }
-
-        reviewCountLabel.snp.makeConstraints {
-            $0.leading.equalTo(bookmarkCountLabel.snp.trailing).offset(15.0)
-            $0.bottom.equalTo(bookmarkCountLabel)
         }
     }
 }
