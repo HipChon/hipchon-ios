@@ -26,9 +26,6 @@ class FeedViewController: UIViewController {
         $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
     }
 
-    private lazy var searchNavigationView = SearchNavigationView().then { _ in
-    }
-
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
@@ -62,8 +59,6 @@ class FeedViewController: UIViewController {
 
     func bind(_ viewModel: FeedViewModel) {
         // MARK: subviewModels
-
-        searchNavigationView.bind(viewModel.searchNavigationVM)
 
         // MARK: view -> viewModel
 
@@ -127,19 +122,19 @@ class FeedViewController: UIViewController {
             })
             .disposed(by: bag)
 
-        viewModel.presentFilterVC
-            .emit(onNext: { [weak self] viewModel in
-                guard let self = self else { return }
-                let filterVC = FilterViewController()
-                filterVC.bind(viewModel)
-
-                // MDC 바텀 시트로 설정
-                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
-                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
-                                                          height: filterVC.viewHeight)
-                self.present(bottomSheet, animated: true, completion: nil)
-            })
-            .disposed(by: bag)
+//        viewModel.presentFilterVC
+//            .emit(onNext: { [weak self] viewModel in
+//                guard let self = self else { return }
+//                let filterVC = FilterViewController()
+//                filterVC.bind(viewModel)
+//
+//                // MDC 바텀 시트로 설정
+//                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
+//                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+//                                                          height: filterVC.viewHeight)
+//                self.present(bottomSheet, animated: true, completion: nil)
+//            })
+//            .disposed(by: bag)
     }
 
     private func attribute() {

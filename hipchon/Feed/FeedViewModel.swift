@@ -13,13 +13,11 @@ class FeedViewModel {
 
     // MARK: subViewModels
 
-    let searchNavigationVM = SearchNavigationViewModel()
-
     // MARK: viewModel -> view
 
     let activating: Signal<Bool>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
-    let presentFilterVC: Signal<FilterViewModel>
+//    let presentFilterVC: Signal<FilterViewModel>
 //    let pushPlaceDetailVC: Signal<ReviewPlaceViewModel>
 
     let reviewCellVMs: Driver<[ReviewCellViewModel]>
@@ -72,11 +70,6 @@ class FeedViewModel {
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }
             .map { ReviewDetailViewModel($0) }
-            .asSignal(onErrorSignalWith: .empty())
-
-        presentFilterVC = searchNavigationVM
-            .searchFilterButtonTapped
-            .map { FilterViewModel(.search) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

@@ -19,54 +19,6 @@ class FilterViewController: UIViewController {
         $0.setImage(UIImage(named: "cancle"), for: .normal)
     }
 
-    private lazy var personnelLabel = UILabel().then {
-        $0.text = "인원"
-        $0.font = .GmarketSans(size: 18.0, type: .medium)
-    }
-
-    private lazy var personnelNumberView = UIView().then {
-        $0.layer.cornerRadius = 16.5
-        $0.layer.masksToBounds = true
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-    }
-
-    private lazy var personnelNumberLabel = UILabel().then {
-        $0.text = "나만의"
-        $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
-        $0.textAlignment = .center
-    }
-
-    private lazy var plusButton = UIButton().then {
-        $0.setTitle("+", for: .normal)
-        $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .regular)
-        $0.layer.cornerRadius = 11.5
-        $0.layer.masksToBounds = true
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-    }
-
-    private lazy var minusButton = UIButton().then {
-        $0.setTitle("-", for: .normal)
-        $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .regular)
-        $0.layer.cornerRadius = 11.5
-        $0.layer.masksToBounds = true
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-    }
-
-    private lazy var petButton = UIButton().then {
-        $0.setTitle("반려동물", for: .normal)
-        $0.setTitleColor(.black, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
-        $0.layer.cornerRadius = 16.5
-        $0.layer.masksToBounds = true
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-    }
-
     private lazy var regionLabel = UILabel().then {
         $0.text = "지역"
         $0.font = .GmarketSans(size: 18.0, type: .medium)
@@ -75,9 +27,9 @@ class FilterViewController: UIViewController {
     private lazy var regionCollectionView = UICollectionView(frame: .zero,
                                                              collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
-        let itemSpacing: CGFloat = 20.0
-        let width = 111.0
-        let height = 30.0
+        let itemSpacing: CGFloat = 12.0
+        let width = 93.0
+        let height = 33.0
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
@@ -101,9 +53,9 @@ class FilterViewController: UIViewController {
     private lazy var categoryCollectionView = UICollectionView(frame: .zero,
                                                                collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
-        let itemSpacing: CGFloat = 20.0
-        let width = 111.0
-        let height = 30.0
+        let itemSpacing: CGFloat = 12.0
+        let width = 81.0
+        let height = 33.0
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
@@ -138,7 +90,7 @@ class FilterViewController: UIViewController {
     }
 
     private let bag = DisposeBag()
-    var viewHeight = 600.0
+    var viewHeight = 469.0
     var befViewModel: PlaceListViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -165,19 +117,6 @@ class FilterViewController: UIViewController {
             .bind(to: viewModel.selectedCategory)
             .disposed(by: bag)
 
-        plusButton.rx.tap
-            .bind(to: viewModel.plusButtonTapped)
-            .disposed(by: bag)
-
-        minusButton.rx.tap
-            .bind(to: viewModel.minusButtonTapped)
-            .disposed(by: bag)
-
-        petButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.petButtonTapped)
-            .disposed(by: bag)
-
         resetButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.resetButtonTapped)
@@ -192,31 +131,6 @@ class FilterViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-
-        viewModel.setPerssonel
-            .drive(personnelNumberLabel.rx.text)
-            .disposed(by: bag)
-
-        viewModel.setSelectedButtonType
-            .drive(onNext: {
-                self.minusButton.setTitleColor($0 == .minus ? .white : .black, for: .normal)
-                self.minusButton.backgroundColor = $0 == .minus ? .black : .white
-                self.plusButton.setTitleColor($0 == .plus ? .white : .black, for: .normal)
-                self.plusButton.backgroundColor = $0 == .plus ? .black : .white
-            })
-            .disposed(by: bag)
-
-        viewModel.setPet
-            .drive(onNext: {
-                if $0 {
-                    self.petButton.backgroundColor = .black
-                    self.petButton.setTitleColor(.white, for: .normal)
-                } else {
-                    self.petButton.backgroundColor = .white
-                    self.petButton.setTitleColor(.black, for: .normal)
-                }
-            })
-            .disposed(by: bag)
 
         viewModel.regions
             .drive(regionCollectionView.rx.items) { col, idx, data in
@@ -299,36 +213,10 @@ class FilterViewController: UIViewController {
     }
 
     func layout() {
-        [
-            minusButton,
-            personnelNumberLabel,
-            plusButton,
-        ].forEach {
-            personnelNumberView.addSubview($0)
-        }
-        minusButton.snp.makeConstraints {
-            $0.height.width.equalTo(23.0)
-            $0.leading.equalToSuperview().inset(6.0)
-            $0.centerY.equalToSuperview()
-        }
-
-        personnelNumberLabel.snp.makeConstraints {
-            $0.width.equalTo(37.0)
-            $0.centerX.centerY.equalToSuperview()
-        }
-
-        plusButton.snp.makeConstraints {
-            $0.height.width.equalTo(23.0)
-            $0.trailing.equalToSuperview().inset(6.0)
-            $0.centerY.equalToSuperview()
-        }
 
         [
             titleLabel,
             cancleButton,
-            personnelLabel,
-            personnelNumberView,
-            petButton,
             regionLabel,
             regionCollectionView,
             categoryLabel,
@@ -351,38 +239,19 @@ class FilterViewController: UIViewController {
             $0.height.width.equalTo(30.0)
         }
 
-        personnelLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(30.0)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(50.0)
-        }
-
-        personnelNumberView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(20.0)
-            $0.top.equalTo(personnelLabel.snp.bottom).offset(19.0)
-            $0.width.equalTo(111.0)
-            $0.height.equalTo(33.0)
-        }
-
-        petButton.snp.makeConstraints {
-            $0.leading.equalTo(personnelNumberView.snp.trailing).offset(20.0)
-            $0.top.equalTo(personnelNumberView.snp.top)
-            $0.width.equalTo(111.0)
-            $0.height.equalTo(33.0)
-        }
-
         regionLabel.snp.makeConstraints {
-            $0.leading.equalTo(personnelLabel)
-            $0.top.equalTo(personnelNumberView.snp.bottom).offset(40.0)
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(40.0)
         }
 
         regionCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(regionLabel.snp.bottom).offset(19.0)
-            $0.height.equalTo(33.0 * 2 + 16.0)
+            $0.height.equalTo(33.0)
         }
 
         categoryLabel.snp.makeConstraints {
-            $0.leading.equalTo(personnelLabel)
+            $0.leading.equalTo(regionLabel)
             $0.top.equalTo(regionCollectionView.snp.bottom).offset(40.0)
         }
 

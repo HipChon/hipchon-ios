@@ -118,7 +118,7 @@ class ProfileViewController: TabmanViewController {
             .emit(onNext: { [weak self] viewModel in
                 let settingVC = SettingViewController()
                 settingVC.bind(viewModel)
-                self?.navigationController?.pushViewController(settingVC, animated: true)
+                self?.tabBarController?.navigationController?.pushViewController(settingVC, animated: true)
             })
             .disposed(by: bag)
 

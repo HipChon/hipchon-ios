@@ -44,7 +44,7 @@ class FilterCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16.5
         contentView.layer.masksToBounds = true
         contentView.layer.borderWidth = 1.0
-        contentView.layer.borderColor = UIColor.lightGray.cgColor
+        contentView.layer.borderColor = UIColor.gray02.cgColor
     }
 
     private func layout() {

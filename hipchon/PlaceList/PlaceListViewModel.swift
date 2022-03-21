@@ -83,8 +83,8 @@ class PlaceListViewModel {
             .asSignal(onErrorSignalWith: .empty())
 
         searchFilterTitle = searchFilter
-            .compactMap { ($0.personnel, $0.pet, $0.region, $0.category) }
-            .map { "\($0.0) \($0.1) \($0.2) \($0.3)" }
+            .compactMap { ($0.region, $0.category) }
+            .map { "\($0.0) \($0.1)" }
             .asDriver(onErrorJustReturn: "")
 
         presentFilterVC = searchNavigationVM

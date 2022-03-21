@@ -48,7 +48,7 @@ class HomeViewModel {
         cateogorys = Driver.just(CategoryModel.tmpModels)
 
         pushPlaceListVC = selectedCategory
-            .map { SearchFilterModel(personnel: 0, pet: false, region: "", category: $0.name) }
+            .map { SearchFilterModel(region: "", category: $0.name) }
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 

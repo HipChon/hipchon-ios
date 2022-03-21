@@ -66,7 +66,7 @@ class CustomerServiceView: UIView {
     }
 
     private func attribute() {
-        backgroundColor = .white
+        backgroundColor = .gray01
     }
 
     private func layout() {
