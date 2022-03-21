@@ -16,13 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
-        window?.backgroundColor = .systemBackground
+        window?.backgroundColor = .white
 
-        let onBoardingViewController = OnBoardingViewController()
-        window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
+//        let onBoardingViewController = OnBoardingViewController()
+//        window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
 
-//        let tapBarViewController = TabBarViewController()
-//        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
+        let tapBarViewController = TabBarViewController()
+        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
 
         window?.makeKeyAndVisible()
     }

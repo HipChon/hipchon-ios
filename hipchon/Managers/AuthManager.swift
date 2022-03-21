@@ -84,6 +84,7 @@ class AuthManager {
                 return Disposables.create()
             }
             single(.success(.success(())))
+//            single(.failure(APIError(statusCode: -1, description: "")))
             
 //            guard let email = authModel.email,
 //                  let password = authModel.password
@@ -124,4 +125,25 @@ class AuthManager {
     
     }
     
+    func signup(auth: AuthModel) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
+                return Disposables.create()
+            }
+            single(.success(.success(())))
+            return Disposables.create()
+        }
+    }
+    
+    func putProfileImage(image: UIImage) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
+                return Disposables.create()
+            }
+            single(.success(.success(())))
+            return Disposables.create()
+        }
+    }
 }

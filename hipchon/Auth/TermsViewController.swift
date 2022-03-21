@@ -5,7 +5,7 @@
 //  Created by 김범수 on 2022/03/21.
 //
 
-import Foundation
+import RxCocoa
 import UIKit
 import RxSwift
 
@@ -102,12 +102,68 @@ class TermsViewController: UIViewController {
         
         // MARK: view -> viewModel
         
+        entireCheckButton.rx.tap
+            .bind(to: viewModel.entireCheckButtonTapped)
+            .disposed(by: bag)
+        
+        ageCheckButton.rx.tap
+            .bind(to: viewModel.ageCheckButtonTapped)
+            .disposed(by: bag)
+        
+        serviceCheckButton.rx.tap
+            .bind(to: viewModel.serviceCheckButtonTapped)
+            .disposed(by: bag)
+        
+        privacyCheckButton.rx.tap
+            .bind(to: viewModel.privacyCheckButtonTapped)
+            .disposed(by: bag)
+        
+        positionCheckButton.rx.tap
+            .bind(to: viewModel.positionCheckButtonTapped)
+            .disposed(by: bag)
+        
+        maketingCheckButton.rx.tap
+            .bind(to: viewModel.maketingCheckButtonTapped)
+            .disposed(by: bag)
+        
         completeButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.completeButtonTapped)
             .disposed(by: bag)
         
         // MARK: viewModel -> view
+        
+        viewModel.setEntireAgree
+            .compactMap { $0 ? UIImage(named: "check") : UIImage(named: "nonCheck") }
+            .drive(entireCheckButton.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.setAgeAgree
+            .compactMap { $0 ? UIImage(named: "check") : UIImage(named: "nonCheck") }
+            .drive(ageCheckButton.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.setServiceAgree
+            .compactMap { $0 ? UIImage(named: "check") : UIImage(named: "nonCheck") }
+            .drive(serviceCheckButton.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.setPrivacyAgree
+            .compactMap { $0 ? UIImage(named: "check") : UIImage(named: "nonCheck") }
+            .drive(privacyCheckButton.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.setPositionAgree
+            .compactMap { $0 ? UIImage(named: "check") : UIImage(named: "nonCheck") }
+            .drive(positionCheckButton.rx.image)
+            .disposed(by: bag)
+        
+        viewModel.setMaketingAgree
+            .compactMap { $0 ? UIImage(named: "check") : UIImage(named: "nonCheck") }
+            .drive(maketingCheckButton.rx.image)
+            .disposed(by: bag)
+        
+        // MARK: scene
         
         viewModel.pushEditProfileVC
             .emit(onNext: { [weak self] viewModel in

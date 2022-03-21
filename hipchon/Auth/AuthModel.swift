@@ -6,17 +6,42 @@
 //
 
 import Foundation
+import UIKit
 
 enum RegisterPasswordCheckType {
     case right, length, combination, special
 }
 
-class AuthModel: Codable {
+class AuthModel {
+    let token: String?
     let email: String?
     let password: String?
-
-    enum Codingkeys: String, CodingKey {
-        case email, password
+    let name: String?
+    var maketingAgree: Bool = false
+    var profileImage: UIImage?
+    
+    init() {
+        token = nil
+        email = nil
+        password = nil
+        name = nil
+        profileImage = nil
+    }
+    
+    init(email: String?, password: String?) {
+        self.email = email
+        self.password = password
+        self.token = nil
+        self.name = nil
+        profileImage = nil
+    }
+    
+    init(token: String?, email: String?, name: String?) {
+        self.token = token
+        self.email = email
+        self.name = name
+        self.password = nil
+        profileImage = nil
     }
 
     public static func emailValidCheck(email: String) -> Bool {
@@ -48,8 +73,4 @@ class AuthModel: Codable {
         return RegisterPasswordCheckType.right
     }
 
-    init(email: String?, password: String?) {
-        self.email = email
-        self.password = password
-    }
 }

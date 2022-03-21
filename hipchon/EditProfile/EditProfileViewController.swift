@@ -123,6 +123,11 @@ class EditProfileViewController: UIViewController {
 
             })
             .disposed(by: bag)
+        
+        completeButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.completeButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
         
@@ -136,6 +141,21 @@ class EditProfileViewController: UIViewController {
         
         viewModel.setChangedImage
             .emit(to: profileImageButton.rx.image)
+            .disposed(by: bag)
+        
+        // MARK: scene
+        
+        viewModel.pushMainVC
+            .emit(onNext: { [weak self] in
+                let tapBarViewController = TabBarViewController()
+                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
+            })
+            .disposed(by: bag)
+        
+        viewModel.editComplete
+            .emit(onNext: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            })
             .disposed(by: bag)
 
     }

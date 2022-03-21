@@ -114,23 +114,18 @@ class OnBoardingViewController: UIViewController {
 
         // MARK: viewModel -> view
 
-        viewModel.pushRegisterVC
+        viewModel.pushTermsVC
             .emit(onNext: { [weak self] viewModel in
-                let registerVC = RegisterViewController()
-                registerVC.bind(viewModel)
-                self?.navigationController?.pushViewController(registerVC, animated: true)
+                let termsVC = TermsViewController()
+                termsVC.bind(viewModel)
+                self?.navigationController?.pushViewController(termsVC, animated: true)
             })
             .disposed(by: bag)
 
         viewModel.pushMainVC
             .emit(onNext: { [weak self] in 
-//                let tapBarViewController = TabBarViewController()
-//                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
-                
-                let termsVM = TermsViewModel()
-                let termsVC = TermsViewController()
-                termsVC.bind(termsVM)
-                self?.navigationController?.pushViewController(termsVC, animated: true)
+                let tapBarViewController = TabBarViewController()
+                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
             })
             .disposed(by: bag)
     }
@@ -204,7 +199,9 @@ extension OnBoardingViewController: ASAuthorizationControllerPresentationContext
             print("User ID : \(userIdentifier)")
             print("User Email : \(email ?? "")")
             print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
-            viewModel.appleUserIdentifier.onNext(userIdentifier)
+            viewModel.token.onNext(userIdentifier)
+            viewModel.email.onNext(email ?? "")
+            viewModel.name.onNext("\((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
         default:
             break
         }
