@@ -35,7 +35,7 @@ class HipPlaceCellViewModel {
             .compactMap { $0.keywords?.first }
             .map { KeywordViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         url = place
             .compactMap { $0.imageURLs?.first }
             .compactMap { URL(string: $0) }

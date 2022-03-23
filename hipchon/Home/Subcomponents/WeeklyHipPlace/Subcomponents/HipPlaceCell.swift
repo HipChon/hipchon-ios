@@ -29,7 +29,7 @@ class HipPlaceCell: UICollectionViewCell {
 
     private lazy var keywordView = KeywordView().then { _ in
     }
-    
+
     private lazy var bookmarkCountImageView = UIImageView().then {
         $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
     }
@@ -38,7 +38,7 @@ class HipPlaceCell: UICollectionViewCell {
         $0.font = .GmarketSans(size: 12.0, type: .medium)
         $0.textColor = .black
     }
-    
+
     private lazy var reviewCountImageView = UIImageView().then {
         $0.image = UIImage(named: "reviewCount") ?? UIImage()
     }
@@ -63,7 +63,6 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
-
         viewModel.keywordVM
             .drive(onNext: { [weak self] viewModel in
                 self?.keywordView.bind(viewModel)
@@ -115,7 +114,6 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     private func layout() {
-        
         // MARK: count
 
         [
@@ -137,14 +135,14 @@ class HipPlaceCell: UICollectionViewCell {
         countStackView.alignment = .fill
         countStackView.distribution = .fill
         countStackView.spacing = 12.0
-        
+
         [
             imageView,
             nameLabel,
             regionLabel,
             bookmarkButton,
             keywordView,
-            countStackView
+            countStackView,
         ].forEach { addSubview($0) }
 
         imageView.snp.makeConstraints {
