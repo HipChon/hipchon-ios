@@ -18,20 +18,19 @@ class ReviewKeywordListView: UIView {
         $0.font = .GmarketSans(size: 18.0, type: .medium)
         $0.textColor = .black
     }
-    
+
     private lazy var firstKeywordView = KeywordDetailView().then { _ in
     }
-    
+
     private lazy var secondKeywordView = KeywordDetailView().then { _ in
     }
-    
+
     private lazy var thirdKeywordView = KeywordDetailView().then { _ in
     }
 
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
-
 
     private let bag = DisposeBag()
 
@@ -50,25 +49,24 @@ class ReviewKeywordListView: UIView {
         // MARK: view -> viewModel
 
         // MARK: viewModel -> view
-        
+
         viewModel.firstKeywordVM
             .drive(onNext: { [weak self] in
                 self?.firstKeywordView.bind($0)
             })
             .disposed(by: bag)
-        
+
         viewModel.secondKeywordVM
             .drive(onNext: { [weak self] in
                 self?.secondKeywordView.bind($0)
             })
             .disposed(by: bag)
-        
+
         viewModel.thirdKeywordVM
             .drive(onNext: { [weak self] in
                 self?.thirdKeywordView.bind($0)
             })
             .disposed(by: bag)
-
     }
 
     private func attribute() {
@@ -96,25 +94,24 @@ class ReviewKeywordListView: UIView {
             $0.leading.equalTo(reviewLabelImageView.snp.trailing).offset(8.0)
             $0.centerY.equalTo(reviewLabelImageView)
         }
-        
+
         firstKeywordView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(reviewLabel.snp.bottom).offset(23.0)
             $0.height.equalTo(40.0)
         }
-        
+
         secondKeywordView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(firstKeywordView.snp.bottom).offset(8.0)
             $0.height.equalTo(40.0)
         }
-        
+
         thirdKeywordView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(secondKeywordView.snp.bottom).offset(8.0)
             $0.height.equalTo(40.0)
         }
-
 
         boundaryView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)

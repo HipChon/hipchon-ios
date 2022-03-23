@@ -25,6 +25,7 @@ class SectorPlaceViewModel {
 
     let places: Driver<[PlaceModel]>
     let activating: Signal<Bool>
+    let placeTableViewHidden: Driver<Bool>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
 
     // MARK: view -> viewModel
@@ -36,22 +37,22 @@ class SectorPlaceViewModel {
     init(_ data: SectorType) {
         let sector = BehaviorSubject<SectorType>(value: data)
         let placeDatas = BehaviorSubject<[PlaceModel]>(value: [])
-        
+
         places = placeDatas
             .asDriver(onErrorJustReturn: [])
-        
+
         // 첫 로드, sorting
         sector
             .flatMap { _ in NetworkManager.shared.getPlaces() }
             .bind(to: placeDatas)
             .disposed(by: bag)
-        
+
         // refresh
         let activatingState = PublishSubject<Bool>()
-        
+
         activating = activatingState
             .asSignal(onErrorJustReturn: false)
-        
+
         reload
             .do(onNext: { activatingState.onNext(true) })
             .withLatestFrom(sector)
@@ -59,14 +60,19 @@ class SectorPlaceViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .bind(to: placeDatas)
             .disposed(by: bag)
-                
+
         // more fetching
-                
+
         moreFetching
+            .withLatestFrom(sector)
             .flatMap { _ in NetworkManager.shared.getPlaces() }
             .withLatestFrom(placeDatas) { $1 + $0 }
             .bind(to: placeDatas)
             .disposed(by: bag)
+
+        placeTableViewHidden = placeDatas
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: false)
 
         pushPlaceDetailVC = selectedPlace
             .map { PlaceDetailViewModel($0) }

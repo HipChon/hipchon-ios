@@ -22,8 +22,9 @@ class MyPlaceCellViewModel {
     let memoContent: Driver<String>
     let memoColor: Driver<UIColor>
     let presentMemoVC: Signal<MemoViewModel>
-    
+
     // MARK: view -> viewModel
+
     let memoButtonTapped = PublishRelay<Void>()
 
     init(_ data: PlaceModel) {
@@ -53,18 +54,17 @@ class MyPlaceCellViewModel {
         reviewCount = place
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
-        
+
         memoContent = place
             .compactMap { $0.memo?.content }
             .asDriver(onErrorJustReturn: "")
-        
+
         memoColor = place
             .compactMap { $0.memo?.backgroundColor }
             .asDriver(onErrorJustReturn: .gray05)
-        
+
         presentMemoVC = memoButtonTapped
             .withLatestFrom(place)
-            .map { $0.memo }
             .map { MemoViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }

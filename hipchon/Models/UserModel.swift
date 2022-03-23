@@ -5,13 +5,12 @@
 //  Created by 김범수 on 2022/02/14.
 //
 
-import RxSwift
 import Alamofire
+import RxSwift
 
 class UserModel: Codable {
-    
     static let currentUser = BehaviorSubject<UserModel>(value: UserModel())
-    
+
     let id: Int?
     let name: String?
     let profileImageURL: String?
@@ -29,7 +28,7 @@ class UserModel: Codable {
         self.profileImageURL = profileImageURL
         self.reviewCount = reviewCount
     }
-    
+
     init() {
         id = nil
         name = nil

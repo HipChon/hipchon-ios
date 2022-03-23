@@ -19,8 +19,8 @@ class PlaceListViewModel {
 
     let placeListCellVMs: Driver<[PlaceListCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let searchFilterTitle: Driver<String>
     let activating: Signal<Bool>
+    let placeTableViewHidden: Driver<Bool>
     let presentFilterVC: Signal<FilterViewModel>
     let presentSortVC: Signal<SortViewModel>
 
@@ -38,32 +38,37 @@ class PlaceListViewModel {
 
         // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
-            .withLatestFrom(NetworkManager.shared.getPlaces())
+            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
             .bind(to: places)
             .disposed(by: bag)
-        
+
         // refresh
         let activatingState = PublishSubject<Bool>()
-        
+
         activating = activatingState
             .asSignal(onErrorJustReturn: false)
-        
+
         reload
             .do(onNext: { activatingState.onNext(true) })
             .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
-            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
             .do(onNext: { _ in activatingState.onNext(false) })
             .bind(to: places)
             .disposed(by: bag)
-                
+
         // more fetching
-                
+
         moreFetching
-            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
+            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
             .withLatestFrom(places) { $1 + $0 }
             .bind(to: places)
             .disposed(by: bag)
-        
+
+        placeTableViewHidden = places
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: false)
+
         placeListCellVMs = places
             .map { $0.map { PlaceListCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
@@ -82,11 +87,6 @@ class PlaceListViewModel {
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        searchFilterTitle = searchFilter
-            .compactMap { ($0.region, $0.category) }
-            .map { "\($0.0) \($0.1)" }
-            .asDriver(onErrorJustReturn: "")
-
         presentFilterVC = searchNavigationVM
             .searchFilterButtonTapped
             .map { FilterViewModel(.research) }
@@ -97,6 +97,5 @@ class PlaceListViewModel {
             .withLatestFrom(sortType)
             .map { SortViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-
     }
 }

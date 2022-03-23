@@ -27,7 +27,7 @@ class OnBoardingViewModel {
 
     init() {
         let signupedUser = PublishSubject<Bool>()
-        
+
         token
             .skip(1)
             .flatMap { AuthManager.shared.signin(token: $0) }
@@ -35,13 +35,13 @@ class OnBoardingViewModel {
                 switch result {
                 case .success():
                     signupedUser.onNext(true)
-                case .failure(let error):
+                case let .failure(error):
                     print(error.description)
                     signupedUser.onNext(false)
                 }
             })
             .disposed(by: bag)
-   
+
         pushTermsVC = signupedUser
             .filter { $0 == true }
             .withLatestFrom(Observable.combineLatest(token,
@@ -50,21 +50,19 @@ class OnBoardingViewModel {
             .map { AuthModel(token: $0.0, email: $0.1, name: $0.2) }
             .map { TermsViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-        
 
         pushMainVC = signupedUser
             .filter { $0 == false }
             .map { _ in () }
             .asSignal(onErrorSignalWith: .empty())
-        
-        
+
         kakaoLoginButtonTapped
             .flatMap { AuthManager.shared.kakaoSignup() }
             .subscribe(onNext: { [weak self] result in
                 switch result {
-                case .success(let accessToken):
+                case let .success(accessToken):
                     self?.token.onNext(accessToken!)
-                case .failure(let error):
+                case let .failure(error):
                     print(error.description)
                 }
             })

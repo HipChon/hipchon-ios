@@ -1,5 +1,5 @@
 //
-//  CategoryCell.swift
+//  HashtagCell.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/01/30.
@@ -8,8 +8,8 @@
 import RxSwift
 import UIKit
 
-class CategoryCell: UICollectionViewCell {
-    public static let identyfier = "CategoryCell"
+class HashtagCell: UICollectionViewCell {
+    public static let identyfier = "HashtagCell"
     private let bag = DisposeBag()
 
     private lazy var label = UILabel().then {
@@ -32,7 +32,7 @@ class CategoryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(_ viewModel: CategoryCellViewModel) {
+    func bind(_ viewModel: HashtagCellViewModel) {
         // MARK: view -> viewModel
 
         // MARK: viewModel -> view

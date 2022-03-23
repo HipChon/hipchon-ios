@@ -26,6 +26,8 @@ class ReviewCellViewModel {
     let likeCount: Driver<Int>
     let commentCount: Driver<Int>
     let content: Driver<String>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let share: Signal<Void>
 
     // MARK: view -> viewModel
 
@@ -119,5 +121,11 @@ class ReviewCellViewModel {
                 }
             })
             .disposed(by: bag)
+
+        pushPlaceDetailVC = reviewPlaceVM
+            .flatMap { $0.pushPlaceDetailVC }
+
+        share = reviewPlaceVM
+            .flatMap { $0.share }
     }
 }

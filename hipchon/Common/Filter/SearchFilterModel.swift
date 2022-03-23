@@ -7,17 +7,21 @@
 
 import Foundation
 
-class SearchFilterModel: Codable {
+class SearchFilterModel {
     let region: String?
     let category: String?
-
-    enum CodingKeys: String, CodingKey {
-        case region, category
-    }
+    let hashtag: String?
 
     init(region: String?, category: String?) {
         self.region = region
         self.category = category
+        hashtag = nil
+    }
+
+    init(hashtag: String?) {
+        self.hashtag = hashtag
+        region = nil
+        category = nil
     }
 
     var filterTitle: String? {
@@ -31,6 +35,11 @@ class SearchFilterModel: Codable {
            category != ""
         {
             titles.append("\(category)")
+        }
+        if let hashtag = hashtag,
+           hashtag != ""
+        {
+            titles.append("\(hashtag)")
         }
         return titles.joined(separator: " | ")
     }

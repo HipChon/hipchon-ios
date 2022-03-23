@@ -26,8 +26,6 @@ extension UIColor {
     static var gray_border: UIColor { return UIColor(hexString: "#E4E5EB")! }
     static var typography_secondary: UIColor { return UIColor(hexString: "#6C6E78")! }
     static var kakao_yellow: UIColor { return UIColor(hexString: "#FBE74D")! }
-    
-
 
     convenience init(red: Int, green: Int, blue: Int, a: Int = 0xFF) {
         self.init(

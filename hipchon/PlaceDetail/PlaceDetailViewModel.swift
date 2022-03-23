@@ -19,27 +19,30 @@ class PlaceDetailViewModel {
     let menuListVM: Signal<MenuListViewModel>
     let reviewKeywordListVM: Signal<ReviewKeywordListViewModel>
     let reviewCellVms: Driver<[ReviewCellViewModel]>
-    
+    let pushReviewListVC: Signal<ReviewListViewModel>
+
     // MARK: viewModel -> view
-    
+
     let urls: Driver<[URL]>
     let openURL: Signal<URL>
     let share: Signal<Void>
     let menuListViewHidden: Driver<Bool>
+    let reviewTableViewHidden: Driver<Bool>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
     let pushPostReviewVC: Signal<PostReviewViewModel>
 
     // MARK: view -> viewModel
 
     let selectedReviewIdx = PublishSubject<Int>()
-
+    let moreReviewButtonTapped = PublishRelay<Void>()
+    let postReviewButtonTapped = PublishRelay<Void>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
         let reviews = BehaviorSubject<[ReviewModel]>(value: [])
-        
+
         // MARK: subViewModels
-        
+
         placeMapVM
             .copyButtonTapped
             .withLatestFrom(place)
@@ -54,7 +57,7 @@ class PlaceDetailViewModel {
             .asDriver(onErrorJustReturn: [])
 
         // MARK: data
-        
+
         urls = place
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
@@ -163,9 +166,13 @@ class PlaceDetailViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         menuListViewHidden = place
             .compactMap { $0.menus }
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: true)
+
+        reviewTableViewHidden = reviews
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: true)
 
@@ -194,7 +201,8 @@ class PlaceDetailViewModel {
         share = placeDesVM.sharedButtonTapped
             .asSignal()
 
-        pushPostReviewVC = placeDesVM.reviewButtonTapped
+        pushPostReviewVC = Observable.merge(placeDesVM.reviewButtonTapped.asObservable(),
+                                            postReviewButtonTapped.asObservable())
             .withLatestFrom(place)
             .map { PostReviewViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
@@ -204,14 +212,13 @@ class PlaceDetailViewModel {
             .map { ReviewDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-//        placeDetailHeaderVM
-//            .drive(onNext: { [weak self] in
-//                self?.headerVM = $0
-//            })
-//            .disposed(by: bag)
-        
+        pushReviewListVC = moreReviewButtonTapped
+            .withLatestFrom(place)
+            .map { ReviewListViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
+
         // MARK: API
-        
+
         place
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.getReviews() }

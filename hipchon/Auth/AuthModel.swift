@@ -16,10 +16,10 @@ class AuthModel {
     let token: String?
     let email: String?
     let password: String?
-    let name: String?
+    var name: String?
     var maketingAgree: Bool = false
     var profileImage: UIImage?
-    
+
     init() {
         token = nil
         email = nil
@@ -27,20 +27,20 @@ class AuthModel {
         name = nil
         profileImage = nil
     }
-    
+
     init(email: String?, password: String?) {
         self.email = email
         self.password = password
-        self.token = nil
-        self.name = nil
+        token = nil
+        name = nil
         profileImage = nil
     }
-    
+
     init(token: String?, email: String?, name: String?) {
         self.token = token
         self.email = email
         self.name = name
-        self.password = nil
+        password = nil
         profileImage = nil
     }
 
@@ -72,5 +72,4 @@ class AuthModel {
         }
         return RegisterPasswordCheckType.right
     }
-
 }

@@ -12,7 +12,7 @@ class NavigationView: UIView {
     private lazy var backButton = UIButton().then {
         $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
     }
-    
+
     private let bag = DisposeBag()
     public let viewHeight = 68.0
 
@@ -27,6 +27,7 @@ class NavigationView: UIView {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     func bind() {
         backButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)

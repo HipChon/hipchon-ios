@@ -11,16 +11,16 @@ import UIKit
 class MemoModel: Codable {
     let content: String?
     let color: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case content, color
     }
-    
+
     init() {
         content = nil
         color = nil
     }
-    
+
     var backgroundColor: UIColor {
         switch color ?? "" {
         case "green":
@@ -29,10 +29,8 @@ class MemoModel: Codable {
             return .secondary_yellow
         case "blue":
             return .secondary_blue
-        case "red":
-            return .secondary_red
         case "purple":
-            return .secondary_red
+            return .secondary_purple
         default:
             return .gray01
         }

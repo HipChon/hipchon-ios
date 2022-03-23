@@ -11,7 +11,7 @@ import UIKit
 
 class MenuListView: UIView {
     private lazy var menuLabelImageView = UIImageView().then {
-        $0.image = UIImage(named: "reviewWhite") ?? UIImage()
+        $0.image = UIImage(named: "menu") ?? UIImage()
     }
 
     private lazy var menuLabel = UILabel().then {

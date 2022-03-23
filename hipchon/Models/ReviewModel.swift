@@ -14,14 +14,14 @@ class ReviewModel: Codable {
     let imageURLs: [String]?
     let user: UserModel?
     let place: PlaceModel?
-    let likeCount: Int?
+    var likeCount: Int?
     let commentCount: Int?
-    let likeYn: Bool?
+    var likeYn: Bool?
 
     enum Codingkeys: String, CodingKey {
         case id, content, postDt, imageURLs, user, place, compliments, likeCount, commentCount, likeYn
     }
-    
+
     var formattedPostDate: String? {
         guard let postDt = postDt else {
             return nil

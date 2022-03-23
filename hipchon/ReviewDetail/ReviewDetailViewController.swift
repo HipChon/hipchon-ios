@@ -113,6 +113,7 @@ class ReviewDetailViewController: UIViewController {
     }
 
     private let bag = DisposeBag()
+    var viewModel: ReviewDetailViewModel? // TODO: remove
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -131,6 +132,8 @@ class ReviewDetailViewController: UIViewController {
     }
 
     func bind(_ viewModel: ReviewDetailViewModel) {
+        self.viewModel = viewModel
+
         // MARK: subViewModels
 
         viewModel.reviewPlaceVM
@@ -138,6 +141,8 @@ class ReviewDetailViewController: UIViewController {
                 self.reviewPlaceView.bind($0)
             })
             .disposed(by: bag)
+
+        inputCommentView.bind(viewModel.inputCommentVM)
 
         // MARK: view -> viewModel
 
@@ -207,6 +212,21 @@ class ReviewDetailViewController: UIViewController {
             }
             .disposed(by: bag)
 
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                self?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
+            .disposed(by: bag)
+
+        viewModel.share
+            .emit(onNext: { [weak self] in
+                let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                                                          applicationActivities: nil)
+                self?.present(activityVC, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {
@@ -225,7 +245,7 @@ class ReviewDetailViewController: UIViewController {
         ].forEach {
             view.addSubview($0)
         }
-        
+
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
@@ -370,7 +390,6 @@ private extension ReviewDetailViewController {
 
     @objc private func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print(keyboardSize.height)
             inputCommentView.snp.remakeConstraints {
                 $0.leading.trailing.equalToSuperview()
                 $0.height.equalTo(102.0)

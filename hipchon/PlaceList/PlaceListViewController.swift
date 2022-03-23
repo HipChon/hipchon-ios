@@ -21,6 +21,9 @@ class PlaceListViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
+    private lazy var emptyView = EmptyView().then { _ in
+    }
+
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -50,7 +53,7 @@ class PlaceListViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         // refresh
         placeTableView.refreshControl = UIRefreshControl()
 
@@ -68,9 +71,18 @@ class PlaceListViewController: UIViewController {
                 self?.placeTableView.refreshControl?.endRefreshing()
             })
             .disposed(by: bag)
-        
+
+        viewModel.placeTableViewHidden
+            .drive(placeTableView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.placeTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
         // more fetching
-        
+
         placeTableView.rx.contentOffset
             .map { [unowned self] in placeTableView.isNearTheBottomEdge($0) }
             .distinctUntilChanged()
@@ -127,7 +139,6 @@ class PlaceListViewController: UIViewController {
                 self.present(bottomSheet, animated: true, completion: nil)
             })
             .disposed(by: bag)
-
     }
 
     private func attribute() {
@@ -139,6 +150,7 @@ class PlaceListViewController: UIViewController {
         [
             searchNavigationView,
             placeTableView,
+            emptyView,
         ].forEach { view.addSubview($0) }
 
         searchNavigationView.snp.makeConstraints {
@@ -150,6 +162,10 @@ class PlaceListViewController: UIViewController {
         placeTableView.snp.makeConstraints {
             $0.top.equalTo(searchNavigationView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(placeTableView)
         }
     }
 }

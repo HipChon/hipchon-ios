@@ -57,8 +57,7 @@ class SearchNavigationView: UIView {
         viewModel.setSearchFilterTitle
             .drive(searchFilterButton.rx.title())
             .disposed(by: bag)
-        
-        
+
         backButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .asSignal(onErrorJustReturn: ())

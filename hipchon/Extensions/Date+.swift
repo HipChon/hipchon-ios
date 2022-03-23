@@ -27,8 +27,8 @@ public extension Date {
         let dateStr = dateFormatter.string(from: self)
         return dateStr
     }
-    
-    public var relativeTime: String {
+
+    var relativeTime: String {
         let formatter = RelativeDateTimeFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.unitsStyle = .abbreviated

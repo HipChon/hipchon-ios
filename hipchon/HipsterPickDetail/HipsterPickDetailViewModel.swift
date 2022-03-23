@@ -38,6 +38,5 @@ class HipsterPickDetailViewModel {
             .asObservable()
             .bind(to: hipsterPicks)
 //            .disposed(by: bag)
-
     }
 }

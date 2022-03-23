@@ -9,9 +9,7 @@ import UIKit
 
 extension UIScrollView {
     func isNearTheBottomEdge(_ contentOffset: CGPoint) -> Bool {
-        if self.contentSize.height == 0 { return false }
-        return contentOffset.y + self.frame.size.height > self.contentSize.height
+        if contentSize.height == 0 { return false }
+        return contentOffset.y + frame.size.height > contentSize.height
     }
-    
-    
 }

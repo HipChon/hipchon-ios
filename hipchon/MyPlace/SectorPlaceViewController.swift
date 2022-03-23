@@ -20,6 +20,9 @@ class SectorPlaceViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
+    private lazy var emptyView = EmptyView().then { _ in
+    }
+
     private let bag = DisposeBag()
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -47,7 +50,7 @@ class SectorPlaceViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         // refresh
         placeTableView.refreshControl = UIRefreshControl()
 
@@ -61,9 +64,9 @@ class SectorPlaceViewController: UIViewController {
             .distinctUntilChanged()
             .emit(to: placeTableView.refreshControl!.rx.isRefreshing)
             .disposed(by: bag)
-        
+
         // more fetching
-        
+
         placeTableView.rx.contentOffset
             .map { [unowned self] in placeTableView.isNearTheBottomEdge($0) }
             .distinctUntilChanged()
@@ -71,7 +74,16 @@ class SectorPlaceViewController: UIViewController {
             .map { _ in () }
             .bind(to: viewModel.moreFetching)
             .disposed(by: bag)
-        
+
+        viewModel.placeTableViewHidden
+            .drive(placeTableView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.placeTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
         // data binding
 
         viewModel.places
@@ -102,11 +114,16 @@ class SectorPlaceViewController: UIViewController {
     func layout() {
         [
             placeTableView,
+            emptyView,
         ].forEach { view.addSubview($0) }
 
         placeTableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(121.0)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(placeTableView)
         }
     }
 }

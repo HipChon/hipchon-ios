@@ -1,5 +1,5 @@
 //
-//  CategoryCellViewModel.swift
+//  HashtagCellViewModel.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/02.
@@ -9,7 +9,7 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
-class CategoryCellViewModel {
+class HashtagCellViewModel {
     private let bag = DisposeBag()
 
     // MARK: viewModel -> view
@@ -19,14 +19,14 @@ class CategoryCellViewModel {
 
     // MARK: view -> viewModel
 
-    let category = PublishRelay<CategoryModel>()
+    let hashtag = PublishRelay<HashtagModel>()
 
     init() {
-        title = category
+        title = hashtag
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
 
-        image = category
+        image = hashtag
             .compactMap { $0.image }
             .asDriver(onErrorJustReturn: UIImage())
     }

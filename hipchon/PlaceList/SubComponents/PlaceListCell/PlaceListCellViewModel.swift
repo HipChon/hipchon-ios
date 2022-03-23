@@ -38,7 +38,7 @@ class PlaceListCellViewModel {
             .compactMap { $0.keywords?.first }
             .map { KeywordViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         placeImageURLs = place
             .compactMap { $0.imageURLs }
             .map { $0.compactMap { URL(string: $0) } }

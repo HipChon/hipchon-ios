@@ -14,6 +14,7 @@ class ReviewDetailViewModel {
     // MARK: subviewModels
 
     let reviewPlaceVM: Driver<ReviewPlaceViewModel>
+    let inputCommentVM = InputCommentViewModel()
 
     // MARK: viewModel -> view
 
@@ -28,6 +29,8 @@ class ReviewDetailViewModel {
     let commentCount: Driver<Int>
     let content: Driver<String>
     let commentCellVMs: Driver<[CommentCellViewModel]>
+    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let share: Signal<Void>
 
     // MARK: view -> viewModel
 
@@ -139,5 +142,13 @@ class ReviewDetailViewModel {
                 }
             })
             .disposed(by: bag)
+
+        // MARK: scene
+
+        pushPlaceDetailVC = reviewPlaceVM
+            .flatMap { $0.pushPlaceDetailVC }
+
+        share = reviewPlaceVM
+            .flatMap { $0.share }
     }
 }

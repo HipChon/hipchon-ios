@@ -9,7 +9,7 @@ import RxCocoa
 import RxSwift
 
 enum SortType {
-    case review, bookmark, distance
+    case review, bookmark
 }
 
 class SortViewModel {

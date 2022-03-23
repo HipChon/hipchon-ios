@@ -13,6 +13,9 @@ class BestReviewCell: UICollectionViewCell {
         $0.contentMode = .scaleAspectFit
     }
 
+    private lazy var hashtagImageView = UIImageView().then { _ in
+    }
+
     public static let identyfier = "BestReviewCell"
     private let bag = DisposeBag()
 
@@ -31,6 +34,10 @@ class BestReviewCell: UICollectionViewCell {
         viewModel.url
             .drive(imageView.rx.setImageKF)
             .disposed(by: bag)
+
+        viewModel.hashtagImageURL
+            .drive(hashtagImageView.rx.setImageKF)
+            .disposed(by: bag)
     }
 
     private func attribute() {}
@@ -38,10 +45,18 @@ class BestReviewCell: UICollectionViewCell {
     private func layout() {
         [
             imageView,
+            hashtagImageView,
         ].forEach { addSubview($0) }
 
         imageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+
+        hashtagImageView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(35.0)
+            $0.top.equalToSuperview().offset(6.0)
+            $0.height.equalTo(76.0)
+            $0.width.equalTo(58.0)
         }
     }
 }

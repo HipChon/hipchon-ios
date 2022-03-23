@@ -16,6 +16,7 @@ class FeedViewModel {
     // MARK: viewModel -> view
 
     let activating: Signal<Bool>
+    let reviewTableViewHidden: Driver<Bool>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
 //    let presentFilterVC: Signal<FilterViewModel>
 //    let pushPlaceDetailVC: Signal<ReviewPlaceViewModel>
@@ -36,19 +37,23 @@ class FeedViewModel {
             .map { $0.map { ReviewCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
+        reviewTableViewHidden = reviews
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: false)
+
         // 첫 load, sorting
         viewAppear
             .flatMap { NetworkManager.shared.getReviews() }
             .asObservable()
             .bind(to: reviews)
             .disposed(by: bag)
-        
+
         // refresh
         let activatingState = PublishSubject<Bool>()
-        
+
         activating = activatingState
             .asSignal(onErrorJustReturn: false)
-        
+
         reload
             .do(onNext: { activatingState.onNext(true) })
 //            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
@@ -56,15 +61,15 @@ class FeedViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .bind(to: reviews)
             .disposed(by: bag)
-                
+
         // more fetching
-                
+
         moreFetching
             .flatMap { _ in NetworkManager.shared.getReviews() }
             .withLatestFrom(reviews) { $1 + $0 }
             .bind(to: reviews)
             .disposed(by: bag)
-        
+
         // scene
 
         pushReviewDetailVC = selectedReviewIdx

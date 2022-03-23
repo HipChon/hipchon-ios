@@ -5,10 +5,10 @@
 //  Created by 김범수 on 2022/01/30.
 //
 
-import UIKit
-import KakaoSDKCommon
 import KakaoSDKAuth
+import KakaoSDKCommon
 import KakaoSDKUser
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

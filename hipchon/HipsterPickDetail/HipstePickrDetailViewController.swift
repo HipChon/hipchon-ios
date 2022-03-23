@@ -54,14 +54,31 @@ class HipsterPickDetailViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.hipsterPickDetailCellVMs
-            .drive(hipsterPickDetailTableView.rx.items) { tv, idx, viewModel in
-                guard let cell = tv.dequeueReusableCell(withIdentifier: HipsterPickDetailCell.identyfier,
+            .drive(hipsterPickDetailTableView.rx.items) { [weak self] tv, idx, viewModel in
+                guard let self = self,
+                      let cell = tv.dequeueReusableCell(withIdentifier: HipsterPickDetailCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? HipsterPickDetailCell else { return UITableViewCell() }
                 cell.bind(viewModel)
+
+                viewModel.pushPlaceDetailVC
+                    .emit(onNext: { [weak self] viewModel in
+                        let placeDetailVC = PlaceDetailViewController()
+                        placeDetailVC.bind(viewModel)
+                        self?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                    })
+                    .disposed(by: cell.bag)
+
+                viewModel.share
+                    .emit(onNext: { [weak self] in
+                        let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                                                                  applicationActivities: nil)
+                        self?.present(activityVC, animated: true, completion: nil)
+                    })
+                    .disposed(by: cell.bag)
+
                 return cell
             }
             .disposed(by: bag)
-
     }
 
     private func attribute() {

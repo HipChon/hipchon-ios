@@ -84,7 +84,7 @@ class FilterViewController: UIViewController {
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
     }
-    
+
     private lazy var marginSearchButton = UIButton().then {
         $0.backgroundColor = .black
     }
@@ -125,10 +125,10 @@ class FilterViewController: UIViewController {
         Observable.merge(
             searchButton.rx.tap.map { _ in () },
             marginSearchButton.rx.tap.map { _ in () }
-            )
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.searchButtonTapped)
-            .disposed(by: bag)
+        )
+        .throttle(.seconds(1), scheduler: MainScheduler.instance)
+        .bind(to: viewModel.searchButtonTapped)
+        .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -213,7 +213,6 @@ class FilterViewController: UIViewController {
     }
 
     func layout() {
-
         [
             titleLabel,
             cancleButton,
@@ -272,7 +271,7 @@ class FilterViewController: UIViewController {
             $0.top.equalTo(resetButton.snp.bottom)
             $0.height.equalTo(54.0)
         }
-        
+
         marginSearchButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(searchButton.snp.bottom)

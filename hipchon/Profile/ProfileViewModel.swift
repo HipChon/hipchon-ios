@@ -25,7 +25,6 @@ class ProfileViewModel {
     let profileImageButtonTapped = PublishRelay<Void>()
 
     init() {
-
         profileImageURL = UserModel.currentUser
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }

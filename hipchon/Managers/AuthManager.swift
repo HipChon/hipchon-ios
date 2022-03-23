@@ -6,8 +6,8 @@
 //
 
 import Alamofire
-import KakaoSDKCommon
 import KakaoSDKAuth
+import KakaoSDKCommon
 import KakaoSDKUser
 import RxSwift
 
@@ -26,8 +26,9 @@ class AuthManager {
         "Accept": "application/json",
         // TODO: Token
     ]
-    
+
     // MARK: kakao
+
     func kakaoSignup() -> Single<Result<String?, APIError>> {
         return Single.create { single in
             if AuthApi.hasToken() { // 토큰 있을 시
@@ -35,9 +36,9 @@ class AuthManager {
                     if accessToken == nil { // 토큰 만료 시
                         if UserApi.isKakaoTalkLoginAvailable() { // 간편 로그인: 카톡 어플 있을 시
                             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
-                                if error != nil {  // 로그인 실패
+                                if error != nil { // 로그인 실패
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
-                                } else {    // 로그인 성공
+                                } else { // 로그인 성공
                                     single(.success(.success(oauthToken?.accessToken)))
                                 }
                             }
@@ -51,15 +52,15 @@ class AuthManager {
                             }
                         }
                     } else { // 토큰 유효 시
-                        single(.success(.success(""))) //TODO: accessToken
+                        single(.success(.success(""))) // TODO: accessToken
                     }
                 }
             } else { // 토큰 없을 시
                 if UserApi.isKakaoTalkLoginAvailable() { // 간편 로그인: 카톡 어플 있을 시
                     UserApi.shared.loginWithKakaoTalk { oauthToken, error in
-                        if error != nil {  // 로그인 실패
+                        if error != nil { // 로그인 실패
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
-                        } else {    // 로그인 성공
+                        } else { // 로그인 성공
                             single(.success(.success(oauthToken?.accessToken)))
                         }
                     }
@@ -76,8 +77,8 @@ class AuthManager {
             return Disposables.create()
         }
     }
-    
-    func signin(token: String) -> Single<Result<Void, APIError>> {
+
+    func signin(token _: String) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
@@ -85,7 +86,7 @@ class AuthManager {
             }
             single(.success(.success(())))
 //            single(.failure(APIError(statusCode: -1, description: "")))
-            
+
 //            guard let email = authModel.email,
 //                  let password = authModel.password
 //            else {
@@ -122,10 +123,9 @@ class AuthManager {
 //
             return Disposables.create()
         }
-    
     }
-    
-    func signup(auth: AuthModel) -> Single<Result<Void, APIError>> {
+
+    func signup(auth _: AuthModel) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
@@ -135,7 +135,7 @@ class AuthManager {
             return Disposables.create()
         }
     }
-    
+
     func withdraw() -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
@@ -146,8 +146,8 @@ class AuthManager {
             return Disposables.create()
         }
     }
-    
-    func putProfileImage(image: UIImage) -> Single<Result<Void, APIError>> {
+
+    func putProfileImage(name _: String, image _: UIImage?) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))

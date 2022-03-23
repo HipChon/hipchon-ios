@@ -43,7 +43,7 @@ class PlaceListCell: UITableViewCell {
     private lazy var placeInfoView = UIView().then {
         $0.backgroundColor = .white
     }
-    
+
     private lazy var placeNameLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 18.0, type: .bold)
         $0.textAlignment = .left
@@ -59,21 +59,21 @@ class PlaceListCell: UITableViewCell {
     }
 
     private lazy var bookmarkCountImageView = UIImageView().then {
-        $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
+        $0.image = UIImage(named: "bookmarkBlack") ?? UIImage()
     }
 
     private lazy var bookmarkCountLabel = UILabel().then {
-        $0.font = .GmarketSans(size: 12.0, type: .medium)
-        $0.textColor = .typography_secondary
+        $0.font = .GmarketSans(size: 16.0, type: .regular)
+        $0.textColor = .black
     }
 
     private lazy var reviewCountImageView = UIImageView().then {
-        $0.image = UIImage(named: "reviewCount") ?? UIImage()
+        $0.image = UIImage(named: "reviewBlack") ?? UIImage()
     }
 
     private lazy var reviewCountLabel = UILabel().then {
-        $0.font = .GmarketSans(size: 12.0, type: .medium)
-        $0.textColor = .typography_secondary
+        $0.font = .GmarketSans(size: 16.0, type: .regular)
+        $0.textColor = .black
     }
 
     private lazy var priceDesLabel = UILabel().then {
@@ -107,7 +107,7 @@ class PlaceListCell: UITableViewCell {
         placeImageCollectView.dataSource = nil
         placeImageCollectView.delegate = nil
         pageCountView.bind(viewModel.pageCountVM)
-        
+
         viewModel.keywordVM
             .drive(onNext: { [weak self] viewModel in
                 self?.keywordView.bind(viewModel)
@@ -176,8 +176,6 @@ class PlaceListCell: UITableViewCell {
     }
 
     private func layout() {
-        
-
         // MARK: title
 
         let titleSpacingView = UIView()
@@ -246,8 +244,7 @@ class PlaceListCell: UITableViewCell {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-        
-        
+
         [
             titleStackView,
             keywordView,
@@ -255,24 +252,23 @@ class PlaceListCell: UITableViewCell {
         ].forEach {
             placeInfoView.addSubview($0)
         }
-        
+
         titleStackView.snp.makeConstraints {
             $0.leading.top.trailing.equalToSuperview().inset(16.0)
             $0.height.equalTo(21.0)
         }
-        
+
         keywordView.snp.makeConstraints {
             $0.leading.equalTo(titleStackView)
             $0.top.equalTo(titleStackView.snp.bottom).offset(8.0)
             $0.height.equalTo(28.0)
         }
-        
+
         countStackView.snp.makeConstraints {
             $0.centerY.equalTo(keywordView)
             $0.trailing.equalToSuperview().inset(16.0)
             $0.height.equalTo(20.0)
         }
-        
     }
 }
 

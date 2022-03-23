@@ -14,9 +14,9 @@ import UIKit
 
 class PlaceDetailViewController: UIViewController {
     // MARK: Property
-    
+
     private lazy var scrollView = UIScrollView().then {
-        $0.bounces = true
+        $0.bounces = false
         $0.showsVerticalScrollIndicator = false
     }
 
@@ -26,11 +26,11 @@ class PlaceDetailViewController: UIViewController {
     private lazy var navigationView = UIView().then {
         $0.backgroundColor = .red
     }
-    
+
     private lazy var backButton = UIButton().then {
         $0.setImage(UIImage(named: "back"), for: .normal)
     }
-    
+
     private lazy var imageCollectView = UICollectionView(frame: .zero,
                                                          collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
@@ -77,7 +77,29 @@ class PlaceDetailViewController: UIViewController {
     private lazy var reviewKeywordListView = ReviewKeywordListView().then { _ in
     }
 
-    private lazy var entireTableView = UITableView(frame: .zero).then {
+    private lazy var fourthBorderView = UIView().then {
+        $0.backgroundColor = .gray_border
+    }
+
+    private lazy var feedLabelImageView = UIImageView().then {
+        $0.image = UIImage(named: "reviewWhite") ?? UIImage()
+    }
+
+    private lazy var feedLabel = UILabel().then {
+        $0.text = "피드"
+        $0.font = .GmarketSans(size: 18.0, type: .medium)
+        $0.textColor = .black
+    }
+
+    private lazy var postReviewButton = UIButton().then {
+        $0.setImage(UIImage(named: "postReview") ?? UIImage(), for: .normal)
+    }
+
+    private lazy var feedBorderView = UIView().then {
+        $0.backgroundColor = .gray_border
+    }
+
+    private lazy var reviewTableView = UITableView(frame: .zero).then {
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
         $0.rowHeight = 315.0
@@ -85,7 +107,10 @@ class PlaceDetailViewController: UIViewController {
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
     }
-    
+
+    private lazy var emptyView = EmptyView().then { _ in
+    }
+
     private lazy var moreReviewButton = UIButton().then {
         $0.setTitle("더보기", for: .normal)
         $0.setTitleColor(.gray05, for: .normal)
@@ -94,7 +119,7 @@ class PlaceDetailViewController: UIViewController {
         $0.layer.borderWidth = 1.0
         $0.layer.borderColor = UIColor.gray01.cgColor
     }
-    
+
     private lazy var marginView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -115,7 +140,7 @@ class PlaceDetailViewController: UIViewController {
 
     func bind(_ viewModel: PlaceDetailViewModel) {
         self.viewModel = viewModel
-        
+
         // MARK: subViewModels
 
         placeDesView.bind(viewModel.placeDesVM)
@@ -133,18 +158,52 @@ class PlaceDetailViewController: UIViewController {
             })
             .disposed(by: bag)
 
-
         // MARK: view -> viewModel
 
-        entireTableView.rx.itemSelected
+        reviewTableView.rx.itemSelected
             .map { $0.row }
             .bind(to: viewModel.selectedReviewIdx)
             .disposed(by: bag)
 
+        moreReviewButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.moreReviewButtonTapped)
+            .disposed(by: bag)
+
+        postReviewButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.postReviewButtonTapped)
+            .disposed(by: bag)
+
         // MARK: viewModel -> view
-        
+
         viewModel.menuListViewHidden
-            .drive(menuListView.rx.isHidden)
+            .filter { $0 == true }
+            .drive(onNext: { _ in
+                self.menuListView.isHidden = true
+                self.menuListView.snp.remakeConstraints {
+                    $0.leading.trailing.equalToSuperview()
+                    $0.top.equalTo(self.firstBorderView.snp.bottom)
+                    $0.height.equalTo(0.0)
+                }
+            })
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .drive(reviewTableView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .drive(moreReviewButton.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.menuListViewHidden
+            .drive(secondBorderView.rx.isHidden)
             .disposed(by: bag)
 
         viewModel.urls
@@ -157,7 +216,7 @@ class PlaceDetailViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.reviewCellVms
-            .drive(entireTableView.rx.items) { tv, _, viewModel in
+            .drive(reviewTableView.rx.items) { tv, _, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
                 cell.imageView?.contentMode = .scaleAspectFill
                 cell.reviewPlaceView.isHidden = true
@@ -201,6 +260,15 @@ class PlaceDetailViewController: UIViewController {
             })
             .disposed(by: bag)
 
+        viewModel.pushReviewListVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let self = self else { return }
+                let reviewListVC = ReviewListViewController()
+                reviewListVC.bind(viewModel)
+                self.navigationController?.pushViewController(reviewListVC, animated: true)
+            })
+            .disposed(by: bag)
+
         backButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
@@ -214,7 +282,6 @@ class PlaceDetailViewController: UIViewController {
     }
 
     func layout() {
-        
         view.addSubview(scrollView)
 
         scrollView.snp.makeConstraints {
@@ -228,9 +295,8 @@ class PlaceDetailViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        
+
         [
-            
             placeDesView,
             firstBorderView,
             menuListView,
@@ -238,7 +304,13 @@ class PlaceDetailViewController: UIViewController {
             placeMapView,
             thirdBorderView,
             reviewKeywordListView,
-            entireTableView,
+            fourthBorderView,
+            feedLabelImageView,
+            feedLabel,
+            postReviewButton,
+            feedBorderView,
+            reviewTableView,
+            emptyView,
             imageCollectView,
             moreReviewButton,
             marginView,
@@ -298,21 +370,53 @@ class PlaceDetailViewController: UIViewController {
         reviewKeywordListView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(thirdBorderView.snp.bottom)
-            $0.height.equalTo(275.0)
+            $0.height.equalTo(220.0)
         }
-    
-        entireTableView.snp.makeConstraints {
+
+        fourthBorderView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(reviewKeywordListView.snp.bottom)
+            $0.height.equalTo(8.0)
+        }
+
+        feedLabelImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(fourthBorderView.snp.bottom).offset(24.0)
+            $0.height.equalTo(25.0)
+        }
+
+        feedLabel.snp.makeConstraints {
+            $0.leading.equalTo(feedLabelImageView.snp.trailing).offset(8.0)
+            $0.centerY.equalTo(feedLabelImageView)
+        }
+
+        postReviewButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(20.0)
+            $0.centerY.equalTo(feedLabelImageView)
+        }
+
+        feedBorderView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(feedLabelImageView.snp.bottom).offset(24.0)
+            $0.height.equalTo(1.0)
+        }
+
+        reviewTableView.snp.makeConstraints {
+            $0.top.equalTo(feedBorderView.snp.bottom)
             $0.height.equalTo(315.0 * 3)
             $0.leading.trailing.equalToSuperview()
         }
-        
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(reviewTableView)
+        }
+
         moreReviewButton.snp.makeConstraints {
-            $0.top.equalTo(entireTableView.snp.bottom)
+            $0.top.equalTo(reviewTableView.snp.bottom).offset(-1)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(48.0)
         }
-        
+
         marginView.snp.makeConstraints {
             $0.top.equalTo(moreReviewButton.snp.bottom)
             $0.height.equalTo(100.0)

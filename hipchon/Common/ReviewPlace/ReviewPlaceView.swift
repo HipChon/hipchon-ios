@@ -66,7 +66,7 @@ class ReviewPlaceView: UIView {
         bookmarkButton.rx.tap
             .bind(to: viewModel.bookmarkButtonTapped)
             .disposed(by: bag)
-        
+
         shareButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.shareButtonTapped)
@@ -86,33 +86,6 @@ class ReviewPlaceView: UIView {
         viewModel.bookmarkYn
             .compactMap { $0 ? UIImage(named: "bookmarkY") : UIImage(named: "bookmarkN") }
             .drive(bookmarkButton.rx.image)
-            .disposed(by: bag)
-        
-        // MARK: scene
-        
-        viewModel.share
-            .emit(onNext: {
-                guard let topVC = UIApplication.topViewController() else { return }
-                let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
-                                                          applicationActivities: nil)
-                activityVC.popoverPresentationController?.sourceView = topVC.view
-                topVC.present(activityVC, animated: true, completion: nil)
-            })
-            .disposed(by: bag)
-        
-        viewModel.pushPlaceDetailVC
-            .emit(onNext: { viewModel in
-                guard let topVC = UIApplication.topViewController() else { return }
-                let placeDetailVC = PlaceDetailViewController()
-                placeDetailVC.bind(viewModel)
-                
-                if let tabBarNavVC = topVC.tabBarController?.navigationController {
-                    tabBarNavVC.pushViewController(placeDetailVC, animated: true)
-                } else if let navVC = topVC.navigationController {
-                    navVC.pushViewController(placeDetailVC, animated: true)
-                }
-                
-            })
             .disposed(by: bag)
     }
 

@@ -78,16 +78,15 @@ class MyPlaceCell: UITableViewCell {
     }
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
-        
         // MARK: view -> viewModel
-        
+
         memoButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.memoButtonTapped)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.imageURL
             .drive(placeImageView.rx.setImageKF)
             .disposed(by: bag)
@@ -113,33 +112,33 @@ class MyPlaceCell: UITableViewCell {
             .map { "\($0)" }
             .drive(reviewCountLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.memoContent
             .drive(memoButton.rx.title())
             .disposed(by: bag)
-        
+
         viewModel.memoContent
             .map { _ in UIColor.black }
             .drive(memoButton.rx.titleColor)
             .disposed(by: bag)
-        
+
         viewModel.memoColor
             .drive(memoButton.rx.backgroundColor)
             .disposed(by: bag)
-        
+
         // MARK: scene
-        
+
         viewModel.presentMemoVC
             .emit(onNext: { viewModel in
                 guard let topVC = UIApplication.topViewController() else { return }
                 let memoVC = MemoViewController()
                 memoVC.bind(viewModel)
-                
+
                 memoVC.providesPresentationContextTransitionStyle = true
                 memoVC.definesPresentationContext = true
-                memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
-                memoVC.view.backgroundColor = UIColor.init(white: 0.4, alpha: 0.3)
-                
+                memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                memoVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
+
                 topVC.tabBarController?.present(memoVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
@@ -195,18 +194,18 @@ class MyPlaceCell: UITableViewCell {
             $0.top.equalTo(addressLabel.snp.bottom).offset(12.0)
             $0.width.height.equalTo(20.0)
         }
-        
+
         bookmarkCountLabel.snp.makeConstraints {
             $0.leading.equalTo(bookmarkImageView.snp.trailing).offset(12.0)
             $0.centerY.equalTo(bookmarkImageView)
         }
-        
+
         reviewImageView.snp.makeConstraints {
             $0.leading.equalTo(bookmarkCountLabel.snp.trailing).offset(12.0)
             $0.centerY.equalTo(bookmarkImageView)
             $0.width.height.equalTo(20.0)
         }
-        
+
         reviewCountLabel.snp.makeConstraints {
             $0.leading.equalTo(reviewImageView.snp.trailing).offset(12.0)
             $0.centerY.equalTo(bookmarkImageView)

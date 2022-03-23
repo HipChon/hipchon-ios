@@ -10,18 +10,16 @@ import RxSwift
 import UIKit
 
 class OnBoardingViewController: UIViewController {
-    
     private lazy var mainTitleLabel = UILabel().then {
         let text = """
-촌스러운 것이
-힙하다
-"""
+        촌스러운 것이
+        힙하다
+        """
         $0.text = text
 
         $0.numberOfLines = 2
         $0.textColor = .white
         $0.font = .GmarketSans(size: 40.0, type: .medium)
-        
 
         let attributeText = NSMutableAttributedString(string: text)
         let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.primary_green]
@@ -29,17 +27,17 @@ class OnBoardingViewController: UIViewController {
         attributeText.addAttributes(attributes, range: NSRange(location: 8, length: 1))
         $0.attributedText = attributeText
     }
-    
+
     private lazy var subTitleLabel = UILabel().then {
         $0.text = "힙촌과 함께 떠나보아요"
         $0.textColor = .white
         $0.font = .GmarketSans(size: 14.0, type: .medium)
     }
-    
+
     private lazy var peopleImageView = UIImageView().then {
         $0.image = UIImage(named: "people") ?? UIImage()
     }
-    
+
     private lazy var kakaoLoginButton = UIButton().then {
         $0.backgroundColor = .kakao_yellow
         $0.layer.cornerRadius = 5.0
@@ -48,12 +46,12 @@ class OnBoardingViewController: UIViewController {
         $0.setTitle("카카오 계정으로 시작하기", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
-        
+
         $0.contentHorizontalAlignment = .left
         $0.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
     }
-    
+
     private lazy var appleLoginButton = UIButton().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 5.0
@@ -62,7 +60,7 @@ class OnBoardingViewController: UIViewController {
         $0.setTitle("애플 아이디로 시작하기", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
-        
+
         $0.contentHorizontalAlignment = .left
         $0.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
@@ -77,7 +75,7 @@ class OnBoardingViewController: UIViewController {
         attribute()
         layout()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         navigationController?.isNavigationBarHidden = true
@@ -100,11 +98,10 @@ class OnBoardingViewController: UIViewController {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
 //            .bind(to: viewModel.appleLoginButtonTapped)
             .subscribe(onNext: {
-                print("@@@")
                 let appleIDProvider = ASAuthorizationAppleIDProvider()
                 let request = appleIDProvider.createRequest()
                 request.requestedScopes = [.fullName, .email]
-                    
+
                 let authorizationController = ASAuthorizationController(authorizationRequests: [request])
                 authorizationController.delegate = self
                 authorizationController.presentationContextProvider = self
@@ -123,7 +120,7 @@ class OnBoardingViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.pushMainVC
-            .emit(onNext: { [weak self] in 
+            .emit(onNext: { [weak self] in
                 let tapBarViewController = TabBarViewController()
                 self?.navigationController?.pushViewController(tapBarViewController, animated: true)
             })
@@ -145,16 +142,15 @@ class OnBoardingViewController: UIViewController {
         ].forEach {
             view.addSubview($0)
         }
-        
+
         mainTitleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(30.0)
             $0.centerY.equalToSuperview().multipliedBy(0.4)
         }
-        
+
         subTitleLabel.snp.makeConstraints {
             $0.leading.equalTo(mainTitleLabel)
             $0.top.equalTo(mainTitleLabel.snp.bottom).offset(21.0)
-
         }
 
         peopleImageView.snp.makeConstraints {
@@ -163,13 +159,13 @@ class OnBoardingViewController: UIViewController {
             $0.width.equalTo(188.0)
             $0.height.equalTo(145.0)
         }
-        
+
         kakaoLoginButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
             $0.bottom.equalTo(appleLoginButton.snp.top).offset(-8.0)
             $0.height.equalTo(50.0)
         }
-        
+
         appleLoginButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(30.0)
@@ -178,24 +174,23 @@ class OnBoardingViewController: UIViewController {
     }
 }
 
-
 extension OnBoardingViewController: ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
     //  Apple 로그인을 모달 시트
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.view.window!
+    func presentationAnchor(for _: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window!
     }
-    
+
     // Apple ID 연동 성공 시
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(controller _: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         // Apple ID
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                
+
             // 계정 정보 가져오기
             let userIdentifier = appleIDCredential.user
             let fullName = appleIDCredential.fullName
             let email = appleIDCredential.email
-                
+
             print("User ID : \(userIdentifier)")
             print("User Email : \(email ?? "")")
             print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
@@ -206,9 +201,9 @@ extension OnBoardingViewController: ASAuthorizationControllerPresentationContext
             break
         }
     }
-        
+
     // Apple ID 연동 실패 시
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+    func authorizationController(controller _: ASAuthorizationController, didCompleteWithError _: Error) {
         // Handle error.
     }
 }

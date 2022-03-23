@@ -5,16 +5,15 @@
 //  Created by 김범수 on 2022/03/20.
 //
 
-import RxSwift
 import RxCocoa
+import RxSwift
 import UIKit
 
 class HashtagReviewViewController: UIViewController {
-    
     // MARK: Property
 
     private let bag = DisposeBag()
-    
+
     private lazy var reviewCollectionView = UICollectionView(frame: .zero,
                                                              collectionViewLayout: UICollectionViewLayout()).then {
         let layout = UICollectionViewFlowLayout()
@@ -36,6 +35,9 @@ class HashtagReviewViewController: UIViewController {
         $0.backgroundColor = .white
     }
 
+    private lazy var emptyView = EmptyView().then { _ in
+    }
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         attribute()
@@ -49,16 +51,17 @@ class HashtagReviewViewController: UIViewController {
 
     func bind(_ viewModel: HashtagReviewViewModel) {
         // MARK: subViews Binding
+
         reviewCollectionView.delegate = nil
         reviewCollectionView.dataSource = nil
 
         // MARK: view -> viewModel
-        
+
         rx.viewWillAppear
             .map { _ in () }
             .bind(to: viewModel.viewAppear)
             .disposed(by: bag)
-        
+
         reviewCollectionView.rx.itemSelected
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .map { $0.row }
@@ -66,7 +69,7 @@ class HashtagReviewViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         // refresh
         reviewCollectionView.refreshControl = UIRefreshControl()
 
@@ -80,9 +83,18 @@ class HashtagReviewViewController: UIViewController {
             .distinctUntilChanged()
             .emit(to: reviewCollectionView.refreshControl!.rx.isRefreshing)
             .disposed(by: bag)
-        
+
+        viewModel.reviewTableViewHidden
+            .drive(reviewCollectionView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
         // more fetching
-        
+
         reviewCollectionView.rx.contentOffset
             .map { [unowned self] in reviewCollectionView.isNearTheBottomEdge($0) }
             .distinctUntilChanged()
@@ -90,9 +102,9 @@ class HashtagReviewViewController: UIViewController {
             .map { _ in () }
             .bind(to: viewModel.moreFetching)
             .disposed(by: bag)
-        
+
         // data binding
-        
+
         viewModel.profileReviewCellVMs
             .drive(reviewCollectionView.rx.items) { col, idx, viewModel in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: HashtagReviewCell.identyfier,
@@ -103,7 +115,7 @@ class HashtagReviewViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
-        
+
         viewModel.pushReviewDetailVC
             .emit(onNext: { [weak self] viewModel in
                 let reviewDetailVC = ReviewDetailViewController()
@@ -118,17 +130,21 @@ class HashtagReviewViewController: UIViewController {
     }
 
     func layout() {
-        
         [
-            reviewCollectionView
+            reviewCollectionView,
+            emptyView,
         ].forEach {
             view.addSubview($0)
         }
-        
+
         reviewCollectionView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()//.inset(20.0)
+            $0.leading.trailing.bottom.equalToSuperview() // .inset(20.0)
             let topInset = 18.0 + view.frame.width * (79.0 / 390.0) + 21.0 + 50.0 + 1.0
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(topInset)
+        }
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(reviewCollectionView)
         }
     }
 }

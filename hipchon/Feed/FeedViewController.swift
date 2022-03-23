@@ -38,6 +38,9 @@ class FeedViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
+    private lazy var emptyView = EmptyView().then { _ in
+    }
+
     private lazy var uploadButton = UIButton().then {
         $0.setImage(UIImage(named: "upload"), for: .normal)
     }
@@ -74,7 +77,7 @@ class FeedViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         // refresh
         reviewTableView.refreshControl = UIRefreshControl()
 
@@ -88,9 +91,18 @@ class FeedViewController: UIViewController {
             .distinctUntilChanged()
             .emit(to: reviewTableView.refreshControl!.rx.isRefreshing)
             .disposed(by: bag)
-        
+
+        viewModel.reviewTableViewHidden
+            .drive(reviewTableView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
         // more fetching
-        
+
         reviewTableView.rx.contentOffset
             .map { [unowned self] in reviewTableView.isNearTheBottomEdge($0) }
             .distinctUntilChanged()
@@ -99,7 +111,6 @@ class FeedViewController: UIViewController {
             .bind(to: viewModel.moreFetching)
             .disposed(by: bag)
 
-        
         // data binding
 
         viewModel.reviewCellVMs
@@ -107,6 +118,22 @@ class FeedViewController: UIViewController {
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
                 cell.bind(viewModel)
+
+                viewModel.pushPlaceDetailVC
+                    .emit(onNext: { [weak self] viewModel in
+                        let placeDetailVC = PlaceDetailViewController()
+                        placeDetailVC.bind(viewModel)
+                        self?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                    })
+                    .disposed(by: cell.bag)
+
+                viewModel.share
+                    .emit(onNext: { [weak self] in
+                        let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                                                                  applicationActivities: nil)
+                        self?.present(activityVC, animated: true, completion: nil)
+                    })
+                    .disposed(by: cell.bag)
                 return cell
             }
             .disposed(by: bag)
@@ -148,6 +175,7 @@ class FeedViewController: UIViewController {
             sortButton,
             boundaryView,
             reviewTableView,
+            emptyView,
             uploadButton,
         ].forEach { view.addSubview($0) }
 
@@ -172,6 +200,10 @@ class FeedViewController: UIViewController {
         reviewTableView.snp.makeConstraints {
             $0.top.equalTo(boundaryView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(reviewTableView)
         }
 
         uploadButton.snp.makeConstraints {

@@ -40,8 +40,8 @@ class ReviewPlaceViewModel {
         sector = place
             .compactMap { $0.sector }
             .asDriver(onErrorJustReturn: "")
-        
-        share = shareButtonTapped // TODO
+
+        share = shareButtonTapped // TODO:
             .asSignal()
 
         // MARK: bookmark

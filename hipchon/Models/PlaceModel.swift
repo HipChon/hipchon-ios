@@ -15,7 +15,6 @@ class PlaceModel: Codable {
     let distance: Double?
     let price: Double?
     let imageURLs: [String]?
-    let hashtags: [String]?
     let bookmarkCount: Int?
     let reviewCount: Int?
 
@@ -32,6 +31,7 @@ class PlaceModel: Codable {
     let keywords: [KeywordModel]?
     let menus: [MenuModel]?
     let memo: MemoModel?
+    let hashtag: HashtagModel?
 
     var placeTitle: String? {
         guard let region = region,
@@ -66,7 +66,7 @@ class PlaceModel: Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, name, region, bookmarkYn, distance, price, imageURLs, hashtags, bookmarkCount, reviewCount
-        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus, memo
+        case id, name, region, bookmarkYn, distance, price, imageURLs, bookmarkCount, reviewCount
+        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus, memo, hashtag
     }
 }

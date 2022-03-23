@@ -20,11 +20,11 @@ class BestReviewViewModel {
     // MARK: view -> viewModel
 
     let selectedBestReview = PublishRelay<BestReviewModel>()
-    
+
     init() {
         reviews = NetworkManager.shared.getBestReview()
             .asDriver(onErrorJustReturn: [])
-        
+
         pushReviewDetailVC = selectedBestReview
             .compactMap { $0.review }
             .map { ReviewDetailViewModel($0) }

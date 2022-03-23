@@ -11,7 +11,7 @@ import UIKit
 
 class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, NMFMapViewTouchDelegate {
     private lazy var mapLabelImageView = UIImageView().then {
-        $0.image = UIImage(named: "reviewWhite") ?? UIImage()
+        $0.image = UIImage(named: "map") ?? UIImage()
     }
 
     private lazy var mapLabel = UILabel().then {
@@ -24,7 +24,6 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
                                                         y: 0.0,
                                                         width: UIApplication.shared.windows.first?.frame.width ?? 0.0 - 40.0,
                                                         height: 140.0)).then {
-        $0.isUserInteractionEnabled = true
         // Delegate
         $0.addCameraDelegate(delegate: self)
         $0.touchDelegate = self
@@ -40,6 +39,9 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
         $0.allowsScrolling = true
         $0.allowsTilting = false
         $0.allowsRotating = false
+
+        $0.isUserInteractionEnabled = false
+        $0.zoomLevel = 7.5
 
         // Map display Info
         $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)

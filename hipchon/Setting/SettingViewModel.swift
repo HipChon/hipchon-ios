@@ -14,45 +14,44 @@ class SettingViewModel {
     // MARK: subViewModels
 
     // MARK: viewModel -> view
-    let popToOnBoarding: Signal<Void>
-    
+
+    let logoutPopToOnBoarding: Signal<Void>
+    let withdrawPopToOnBoarding: Signal<Void>
+
     // MARK: view -> viewModel
-    
+
     let logoutButtonTapped = PublishRelay<Void>()
     let withdrawButtonTapped = PublishRelay<Void>()
     let partnershipButtonTapped = PublishRelay<Void>()
     let customerServiceButtonTapped = PublishRelay<Void>()
-    
+
     init() {
-        let localInfoDeleteComplete = PublishSubject<Void>()
-        let localInfoDelete = PublishSubject<Void>()
-        
-        popToOnBoarding = localInfoDeleteComplete
+        let logoutComplete = PublishSubject<Void>()
+        let withdrawComplete = PublishSubject<Void>()
+
+        logoutPopToOnBoarding = logoutComplete
             .asSignal(onErrorJustReturn: ())
-        
+
+        withdrawPopToOnBoarding = withdrawComplete
+            .asSignal(onErrorJustReturn: ())
+
         logoutButtonTapped
             .subscribe(onNext: {
-                localInfoDelete.onNext(())
+                // TODO: Local Info Delete
+                logoutComplete.onNext(())
             })
             .disposed(by: bag)
-        
+
         withdrawButtonTapped
             .flatMap { AuthManager.shared.withdraw() }
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
-                    localInfoDelete.onNext(())
-                case .failure(let error):
+                    withdrawComplete.onNext(())
+                case let .failure(error):
                     print(error.description)
                 }
             })
-            .disposed(by: bag)
-        
-        localInfoDelete
-            .do(onNext: {
-                // TODO:  Local Info Delete
-            })
-            .bind(to: localInfoDeleteComplete)
             .disposed(by: bag)
     }
 }

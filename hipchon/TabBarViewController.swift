@@ -29,9 +29,9 @@ class TabBarViewController: UITabBarController {
 
         let storagePlaceViewController = StoragePlaceViewController()
         storagePlaceViewController.tabBarItem = UITabBarItem(title: "저장",
-                                                        image: UIImage(named: "bookmark") ?? UIImage(),
-                                                        selectedImage: UIImage(named: "bookmark_fill") ?? UIImage())
-        
+                                                             image: UIImage(named: "bookmark") ?? UIImage(),
+                                                             selectedImage: UIImage(named: "bookmark_fill") ?? UIImage())
+
         let profileViewController = ProfileViewController()
         profileViewController.tabBarItem = UITabBarItem(title: "프로필",
                                                         image: UIImage(named: "profile") ?? UIImage(),
@@ -47,6 +47,8 @@ class TabBarViewController: UITabBarController {
             $0.tabBarItem.imageInsets = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
             $0.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
             $0.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray04], for: .normal)
+            $0.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .focused)
+            $0.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .highlighted)
         }
 
         view.backgroundColor = .white

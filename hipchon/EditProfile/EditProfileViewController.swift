@@ -44,13 +44,8 @@ class EditProfileViewController: UIViewController {
         $0.setImage(UIImage(named: "cancle") ?? UIImage(), for: .normal)
     }
 
-    private lazy var completeButton = UIButton().then {
-        $0.backgroundColor = .gray02
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 5.0
+    private lazy var completeButton = BottomButton().then {
         $0.setTitle("확인", for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .medium)
-        $0.setTitleColor(.black, for: .normal)
     }
 
     private let bag = DisposeBag()
@@ -123,41 +118,64 @@ class EditProfileViewController: UIViewController {
 
             })
             .disposed(by: bag)
-        
+
+        nickNameTextField.rx.text.orEmpty
+            .bind(to: viewModel.inputNickName)
+            .disposed(by: bag)
+
+        clearButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                self?.nickNameTextField.text = ""
+                viewModel.inputNickName.accept("")
+            })
+            .disposed(by: bag)
+
         completeButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.completeButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
-        
+
         viewModel.profileImageURL
             .drive(profileImageButton.rx.setImageKF)
             .disposed(by: bag)
-        
+
         viewModel.name
             .drive(nickNameTextField.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.setChangedImage
             .emit(to: profileImageButton.rx.image)
             .disposed(by: bag)
-        
+
+        viewModel.completeButtonValid
+            .drive(completeButton.rx.isEnabled)
+            .disposed(by: bag)
+
+        viewModel.completeButtonActivity
+            .drive(completeButton.rx.activityIndicator)
+            .disposed(by: bag)
+
         // MARK: scene
-        
+
         viewModel.pushMainVC
             .emit(onNext: { [weak self] in
                 let tapBarViewController = TabBarViewController()
-                self?.navigationController?.pushViewController(tapBarViewController, animated: true)
-            })
-            .disposed(by: bag)
-        
-        viewModel.editComplete
-            .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
+                self?.navigationController?.pushViewController(tapBarViewController, animated: true, completion: {
+                    Singleton.shred.toastAlert.onNext("회원가입이 완료되었습니다")
+                })
             })
             .disposed(by: bag)
 
+        viewModel.editComplete
+            .emit(onNext: { [weak self] in
+                self?.navigationController?.popViewController(animated: true, completion: {
+                    Singleton.shred.toastAlert.onNext("프로필 편집이 완료되었습니다")
+                })
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {
@@ -199,11 +217,12 @@ class EditProfileViewController: UIViewController {
         nickNameTextField.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(profileImageButton.snp.bottom).offset(36.0)
+            $0.height.equalTo(32.0)
         }
 
         bottomLineView.snp.makeConstraints {
             $0.leading.trailing.equalTo(nickNameTextField)
-            $0.top.equalTo(nickNameTextField.snp.bottom).offset(2.0)
+            $0.top.equalTo(nickNameTextField.snp.bottom)
             $0.height.equalTo(1.0)
         }
 
@@ -240,12 +259,10 @@ private extension EditProfileViewController {
     }
 
     @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-        }
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {}
     }
 
-    @objc private func keyboardWillHide(_: Notification) {
-    }
+    @objc private func keyboardWillHide(_: Notification) {}
 
     // 주변 터치시 키보드 내림
     private func hideKeyboardWhenTappedAround() {
@@ -262,7 +279,7 @@ private extension EditProfileViewController {
 // MARK: TextField Delegate
 
 extension EditProfileViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
         guard let text = textField.text else { return true }
         return text.count <= 10
     }

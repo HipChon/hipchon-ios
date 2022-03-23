@@ -5,8 +5,8 @@
 //  Created by 김범수 on 2022/03/22.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 class KeywordView: UIView {
     public lazy var iconImageView = UIImageView().then { _ in
@@ -15,9 +15,9 @@ class KeywordView: UIView {
     public lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
     }
-    
+
     private let bag = DisposeBag()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
@@ -28,22 +28,20 @@ class KeywordView: UIView {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func bind(_ viewModel: KeywordViewModel) {
-        
         viewModel.iconImage
             .drive(iconImageView.rx.image)
             .disposed(by: bag)
-        
+
         viewModel.content
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.backgroundColor
             .drive(rx.backgroundColor)
             .disposed(by: bag)
     }
-    
 
     private func attribute() {
         layer.cornerRadius = 5.0

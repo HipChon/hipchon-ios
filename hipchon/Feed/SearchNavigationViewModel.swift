@@ -26,6 +26,5 @@ class SearchNavigationViewModel {
     init() {
         setSearchFilterTitle = searchFilterTitle
             .asDriver(onErrorJustReturn: "")
-
     }
 }

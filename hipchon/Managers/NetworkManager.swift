@@ -23,16 +23,16 @@ class NetworkManager {
         "Accept": "application/json",
         // TODO: Token
     ]
-    
+
     // MARK: User
-    
+
     func getUser() -> Single<UserModel> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/user") else {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-            
+
             let str = """
             {
                 "id": 1,
@@ -41,7 +41,7 @@ class NetworkManager {
                 "reviewCount": 12
             }
             """
-            
+
             do {
                 let model = try JSONDecoder().decode(UserModel.self, from: Data(str.utf8))
                 single(.success(model))
@@ -52,7 +52,6 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
 
     // MARK: Home
 
@@ -100,7 +99,7 @@ class NetworkManager {
         }
     }
 
-    func getHipsterPicks(_ id: Int) -> Single<[HipsterPickModel]> {
+    func getHipsterPicks(_: Int) -> Single<[HipsterPickModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/hipsteropicks") else {
                 single(.failure(NetworkError.uri))
@@ -193,7 +192,12 @@ class NetworkManager {
                                     "name": "러스틱 카페",
                                     "address": "서울특별시 용산구 서빙고",
                                     "sector": "맛집",
-                                    "bookmarkYn": false
+                                    "bookmarkYn": false,
+                                    "hashtag": {
+                                        "name": "불멍",
+                                        "imageURL":
+                                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                    }
                                 },
                                 "likeCount": 23,
                                 "commentCount": 12,
@@ -221,7 +225,12 @@ class NetworkManager {
                                     "name": "러스틱 카페",
                                     "address": "서울특별시 용산구 서빙고",
                                     "sector": "맛집",
-                                    "bookmarkYn": false
+                                    "bookmarkYn": false,
+                                    "hashtag": {
+                                        "name": "불멍",
+                                        "imageURL":
+                                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                    }
                                 },
                                 "likeCount": 23,
                                 "commentCount": 12,
@@ -249,7 +258,12 @@ class NetworkManager {
                                     "name": "러스틱 카페",
                                     "address": "서울특별시 용산구 서빙고",
                                     "sector": "맛집",
-                                    "bookmarkYn": false
+                                    "bookmarkYn": false,
+                                    "hashtag": {
+                                        "name": "불멍",
+                                        "imageURL":
+                                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                    }
                                 },
                                 "likeCount": 23,
                                 "commentCount": 12,
@@ -332,11 +346,11 @@ class NetworkManager {
                             "count": 35
                         },
                         {
-                            "content": "단체모임 하기 좋아요",
+                            "content": "단체 모임 하기 좋아요",
                             "count": 31
                         },
                         {
-                            "content": "여자/남자친구가 좋아해요",
+                            "content": "직원분들이 친절해요",
                             "count": 28
                         }
                     ],
@@ -380,20 +394,20 @@ class NetworkManager {
                     "imageURLs": [
             "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4a5dd5b0-e39c-4ca3-b0c1-3f767367c9ad%2FUntitled.png?table=block&id=dddf5931-e323-47a1-8ee8-fa7267ac1116&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=790&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                    "keywords": [
-                        {
-                            "content": "화장실이 청결해요",
-                            "count": 35
-                        },
-                        {
-                            "content": "단체모임 하기 좋아요",
-                            "count": 31
-                        },
-                        {
-                            "content": "여자/남자친구가 좋아해요",
-                            "count": 28
-                        }
-                    ],
+                      "keywords": [
+                          {
+                              "content": "화장실이 청결해요",
+                              "count": 35
+                          },
+                          {
+                              "content": "단체 모임 하기 좋아요",
+                              "count": 31
+                          },
+                          {
+                              "content": "직원분들이 친절해요",
+                              "count": 28
+                          }
+                      ],
                     "bookmarkCount": 32,
                     "reviewCount": 12
                 }
@@ -459,7 +473,12 @@ class NetworkManager {
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
                         "sector": "맛집",
-                        "bookmarkYn": false
+                        "bookmarkYn": false,
+                        "hashtag": {
+                            "name": "불멍",
+                            "imageURL":
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        }
                     },
                     "likeCount": 23,
                     "commentCount": 12,
@@ -483,7 +502,12 @@ class NetworkManager {
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
                         "sector": "맛집",
-                        "bookmarkYn": true
+                        "bookmarkYn": true,
+                        "hashtag": {
+                            "name": "불멍",
+                            "imageURL":
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        }
                     },
                     "likeCount": 23,
                     "commentCount": 12,
@@ -507,7 +531,12 @@ class NetworkManager {
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
                         "sector": "맛집",
-                        "bookmarkYn": false
+                        "bookmarkYn": false,
+                        "hashtag": {
+                            "name": "불멍",
+                            "imageURL":
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        }
                     },
                     "likeCount": 23,
                     "commentCount": 12,
@@ -531,7 +560,12 @@ class NetworkManager {
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
                         "sector": "맛집",
-                        "bookmarkYn": false
+                        "bookmarkYn": false,
+                        "hashtag": {
+                            "name": "불멍",
+                            "imageURL":
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        }
                     },
                     "likeCount": 23,
                     "commentCount": 12,
@@ -555,7 +589,12 @@ class NetworkManager {
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
                         "sector": "맛집",
-                        "bookmarkYn": true
+                        "bookmarkYn": true,
+                        "hashtag": {
+                            "name": "불멍",
+                            "imageURL":
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        }
                     },
                     "likeCount": 23,
                     "commentCount": 12,
@@ -579,7 +618,12 @@ class NetworkManager {
                         "name": "러스틱 카페",
                         "address": "서울특별시 용산구 서빙고",
                         "sector": "맛집",
-                        "bookmarkYn": false
+                        "bookmarkYn": false,
+                        "hashtag": {
+                            "name": "불멍",
+                            "imageURL":
+                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6c1887f7-6e65-4b7a-9fe3-61228a4b925b%2FFrame.png?table=block&id=f632c3be-72ce-4394-956b-dd47787f7c97&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=380&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                        }
                     },
                     "likeCount": 23,
                     "commentCount": 12,
@@ -605,7 +649,6 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
             let str = """
             [
                 {
@@ -620,7 +663,6 @@ class NetworkManager {
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                    "hashtags": ["3인가능", "반려동물", "핫플"],
                     "bookmarkCount": 32,
                     "reviewCount": 12,
                     "sector": "카페",
@@ -662,7 +704,6 @@ class NetworkManager {
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                     "hashtags": ["3인가능", "반려동물", "핫플"],
                      "bookmarkCount": 32,
                      "reviewCount": 12,
                      "sector": "식당",
@@ -700,7 +741,6 @@ class NetworkManager {
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                     "hashtags": ["3인가능", "반려동물", "핫플"],
                      "bookmarkCount": 32,
                      "reviewCount": 12,
                      "sector": "활동",
@@ -738,7 +778,186 @@ class NetworkManager {
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                     "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                     ],
-                     "hashtags": ["3인가능", "반려동물", "핫플"],
+                     "bookmarkCount": 32,
+                     "reviewCount": 12,
+                     "sector": "자연",
+                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                     "link": "http://www.naver.com",
+                     "geoLat": 37.27455854791513,
+                     "geoLon": 127.50946893739612,
+                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                     "number": "01073787605",
+                     "keywords": [
+                         {
+                             "content": "화장실이 청결해요",
+                             "count": 35
+                         },
+                         {
+                             "content": "단체모임 하기 좋아요",
+                             "count": 31
+                         },
+                         {
+                             "content": "여자/남자친구가 좋아해요",
+                             "count": 28
+                         }
+                     ]
+                 }
+
+            ]
+
+            """
+
+            do {
+                let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
+                single(.success(model))
+            } catch {
+                single(.failure(NetworkError.parsing))
+            }
+
+            return Disposables.create()
+        }
+    }
+
+    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<[PlaceModel]> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/eco") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            print("@@@@ getPlaceList @@@@")
+            print(filter.filterTitle)
+            print(sort)
+
+            let str = """
+            [
+                {
+                    "id": 1,
+                    "name": "옹심이네",
+                    "region": "서울",
+                    "bookmarkYn": true,
+                    "distance": 50.4,
+                    "price": 100000.0,
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
+                    "bookmarkCount": 32,
+                    "reviewCount": 12,
+                    "sector": "카페",
+                    "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                    "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                    "link": "http://www.naver.com",
+                    "geoLat": 37.27455854791513,
+                    "geoLon": 127.50946893739612,
+                    "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                    "number": "01073787605",
+                    "keywords": [
+                        {
+                            "content": "화장실이 청결해요",
+                            "count": 35
+                        },
+                        {
+                            "content": "단체모임 하기 좋아요",
+                            "count": 31
+                        },
+                        {
+                            "content": "여자/남자친구가 좋아해요",
+                            "count": 28
+                        }
+                    ],
+                    "memo": {
+                        "content": "빵, 과일 먹으러 갈 곳",
+                        "color": "green"
+                    }
+                },
+                 {
+                     "id": 1,
+                     "name": "옹심이네",
+                     "region": "서울",
+                     "bookmarkYn": true,
+                     "distance": 50.4,
+                     "price": 100000.0,
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
+                     "bookmarkCount": 32,
+                     "reviewCount": 12,
+                     "sector": "식당",
+                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                     "link": "http://www.naver.com",
+                     "geoLat": 37.27455854791513,
+                     "geoLon": 127.50946893739612,
+                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                     "number": "01073787605",
+                     "keywords": [
+                         {
+                             "content": "화장실이 청결해요",
+                             "count": 35
+                         },
+                         {
+                             "content": "단체모임 하기 좋아요",
+                             "count": 31
+                         },
+                         {
+                             "content": "여자/남자친구가 좋아해요",
+                             "count": 28
+                         }
+                     ]
+                 },
+                 {
+                     "id": 1,
+                     "name": "옹심이네",
+                     "region": "서울",
+                     "bookmarkYn": true,
+                     "distance": 50.4,
+                     "price": 100000.0,
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
+                     "bookmarkCount": 32,
+                     "reviewCount": 12,
+                     "sector": "활동",
+                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                     "link": "http://www.naver.com",
+                     "geoLat": 37.27455854791513,
+                     "geoLon": 127.50946893739612,
+                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                     "number": "01073787605",
+                     "keywords": [
+                         {
+                             "content": "화장실이 청결해요",
+                             "count": 35
+                         },
+                         {
+                             "content": "단체모임 하기 좋아요",
+                             "count": 31
+                         },
+                         {
+                             "content": "여자/남자친구가 좋아해요",
+                             "count": 28
+                         }
+                     ]
+                 },
+                 {
+                     "id": 1,
+                     "name": "옹심이네",
+                     "region": "서울",
+                     "bookmarkYn": true,
+                     "distance": 50.4,
+                     "price": 100000.0,
+                    "imageURLs": [
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                    ],
                      "bookmarkCount": 32,
                      "reviewCount": 12,
                      "sector": "자연",
@@ -802,7 +1021,6 @@ class NetworkManager {
                 "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
                 "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
                 ],
-                "hashtags": ["3인가능", "반려동물", "핫플"],
                 "bookmarkCount": 32,
                 "reviewCount": 12,
                 "sector": "카페/식당",
@@ -813,20 +1031,20 @@ class NetworkManager {
                 "geoLon": 127.50946893739612,
                 "address": "경기 고양시 일산동구 강송로 170 현대프라자",
                 "number": "01073787605",
-                "keywords": [
-                    {
-                        "content": "화장실이 청결해요",
-                        "count": 35
-                    },
-                    {
-                        "content": "단체모임 하기 좋아요",
-                        "count": 31
-                    },
-                    {
-                        "content": "여자/남자친구가 좋아해요",
-                        "count": 28
-                    }
-                ],
+              "keywords": [
+                  {
+                      "content": "화장실이 청결해요",
+                      "count": 35
+                  },
+                  {
+                      "content": "단체 모임 하기 좋아요",
+                      "count": 31
+                  },
+                  {
+                      "content": "직원분들이 친절해요",
+                      "count": 28
+                  }
+              ],
                 "menus": [
                     {
                         "id": 1,
@@ -875,6 +1093,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            Singleton.shred.toastAlert.onNext("저장 장소에 추가되었습니다")
             single(.success(true))
 
             return Disposables.create()
@@ -908,6 +1127,48 @@ class NetworkManager {
     }
 
     func deleteLike(_: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+
+    // MARK: post review
+
+    func postReview(images: [UIImage], content: String, keywords: [KeywordModel]) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            print(images.count, content, keywords)
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+
+    // MARK: post comment
+
+    func postComment(content: String) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            print(content)
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+
+    func deleteComment(_: Int) -> Single<Bool> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
                 single(.failure(NetworkError.uri))
@@ -982,7 +1243,7 @@ class NetworkManager {
             return Disposables.create()
         }
     }
-    
+
     func getMyComments() -> Single<[CommentModel]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/comments") else {
@@ -1096,6 +1357,20 @@ class NetworkManager {
             } catch {
                 single(.failure(NetworkError.parsing))
             }
+
+            return Disposables.create()
+        }
+    }
+
+    // MARK: memo
+
+    func postMemo(placeId _: Int, content _: String, color _: String) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            single(.success(true))
 
             return Disposables.create()
         }

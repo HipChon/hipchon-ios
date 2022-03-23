@@ -51,9 +51,8 @@ class InputCommentView: UIView {
     }
 
     func bind(_ viewModel: InputCommentViewModel) {
-        
         // MARK: view -> viewModel
-        
+
         contentTextField.rx.text.orEmpty
             .bind(to: viewModel.content)
             .disposed(by: bag)
@@ -62,9 +61,9 @@ class InputCommentView: UIView {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.registerButtonTapped)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.profileImageURL
             .drive(profileImageView.rx.setImageKF)
             .disposed(by: bag)
@@ -108,7 +107,7 @@ class InputCommentView: UIView {
 // MARK: TextField Delegate
 
 extension InputCommentView: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
         guard let text = textField.text else { return true }
         return text.count <= 100
     }
