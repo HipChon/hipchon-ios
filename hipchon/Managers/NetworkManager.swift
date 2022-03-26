@@ -8,21 +8,31 @@
 import Alamofire
 import RxCocoa
 import RxSwift
+import SwiftKeychainWrapper
+import SwiftyJSON
 
 enum NetworkError: Error {
     case uri, parsing
 }
 
 class NetworkManager {
-    private init() {}
-
     public static let shared = NetworkManager()
-    static let uri = "https://"
-    static let headers: HTTPHeaders = [
+    static let uri = "https://4481af16-a6f8-45cb-abed-fdeefd721a9f.mock.pstmn.io"
+    static let localUrl = "http://54.180.25.216/"
+    let headers: HTTPHeaders = [
         "Authorization": "some auth",
         "Accept": "application/json",
-        // TODO: Token
+        "token": KeychainWrapper.standard.string(forKey: "token") ?? "",
     ]
+    
+    let session: Session = {
+      let configuration = URLSessionConfiguration.af.default
+        configuration.timeoutIntervalForRequest = 5
+        configuration.timeoutIntervalForResource = 5
+      return Session(configuration: configuration)
+    }()
+    
+    let bag = DisposeBag()
 
     // MARK: User
 
@@ -32,7 +42,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getUser")
             let str = """
             {
                 "id": 1,
@@ -61,7 +71,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getLocalHipsterPicks")
             let str = """
             [
                 {
@@ -105,7 +115,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getHipsterPicks")
             let str = """
             [
                 {
@@ -168,6 +178,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("getBestReview")
 
             let str = """
             [
@@ -291,7 +302,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getBanners")
             let str = """
             [
                 {
@@ -327,7 +338,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getWeeklyHipPlace")
             let str = """
             [
                 {
@@ -433,7 +444,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getReviews")
 //            AF
 //                .request(url, method: .get, parameters: nil, headers: NetworkManager.headers)
 //                .responseJSON(completionHandler: { response in
@@ -643,357 +654,436 @@ class NetworkManager {
         }
     }
 
-    func getPlaces() -> Single<[PlaceModel]> {
+    func getPlaces() -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/eco") else {
-                single(.failure(NetworkError.uri))
+            guard let url = URL(string: "\(NetworkManager.localUrl)/api/myplace/1") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
                 return Disposables.create()
             }
-            let str = """
-            [
-                {
-                    "id": 1,
-                    "name": "옹심이네",
-                    "region": "서울",
-                    "bookmarkYn": true,
-                    "distance": 50.4,
-                    "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                    "bookmarkCount": 32,
-                    "reviewCount": 12,
-                    "sector": "카페",
-                    "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                    "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                    "link": "http://www.naver.com",
-                    "geoLat": 37.27455854791513,
-                    "geoLon": 127.50946893739612,
-                    "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                    "number": "01073787605",
-                    "keywords": [
-                        {
-                            "content": "화장실이 청결해요",
-                            "count": 35
-                        },
-                        {
-                            "content": "단체모임 하기 좋아요",
-                            "count": 31
-                        },
-                        {
-                            "content": "여자/남자친구가 좋아해요",
-                            "count": 28
-                        }
-                    ],
-                    "memo": {
-                        "content": "빵, 과일 먹으러 갈 곳",
-                        "color": "green"
+            print("getPlaces")
+//            self.session
+//                .request(url, method: .get, parameters: nil, headers: NetworkManager.shared.headers)
+//                .validate(statusCode: 200 ..< 300)
+//                .responseJSON(completionHandler: { response in
+//                    switch response.result {
+//                    case .success(let data):
+//
+//                        do {
+//                            let modelData = try JSON(data)["data"].rawData()
+//
+//                            do {
+//                                let model = try JSONDecoder().decode([PlaceModel].self, from: modelData)
+//                                single(.success(.success(model)))
+//                            } catch {
+//                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+//                            }
+//
+//                        } catch {
+//                            single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+//                        }
+//
+//
+//                    case let .failure(error):
+//                        guard let statusCode = response.response?.statusCode else {
+//                            single(.success(.failure(APIError(statusCode: error._code,
+//                                                              description: error.errorDescription ?? ""))))
+//                            return
+//                        }
+//                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription ?? ""))))
+//                    }
+//                     })
+//                   .resume()
+                    
+                    let str = """
+                                [
+                                    {
+                                        "id": 1,
+                                        "name": "옹심이네",
+                                        "region": "서울",
+                                        "bookmarkYn": true,
+                                        "distance": 50.4,
+                                        "price": 100000.0,
+                                        "imageURLs": [
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                        ],
+                                        "bookmarkCount": 32,
+                                        "reviewCount": 12,
+                                        "sector": "카페",
+                                        "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                                        "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                                        "link": "http://www.naver.com",
+                                        "geoLat": 37.27455854791513,
+                                        "geoLon": 127.50946893739612,
+                                        "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                                        "number": "01073787605",
+                                        "keywords": [
+                                            {
+                                                "content": "화장실이 청결해요",
+                                                "count": 35
+                                            },
+                                            {
+                                                "content": "단체모임 하기 좋아요",
+                                                "count": 31
+                                            },
+                                            {
+                                                "content": "여자/남자친구가 좋아해요",
+                                                "count": 28
+                                            }
+                                        ],
+                                        "memo": {
+                                            "content": "빵, 과일 먹으러 갈 곳",
+                                            "color": "green"
+                                        }
+                                    },
+                                     {
+                                         "id": 1,
+                                         "name": "옹심이네",
+                                         "region": "서울",
+                                         "bookmarkYn": true,
+                                         "distance": 50.4,
+                                         "price": 100000.0,
+                                        "imageURLs": [
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                        ],
+                                         "bookmarkCount": 32,
+                                         "reviewCount": 12,
+                                         "sector": "식당",
+                                         "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                                         "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                                         "link": "http://www.naver.com",
+                                         "geoLat": 37.27455854791513,
+                                         "geoLon": 127.50946893739612,
+                                         "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                                         "number": "01073787605",
+                                         "keywords": [
+                                             {
+                                                 "content": "화장실이 청결해요",
+                                                 "count": 35
+                                             },
+                                             {
+                                                 "content": "단체모임 하기 좋아요",
+                                                 "count": 31
+                                             },
+                                             {
+                                                 "content": "여자/남자친구가 좋아해요",
+                                                 "count": 28
+                                             }
+                                         ]
+                                     },
+                                     {
+                                         "id": 1,
+                                         "name": "옹심이네",
+                                         "region": "서울",
+                                         "bookmarkYn": true,
+                                         "distance": 50.4,
+                                         "price": 100000.0,
+                                        "imageURLs": [
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                        ],
+                                         "bookmarkCount": 32,
+                                         "reviewCount": 12,
+                                         "sector": "활동",
+                                         "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                                         "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                                         "link": "http://www.naver.com",
+                                         "geoLat": 37.27455854791513,
+                                         "geoLon": 127.50946893739612,
+                                         "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                                         "number": "01073787605",
+                                         "keywords": [
+                                             {
+                                                 "content": "화장실이 청결해요",
+                                                 "count": 35
+                                             },
+                                             {
+                                                 "content": "단체모임 하기 좋아요",
+                                                 "count": 31
+                                             },
+                                             {
+                                                 "content": "여자/남자친구가 좋아해요",
+                                                 "count": 28
+                                             }
+                                         ]
+                                     },
+                                     {
+                                         "id": 1,
+                                         "name": "옹심이네",
+                                         "region": "서울",
+                                         "bookmarkYn": true,
+                                         "distance": 50.4,
+                                         "price": 100000.0,
+                                        "imageURLs": [
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+                                        "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+                                        ],
+                                         "bookmarkCount": 32,
+                                         "reviewCount": 12,
+                                         "sector": "자연",
+                                         "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+                                         "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+                                         "link": "http://www.naver.com",
+                                         "geoLat": 37.27455854791513,
+                                         "geoLon": 127.50946893739612,
+                                         "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+                                         "number": "01073787605",
+                                         "keywords": [
+                                             {
+                                                 "content": "화장실이 청결해요",
+                                                 "count": 35
+                                             },
+                                             {
+                                                 "content": "단체모임 하기 좋아요",
+                                                 "count": 31
+                                             },
+                                             {
+                                                 "content": "여자/남자친구가 좋아해요",
+                                                 "count": 28
+                                             }
+                                         ]
+                                     }
+                                
+                                ]
+                                
+                                """
+                    
+                    do {
+                        let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
+                        single(.success(.success(model)))
+                    } catch {
+                        single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                     }
-                },
-                 {
-                     "id": 1,
-                     "name": "옹심이네",
-                     "region": "서울",
-                     "bookmarkYn": true,
-                     "distance": 50.4,
-                     "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                     "bookmarkCount": 32,
-                     "reviewCount": 12,
-                     "sector": "식당",
-                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                     "link": "http://www.naver.com",
-                     "geoLat": 37.27455854791513,
-                     "geoLon": 127.50946893739612,
-                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                     "number": "01073787605",
-                     "keywords": [
-                         {
-                             "content": "화장실이 청결해요",
-                             "count": 35
-                         },
-                         {
-                             "content": "단체모임 하기 좋아요",
-                             "count": 31
-                         },
-                         {
-                             "content": "여자/남자친구가 좋아해요",
-                             "count": 28
-                         }
-                     ]
-                 },
-                 {
-                     "id": 1,
-                     "name": "옹심이네",
-                     "region": "서울",
-                     "bookmarkYn": true,
-                     "distance": 50.4,
-                     "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                     "bookmarkCount": 32,
-                     "reviewCount": 12,
-                     "sector": "활동",
-                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                     "link": "http://www.naver.com",
-                     "geoLat": 37.27455854791513,
-                     "geoLon": 127.50946893739612,
-                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                     "number": "01073787605",
-                     "keywords": [
-                         {
-                             "content": "화장실이 청결해요",
-                             "count": 35
-                         },
-                         {
-                             "content": "단체모임 하기 좋아요",
-                             "count": 31
-                         },
-                         {
-                             "content": "여자/남자친구가 좋아해요",
-                             "count": 28
-                         }
-                     ]
-                 },
-                 {
-                     "id": 1,
-                     "name": "옹심이네",
-                     "region": "서울",
-                     "bookmarkYn": true,
-                     "distance": 50.4,
-                     "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                     "bookmarkCount": 32,
-                     "reviewCount": 12,
-                     "sector": "자연",
-                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                     "link": "http://www.naver.com",
-                     "geoLat": 37.27455854791513,
-                     "geoLon": 127.50946893739612,
-                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                     "number": "01073787605",
-                     "keywords": [
-                         {
-                             "content": "화장실이 청결해요",
-                             "count": 35
-                         },
-                         {
-                             "content": "단체모임 하기 좋아요",
-                             "count": 31
-                         },
-                         {
-                             "content": "여자/남자친구가 좋아해요",
-                             "count": 28
-                         }
-                     ]
-                 }
-
-            ]
-
-            """
-
-            do {
-                let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
-                single(.success(model))
-            } catch {
-                single(.failure(NetworkError.parsing))
-            }
+      
 
             return Disposables.create()
         }
     }
+ 
 
-    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<[PlaceModel]> {
+    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/eco") else {
-                single(.failure(NetworkError.uri))
+            print("getPlaceList")
+            var urlStr = ""
+            
+            if filter.hashtag == nil,
+               let regionId = filter.region?.id,
+               let categoryId = filter.category?.id,
+               let order = sort == .bookmark ? "myplace" : "review" {
+                urlStr = "\(NetworkManager.localUrl)/api/place/1/\(regionId)/\(categoryId)/\(order)"
+            } else if let hashtagId = filter.hashtag?.id,
+                      let order = sort == .bookmark ? "myplace" : "review" {
+                urlStr = "\(NetworkManager.localUrl)/api/place/hashtag/1/\(hashtagId)/\(order)"
+            } else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+            }
+            
+            guard let url = URL(string: urlStr) else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            print("@@@@ getPlaceList @@@@")
-            print(filter.filterTitle)
-            print(sort)
 
-            let str = """
-            [
-                {
-                    "id": 1,
-                    "name": "옹심이네",
-                    "region": "서울",
-                    "bookmarkYn": true,
-                    "distance": 50.4,
-                    "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                    "bookmarkCount": 32,
-                    "reviewCount": 12,
-                    "sector": "카페",
-                    "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                    "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                    "link": "http://www.naver.com",
-                    "geoLat": 37.27455854791513,
-                    "geoLon": 127.50946893739612,
-                    "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                    "number": "01073787605",
-                    "keywords": [
-                        {
-                            "content": "화장실이 청결해요",
-                            "count": 35
-                        },
-                        {
-                            "content": "단체모임 하기 좋아요",
-                            "count": 31
-                        },
-                        {
-                            "content": "여자/남자친구가 좋아해요",
-                            "count": 28
+            
+            
+            self.session
+                .request(url, method: .get, parameters: nil, headers: NetworkManager.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let modelData = try JSON(data)["data"].rawData()
+                            do {
+                                let model = try JSONDecoder().decode([PlaceModel].self, from: modelData)
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                            
+                        } catch {
+                            single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                         }
-                    ],
-                    "memo": {
-                        "content": "빵, 과일 먹으러 갈 곳",
-                        "color": "green"
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription ?? ""))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription ?? ""))))
                     }
-                },
-                 {
-                     "id": 1,
-                     "name": "옹심이네",
-                     "region": "서울",
-                     "bookmarkYn": true,
-                     "distance": 50.4,
-                     "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                     "bookmarkCount": 32,
-                     "reviewCount": 12,
-                     "sector": "식당",
-                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                     "link": "http://www.naver.com",
-                     "geoLat": 37.27455854791513,
-                     "geoLon": 127.50946893739612,
-                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                     "number": "01073787605",
-                     "keywords": [
-                         {
-                             "content": "화장실이 청결해요",
-                             "count": 35
-                         },
-                         {
-                             "content": "단체모임 하기 좋아요",
-                             "count": 31
-                         },
-                         {
-                             "content": "여자/남자친구가 좋아해요",
-                             "count": 28
-                         }
-                     ]
-                 },
-                 {
-                     "id": 1,
-                     "name": "옹심이네",
-                     "region": "서울",
-                     "bookmarkYn": true,
-                     "distance": 50.4,
-                     "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                     "bookmarkCount": 32,
-                     "reviewCount": 12,
-                     "sector": "활동",
-                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                     "link": "http://www.naver.com",
-                     "geoLat": 37.27455854791513,
-                     "geoLon": 127.50946893739612,
-                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                     "number": "01073787605",
-                     "keywords": [
-                         {
-                             "content": "화장실이 청결해요",
-                             "count": 35
-                         },
-                         {
-                             "content": "단체모임 하기 좋아요",
-                             "count": 31
-                         },
-                         {
-                             "content": "여자/남자친구가 좋아해요",
-                             "count": 28
-                         }
-                     ]
-                 },
-                 {
-                     "id": 1,
-                     "name": "옹심이네",
-                     "region": "서울",
-                     "bookmarkYn": true,
-                     "distance": 50.4,
-                     "price": 100000.0,
-                    "imageURLs": [
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
-                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
-                    ],
-                     "bookmarkCount": 32,
-                     "reviewCount": 12,
-                     "sector": "자연",
-                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
-                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
-                     "link": "http://www.naver.com",
-                     "geoLat": 37.27455854791513,
-                     "geoLon": 127.50946893739612,
-                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
-                     "number": "01073787605",
-                     "keywords": [
-                         {
-                             "content": "화장실이 청결해요",
-                             "count": 35
-                         },
-                         {
-                             "content": "단체모임 하기 좋아요",
-                             "count": 31
-                         },
-                         {
-                             "content": "여자/남자친구가 좋아해요",
-                             "count": 28
-                         }
-                     ]
-                 }
-
-            ]
-
-            """
-
-            do {
-                let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
-                single(.success(model))
-            } catch {
-                single(.failure(NetworkError.parsing))
-            }
+                })
+                .resume()
+//
+//            let str = """
+//            [
+//                {
+//                    "id": 1,
+//                    "name": "옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네옹심이네",
+//                    "region": "서울",
+//                    "bookmarkYn": true,
+//                    "distance": 50.4,
+//                    "price": 100000.0,
+//                    "imageURLs": [
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+//                    ],
+//                    "bookmarkCount": 32,
+//                    "reviewCount": 12,
+//                    "sector": "카페",
+//                    "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+//                    "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+//                    "link": "http://www.naver.com",
+//                    "geoLat": 37.27455854791513,
+//                    "geoLon": 127.50946893739612,
+//                    "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+//                    "number": "01073787605",
+//                    "keywords": [
+//                        {
+//                            "content": "화장실이 청결해요",
+//                            "count": 35
+//                        },
+//                        {
+//                            "content": "단체모임 하기 좋아요",
+//                            "count": 31
+//                        },
+//                        {
+//                            "content": "여자/남자친구가 좋아해요",
+//                            "count": 28
+//                        }
+//                    ],
+//                    "memo": {
+//                        "content": "빵, 과일 먹으러 갈 곳",
+//                        "color": "green"
+//                    }
+//                },
+//                 {
+//                     "id": 1,
+//                     "name": "옹심이네",
+//                     "region": "서울",
+//                     "bookmarkYn": true,
+//                     "distance": 50.4,
+//                     "price": 100000.0,
+//                    "imageURLs": [
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+//                    ],
+//                     "bookmarkCount": 32,
+//                     "reviewCount": 12,
+//                     "sector": "식당",
+//                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+//                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+//                     "link": "http://www.naver.com",
+//                     "geoLat": 37.27455854791513,
+//                     "geoLon": 127.50946893739612,
+//                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+//                     "number": "01073787605",
+//                     "keywords": [
+//                         {
+//                             "content": "화장실이 청결해요",
+//                             "count": 35
+//                         },
+//                         {
+//                             "content": "단체모임 하기 좋아요",
+//                             "count": 31
+//                         },
+//                         {
+//                             "content": "여자/남자친구가 좋아해요",
+//                             "count": 28
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     "id": 1,
+//                     "name": "옹심이네",
+//                     "region": "서울",
+//                     "bookmarkYn": true,
+//                     "distance": 50.4,
+//                     "price": 100000.0,
+//                    "imageURLs": [
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+//                    ],
+//                     "bookmarkCount": 32,
+//                     "reviewCount": 12,
+//                     "sector": "활동",
+//                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+//                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+//                     "link": "http://www.naver.com",
+//                     "geoLat": 37.27455854791513,
+//                     "geoLon": 127.50946893739612,
+//                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+//                     "number": "01073787605",
+//                     "keywords": [
+//                         {
+//                             "content": "화장실이 청결해요",
+//                             "count": 35
+//                         },
+//                         {
+//                             "content": "단체모임 하기 좋아요",
+//                             "count": 31
+//                         },
+//                         {
+//                             "content": "여자/남자친구가 좋아해요",
+//                             "count": 28
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     "id": 1,
+//                     "name": "옹심이네",
+//                     "region": "서울",
+//                     "bookmarkYn": true,
+//                     "distance": 50.4,
+//                     "price": 100000.0,
+//                    "imageURLs": [
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2",
+//                    "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F603cc735-a283-414d-82e4-677b48c2a9a4%2F16d95d59f310a0816dcf2b30f0d3e77f_3.png?table=block&id=607a22b3-b62f-4571-8426-42fae73e3409&spaceId=8f951a40-5f58-4e37-a434-f8779f97f587&width=2000&userId=711ecf32-2a4d-418b-9878-68474ca48176&cache=v2"
+//                    ],
+//                     "bookmarkCount": 32,
+//                     "reviewCount": 12,
+//                     "sector": "자연",
+//                     "businessHours": "11:00 - 19:00 (매주 월/화/수요일 휴무)",
+//                     "description": "러스틱 라이프를 담은 브런치 신선한 재료와 평화로운 뷰가 자랑거리입니다.",
+//                     "link": "http://www.naver.com",
+//                     "geoLat": 37.27455854791513,
+//                     "geoLon": 127.50946893739612,
+//                     "address": "경기 고양시 일산동구 강송로 170 현대프라자",
+//                     "number": "01073787605",
+//                     "keywords": [
+//                         {
+//                             "content": "화장실이 청결해요",
+//                             "count": 35
+//                         },
+//                         {
+//                             "content": "단체모임 하기 좋아요",
+//                             "count": 31
+//                         },
+//                         {
+//                             "content": "여자/남자친구가 좋아해요",
+//                             "count": 28
+//                         }
+//                     ]
+//                 }
+//
+//            ]
+//
+//            """
+//
+//            do {
+//                let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
+//                single(.success(model))
+//            } catch {
+//                single(.failure(NetworkError.parsing))
+//            }
 
             return Disposables.create()
         }
@@ -1007,7 +1097,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-
+            print("getPlaceDetail")
             let str = """
             {
                 "id": 1,
@@ -1093,7 +1183,9 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-            Singleton.shred.toastAlert.onNext("저장 장소에 추가되었습니다")
+            print("addBookmark")
+            Singleton.shared.toastAlert.onNext("저장 장소에 추가되었습니다")
+            Singleton.shared.myPlaceRefresh.onNext(())
             single(.success(true))
 
             return Disposables.create()
@@ -1106,7 +1198,11 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("deleteBookmark")
+            Singleton.shared.toastAlert.onNext("저장 장소에서 삭제되었습니다")
+            Singleton.shared.myPlaceRefresh.onNext(())
             single(.success(true))
+            
 
             return Disposables.create()
         }
@@ -1120,6 +1216,8 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("addLike")
+            Singleton.shared.likedReviewRefresh.onNext(())
             single(.success(true))
 
             return Disposables.create()
@@ -1132,6 +1230,8 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("deleteLike")
+            Singleton.shared.likedReviewRefresh.onNext(())
             single(.success(true))
 
             return Disposables.create()
@@ -1146,7 +1246,25 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-            print(images.count, content, keywords)
+            print("postReview")
+            dump(images)
+            dump(content)
+            dump(keywords)
+            Singleton.shared.myReviewRefresh.onNext(())
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+    
+    func deleteReview(_: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            print("deleteReview")
+            Singleton.shared.myReviewRefresh.onNext(())
             single(.success(true))
 
             return Disposables.create()
@@ -1161,7 +1279,8 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
-            print(content)
+            print("postComment")
+            Singleton.shared.myCommentRefresh.onNext(())
             single(.success(true))
 
             return Disposables.create()
@@ -1174,6 +1293,24 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("deleteComment")
+            Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
+            Singleton.shared.myCommentRefresh.onNext(())
+            single(.success(true))
+
+            return Disposables.create()
+        }
+    }
+    
+    func reportComment(_: Int) -> Single<Bool> {
+        return Single.create { single in
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.failure(NetworkError.uri))
+                return Disposables.create()
+            }
+            print("reportComment")
+            Singleton.shared.toastAlert.onNext("댓글이 신고되었습니다")
+            Singleton.shared.myCommentRefresh.onNext(())
             single(.success(true))
 
             return Disposables.create()
@@ -1188,8 +1325,130 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+           
+            print("getComments")
             let str = """
             [
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2022-03-13T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2021-03-19T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2020-03-19T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2022-03-13T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2021-03-19T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2020-03-19T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
+                    "dateTime": "2022-03-15T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2022-03-13T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2021-03-19T11:02:11.111"
+                },
+                {
+                    "id": 1,
+                    "user": {
+                        "id": 1,
+                        "name": "김범수",
+                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
+                    },
+                    "content": "완전 재밌었겠네용!!",
+                    "dateTime": "2020-03-19T11:02:11.111"
+                },
                 {
                     "id": 1,
                     "user": {
@@ -1250,6 +1509,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("getMyComments")
             let str = """
             [
                 {
@@ -1370,6 +1630,7 @@ class NetworkManager {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
+            print("postMemo")
             single(.success(true))
 
             return Disposables.create()

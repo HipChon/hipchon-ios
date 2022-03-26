@@ -20,6 +20,7 @@ class PlaceDesViewModel {
     let setBusinessHours: Driver<String>
     let setDescription: Driver<String>
     let setLink: Driver<String>
+    let share: Signal<String>
 
     // MARK: view -> viewModel
 
@@ -33,7 +34,7 @@ class PlaceDesViewModel {
     let link = BehaviorSubject<String>(value: "")
 
     let callButtonTapped = PublishRelay<Void>()
-    let sharedButtonTapped = PublishRelay<Void>()
+    let shareButtonTapped = PublishRelay<Void>()
     let reviewButtonTapped = PublishRelay<Void>()
     let bookmarkButtonTapped = PublishRelay<Void>()
     let linkButtonTapped = PublishRelay<Void>()
@@ -62,5 +63,9 @@ class PlaceDesViewModel {
 
         setLink = link
             .asDriver(onErrorJustReturn: "")
+        
+        share = shareButtonTapped
+            .withLatestFrom(link)
+            .asSignal(onErrorJustReturn: "")
     }
 }

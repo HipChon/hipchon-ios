@@ -15,7 +15,8 @@ target 'hipchon' do
 
   # For Parsing 
   pod 'Alamofire'
-
+  pod 'SwiftyJSON'
+  
   # For UI
   pod 'SnapKit'
   pod 'Then'
@@ -30,4 +31,5 @@ target 'hipchon' do
   # For SNS
   pod 'KakaoSDK'
   pod 'Toast-Swift', '~> 5.0.1'
+  pod 'SwiftKeychainWrapper'
 end

@@ -39,7 +39,19 @@ class PlaceListViewModel {
         // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
             .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
-            .bind(to: places)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    places.onNext(data)
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        break
+                    }
+                }
+            })
             .disposed(by: bag)
 
         // refresh
@@ -53,17 +65,29 @@ class PlaceListViewModel {
             .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
             .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
             .do(onNext: { _ in activatingState.onNext(false) })
-            .bind(to: places)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    places.onNext(data)
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        break
+                    }
+                }
+            })
             .disposed(by: bag)
 
         // more fetching
 
-        moreFetching
-            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
-            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
-            .withLatestFrom(places) { $1 + $0 }
-            .bind(to: places)
-            .disposed(by: bag)
+//        moreFetching
+//            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
+//            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
+//            .withLatestFrom(places) { $1 + $0 }
+//            .bind(to: places)
+//            .disposed(by: bag)
 
         placeTableViewHidden = places
             .map { $0.count == 0 }

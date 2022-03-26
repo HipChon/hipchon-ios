@@ -15,7 +15,7 @@ class HipsterPickDetailCellViewModel {
 
     let reviewPlaceVM: Driver<ReviewPlaceViewModel>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let share: Signal<Void>
+    let share: Signal<String>
 
     // MARK: viewModel -> view
 

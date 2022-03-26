@@ -22,7 +22,7 @@ class HomeViewModel {
 
     // MARK: viewModel -> view
 
-    let cateogorys: Driver<[HashtagModel]>
+    let hashtags: Driver<[HashtagModel]>
     let banners: Driver<[BannerModel]>
     let pushPlaceListVC: Signal<PlaceListViewModel>
     let presentFilterVC: Signal<FilterViewModel>
@@ -37,17 +37,11 @@ class HomeViewModel {
     let bannerCurrentIdx = BehaviorRelay<Int>(value: 1)
 
     init() {
-        // TODO: User
-        NetworkManager.shared.getUser()
-            .subscribe(onSuccess: {
-                UserModel.currentUser.onNext($0)
-            })
-            .disposed(by: bag)
 
-        cateogorys = Driver.just(HashtagModel.tmpModels)
+        hashtags = Driver.just(HashtagModel.model)
 
         pushPlaceListVC = selectedHashtag
-            .map { SearchFilterModel(hashtag: $0.name) }
+            .map { SearchFilterModel(hashtag: $0) }
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 

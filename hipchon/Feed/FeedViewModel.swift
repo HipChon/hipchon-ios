@@ -42,7 +42,7 @@ class FeedViewModel {
             .asDriver(onErrorJustReturn: false)
 
         // 첫 load, sorting
-        viewAppear
+        viewAppear.take(1)
             .flatMap { NetworkManager.shared.getReviews() }
             .asObservable()
             .bind(to: reviews)

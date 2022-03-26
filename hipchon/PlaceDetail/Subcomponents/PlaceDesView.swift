@@ -129,7 +129,7 @@ class PlaceDesView: UIView {
 
         shareButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.sharedButtonTapped)
+            .bind(to: viewModel.shareButtonTapped)
             .disposed(by: bag)
 
         reviewButton.rx.tap

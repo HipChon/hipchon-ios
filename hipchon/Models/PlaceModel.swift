@@ -65,8 +65,21 @@ class PlaceModel: Codable {
         return NMGLatLng(lat: geoLat, lng: geoLon)
     }
 
+//    enum CodingKeys: String, CodingKey {
+//        case id, name, region, bookmarkYn, distance, price, imageURLs, bookmarkCount, reviewCount
+//        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus, memo, hashtag
+//    }
+    
     enum CodingKeys: String, CodingKey {
-        case id, name, region, bookmarkYn, distance, price, imageURLs, bookmarkCount, reviewCount
-        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus, memo, hashtag
+        case id = "placeId"
+        case name
+        case sector = "category"
+        case address
+        case region = "city"
+        case imageURLs = "image"
+        case bookmarkCount = "myplaceCnt"
+        case reviewCount = "postCnt"
+        case bookmarkYn = "isMyplace"
+        case distance, price, businessHours, description, link, geoLat, geoLon, number, reviews, keywords, menus, memo, hashtag
     }
 }

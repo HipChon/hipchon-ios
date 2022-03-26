@@ -83,7 +83,7 @@ class MyCommentCell: UITableViewCell {
             deleteButton,
             borderView,
         ].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
 
         reviewImageView.snp.makeConstraints {

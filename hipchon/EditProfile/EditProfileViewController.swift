@@ -33,7 +33,6 @@ class EditProfileViewController: UIViewController {
         $0.font = .GmarketSans(size: 16.0, type: .medium)
         $0.textAlignment = .center
         $0.borderStyle = .none
-        $0.text = "닉네임"
     }
 
     private lazy var bottomLineView = UIView().then {
@@ -164,7 +163,7 @@ class EditProfileViewController: UIViewController {
             .emit(onNext: { [weak self] in
                 let tapBarViewController = TabBarViewController()
                 self?.navigationController?.pushViewController(tapBarViewController, animated: true, completion: {
-                    Singleton.shred.toastAlert.onNext("회원가입이 완료되었습니다")
+                    Singleton.shared.toastAlert.onNext("회원가입이 완료되었습니다")
                 })
             })
             .disposed(by: bag)
@@ -172,7 +171,7 @@ class EditProfileViewController: UIViewController {
         viewModel.editComplete
             .emit(onNext: { [weak self] in
                 self?.navigationController?.popViewController(animated: true, completion: {
-                    Singleton.shred.toastAlert.onNext("프로필 편집이 완료되었습니다")
+                    Singleton.shared.toastAlert.onNext("프로필 편집이 완료되었습니다")
                 })
             })
             .disposed(by: bag)

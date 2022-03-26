@@ -65,6 +65,12 @@ class OnBoardingViewController: UIViewController {
         $0.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
         $0.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 0.0)
     }
+    
+    private lazy var guestLoginButton = UIButton().then {
+        $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
+        $0.setTitle("힙촌 둘러보기", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+    }
 
     private let bag = DisposeBag()
     let viewModel = OnBoardingViewModel()
@@ -96,17 +102,21 @@ class OnBoardingViewController: UIViewController {
 
         appleLoginButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
-//            .bind(to: viewModel.appleLoginButtonTapped)
             .subscribe(onNext: {
                 let appleIDProvider = ASAuthorizationAppleIDProvider()
                 let request = appleIDProvider.createRequest()
-                request.requestedScopes = [.fullName, .email]
+//                request.requestedScopes = [.fullName, .email]
 
                 let authorizationController = ASAuthorizationController(authorizationRequests: [request])
                 authorizationController.delegate = self
                 authorizationController.presentationContextProvider = self
                 authorizationController.performRequests()
             })
+            .disposed(by: bag)
+        
+        guestLoginButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.guestLoginButtonTapped)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -139,6 +149,7 @@ class OnBoardingViewController: UIViewController {
             peopleImageView,
             kakaoLoginButton,
             appleLoginButton,
+            guestLoginButton,
         ].forEach {
             view.addSubview($0)
         }
@@ -168,7 +179,13 @@ class OnBoardingViewController: UIViewController {
 
         appleLoginButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(30.0)
+            $0.bottom.equalTo(guestLoginButton.snp.top).offset(-8.0)
+            $0.height.equalTo(50.0)
+        }
+        
+        guestLoginButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(25.0)
             $0.height.equalTo(50.0)
         }
     }
@@ -188,15 +205,17 @@ extension OnBoardingViewController: ASAuthorizationControllerPresentationContext
 
             // 계정 정보 가져오기
             let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName
-            let email = appleIDCredential.email
-
-            print("User ID : \(userIdentifier)")
-            print("User Email : \(email ?? "")")
-            print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
-            viewModel.token.onNext(userIdentifier)
-            viewModel.email.onNext(email ?? "")
-            viewModel.name.onNext("\((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
+            viewModel.appleId.onNext(userIdentifier.identity)
+            
+//            let fullName = appleIDCredential.fullName
+//            let email = appleIDCredential.email
+//
+//            print("User ID : \(userIdentifier)")
+//            print("User Email : \(email ?? "")")
+//            print("User Name : \((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
+//
+//            viewModel.email.onNext(email ?? "")
+//            viewModel.name.onNext("\((fullName?.givenName ?? "") + (fullName?.familyName ?? ""))")
         default:
             break
         }

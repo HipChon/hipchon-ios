@@ -35,7 +35,8 @@ class MemoViewModel {
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
 
-        color = Observable.merge(memo.compactMap { $0.backgroundColor }.asObservable(),
+        color = Observable.merge( Observable.just(.gray01),
+                                  memo.map { $0.backgroundColor }.asObservable(),
                                  changedColor.asObservable())
             .asDriver(onErrorJustReturn: .gray01)
 
@@ -51,7 +52,7 @@ class MemoViewModel {
             .withLatestFrom(Observable.combineLatest(place.compactMap { $0.id }, inputContent, color.asObservable()))
             .flatMap { NetworkManager.shared.postMemo(placeId: $0, content: $1, color: $2.memoColorString()) }
             .subscribe(onNext: { _ in
-                Singleton.shred.toastAlert.onNext("메모가 등록되었습니다")
+                Singleton.shared.toastAlert.onNext("메모가 등록되었습니다")
             })
             .disposed(by: bag)
     }

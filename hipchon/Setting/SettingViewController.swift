@@ -149,7 +149,7 @@ class SettingViewController: UIViewController {
         viewModel.withdrawPopToOnBoarding
             .emit(onNext: { [weak self] in
                 self?.navigationController?.popToRootViewController(animated: true, completion: {
-                    Singleton.shred.toastAlert.onNext("회원 탈퇴가 완료되었습니다")
+                    Singleton.shared.toastAlert.onNext("회원 탈퇴가 완료되었습니다")
                 })
             })
             .disposed(by: bag)

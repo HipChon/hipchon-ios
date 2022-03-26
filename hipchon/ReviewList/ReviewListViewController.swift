@@ -127,7 +127,7 @@ class ReviewListViewController: UIViewController {
             .emit(onNext: { [weak self] viewModel in
                 let reviewDetailVC = ReviewDetailViewController()
                 reviewDetailVC.bind(viewModel)
-                self?.tabBarController?.navigationController?.pushViewController(reviewDetailVC, animated: true)
+                self?.navigationController?.pushViewController(reviewDetailVC, animated: true)
             })
             .disposed(by: bag)
 

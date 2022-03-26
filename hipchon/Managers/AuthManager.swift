@@ -28,31 +28,53 @@ class AuthManager {
     ]
 
     // MARK: kakao
+    // TODO: 로그인 후 User.me? 에서 userId 받은 후 우리 서버 로그인 API 호출?
 
-    func kakaoSignup() -> Single<Result<String?, APIError>> {
+    func kakaoSignin() -> Single<Result<String, APIError>> {
         return Single.create { single in
-            if AuthApi.hasToken() { // 토큰 있을 시
-                UserApi.shared.accessTokenInfo { accessToken, error in
-                    if accessToken == nil { // 토큰 만료 시
-                        if UserApi.isKakaoTalkLoginAvailable() { // 간편 로그인: 카톡 어플 있을 시
+            if AuthApi.hasToken() { // 기존 access token 토큰 존재 여부 체크
+                UserApi.shared.accessTokenInfo { _, error in // access token 토큰 요청
+                    if error != nil { // access token 토큰 만료 시
+                        if UserApi.isKakaoTalkLoginAvailable() { // 앱 로그인: 카톡 어플 O
                             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                                 if error != nil { // 로그인 실패
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
-                                } else { // 로그인 성공
-                                    single(.success(.success(oauthToken?.accessToken)))
+                                } else { // 로그인 성공, userId 발급
+                                    UserApi.shared.me(completion: { user, error in
+                                        guard let user = user else {
+                                            single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
+                                            return
+                                        }
+                                        let id = "\(user.id)"
+                                        single(.success(.success(id)))
+                                    })
                                 }
                             }
-                        } else { // 카톡 어플 없을 시
+                        } else { // 웹 로그인: 카톡 어플 X
                             UserApi.shared.loginWithKakaoAccount { oauthToken, error in
-                                if error != nil {
+                                if error != nil { // 로그인 실패
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
-                                } else {
-                                    single(.success(.success(oauthToken?.accessToken)))
+                                } else { // 로그인 성공, userId 발급
+                                    UserApi.shared.me(completion: { user, error in
+                                        guard let user = user else {
+                                            single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
+                                            return
+                                        }
+                                        let id = "\(user.id)"
+                                        single(.success(.success(id)))
+                                    })
                                 }
                             }
                         }
-                    } else { // 토큰 유효 시
-                        single(.success(.success(""))) // TODO: accessToken
+                    } else { // 토큰 유효 시, userId 발급
+                        UserApi.shared.me(completion: { user, errㅐㄱ in
+                            guard let user = user else {
+                                single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
+                                return
+                            }
+                            let id = "\(user.id)"
+                            single(.success(.success(id)))
+                        })
                     }
                 }
             } else { // 토큰 없을 시
@@ -60,16 +82,30 @@ class AuthManager {
                     UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                         if error != nil { // 로그인 실패
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
-                        } else { // 로그인 성공
-                            single(.success(.success(oauthToken?.accessToken)))
+                        } else { // 로그인 성공, userId 발급
+                            UserApi.shared.me(completion: { user, error in
+                                guard let user = user else {
+                                    single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
+                                    return
+                                }
+                                let id = "\(user.id)"
+                                single(.success(.success(id)))
+                            })
                         }
                     }
                 } else { // 카톡 어플 없을 시
                     UserApi.shared.loginWithKakaoAccount { oauthToken, error in
                         if error != nil {
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
-                        } else {
-                            single(.success(.success(oauthToken?.accessToken)))
+                        } else { // 로그인 성공, userId 발급
+                            UserApi.shared.me(completion: { user, error in
+                                guard let user = user else {
+                                    single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
+                                    return
+                                }
+                                let id = "\(user.id)"
+                                single(.success(.success(id)))
+                            })
                         }
                     }
                 }
@@ -78,14 +114,36 @@ class AuthManager {
         }
     }
 
-    func signin(token _: String) -> Single<Result<Void, APIError>> {
+    func signin(authModel: AuthModel) -> Single<Result<UserModel, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
                 return Disposables.create()
             }
-            single(.success(.success(())))
-//            single(.failure(APIError(statusCode: -1, description: "")))
+            
+            let str = """
+            {
+                "id": 1,
+                "name": "김범수",
+                "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                "reviewCount": 12
+            }
+            """
+
+            do {
+                let model = try JSONDecoder().decode(UserModel.self, from: Data(str.utf8))
+                single(.success(.success(model)))
+            } catch {
+                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+            }
+            
+            
+            
+            
+            
+//            single(.success(.success(())))
+            // TODO: 401 리턴 시 회원가입
+            single(.success(.failure(APIError(statusCode: 401, description: "unathorized"))))
 
 //            guard let email = authModel.email,
 //                  let password = authModel.password
@@ -125,13 +183,29 @@ class AuthManager {
         }
     }
 
-    func signup(auth _: AuthModel) -> Single<Result<Void, APIError>> {
+    func signup(authModel: AuthModel) -> Single<Result<UserModel, APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signin") else {
+            guard let url = URL(string: "\(NetworkManager.uri)/api/auth/signup") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
                 return Disposables.create()
             }
-            single(.success(.success(())))
+            
+            let str = """
+            {
+                "id": 1,
+                "name": "김범수",
+                "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9",
+                "reviewCount": 12
+            }
+            """
+
+            do {
+                let model = try JSONDecoder().decode(UserModel.self, from: Data(str.utf8))
+                single(.success(.success(model)))
+            } catch {
+                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+            }
+            
             return Disposables.create()
         }
     }
@@ -142,6 +216,7 @@ class AuthManager {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
                 return Disposables.create()
             }
+            print("withdraw")
             single(.success(.success(())))
             return Disposables.create()
         }
@@ -153,6 +228,7 @@ class AuthManager {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
                 return Disposables.create()
             }
+            print("putProfileImage")
             single(.success(.success(())))
             return Disposables.create()
         }

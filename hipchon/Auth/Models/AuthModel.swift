@@ -13,7 +13,8 @@ enum RegisterPasswordCheckType {
 }
 
 class AuthModel {
-    let token: String?
+    let id: String?
+    let type: String?
     let email: String?
     let password: String?
     var name: String?
@@ -21,7 +22,18 @@ class AuthModel {
     var profileImage: UIImage?
 
     init() {
-        token = nil
+        type = nil
+        id = nil
+        email = nil
+        password = nil
+        name = nil
+        profileImage = nil
+    }
+    
+    // 소셜 로그인 시
+    init(id: String, type: String) {
+        self.id = id
+        self.type = type
         email = nil
         password = nil
         name = nil
@@ -31,15 +43,17 @@ class AuthModel {
     init(email: String?, password: String?) {
         self.email = email
         self.password = password
-        token = nil
+        id = nil
+        type = nil
         name = nil
         profileImage = nil
     }
 
-    init(token: String?, email: String?, name: String?) {
-        self.token = token
+    init(id: String?, email: String?, name: String?) {
+        self.id = id
         self.email = email
         self.name = name
+        type = nil
         password = nil
         profileImage = nil
     }

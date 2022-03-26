@@ -307,16 +307,17 @@ class PostReviewViewController: UIViewController {
         viewModel.pop
             .emit(onNext: { [weak self] in
                 self?.navigationController?.popViewController(animated: true, completion: {
-                    Singleton.shred.toastAlert.onNext("게시물이 등록되었습니다")
+                    Singleton.shared.toastAlert.onNext("게시물이 등록되었습니다")
                 })
             })
             .disposed(by: bag)
     }
 
     private func attribute() {
-        hideKeyboardWhenTappedAround()
         view.backgroundColor = .white
         contentTextView.delegate = self
+        hideKeyboardWhenTappedAround()
+        addKeyboardNotification()
     }
 
     private func layout() {
@@ -458,16 +459,22 @@ private extension PostReviewViewController {
         )
     }
 
-    @objc private func keyboardWillShow(_: Notification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            keyboardHeight.onNext(keyboardSize.height + UITextField.keyboardUpBottomHeight)
-//            navigationBottomHeight.onNext(16.0 - keyboardSize.height)
-//        }
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            contentView.snp.remakeConstraints {
+                $0.top.equalToSuperview().inset(-keyboardSize.height)
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview().inset(keyboardSize.height)
+                $0.width.equalToSuperview()
+            }
+        }
     }
 
-    @objc private func keyboardWillHide(_: Notification) {
-//        keyboardHeight.onNext(UITextField.keyboardDownBottomHeight)
-//        navigationBottomHeight.onNext(16.0)
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        contentView.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
     }
 
     // 주변 터치시 키보드 내림

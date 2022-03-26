@@ -31,12 +31,30 @@ class HashtagReviewCell: UICollectionViewCell {
     private lazy var hashtagImageView = UIImageView().then { _ in
     }
 
+    public static let identyfier = "HashtagReviewCell"
+    var bag = DisposeBag()
+    var viewModel: HashtagReviewCellViewModel?
+    
     private lazy var dotButton = UIButton().then {
         $0.setImage(UIImage(named: "dots"), for: .normal)
+        
+        
+        var actions: [UIAction] = []
+        let showAction = UIAction(title: "조회",
+                                     image: nil) { [weak self] _ in
+            self?.viewModel?.showTapped.onNext(())
+        }
+        actions.append(showAction)
+        let deleteAction = UIAction(title: "삭제",
+                                     image: nil) { [weak self] _ in
+            self?.viewModel?.deleteTapped.onNext(())
+        }
+        actions.append(deleteAction)
+        
+        let menu = UIMenu(title: "", children: actions)
+        $0.menu = menu
+        $0.showsMenuAsPrimaryAction = true
     }
-
-    public static let identyfier = "HashtagReviewCell"
-    private var bag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,6 +73,8 @@ class HashtagReviewCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HashtagReviewCellViewModel) {
+        self.viewModel = viewModel
+        
         viewModel.imageURL
             .drive(imageView.rx.setImageKF)
             .disposed(by: bag)
@@ -115,8 +135,7 @@ class HashtagReviewCell: UICollectionViewCell {
         dotButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(13.0)
             $0.centerY.equalTo(nameLabel)
-            $0.width.equalTo(17.0)
-            $0.height.equalTo(4)
+            $0.width.height.equalTo(17.0)
         }
     }
 }

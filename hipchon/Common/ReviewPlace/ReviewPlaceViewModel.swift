@@ -18,7 +18,7 @@ class ReviewPlaceViewModel {
     let sector: Driver<String>
     let bookmarkYn: Driver<Bool>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let share: Signal<Void>
+    let share: Signal<String>
 
     // MARK: view -> viewModel
 
@@ -41,8 +41,10 @@ class ReviewPlaceViewModel {
             .compactMap { $0.sector }
             .asDriver(onErrorJustReturn: "")
 
-        share = shareButtonTapped // TODO:
-            .asSignal()
+        share = shareButtonTapped
+            .withLatestFrom(place)
+            .compactMap { $0.link }
+            .asSignal(onErrorJustReturn: "")
 
         // MARK: bookmark
 

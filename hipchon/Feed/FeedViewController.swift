@@ -24,6 +24,7 @@ class FeedViewController: UIViewController {
 
     private lazy var sortButton = UIButton().then {
         $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
+        $0.isHidden = true // TODO: delete
     }
 
     private lazy var boundaryView = UIView().then {
@@ -43,6 +44,7 @@ class FeedViewController: UIViewController {
 
     private lazy var uploadButton = UIButton().then {
         $0.setImage(UIImage(named: "upload"), for: .normal)
+        $0.isHidden = true // TODO: delete
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -123,13 +125,13 @@ class FeedViewController: UIViewController {
                     .emit(onNext: { [weak self] viewModel in
                         let placeDetailVC = PlaceDetailViewController()
                         placeDetailVC.bind(viewModel)
-                        self?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                        self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
                     })
                     .disposed(by: cell.bag)
 
                 viewModel.share
                     .emit(onNext: { [weak self] in
-                        let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                        let activityVC = UIActivityViewController(activityItems: [$0],
                                                                   applicationActivities: nil)
                         self?.present(activityVC, animated: true, completion: nil)
                     })

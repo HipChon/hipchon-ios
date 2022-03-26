@@ -107,13 +107,14 @@ class ReviewDetailViewController: UIViewController {
 //        $0.rowHeight = 200.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
+        $0.isScrollEnabled = false
     }
 
     private lazy var inputCommentView = InputCommentView().then { _ in
     }
 
     private let bag = DisposeBag()
-    var viewModel: ReviewDetailViewModel? // TODO: remove
+    var viewModel: ReviewDetailViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -222,7 +223,7 @@ class ReviewDetailViewController: UIViewController {
 
         viewModel.share
             .emit(onNext: { [weak self] in
-                let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                let activityVC = UIActivityViewController(activityItems: [$0],
                                                           applicationActivities: nil)
                 self?.present(activityVC, animated: true, completion: nil)
             })

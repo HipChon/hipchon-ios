@@ -125,7 +125,7 @@ class HomeViewController: UIViewController {
 
         // MARK: viewModel -> view
 
-        viewModel.cateogorys
+        viewModel.hashtags
             .drive(hashtagCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: HashtagCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HashtagCell else { return UICollectionViewCell() }
                 let hashtagCellViewModel = HashtagCellViewModel()

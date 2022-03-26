@@ -27,7 +27,7 @@ class ReviewCellViewModel {
     let commentCount: Driver<Int>
     let content: Driver<String>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let share: Signal<Void>
+    let share: Signal<String>
 
     // MARK: view -> viewModel
 
@@ -100,6 +100,7 @@ class ReviewCellViewModel {
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.addLike($0) }
             .subscribe(onNext: {
+                Singleton.shared.unauthorized.onNext(())
                 if $0 == true {
                     // reload
                 }

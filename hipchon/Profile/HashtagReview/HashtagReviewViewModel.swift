@@ -30,6 +30,7 @@ class HashtagReviewViewModel {
     let reload = PublishRelay<Void>()
     let moreFetching = PublishRelay<Void>()
     let selectedReviewIdx = PublishRelay<Int>()
+    let deleteReviewIdx = PublishRelay<Int>()
 
     init(_ data: ProfileReviewType) {
         let type = BehaviorSubject<ProfileReviewType>(value: data)
@@ -39,12 +40,15 @@ class HashtagReviewViewModel {
             .map { $0.map { HashtagReviewCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
-        // 첫 load, sorting
-        type
-            .flatMap { _ in NetworkManager.shared.getReviews() }
-            .asObservable()
-            .bind(to: reviews)
-            .disposed(by: bag)
+        // 첫 load, refresh
+//        Observable.merge(Observable.just(()).withLatestFrom(type),
+//                         Singleton.shared.myPlaceRefresh.withLatestFrom(type).filter { $0 == .myReview },
+//                         Singleton.shared.likedReviewRefresh.withLatestFrom(type).filter { $0 == .likeReview }
+//        )
+//            .flatMap { _ in NetworkManager.shared.getReviews() }
+//            .asObservable()
+//            .bind(to: reviews)
+//            .disposed(by: bag)
 
         // refresh
         let activatingState = PublishSubject<Bool>()

@@ -18,16 +18,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .white
 
-//        let onBoardingViewController = OnBoardingViewController()
-//        window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
+        let onBoardingViewController = OnBoardingViewController()
+        window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
 
-        let tapBarViewController = TabBarViewController()
-        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
+//        let tapBarViewController = TabBarViewController()
+//        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
 
         window?.makeKeyAndVisible()
     }
 
-    // Kakao
+    // MARK: Kakao Redirect Url
     func scene(_: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             if AuthApi.isKakaoTalkLoginUrl(url) {

@@ -235,7 +235,7 @@ class PlaceDetailViewController: UIViewController {
 
         viewModel.share
             .emit(onNext: { [weak self] in
-                let activityVC = UIActivityViewController(activityItems: ["asd", "def"],
+                let activityVC = UIActivityViewController(activityItems: [$0],
                                                           applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self?.view
                 self?.present(activityVC, animated: true, completion: nil)

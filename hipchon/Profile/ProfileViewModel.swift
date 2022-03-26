@@ -16,6 +16,7 @@ class ProfileViewModel {
     // MARK: viewModel -> view
 
     let profileImageURL: Driver<URL>
+    let name: Driver<String?>
     let pushSettingVC: Signal<SettingViewModel>
     let pushEditProfileVC: Signal<EditProfileViewModel>
 
@@ -25,10 +26,14 @@ class ProfileViewModel {
     let profileImageButtonTapped = PublishRelay<Void>()
 
     init() {
-        profileImageURL = UserModel.currentUser
+        profileImageURL = Singleton.shared.currentUser
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
+        
+        name = Singleton.shared.currentUser
+            .map { $0.name }
+            .asDriver(onErrorJustReturn: "")
 
         pushSettingVC = settingButtonTapped
             .map { SettingViewModel() }

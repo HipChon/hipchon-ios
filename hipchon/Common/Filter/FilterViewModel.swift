@@ -36,16 +36,19 @@ class FilterViewModel {
     let searchButtonTapped = PublishRelay<Void>()
 
     init(_ befViewType: FilterSearchType) {
-        regions = Driver.just(FilterCellModel.regionModels)
-        categorys = Driver.just(FilterCellModel.categoryModels)
+        regions = Driver.just(RegionModel.model)
+            .map { $0.map { FilterCellModel(region: $0) } }
+        
+        categorys = Driver.just(CategoryModel.model)
+            .map { $0.map { FilterCellModel(category: $0) } }
 
         // MARK: 지역
 
-        let region = BehaviorSubject<FilterCellModel>(value: FilterCellModel(name: ""))
+        let region = BehaviorSubject<FilterCellModel>(value: FilterCellModel())
 
         selectedRegion
             .withLatestFrom(Observable.combineLatest(region, selectedRegion))
-            .map { $0.name == $1.name ? FilterCellModel(name: "") : $1 }
+            .map { $0.name == $1.name ? FilterCellModel() : $1 }
             .bind(to: region)
             .disposed(by: bag)
 
@@ -54,11 +57,11 @@ class FilterViewModel {
 
         // MARK: 유형
 
-        let category = BehaviorSubject<FilterCellModel>(value: FilterCellModel(name: ""))
+        let category = BehaviorSubject<FilterCellModel>(value: FilterCellModel())
 
         selectedCategory
             .withLatestFrom(Observable.combineLatest(category, selectedCategory))
-            .map { $0.name == $1.name ? FilterCellModel(name: "") : $1 }
+            .map { $0.name == $1.name ? FilterCellModel() : $1 }
             .bind(to: category)
             .disposed(by: bag)
 
@@ -69,8 +72,8 @@ class FilterViewModel {
 
         resetButtonTapped
             .subscribe(onNext: {
-                region.onNext(FilterCellModel(name: ""))
-                category.onNext(FilterCellModel(name: ""))
+                region.onNext(FilterCellModel())
+                category.onNext(FilterCellModel())
             })
             .disposed(by: bag)
 
@@ -81,7 +84,7 @@ class FilterViewModel {
             .withLatestFrom(Observable.combineLatest(region.asObservable(),
                                                      category.asObservable(),
                                                      resultSelector: {
-                                                         SearchFilterModel(region: $0.name, category: $1.name)
+                SearchFilterModel(region: $0.region, category: $1.category)
                                                      }))
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
@@ -91,7 +94,7 @@ class FilterViewModel {
             .withLatestFrom(Observable.combineLatest(region.asObservable(),
                                                      category.asObservable(),
                                                      resultSelector: {
-                                                         SearchFilterModel(region: $0.name, category: $1.name)
+                                                         SearchFilterModel(region: $0.region, category: $1.category)
                                                      }))
             .asSignal(onErrorSignalWith: .empty())
     }

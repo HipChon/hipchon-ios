@@ -25,7 +25,7 @@ class PlaceDetailViewModel {
 
     let urls: Driver<[URL]>
     let openURL: Signal<URL>
-    let share: Signal<Void>
+    let share: Signal<String>
     let menuListViewHidden: Driver<Bool>
     let reviewTableViewHidden: Driver<Bool>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
@@ -49,6 +49,7 @@ class PlaceDetailViewModel {
             .compactMap { $0.address }
             .subscribe(onNext: {
                 UIPasteboard.general.string = $0
+                Singleton.shared.toastAlert.onNext("클립보드에 복사되었습니다")
             })
             .disposed(by: bag)
 
@@ -198,8 +199,7 @@ class PlaceDetailViewModel {
         .compactMap { URL(string: $0) }
         .asSignal(onErrorSignalWith: .empty())
 
-        share = placeDesVM.sharedButtonTapped
-            .asSignal()
+        share = placeDesVM.share
 
         pushPostReviewVC = Observable.merge(placeDesVM.reviewButtonTapped.asObservable(),
                                             postReviewButtonTapped.asObservable())

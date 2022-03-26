@@ -1,5 +1,5 @@
 //
-//  ReviewPlaceButton.swift
+//  ReviewPlaceView.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/03/10.
@@ -22,8 +22,7 @@ class ReviewPlaceView: UIView {
         $0.textColor = .gray04
     }
 
-    private lazy var bookmarkButton = UIButton().then {
-        $0.setImage(UIImage(named: "bookmarkN") ?? UIImage(), for: .normal)
+    private lazy var bookmarkButton = UIButton().then { _ in
     }
 
     private lazy var bookmarkLabel = UILabel().then {
@@ -33,7 +32,7 @@ class ReviewPlaceView: UIView {
     }
 
     private lazy var shareButton = UIButton().then {
-        $0.setImage(UIImage(named: "share") ?? UIImage(), for: .normal)
+        $0.setImage(UIImage(named: "share_gray") ?? UIImage(), for: .normal)
     }
 
     private lazy var shareLabel = UILabel().then {
@@ -84,7 +83,7 @@ class ReviewPlaceView: UIView {
             .disposed(by: bag)
 
         viewModel.bookmarkYn
-            .compactMap { $0 ? UIImage(named: "bookmarkY") : UIImage(named: "bookmarkN") }
+            .compactMap { $0 ? UIImage(named: "bookmarkY_gray") : UIImage(named: "bookmarkN_gray") }
             .drive(bookmarkButton.rx.image)
             .disposed(by: bag)
     }
@@ -108,7 +107,7 @@ class ReviewPlaceView: UIView {
             shareButton,
         ].forEach {
             $0.snp.makeConstraints {
-                $0.height.width.equalTo(22.0)
+                $0.height.width.equalTo(24.0)
             }
         }
 

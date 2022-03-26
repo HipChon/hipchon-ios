@@ -43,7 +43,7 @@ class MyCommentCellViewModel {
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.deleteComment($0) }
             .subscribe(onNext: { _ in
-                Singleton.shred.toastAlert.onNext("댓글이 삭제되었습니다")
+                Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
             })
             .disposed(by: bag)
     }

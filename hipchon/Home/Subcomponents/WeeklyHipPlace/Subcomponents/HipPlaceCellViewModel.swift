@@ -49,10 +49,6 @@ class HipPlaceCellViewModel {
             .compactMap { $0.region }
             .asDriver(onErrorJustReturn: "")
 
-        bookmarkCount = place
-            .compactMap { $0.bookmarkCount }
-            .asDriver(onErrorJustReturn: 0)
-
         reviewCount = place
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
@@ -60,9 +56,13 @@ class HipPlaceCellViewModel {
         // MARK: bookmark
 
         let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
+        let bookmarkCounted = BehaviorSubject<Int>(value: data.bookmarkCount ?? 0)
 
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
+        
+        bookmarkCount = bookmarkCounted
+            .asDriver(onErrorJustReturn: 0)
 
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
@@ -80,7 +80,11 @@ class HipPlaceCellViewModel {
             .disposed(by: bag)
 
         addBookmark
-            .do(onNext: { bookmarked.onNext(true) })
+            .withLatestFrom(bookmarkCounted)
+            .do(onNext: {
+                bookmarked.onNext(true)
+                bookmarkCounted.onNext($0 + 1)
+            })
             .withLatestFrom(place)
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.addBookmark($0) }
@@ -92,7 +96,11 @@ class HipPlaceCellViewModel {
             .disposed(by: bag)
 
         deleteBookmark
-            .do(onNext: { bookmarked.onNext(false) })
+            .withLatestFrom(bookmarkCounted)
+            .do(onNext: {
+                bookmarked.onNext(false)
+                bookmarkCounted.onNext($0 - 1)
+            })
             .withLatestFrom(place)
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.deleteBookmark($0) }

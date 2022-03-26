@@ -43,6 +43,11 @@ class MyCommentViewController: UIViewController {
         myCommentTableView.dataSource = nil
 
         // MARK: view -> viewModel
+        
+        rx.viewWillAppear
+            .map { _ in () }
+            .bind(to: viewModel.viewAppear)
+            .disposed(by: bag)
 
         myCommentTableView.rx.itemSelected
             .throttle(.seconds(2), scheduler: MainScheduler.instance)

@@ -146,10 +146,11 @@
 		D89E8B8027DDDAEF00090C5B /* PhotoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89E8B7F27DDDAEF00090C5B /* PhotoCellViewModel.swift */; };
 		D8A3031227C9E6750013E71A /* SearchFilterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A3031127C9E6750013E71A /* SearchFilterModel.swift */; };
 		D8A3031427C9EE3A0013E71A /* SearchFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A3031327C9EE3A0013E71A /* SearchFilterButton.swift */; };
+		D8B84ADF27EF2B09002AAA8E /* RegionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B84ADE27EF2B09002AAA8E /* RegionModel.swift */; };
+		D8B84AE127EF2BD4002AAA8E /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B84AE027EF2BD4002AAA8E /* CategoryModel.swift */; };
+		D8B84AE327EF6F44002AAA8E /* UnauthorizedAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B84AE227EF6F43002AAA8E /* UnauthorizedAlertViewController.swift */; };
 		D8B86CBD27E21C06004EBFD9 /* KeywordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CBC27E21C06004EBFD9 /* KeywordModel.swift */; };
 		D8B86CBF27E21C40004EBFD9 /* KeywordListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CBE27E21C40004EBFD9 /* KeywordListModel.swift */; };
-		D8B86CC827E23DD5004EBFD9 /* KeywordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CC627E23DD5004EBFD9 /* KeywordDetailView.swift */; };
-		D8B86CC927E23DD5004EBFD9 /* KeywordDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CC727E23DD5004EBFD9 /* KeywordDetailViewModel.swift */; };
 		D8B86CCB27E24261004EBFD9 /* MemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CCA27E24261004EBFD9 /* MemoViewController.swift */; };
 		D8B86CCD27E242C1004EBFD9 /* MemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CCC27E242C1004EBFD9 /* MemoViewModel.swift */; };
 		D8B86CCF27E244BA004EBFD9 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B86CCE27E244BA004EBFD9 /* UIApplication+.swift */; };
@@ -162,6 +163,9 @@
 		D8C72EB927CE3950007C160A /* HipsterPickModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C72EB827CE3950007C160A /* HipsterPickModel.swift */; };
 		D8C72EBB27CE3B68007C160A /* RoundLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C72EBA27CE3B68007C160A /* RoundLabelView.swift */; };
 		D8C72EBD27CE3C33007C160A /* RoundLabelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C72EBC27CE3C33007C160A /* RoundLabelViewModel.swift */; };
+		D8CF9C6527ECA49C00520CAF /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */; };
+		D8CF9C6727ECA94400520CAF /* KeywordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF9C6627ECA94400520CAF /* KeywordDetailView.swift */; };
+		D8CF9C6927ECA94D00520CAF /* KeywordDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF9C6827ECA94D00520CAF /* KeywordDetailViewModel.swift */; };
 		D8E019D927C0CFA600A167CA /* SearchNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */; };
 		D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */; };
 		D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E7756327A810C0005E037D /* FilterViewController.swift */; };
@@ -315,10 +319,11 @@
 		D89E8B7F27DDDAEF00090C5B /* PhotoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCellViewModel.swift; sourceTree = "<group>"; };
 		D8A3031127C9E6750013E71A /* SearchFilterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterModel.swift; sourceTree = "<group>"; };
 		D8A3031327C9EE3A0013E71A /* SearchFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterButton.swift; sourceTree = "<group>"; };
+		D8B84ADE27EF2B09002AAA8E /* RegionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionModel.swift; sourceTree = "<group>"; };
+		D8B84AE027EF2BD4002AAA8E /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
+		D8B84AE227EF6F43002AAA8E /* UnauthorizedAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnauthorizedAlertViewController.swift; sourceTree = "<group>"; };
 		D8B86CBC27E21C06004EBFD9 /* KeywordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordModel.swift; sourceTree = "<group>"; };
 		D8B86CBE27E21C40004EBFD9 /* KeywordListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListModel.swift; sourceTree = "<group>"; };
-		D8B86CC627E23DD5004EBFD9 /* KeywordDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeywordDetailView.swift; path = ../../../../../KeywordDetailView.swift; sourceTree = "<group>"; };
-		D8B86CC727E23DD5004EBFD9 /* KeywordDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeywordDetailViewModel.swift; path = ../../../../../KeywordDetailViewModel.swift; sourceTree = "<group>"; };
 		D8B86CCA27E24261004EBFD9 /* MemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewController.swift; sourceTree = "<group>"; };
 		D8B86CCC27E242C1004EBFD9 /* MemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoViewModel.swift; sourceTree = "<group>"; };
 		D8B86CCE27E244BA004EBFD9 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
@@ -331,6 +336,9 @@
 		D8C72EB827CE3950007C160A /* HipsterPickModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HipsterPickModel.swift; sourceTree = "<group>"; };
 		D8C72EBA27CE3B68007C160A /* RoundLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundLabelView.swift; sourceTree = "<group>"; };
 		D8C72EBC27CE3C33007C160A /* RoundLabelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundLabelViewModel.swift; sourceTree = "<group>"; };
+		D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		D8CF9C6627ECA94400520CAF /* KeywordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordDetailView.swift; sourceTree = "<group>"; };
+		D8CF9C6827ECA94D00520CAF /* KeywordDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordDetailViewModel.swift; sourceTree = "<group>"; };
 		D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationView.swift; sourceTree = "<group>"; };
 		D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationViewModel.swift; sourceTree = "<group>"; };
 		D8E7756327A810C0005E037D /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
@@ -424,6 +432,8 @@
 			children = (
 				D83C6AE927EB712300DDB33F /* Singleton.swift */,
 				D8237DE927B9304400238387 /* HashtagModel.swift */,
+				D8B84ADE27EF2B09002AAA8E /* RegionModel.swift */,
+				D8B84AE027EF2BD4002AAA8E /* CategoryModel.swift */,
 				D809200527B286FF000F057E /* PlaceModel.swift */,
 				D809200827B2872D000F057E /* ReviewModel.swift */,
 				D80967B827BA83310015E7EF /* UserModel.swift */,
@@ -449,6 +459,7 @@
 			isa = PBXGroup;
 			children = (
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
+				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
 				D828B39227E78163007C2487 /* AuthManager.swift */,
 			);
 			path = Managers;
@@ -517,8 +528,8 @@
 				D84CFBF527E0EFEA00FF3AA4 /* MenuCellViewModel.swift */,
 				D86CC50C27D3438D004B74EA /* ReviewKeywordListView.swift */,
 				D86CC50E27D343EB004B74EA /* ReviewKeywordListViewModel.swift */,
-				D8B86CC627E23DD5004EBFD9 /* KeywordDetailView.swift */,
-				D8B86CC727E23DD5004EBFD9 /* KeywordDetailViewModel.swift */,
+				D8CF9C6627ECA94400520CAF /* KeywordDetailView.swift */,
+				D8CF9C6827ECA94D00520CAF /* KeywordDetailViewModel.swift */,
 			);
 			path = Subcomponents;
 			sourceTree = "<group>";
@@ -575,7 +586,7 @@
 		D841C86B27A6B60C005B8C25 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				D840813227C5343E00FA9D1B /* AuthModel.swift */,
+				D8B84AD527EF0519002AAA8E /* Models */,
 				D840812A27C5263B00FA9D1B /* OnBoardingViewController.swift */,
 				D840812C27C5269C00FA9D1B /* OnBoardingViewModel.swift */,
 				D88FAF8027A67D6F00E41F4F /* LoginViewController.swift */,
@@ -735,6 +746,14 @@
 			path = EditProfile;
 			sourceTree = "<group>";
 		};
+		D8B84AD527EF0519002AAA8E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D840813227C5343E00FA9D1B /* AuthModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		D8C72E9D27CE0A47007C160A /* WeeklyHipPlace */ = {
 			isa = PBXGroup;
 			children = (
@@ -851,6 +870,7 @@
 				D8237DED27B9362800238387 /* ImageURLCellViewModel.swift */,
 				D812307627EA23390038A96C /* BottomButton.swift */,
 				D83C6AEB27EB87ED00DDB33F /* EmptyView.swift */,
+				D8B84AE227EF6F43002AAA8E /* UnauthorizedAlertViewController.swift */,
 				D854E43327E8E04F0088DD29 /* Keyword */,
 				D85B6A8D27E4E4C8002DC7B1 /* ReviewPlace */,
 				D8E019DC27C0D49600A167CA /* Filter */,
@@ -993,9 +1013,12 @@
 				D828B39827E79D2F007C2487 /* TermsViewModel.swift in Sources */,
 				D80967BC27BA847E0015E7EF /* NetworkManager.swift in Sources */,
 				D8A3031227C9E6750013E71A /* SearchFilterModel.swift in Sources */,
+				D8B84AE327EF6F44002AAA8E /* UnauthorizedAlertViewController.swift in Sources */,
 				D85B6A9927E5865A002DC7B1 /* String+.swift in Sources */,
 				D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */,
 				D8C72EBD27CE3C33007C160A /* RoundLabelViewModel.swift in Sources */,
+				D8B84ADF27EF2B09002AAA8E /* RegionModel.swift in Sources */,
+				D8CF9C6527ECA49C00520CAF /* DeviceManager.swift in Sources */,
 				D84CFBF027E0EDA100FF3AA4 /* MenuListViewModel.swift in Sources */,
 				D83E538F27AA65E10047A05C /* HashtagCellViewModel.swift in Sources */,
 				D8237DE627B925A700238387 /* BannerModel.swift in Sources */,
@@ -1029,6 +1052,7 @@
 				D8237DE227B9245A00238387 /* BannerCell.swift in Sources */,
 				D82A28DB27DC9FBB00E7C898 /* KeywordListCellViewModel.swift in Sources */,
 				D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */,
+				D8CF9C6927ECA94D00520CAF /* KeywordDetailViewModel.swift in Sources */,
 				D8B86CBD27E21C06004EBFD9 /* KeywordModel.swift in Sources */,
 				D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */,
 				D812307427E9FF100038A96C /* ReviewListViewModel.swift in Sources */,
@@ -1052,7 +1076,6 @@
 				D828B38727E6E826007C2487 /* HashtagReviewCellViewModel.swift in Sources */,
 				D828B38A27E6F511007C2487 /* MyCommentViewController.swift in Sources */,
 				D828B38527E6E81A007C2487 /* HashtagReivewCell.swift in Sources */,
-				D8B86CC927E23DD5004EBFD9 /* KeywordDetailViewModel.swift in Sources */,
 				D89E8B7E27DDDAE300090C5B /* PhotoCell.swift in Sources */,
 				D871F4B427BD18DC00CCDE4D /* HipPlaceCell.swift in Sources */,
 				D83304DE27AC1763008E7DB7 /* TabBarViewController.swift in Sources */,
@@ -1070,6 +1093,7 @@
 				D871F4AE27BD12D700CCDE4D /* LocalHipsterPickViewModel.swift in Sources */,
 				D828B38327E6E63F007C2487 /* HashtagReviewViewModel.swift in Sources */,
 				D8EBA6C027D6612500305CB5 /* PageCountView.swift in Sources */,
+				D8B84AE127EF2BD4002AAA8E /* CategoryModel.swift in Sources */,
 				D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */,
 				D84CFBF427E0EF9B00FF3AA4 /* MenuCell.swift in Sources */,
 				D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */,
@@ -1085,6 +1109,7 @@
 				D811612927E3898500E6A0A4 /* StoragePlaceViewController.swift in Sources */,
 				D8237DDD27B920C400238387 /* SettingViewModel.swift in Sources */,
 				D840779427DE0B8A0029C17E /* CommentModel.swift in Sources */,
+				D8CF9C6727ECA94400520CAF /* KeywordDetailView.swift in Sources */,
 				D84B351D27CB9BC200BF1A63 /* SortViewModel.swift in Sources */,
 				D841C86E27A6C224005B8C25 /* UIView+.swift in Sources */,
 				D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */,
@@ -1113,7 +1138,6 @@
 				D8237DEC27B9361800238387 /* ImageURLCell.swift in Sources */,
 				D84B351B27CB9A6900BF1A63 /* SortViewController.swift in Sources */,
 				D83257D027CF9FFE00129E50 /* BestReviewCellViewModel.swift in Sources */,
-				D8B86CC827E23DD5004EBFD9 /* KeywordDetailView.swift in Sources */,
 				D83257DA27CFA3F600129E50 /* PlaceDesViewModel.swift in Sources */,
 				D809200627B286FF000F057E /* PlaceModel.swift in Sources */,
 				D85B6A8F27E4E909002DC7B1 /* MemoModel.swift in Sources */,
@@ -1271,10 +1295,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = hipchon/hipchon.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3H82V5JC29;
+				DEVELOPMENT_TEAM = SPJ3VZVK78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
@@ -1282,19 +1306,21 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hip-chon";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "hipchon-Provisioning-Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1305,10 +1331,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = hipchon/hipchon.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3H82V5JC29;
+				DEVELOPMENT_TEAM = SPJ3VZVK78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
@@ -1316,19 +1342,21 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hip-chon";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "hipchon-Provisioning-Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -20,15 +20,13 @@ class PlaceListCellViewModel {
 
     let placeImageURLs: Driver<[URL]>
     let name: Driver<String>
-    let bookmarkYn: Driver<Bool>
     let region: Driver<String>
     let priceDes: Driver<String>
     let bookmarkCount: Driver<Int>
     let reviewCount: Driver<Int>
 
     // MARK: view -> viewModel
-
-    let bookmarkButtonTapped = PublishRelay<Void>()
+    
     let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ data: PlaceModel) {
@@ -74,50 +72,5 @@ class PlaceListCellViewModel {
             .bind(to: pageCountVM.currentIdx)
             .disposed(by: bag)
 
-        // MARK: bookmark
-
-        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
-
-        bookmarkYn = bookmarked
-            .asDriver(onErrorJustReturn: false)
-
-        let addBookmark = PublishSubject<Void>()
-        let deleteBookmark = PublishSubject<Void>()
-
-        bookmarkButtonTapped
-            .withLatestFrom(bookmarked)
-            .subscribe(onNext: {
-                switch $0 {
-                case true:
-                    deleteBookmark.onNext(())
-                case false:
-                    addBookmark.onNext(())
-                }
-            })
-            .disposed(by: bag)
-
-        addBookmark
-            .do(onNext: { bookmarked.onNext(true) })
-            .withLatestFrom(place)
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.addBookmark($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
-                }
-            })
-            .disposed(by: bag)
-
-        deleteBookmark
-            .do(onNext: { bookmarked.onNext(false) })
-            .withLatestFrom(place)
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.deleteBookmark($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
-                }
-            })
-            .disposed(by: bag)
     }
 }

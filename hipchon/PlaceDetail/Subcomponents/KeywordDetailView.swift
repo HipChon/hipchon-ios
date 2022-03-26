@@ -48,6 +48,10 @@ class KeywordDetailView: UIView {
             .map { "+\($0)" }
             .drive(countLabel.rx.text)
             .disposed(by: bag)
+        
+        viewModel.backgroundColor
+            .drive(rx.backgroundColor)
+            .disposed(by: bag)
     }
     
     private func attribute() {

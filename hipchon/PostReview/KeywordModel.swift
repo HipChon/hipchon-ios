@@ -8,14 +8,16 @@
 import UIKit
 
 struct KeywordModel: Codable {
+    let id: Int?
     let content: String?
     let count: Int?
 
     enum CodingKeys: String, CodingKey {
-        case content, count
+        case id, content, count
     }
 
-    init(content: String?) {
+    init(id: Int?, content: String?) {
+        self.id = id
         self.content = content
         count = nil
     }

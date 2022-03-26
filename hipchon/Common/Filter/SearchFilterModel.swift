@@ -8,17 +8,17 @@
 import Foundation
 
 class SearchFilterModel {
-    let region: String?
-    let category: String?
-    let hashtag: String?
+    let region: RegionModel?
+    let category: CategoryModel?
+    let hashtag: HashtagModel?
 
-    init(region: String?, category: String?) {
+    init(region: RegionModel?, category: CategoryModel?) {
         self.region = region
         self.category = category
         hashtag = nil
     }
 
-    init(hashtag: String?) {
+    init(hashtag: HashtagModel?) {
         self.hashtag = hashtag
         region = nil
         category = nil
@@ -26,17 +26,17 @@ class SearchFilterModel {
 
     var filterTitle: String? {
         var titles: [String] = []
-        if let region = region,
+        if let region = region?.name,
            region != ""
         {
             titles.append("\(region)")
         }
-        if let category = category,
+        if let category = category?.name,
            category != ""
         {
             titles.append("\(category)")
         }
-        if let hashtag = hashtag,
+        if let hashtag = hashtag?.name,
            hashtag != ""
         {
             titles.append("\(hashtag)")

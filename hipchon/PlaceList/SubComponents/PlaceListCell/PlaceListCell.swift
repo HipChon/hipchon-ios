@@ -15,7 +15,7 @@ class PlaceListCell: UITableViewCell {
         let itemSpacing: CGFloat = 0.0
         let width = UIScreen.main.bounds.size.width - 20.0 * 2
         let cellHeight = width * ((255.0 + 16.0) / 351.0)
-        let height = cellHeight - 89.0
+        let height = cellHeight - 89.0 - 16.0
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
@@ -32,9 +32,6 @@ class PlaceListCell: UITableViewCell {
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 5.0
         $0.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-    }
-
-    private lazy var bookmarkButton = UIButton().then { _ in
     }
 
     private lazy var pageCountView = PageCountView().then { _ in
@@ -58,22 +55,22 @@ class PlaceListCell: UITableViewCell {
     private lazy var keywordView = KeywordView().then { _ in
     }
 
-    private lazy var bookmarkCountImageView = UIImageView().then {
-        $0.image = UIImage(named: "bookmarkBlack") ?? UIImage()
+    private lazy var bookmarkButton = UIImageView().then {
+        $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
     }
 
     private lazy var bookmarkCountLabel = UILabel().then {
-        $0.font = .GmarketSans(size: 16.0, type: .regular)
-        $0.textColor = .black
+        $0.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
+        $0.textColor = .gray04
     }
 
     private lazy var reviewCountImageView = UIImageView().then {
-        $0.image = UIImage(named: "reviewBlack") ?? UIImage()
+        $0.image = UIImage(named: "reviewCount") ?? UIImage()
     }
 
     private lazy var reviewCountLabel = UILabel().then {
-        $0.font = .GmarketSans(size: 16.0, type: .regular)
-        $0.textColor = .black
+        $0.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
+        $0.textColor = .gray04
     }
 
     private lazy var priceDesLabel = UILabel().then {
@@ -116,11 +113,6 @@ class PlaceListCell: UITableViewCell {
 
         // MARK: view -> viewModel
 
-        bookmarkButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.bookmarkButtonTapped)
-            .disposed(by: bag)
-
         placeImageCollectView.rx.contentOffset
             .compactMap { [unowned self] in Int(($0.x + self.contentView.frame.width / 2) / self.contentView.frame.width) }
             .distinctUntilChanged()
@@ -141,11 +133,6 @@ class PlaceListCell: UITableViewCell {
 
         viewModel.name
             .drive(placeNameLabel.rx.text)
-            .disposed(by: bag)
-
-        viewModel.bookmarkYn
-            .compactMap { $0 == true ? UIImage(named: "bookmarkY") ?? UIImage() : UIImage(named: "bookmarkN") ?? UIImage() }
-            .drive(bookmarkButton.rx.image)
             .disposed(by: bag)
 
         viewModel.region
@@ -183,6 +170,10 @@ class PlaceListCell: UITableViewCell {
             $0.width.equalTo(frame.width).priority(.low)
         }
 
+        regionLabel.snp.makeConstraints {
+            $0.width.equalTo(frame.width).priority(.high)
+        }
+        
         let titleStackView = UIStackView(arrangedSubviews: [placeNameLabel, regionLabel, titleSpacingView])
         titleStackView.axis = .horizontal
         titleStackView.alignment = .fill
@@ -192,7 +183,7 @@ class PlaceListCell: UITableViewCell {
         // MARK: count
 
         [
-            bookmarkCountImageView,
+            bookmarkButton,
             reviewCountImageView,
         ].forEach {
             $0.snp.makeConstraints {
@@ -205,7 +196,7 @@ class PlaceListCell: UITableViewCell {
             $0.width.equalTo(frame.width).priority(.low)
         }
 
-        let countStackView = UIStackView(arrangedSubviews: [bookmarkCountImageView, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
+        let countStackView = UIStackView(arrangedSubviews: [bookmarkButton, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
         countStackView.axis = .horizontal
         countStackView.alignment = .fill
         countStackView.distribution = .fill
@@ -215,7 +206,6 @@ class PlaceListCell: UITableViewCell {
             placeImageCollectView,
             pageCountView,
             placeInfoView,
-            bookmarkButton,
 
         ].forEach { contentView.addSubview($0) }
 
@@ -223,7 +213,7 @@ class PlaceListCell: UITableViewCell {
             $0.top.leading.trailing.equalToSuperview()
             let width = UIScreen.main.bounds.size.width - 20.0 * 2
             let cellHeight = width * ((255.0 + 16.0) / 351.0)
-            let height = cellHeight - 89.0
+            let height = cellHeight - 89.0 - 16.0
             $0.height.equalTo(height)
 //            $0.bottom.equalTo(placeInfoView.snp.top)
         }
@@ -231,12 +221,6 @@ class PlaceListCell: UITableViewCell {
         pageCountView.snp.makeConstraints {
             $0.trailing.equalTo(placeImageCollectView).inset(16.0)
             $0.bottom.equalTo(placeImageCollectView).inset(16.0)
-        }
-
-        bookmarkButton.snp.makeConstraints {
-            $0.top.equalTo(placeImageCollectView.snp.top).offset(15.0)
-            $0.trailing.equalTo(placeImageCollectView.snp.trailing).inset(15.0)
-            $0.width.height.equalTo(25.0)
         }
 
         placeInfoView.snp.makeConstraints {

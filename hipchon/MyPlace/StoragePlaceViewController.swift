@@ -17,6 +17,7 @@ class StoragePlaceViewController: TabmanViewController {
 
     private lazy var sortButton = UIButton().then {
         $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
+        $0.isHidden = true // TODO: delete
     }
 
     private lazy var topBarPositionView = UIView().then { _ in

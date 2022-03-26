@@ -30,7 +30,7 @@ class ReviewDetailViewModel {
     let content: Driver<String>
     let commentCellVMs: Driver<[CommentCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let share: Signal<Void>
+    let share: Signal<String>
 
     // MARK: view -> viewModel
 
@@ -85,7 +85,11 @@ class ReviewDetailViewModel {
             .map { $0.map { CommentCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
-        review
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myCommentRefresh
+        )
+            .withLatestFrom(review)
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.getComments($0) }
             .bind(to: comments)
@@ -148,7 +152,6 @@ class ReviewDetailViewModel {
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
 
-        share = reviewPlaceVM
-            .flatMap { $0.share }
+        share = reviewPlaceVM.flatMap { $0.share }
     }
 }

@@ -22,7 +22,7 @@ class ProfileViewController: TabmanViewController {
 
     private lazy var nameLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 20.0, type: .bold)
-        $0.text = "김범수"
+        $0.text = "로그인이 필요합니다"
     }
 
     private lazy var settingButton = UIButton().then {
@@ -54,11 +54,12 @@ class ProfileViewController: TabmanViewController {
         bar.backgroundColor = .white
 
         bar.layout.transitionStyle = .progressive
+        
     }
 
     let myReviewVM = HashtagReviewViewModel(.myReview)
     let likeReviewVM = HashtagReviewViewModel(.likeReview)
-    let myCommentVM = MyCommentViewModel(0)
+    let myCommentVM = MyCommentViewModel()
 
     private lazy var viewControllers: [UIViewController] = {
         let myReviewVC = HashtagReviewViewController()
@@ -112,6 +113,12 @@ class ProfileViewController: TabmanViewController {
 
         viewModel.profileImageURL
             .drive(profileImageButton.rx.setImageKF)
+            .disposed(by: bag)
+        
+        viewModel.name
+            .drive(onNext: { [weak self] in
+                self?.setNameLabel($0)
+            })
             .disposed(by: bag)
 
         // MARK: scene
@@ -179,6 +186,27 @@ class ProfileViewController: TabmanViewController {
         dataSource = self
         addBar(topBar, dataSource: self, at: .custom(view: topBarPositionView, layout: nil))
     }
+    
+    private func setNameLabel(_ name: String?) {
+        if name != nil {
+            nameLabel.text = name!
+            nameLabel.font = .AppleSDGothicNeo(size: 20.0, type: .bold)
+            nameLabel.textColor = .black
+            nameLabel.numberOfLines = 1
+            profileImageButton.isEnabled = true
+            settingButton.isHidden = false
+        } else {
+            nameLabel.text = """
+로그인이
+필요합니다
+"""
+            nameLabel.font = .AppleSDGothicNeo(size: 16.0, type: .semibold)
+            nameLabel.textColor = .gray04
+            nameLabel.numberOfLines = 2
+            profileImageButton.isEnabled = false
+            settingButton.isHidden = true
+        }
+    }
 }
 
 extension ProfileViewController: PageboyViewControllerDataSource, TMBarDataSource {
@@ -210,4 +238,5 @@ extension ProfileViewController: PageboyViewControllerDataSource, TMBarDataSourc
         }
         return TMBarItem(title: title)
     }
+
 }

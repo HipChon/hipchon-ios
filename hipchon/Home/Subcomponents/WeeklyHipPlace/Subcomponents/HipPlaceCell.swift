@@ -163,7 +163,7 @@ class HipPlaceCell: UICollectionViewCell {
         bookmarkButton.snp.makeConstraints {
             $0.width.height.equalTo(30.0)
             $0.centerY.equalTo(nameLabel)
-            $0.trailing.equalToSuperview().inset(20.0)
+            $0.trailing.equalToSuperview().inset(16.0)
         }
 
         keywordView.snp.makeConstraints {

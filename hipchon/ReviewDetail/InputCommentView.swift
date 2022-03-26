@@ -29,6 +29,7 @@ class InputCommentView: UIView {
     private lazy var registerButton = UIButton().then {
         $0.setTitle("등록", for: .normal)
         $0.setTitleColor(.primary_green, for: .normal)
+        $0.setTitleColor(.gray03, for: .disabled)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
     }
 
@@ -66,6 +67,17 @@ class InputCommentView: UIView {
 
         viewModel.profileImageURL
             .drive(profileImageView.rx.setImageKF)
+            .disposed(by: bag)
+        
+        viewModel.registerButtonValid
+            .drive(registerButton.rx.isEnabled)
+            .disposed(by: bag)
+        
+        viewModel.contentInit
+            .emit(onNext: { [weak self] in
+                self?.contentTextField.text = ""
+                viewModel.content.accept("")
+            })
             .disposed(by: bag)
     }
 

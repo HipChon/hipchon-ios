@@ -27,15 +27,17 @@ class MyCommentViewModel {
     let moreFetching = PublishRelay<Void>()
     let selectedCommentIdx = PublishRelay<Int>()
 
-    init(_ data: Int) {
-        let tmp = BehaviorSubject<Int>(value: data)
+    init() {
         let comments = BehaviorSubject<[CommentModel]>(value: [])
 
         myCommentCellVMs = comments
             .map { $0.map { MyCommentCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
-        tmp
+        Observable.merge(
+            viewAppear.take(1),
+            Singleton.shared.myCommentRefresh
+        )
             .flatMap { _ in NetworkManager.shared.getMyComments() }
             .bind(to: comments)
             .disposed(by: bag)
