@@ -87,6 +87,13 @@ class ReviewDetailViewController: UIViewController {
     private lazy var commentCountLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
     }
+    
+    private lazy var reportButton = UIButton().then {
+        $0.setImage(UIImage(named: "report"), for: .normal)
+        $0.setTitle(" 신고하기", for: .normal)
+        $0.setTitleColor(.gray04, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+    }
 
     private lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
@@ -150,7 +157,12 @@ class ReviewDetailViewController: UIViewController {
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-
+        
+        reportButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.reportButtonTapped)
+            .disposed(by: bag)
+        
         // MARK: viewModel -> view
 
         viewModel.placeName
@@ -281,6 +293,7 @@ class ReviewDetailViewController: UIViewController {
             likeCountLabel,
             commentButton,
             commentCountLabel,
+            reportButton,
             contentLabel,
             reviewPlaceView,
             boundaryView,
@@ -354,6 +367,11 @@ class ReviewDetailViewController: UIViewController {
         commentCountLabel.snp.makeConstraints {
             $0.centerY.equalTo(commentButton)
             $0.leading.equalTo(commentButton.snp.trailing).offset(12.0)
+        }
+        
+        reportButton.snp.makeConstraints {
+            $0.centerY.equalTo(commentButton)
+            $0.trailing.equalToSuperview().inset(20.0)
         }
 
         boundaryView.snp.makeConstraints {

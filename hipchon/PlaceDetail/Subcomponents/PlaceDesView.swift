@@ -101,6 +101,20 @@ class PlaceDesView: UIView {
         $0.contentHorizontalAlignment = .left
         $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 0.0)
     }
+    
+    private lazy var reportButton = UIButton().then {
+        $0.setImage(UIImage(named: "report"), for: .normal)
+        $0.setTitle(" 신고하기", for: .normal)
+        $0.setTitleColor(.gray04, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+    }
+    
+    private lazy var infoChangeButton = UIButton().then {
+//        $0.setImage(UIImage(named: "arrowGray"), for: .normal)
+        $0.setTitle("정보 수정 제안 >", for: .normal)
+        $0.setTitleColor(.gray04, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
+    }
 
     private lazy var arrowImageView = UIImageView().then {
         $0.image = UIImage(named: "arrowGray") ?? UIImage()
@@ -146,6 +160,16 @@ class PlaceDesView: UIView {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.linkButtonTapped)
             .disposed(by: bag)
+        
+        reportButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.reportButtonTapped)
+            .disposed(by: bag)
+        
+        infoChangeButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.infoChangeButtonTapped)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -182,6 +206,12 @@ class PlaceDesView: UIView {
 
         viewModel.setLink
             .drive(linkButton.rx.title())
+            .disposed(by: bag)
+        
+        viewModel.openURL
+            .emit(onNext: {
+                UIApplication.shared.open($0, options: [:])
+            })
             .disposed(by: bag)
     }
 
@@ -258,6 +288,8 @@ class PlaceDesView: UIView {
             descriptionImageView,
             descriptionLabel,
             linkButton,
+            reportButton,
+            infoChangeButton,
             arrowImageView,
         ].forEach {
             addSubview($0)
@@ -320,6 +352,16 @@ class PlaceDesView: UIView {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(16.0)
             $0.height.equalTo(44.0)
+        }
+        
+        reportButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(linkButton.snp.bottom).offset(16.0)
+        }
+        
+        infoChangeButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(linkButton.snp.bottom).offset(16.0)
         }
 
         arrowImageView.snp.makeConstraints {

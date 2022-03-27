@@ -34,7 +34,7 @@ class CommentCell: UITableViewCell {
         $0.setImage(UIImage(named: "report"), for: .normal)
         $0.setTitle(" 신고하기", for: .normal)
         $0.setTitleColor(.gray04, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 13.0, type: .regular)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

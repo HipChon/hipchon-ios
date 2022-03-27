@@ -38,7 +38,7 @@ class PlaceListViewModel {
 
         // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
-            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
+            .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
@@ -63,7 +63,7 @@ class PlaceListViewModel {
         reload
             .do(onNext: { activatingState.onNext(true) })
             .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
-            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
+            .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
             .do(onNext: { _ in activatingState.onNext(false) })
             .subscribe(onNext: { result in
                 switch result {
@@ -84,7 +84,7 @@ class PlaceListViewModel {
 
 //        moreFetching
 //            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
-//            .flatMap { NetworkManager.shared.getPlaceList(filter: $0, sort: $1) }
+//            .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
 //            .withLatestFrom(places) { $1 + $0 }
 //            .bind(to: places)
 //            .disposed(by: bag)

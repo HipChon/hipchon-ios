@@ -44,7 +44,7 @@ class SectorPlaceViewModel {
         // 첫 로드, sorting
         sector
             .filter { _ in DeviceManager.shared.networkStatus }
-            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .flatMap { PlaceAPI.shared.getMyPlaces($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
@@ -76,7 +76,7 @@ class SectorPlaceViewModel {
             .filter { DeviceManager.shared.networkStatus }
             .do(onNext: { activatingState.onNext(true) })
             .withLatestFrom(sector)
-            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .flatMap { PlaceAPI.shared.getMyPlaces($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .do(onNext: { _ in activatingState.onNext(false) })
@@ -104,7 +104,7 @@ class SectorPlaceViewModel {
         moreFetching
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(sector)
-            .flatMap { _ in NetworkManager.shared.getPlaces() }
+            .flatMap { PlaceAPI.shared.getMyPlaces($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in

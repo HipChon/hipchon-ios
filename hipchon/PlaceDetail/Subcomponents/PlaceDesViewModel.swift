@@ -10,6 +10,8 @@ import RxRelay
 import RxSwift
 
 class PlaceDesViewModel {
+    private let bag = DisposeBag()
+    
     // MARK: viewModel -> view
 
     let setPlaceName: Driver<String>
@@ -21,6 +23,7 @@ class PlaceDesViewModel {
     let setDescription: Driver<String>
     let setLink: Driver<String>
     let share: Signal<String>
+    let openURL: Signal<URL>
 
     // MARK: view -> viewModel
 
@@ -38,6 +41,8 @@ class PlaceDesViewModel {
     let reviewButtonTapped = PublishRelay<Void>()
     let bookmarkButtonTapped = PublishRelay<Void>()
     let linkButtonTapped = PublishRelay<Void>()
+    let reportButtonTapped = PublishRelay<Void>()
+    let infoChangeButtonTapped = PublishRelay<Void>()
 
     init() {
         setPlaceName = placeName
@@ -67,5 +72,16 @@ class PlaceDesViewModel {
         share = shareButtonTapped
             .withLatestFrom(link)
             .asSignal(onErrorJustReturn: "")
+        
+        reportButtonTapped
+            .subscribe(onNext: { _ in
+                Singleton.shared.toastAlert.onNext("장소 신고가 완료되었습니다")
+            })
+            .disposed(by: bag)
+        
+        openURL = infoChangeButtonTapped
+            .map { "http://pf.kakao.com/_xgHYNb/chat" }
+            .compactMap { URL(string: $0) }
+            .asSharedSequence(onErrorDriveWith: .empty())
     }
 }

@@ -35,6 +35,7 @@ class ReviewDetailViewModel {
     // MARK: view -> viewModel
 
     let likeButtonTapped = PublishRelay<Void>()
+    let reportButtonTapped = PublishRelay<Void>()
 
     init(_ data: ReviewModel) {
         let review = BehaviorSubject<ReviewModel>(value: data)
@@ -153,5 +154,11 @@ class ReviewDetailViewModel {
             .flatMap { $0.pushPlaceDetailVC }
 
         share = reviewPlaceVM.flatMap { $0.share }
+        
+        reportButtonTapped
+            .subscribe(onNext: { _ in
+                Singleton.shared.toastAlert.onNext("게시물 신고가 완료되었습니다")
+            })
+            .disposed(by: bag)
     }
 }

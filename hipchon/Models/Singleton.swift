@@ -23,6 +23,7 @@ class Singleton {
     let toastAlert = PublishSubject<String>()
     let unauthorized = PublishSubject<Void>()
     let unknownedError = PublishSubject<APIError>()
+    let openKakao = PublishSubject<Void>()
 
     private init() {
         toastAlert

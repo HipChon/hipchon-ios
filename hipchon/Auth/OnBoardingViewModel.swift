@@ -31,26 +31,24 @@ class OnBoardingViewModel {
         let authModel = BehaviorSubject<AuthModel?>(value: nil)
         let kakaoId = PublishSubject<String>()
         
-//        // 자동 로그인
+        // 자동 로그인
 //        Observable.just(())
-//            .delay(.seconds(3), scheduler: MainScheduler.instance)
-//            .compactMap { KeychainWrapper.standard.string(forKey: "id") }
+////            .delay(.seconds(3), scheduler: MainScheduler.instance)
+//            .compactMap { KeychainWrapper.standard.string(forKey: "accessToken") }
 //            .map {  _ in () }
-//            .bind(to: login)
+//            .subscribe(onNext: {
+//                login.onNext(())
+//            })
+////            .bind(to: login)
 //            .disposed(by: bag)
         
         // AuthModel
         
-        kakaoId
-            .map { AuthModel(id: $0, type: "카카오") }
+        Observable.merge(kakaoId.map { AuthModel(id: $0, type: "카카오") },
+                         appleId.map { AuthModel(id: $0, type: "애플") })
             .bind(to: authModel)
             .disposed(by: bag)
-        
-        appleId
-            .map { AuthModel(id: $0, type: "애플") }
-            .bind(to: authModel)
-            .disposed(by: bag)
-        
+ 
         guestLoginButtonTapped
             .bind(to: login)
             .disposed(by: bag)
@@ -69,12 +67,26 @@ class OnBoardingViewModel {
             })
             .disposed(by: bag)
         
+        authModel
+            .subscribe(onNext: {
+                print("@@@")
+                dump($0)
+            })
+        
+        signupedUser
+            .filter { $0 == true }
+            .withLatestFrom(authModel)
+            .subscribe(onNext: {
+                print("###")
+                dump($0)
+            })
         
         // 힙촌 로그인
         
         authModel
             .compactMap { $0 }
             .flatMap { AuthManager.shared.signin(authModel: $0) }
+            .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let user): // 가입된 유저: 로그인
@@ -105,10 +117,13 @@ class OnBoardingViewModel {
             .withLatestFrom(authModel)
             .compactMap { $0?.id }
             .do(onNext: { id in // 로컬에 id 저장
-                KeychainWrapper.standard.set(id, forKey: "id")
+                KeychainWrapper.standard.set(id, forKey: "accessToken")
             })
             .map { _ in () }
-            .bind(to: login)
+            .subscribe(onNext: {
+                login.onNext(())
+            })
+//            .bind(to: login)
             .disposed(by: bag)
         
         pushMainVC = login

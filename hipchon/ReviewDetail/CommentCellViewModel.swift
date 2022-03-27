@@ -42,11 +42,7 @@ class CommentCellViewModel {
         timeForNow = comment
             .compactMap { $0.relatedDT }
             .asDriver(onErrorJustReturn: "")
-        
-        reportButtonTapped
-            .subscribe(onNext :{
-                print("@@")
-            })
+    
         reportButtonTapped
             .withLatestFrom(comment)
             .compactMap { $0.id }

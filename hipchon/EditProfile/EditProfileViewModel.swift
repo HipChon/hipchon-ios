@@ -7,6 +7,7 @@
 
 import RxCocoa
 import RxSwift
+import SwiftKeychainWrapper
 
 class EditProfileViewModel {
     private let bag = DisposeBag()
@@ -64,20 +65,22 @@ class EditProfileViewModel {
             }
             .flatMap { AuthManager.shared.signup(authModel: $0) }
             .do(onNext: { _ in activity.onNext(false) })
-                .subscribe(onNext: { result in
-                    switch result {
-                    case .success(let user):
-                        Singleton.shared.currentUser.onNext(user)
-                        signupComplete.onNext(())
-                    case .failure(let error):
-                        switch error.statusCode {
-                        case 401:
-                            return
-                        default:
-                            break
-                        }
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let user):
+                    guard let id = user.id else { return }
+                    KeychainWrapper.standard.set(id, forKey: "accessToken")
+                    Singleton.shared.currentUser.onNext(user)
+                    signupComplete.onNext(())
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        return
+                    default:
+                        break
                     }
-                })
+                }
+            })
             .disposed(by: bag)
 
         // MARK: 프로필 편집

@@ -69,7 +69,7 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
 
         place
-            .compactMap { $0.reviewCount }
+            .map { $0.reviewCount ?? 0 }
             .bind(to: placeDesVM.reviewCount)
             .disposed(by: bag)
 
@@ -106,10 +106,27 @@ class PlaceDetailViewModel {
         place
             .take(1)
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.getPlaceDetail($0) }
-            .asObservable()
-            .subscribe(onNext: {
-                place.onNext($0)
+            .filter {_ in DeviceManager.shared.networkStatus }
+            .flatMap { PlaceAPI.shared.getPlaceDetail($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    place.onNext(data)
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 404: // 404: Not Found(등록된 리뷰 없음)
+//                        reviews.onNext([])
+                        break
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
             })
             .disposed(by: bag)
 
@@ -169,8 +186,8 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
 
         menuListViewHidden = place
-            .compactMap { $0.menus }
-            .map { $0.count == 0 }
+            .map { $0.menus?.count ?? 0 }
+            .map { $0 == 0 }
             .asDriver(onErrorJustReturn: true)
 
         reviewTableViewHidden = reviews
@@ -221,9 +238,27 @@ class PlaceDetailViewModel {
 
         place
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.getReviews() }
-            .asObservable()
-            .bind(to: reviews)
+            .filter {_ in DeviceManager.shared.networkStatus }
+            .flatMap { ReviewAPI.shared.getPlaceReview($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    reviews.onNext(data)
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 404: // 404: Not Found(등록된 리뷰 없음)
+                        reviews.onNext([])
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
+            })
             .disposed(by: bag)
     }
 }

@@ -7,6 +7,7 @@
 
 import RxCocoa
 import RxSwift
+import SwiftKeychainWrapper
 
 class SettingViewModel {
     private let bag = DisposeBag()
@@ -17,6 +18,7 @@ class SettingViewModel {
 
     let logoutPopToOnBoarding: Signal<Void>
     let withdrawPopToOnBoarding: Signal<Void>
+    let openURL: Signal<URL>
 
     // MARK: view -> viewModel
 
@@ -38,6 +40,7 @@ class SettingViewModel {
         logoutButtonTapped
             .subscribe(onNext: {
                 // TODO: Local Info Delete
+                KeychainWrapper.standard.remove(forKey: "accessToken")
                 logoutComplete.onNext(())
             })
             .disposed(by: bag)
@@ -47,11 +50,17 @@ class SettingViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
+                    KeychainWrapper.standard.remove(forKey: "accessToken")
                     withdrawComplete.onNext(())
                 case let .failure(error):
                     print(error.description)
                 }
             })
             .disposed(by: bag)
+        
+        openURL = customerServiceButtonTapped
+            .map { "http://pf.kakao.com/_xgHYNb/chat" }
+            .compactMap { URL(string: $0) }
+            .asSharedSequence(onErrorDriveWith: .empty())
     }
 }

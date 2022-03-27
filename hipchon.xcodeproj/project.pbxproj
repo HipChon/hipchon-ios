@@ -101,6 +101,8 @@
 		D84CFBF227E0EF5300FF3AA4 /* MenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBF127E0EF5300FF3AA4 /* MenuModel.swift */; };
 		D84CFBF427E0EF9B00FF3AA4 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBF327E0EF9B00FF3AA4 /* MenuCell.swift */; };
 		D84CFBF627E0EFEA00FF3AA4 /* MenuCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFBF527E0EFEA00FF3AA4 /* MenuCellViewModel.swift */; };
+		D8522AAC27F00B8F00381EE8 /* PlaceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8522AAB27F00B8F00381EE8 /* PlaceAPI.swift */; };
+		D8522AAE27F01AAA00381EE8 /* ReviewAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8522AAD27F01AA900381EE8 /* ReviewAPI.swift */; };
 		D854E43027E8DE190088DD29 /* KeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D854E42F27E8DE190088DD29 /* KeywordView.swift */; };
 		D854E43227E8DE9E0088DD29 /* KeywordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D854E43127E8DE9E0088DD29 /* KeywordViewModel.swift */; };
 		D85B6A8F27E4E909002DC7B1 /* MemoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */; };
@@ -272,6 +274,8 @@
 		D84CFBF127E0EF5300FF3AA4 /* MenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModel.swift; sourceTree = "<group>"; };
 		D84CFBF327E0EF9B00FF3AA4 /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
 		D84CFBF527E0EFEA00FF3AA4 /* MenuCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellViewModel.swift; sourceTree = "<group>"; };
+		D8522AAB27F00B8F00381EE8 /* PlaceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAPI.swift; sourceTree = "<group>"; };
+		D8522AAD27F01AA900381EE8 /* ReviewAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewAPI.swift; sourceTree = "<group>"; };
 		D854E42F27E8DE190088DD29 /* KeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordView.swift; sourceTree = "<group>"; };
 		D854E43127E8DE9E0088DD29 /* KeywordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordViewModel.swift; sourceTree = "<group>"; };
 		D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoModel.swift; sourceTree = "<group>"; };
@@ -458,6 +462,8 @@
 		D80967BA27BA846C0015E7EF /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				D8522AAB27F00B8F00381EE8 /* PlaceAPI.swift */,
+				D8522AAD27F01AA900381EE8 /* ReviewAPI.swift */,
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
 				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
 				D828B39227E78163007C2487 /* AuthManager.swift */,
@@ -1095,6 +1101,7 @@
 				D8EBA6C027D6612500305CB5 /* PageCountView.swift in Sources */,
 				D8B84AE127EF2BD4002AAA8E /* CategoryModel.swift in Sources */,
 				D88FAF9727A68ADB00E41F4F /* HomeViewModel.swift in Sources */,
+				D8522AAE27F01AAA00381EE8 /* ReviewAPI.swift in Sources */,
 				D84CFBF427E0EF9B00FF3AA4 /* MenuCell.swift in Sources */,
 				D8E019DB27C0CFAF00A167CA /* SearchNavigationViewModel.swift in Sources */,
 				D890251027DA35450099FACA /* ReviewPlaceViewModel.swift in Sources */,
@@ -1115,6 +1122,7 @@
 				D88FAF7D27A67D6F00E41F4F /* AppDelegate.swift in Sources */,
 				D83304E727AC1AEB008E7DB7 /* DefaultViewModel.swift in Sources */,
 				D8B86CCB27E24261004EBFD9 /* MemoViewController.swift in Sources */,
+				D8522AAC27F00B8F00381EE8 /* PlaceAPI.swift in Sources */,
 				D840813727C544A200FA9D1B /* FilterCell.swift in Sources */,
 				D8091FF727B28034000F057E /* FeedViewController.swift in Sources */,
 				D840779E27DE1ABB0029C17E /* UITextField+.swift in Sources */,
@@ -1295,8 +1303,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = hipchon/hipchon.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SPJ3VZVK78;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1317,7 +1325,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "hipchon-Provisioning-Profile";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1331,8 +1339,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = hipchon/hipchon.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SPJ3VZVK78;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1353,7 +1361,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "hipchon-Provisioning-Profile";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

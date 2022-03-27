@@ -73,11 +73,6 @@ class PlaceListCell: UITableViewCell {
         $0.textColor = .gray04
     }
 
-    private lazy var priceDesLabel = UILabel().then {
-        $0.font = .AppleSDGothicNeo(size: 16.0, type: .bold)
-        $0.textAlignment = .right
-    }
-
     public static let identyfier = "PlaceListCell"
     private let bag = DisposeBag()
 
@@ -147,10 +142,6 @@ class PlaceListCell: UITableViewCell {
         viewModel.reviewCount
             .map { "\($0)" }
             .drive(reviewCountLabel.rx.text)
-            .disposed(by: bag)
-
-        viewModel.priceDes
-            .drive(priceDesLabel.rx.text)
             .disposed(by: bag)
     }
 

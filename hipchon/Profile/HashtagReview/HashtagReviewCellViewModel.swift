@@ -20,7 +20,7 @@ class HashtagReviewCellViewModel {
 
     init(_ data: ReviewModel) {
         let review = BehaviorSubject<ReviewModel>(value: data)
-
+        dump(data)
         imageURL = review
             .compactMap { $0.imageURLs?.first }
             .compactMap { URL(string: $0) }
@@ -37,7 +37,7 @@ class HashtagReviewCellViewModel {
         
         deleteTapped
             .withLatestFrom(review)
-            .compactMap { $0.id }
+            .map { $0.id ?? 0 }
             .flatMap { NetworkManager.shared.deleteReview($0) }
             .subscribe(onNext: { _ in
                 Singleton.shared.toastAlert.onNext("리뷰가 삭제되었습니다")

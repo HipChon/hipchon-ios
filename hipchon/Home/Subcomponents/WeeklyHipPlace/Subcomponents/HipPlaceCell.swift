@@ -36,7 +36,7 @@ class HipPlaceCell: UICollectionViewCell {
 
     private lazy var bookmarkCountLabel = UILabel().then {
         $0.font = .GmarketSans(size: 12.0, type: .medium)
-        $0.textColor = .black
+        $0.textColor = .gray04
     }
 
     private lazy var reviewCountImageView = UIImageView().then {
@@ -45,16 +45,21 @@ class HipPlaceCell: UICollectionViewCell {
 
     private lazy var reviewCountLabel = UILabel().then {
         $0.font = .GmarketSans(size: 12.0, type: .medium)
-        $0.textColor = .black
+        $0.textColor = .gray04
     }
 
     public static let identyfier = "HipPlaceCell"
-    private let bag = DisposeBag()
+    private var bag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
         layout()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
     }
 
     @available(*, unavailable)
