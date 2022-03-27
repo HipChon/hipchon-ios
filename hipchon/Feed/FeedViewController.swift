@@ -24,9 +24,7 @@ class FeedViewController: UIViewController {
 
     private lazy var sortButton = UIButton().then {
         $0.setImage(UIImage(named: "sort") ?? UIImage(), for: .normal)
-    }
-
-    private lazy var searchNavigationView = SearchNavigationView().then { _ in
+        $0.isHidden = true // TODO: delete
     }
 
     private lazy var boundaryView = UIView().then {
@@ -41,8 +39,12 @@ class FeedViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
+    private lazy var emptyView = EmptyView().then { _ in
+    }
+
     private lazy var uploadButton = UIButton().then {
         $0.setImage(UIImage(named: "upload"), for: .normal)
+        $0.isHidden = true // TODO: delete
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -63,8 +65,6 @@ class FeedViewController: UIViewController {
     func bind(_ viewModel: FeedViewModel) {
         // MARK: subviewModels
 
-        searchNavigationView.bind(viewModel.searchNavigationVM)
-
         // MARK: view -> viewModel
 
         rx.viewWillAppear
@@ -80,6 +80,41 @@ class FeedViewController: UIViewController {
 
         // MARK: viewModel -> view
 
+        // refresh
+        reviewTableView.refreshControl = UIRefreshControl()
+
+        reviewTableView.refreshControl?.rx
+            .controlEvent(.valueChanged)
+            .map { _ in () }
+            .bind(to: viewModel.reload)
+            .disposed(by: bag)
+
+        viewModel.activating
+            .distinctUntilChanged()
+            .emit(to: reviewTableView.refreshControl!.rx.isRefreshing)
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .drive(reviewTableView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.reviewTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
+        // more fetching
+
+        reviewTableView.rx.contentOffset
+            .map { [unowned self] in reviewTableView.isNearTheBottomEdge($0) }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .map { _ in () }
+            .bind(to: viewModel.moreFetching)
+            .disposed(by: bag)
+
+        // data binding
+
         viewModel.reviewCellVMs
             .drive(reviewTableView.rx.items) { tv, idx, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
@@ -87,13 +122,20 @@ class FeedViewController: UIViewController {
                 cell.bind(viewModel)
 
                 viewModel.pushPlaceDetailVC
-                    .emit(onNext: {
+                    .emit(onNext: { [weak self] viewModel in
                         let placeDetailVC = PlaceDetailViewController()
-                        placeDetailVC.bind($0)
-                        self.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                        placeDetailVC.bind(viewModel)
+                        self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
                     })
-                    .disposed(by: self.bag)
+                    .disposed(by: cell.bag)
 
+                viewModel.share
+                    .emit(onNext: { [weak self] in
+                        let activityVC = UIActivityViewController(activityItems: [$0],
+                                                                  applicationActivities: nil)
+                        self?.present(activityVC, animated: true, completion: nil)
+                    })
+                    .disposed(by: cell.bag)
                 return cell
             }
             .disposed(by: bag)
@@ -109,19 +151,19 @@ class FeedViewController: UIViewController {
             })
             .disposed(by: bag)
 
-        viewModel.presentFilterVC
-            .emit(onNext: { [weak self] viewModel in
-                guard let self = self else { return }
-                let filterVC = FilterViewController()
-                filterVC.bind(viewModel)
-
-                // MDC 바텀 시트로 설정
-                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
-                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
-                                                          height: filterVC.viewHeight)
-                self.present(bottomSheet, animated: true, completion: nil)
-            })
-            .disposed(by: bag)
+//        viewModel.presentFilterVC
+//            .emit(onNext: { [weak self] viewModel in
+//                guard let self = self else { return }
+//                let filterVC = FilterViewController()
+//                filterVC.bind(viewModel)
+//
+//                // MDC 바텀 시트로 설정
+//                let bottomSheet: MDCBottomSheetController = .init(contentViewController: filterVC)
+//                bottomSheet.preferredContentSize = CGSize(width: self.view.frame.size.width,
+//                                                          height: filterVC.viewHeight)
+//                self.present(bottomSheet, animated: true, completion: nil)
+//            })
+//            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -135,6 +177,7 @@ class FeedViewController: UIViewController {
             sortButton,
             boundaryView,
             reviewTableView,
+            emptyView,
             uploadButton,
         ].forEach { view.addSubview($0) }
 
@@ -159,6 +202,10 @@ class FeedViewController: UIViewController {
         reviewTableView.snp.makeConstraints {
             $0.top.equalTo(boundaryView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(reviewTableView)
         }
 
         uploadButton.snp.makeConstraints {

@@ -5,9 +5,11 @@
 //  Created by 김범수 on 2022/02/14.
 //
 
-import Foundation
+import Alamofire
+import RxSwift
 
 class UserModel: Codable {
+
     let id: Int?
     let name: String?
     let profileImageURL: String?
@@ -24,5 +26,12 @@ class UserModel: Codable {
         self.name = name
         self.profileImageURL = profileImageURL
         self.reviewCount = reviewCount
+    }
+
+    init() {
+        id = nil
+        name = nil
+        profileImageURL = nil
+        reviewCount = nil
     }
 }

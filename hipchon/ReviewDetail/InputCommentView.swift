@@ -16,6 +16,7 @@ class InputCommentView: UIView {
     }
 
     private lazy var contentTextField = UITextField().then {
+        $0.delegate = self
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
         $0.placeholder = "댓글 달기 ..."
         $0.layer.cornerRadius = 25.0
@@ -28,6 +29,7 @@ class InputCommentView: UIView {
     private lazy var registerButton = UIButton().then {
         $0.setTitle("등록", for: .normal)
         $0.setTitleColor(.primary_green, for: .normal)
+        $0.setTitleColor(.gray03, for: .disabled)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
     }
 
@@ -50,6 +52,8 @@ class InputCommentView: UIView {
     }
 
     func bind(_ viewModel: InputCommentViewModel) {
+        // MARK: view -> viewModel
+
         contentTextField.rx.text.orEmpty
             .bind(to: viewModel.content)
             .disposed(by: bag)
@@ -57,6 +61,23 @@ class InputCommentView: UIView {
         registerButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.registerButtonTapped)
+            .disposed(by: bag)
+
+        // MARK: viewModel -> view
+
+        viewModel.profileImageURL
+            .drive(profileImageView.rx.setImageKF)
+            .disposed(by: bag)
+        
+        viewModel.registerButtonValid
+            .drive(registerButton.rx.isEnabled)
+            .disposed(by: bag)
+        
+        viewModel.contentInit
+            .emit(onNext: { [weak self] in
+                self?.contentTextField.text = ""
+                viewModel.content.accept("")
+            })
             .disposed(by: bag)
     }
 
@@ -92,5 +113,14 @@ class InputCommentView: UIView {
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(25.0)
         }
+    }
+}
+
+// MARK: TextField Delegate
+
+extension InputCommentView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
+        guard let text = textField.text else { return true }
+        return text.count <= 100
     }
 }

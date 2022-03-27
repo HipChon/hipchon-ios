@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
     // MARK: Property
 
     private lazy var scrollView = UIScrollView().then {
-        $0.bounces = true
+        $0.bounces = false
         $0.showsVerticalScrollIndicator = false
     }
 
@@ -26,8 +26,8 @@ class HomeViewController: UIViewController {
     private lazy var homeSearchView = HomeSearchView().then { _ in
     }
 
-    private lazy var categoryCollectionView = UICollectionView(frame: .zero,
-                                                               collectionViewLayout: UICollectionViewFlowLayout()).then {
+    private lazy var hashtagCollectionView = UICollectionView(frame: .zero,
+                                                              collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 10.0
         let width = (view.frame.width - itemSpacing * 3) / 4
@@ -40,7 +40,7 @@ class HomeViewController: UIViewController {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
-        $0.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.identyfier)
+        $0.register(HashtagCell.self, forCellWithReuseIdentifier: HashtagCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.backgroundColor = .white
     }
@@ -108,9 +108,9 @@ class HomeViewController: UIViewController {
 
         // MARK: view -> viewModel
 
-        categoryCollectionView.rx.modelSelected(CategoryModel.self)
+        hashtagCollectionView.rx.modelSelected(HashtagModel.self)
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.selectedCategory)
+            .bind(to: viewModel.selectedHashtag)
             .disposed(by: bag)
 
         bannerCollectionView.rx.modelSelected(BannerModel.self)
@@ -125,12 +125,12 @@ class HomeViewController: UIViewController {
 
         // MARK: viewModel -> view
 
-        viewModel.cateogorys
-            .drive(categoryCollectionView.rx.items) { col, idx, data in
-                guard let cell = col.dequeueReusableCell(withReuseIdentifier: CategoryCell.identyfier, for: IndexPath(row: idx, section: 0)) as? CategoryCell else { return UICollectionViewCell() }
-                let categoryCellViewModel = CategoryCellViewModel()
-                cell.bind(categoryCellViewModel)
-                categoryCellViewModel.category.accept(data)
+        viewModel.hashtags
+            .drive(hashtagCollectionView.rx.items) { col, idx, data in
+                guard let cell = col.dequeueReusableCell(withReuseIdentifier: HashtagCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HashtagCell else { return UICollectionViewCell() }
+                let hashtagCellViewModel = HashtagCellViewModel()
+                cell.bind(hashtagCellViewModel)
+                hashtagCellViewModel.hashtag.accept(data)
                 return cell
             }
             .disposed(by: bag)
@@ -212,7 +212,7 @@ class HomeViewController: UIViewController {
 
         [
             homeSearchView,
-            categoryCollectionView,
+            hashtagCollectionView,
             localHipsterPickView,
             bestReviewView,
             bannerCollectionView,
@@ -229,7 +229,7 @@ class HomeViewController: UIViewController {
             $0.height.equalTo(74.0)
         }
 
-        categoryCollectionView.snp.makeConstraints {
+        hashtagCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(homeSearchView.snp.bottom)
             $0.height.equalTo(106.0)
@@ -237,7 +237,7 @@ class HomeViewController: UIViewController {
 
         localHipsterPickView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(categoryCollectionView.snp.bottom)
+            $0.top.equalTo(hashtagCollectionView.snp.bottom)
             $0.height.equalTo(394.0)
         }
 

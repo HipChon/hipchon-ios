@@ -42,7 +42,7 @@ class HipsterPickDetailCell: UITableViewCell {
     }
 
     public static let identyfier = "HipsterPickDetailCell"
-    private let bag = DisposeBag()
+    var bag = DisposeBag()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -53,6 +53,11 @@ class HipsterPickDetailCell: UITableViewCell {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
     }
 
     func bind(_ viewModel: HipsterPickDetailCellViewModel) {
@@ -99,7 +104,7 @@ class HipsterPickDetailCell: UITableViewCell {
             contentLabel,
             reviewPlace,
         ].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
 
         imageCollectView.snp.makeConstraints {

@@ -13,12 +13,16 @@ class PlaceListViewController: UIViewController {
     private lazy var searchNavigationView = SearchNavigationView().then { _ in
     }
 
-    private lazy var placeList = UITableView().then {
+    private lazy var placeTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(PlaceListCell.self, forCellReuseIdentifier: PlaceListCell.identyfier)
-        $0.rowHeight = (view.frame.width - 60.0) * ((280.0 + 16.0) / 330.0)
+        $0.rowHeight = (view.frame.width - 40.0) * ((255.0 + 16.0) / 351.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
+    }
+
+    private lazy var emptyView = EmptyView().then {
+        $0.checkAuth = false
     }
 
     private let bag = DisposeBag()
@@ -37,11 +41,13 @@ class PlaceListViewController: UIViewController {
     func bind(_ viewModel: PlaceListViewModel) {
         // MARK: subviewModels
 
+        placeTableView.delegate = nil
+        placeTableView.dataSource = nil
         searchNavigationView.bind(viewModel.searchNavigationVM)
 
         // MARK: view -> viewModel
 
-        placeList.rx.itemSelected
+        placeTableView.rx.itemSelected
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .map { $0.row }
             .bind(to: viewModel.selectedIdx)
@@ -49,8 +55,45 @@ class PlaceListViewController: UIViewController {
 
         // MARK: viewModel -> view
 
+        // refresh
+        placeTableView.refreshControl = UIRefreshControl()
+
+        placeTableView.refreshControl?.rx
+            .controlEvent(.valueChanged)
+            .map { _ in () }
+            .bind(to: viewModel.reload)
+            .disposed(by: bag)
+
+        viewModel.activating
+            .distinctUntilChanged()
+            .map { !$0 }
+            .filter { $0 == false }
+            .emit(onNext: { [weak self] _ in
+                self?.placeTableView.refreshControl?.endRefreshing()
+            })
+            .disposed(by: bag)
+
+        viewModel.placeTableViewHidden
+            .drive(placeTableView.rx.isHidden)
+            .disposed(by: bag)
+
+        viewModel.placeTableViewHidden
+            .map { !$0 }
+            .drive(emptyView.rx.isHidden)
+            .disposed(by: bag)
+
+        // more fetching
+
+        placeTableView.rx.contentOffset
+            .map { [unowned self] in placeTableView.isNearTheBottomEdge($0) }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .map { _ in () }
+            .bind(to: viewModel.moreFetching)
+            .disposed(by: bag)
+
         viewModel.placeListCellVMs
-            .drive(placeList.rx.items) { tv, idx, vm in
+            .drive(placeTableView.rx.items) { tv, idx, vm in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: PlaceListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceListCell else { return UITableViewCell() }
                 cell.bind(vm)
                 return cell
@@ -97,11 +140,6 @@ class PlaceListViewController: UIViewController {
                 self.present(bottomSheet, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        viewModel.pop
-            .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
-            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -112,7 +150,8 @@ class PlaceListViewController: UIViewController {
     private func layout() {
         [
             searchNavigationView,
-            placeList,
+            placeTableView,
+            emptyView,
         ].forEach { view.addSubview($0) }
 
         searchNavigationView.snp.makeConstraints {
@@ -121,9 +160,13 @@ class PlaceListViewController: UIViewController {
             $0.height.equalTo(74.0)
         }
 
-        placeList.snp.makeConstraints {
+        placeTableView.snp.makeConstraints {
             $0.top.equalTo(searchNavigationView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(placeTableView)
         }
     }
 }

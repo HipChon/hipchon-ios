@@ -19,25 +19,79 @@ class PlaceListViewModel {
 
     let placeListCellVMs: Driver<[PlaceListCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let searchFilterTitle: Driver<String>
+    let activating: Signal<Bool>
+    let placeTableViewHidden: Driver<Bool>
     let presentFilterVC: Signal<FilterViewModel>
     let presentSortVC: Signal<SortViewModel>
-    let pop: Signal<Void>
 
     // MARK: view -> viewModel
 
     let selectedIdx = PublishRelay<Int>()
     let changedSearchFilter = PublishSubject<SearchFilterModel>()
     let sortType = BehaviorSubject<SortType>(value: .review)
+    let reload = PublishRelay<Void>()
+    let moreFetching = PublishRelay<Void>()
 
     init(_ data: SearchFilterModel) {
         let searchFilter = BehaviorSubject<SearchFilterModel>(value: data)
         let places = BehaviorSubject<[PlaceModel]>(value: [])
 
+        // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
-            .withLatestFrom(NetworkManager.shared.getPlaces())
-            .bind(to: places)
+            .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    places.onNext(data)
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        break
+                    }
+                }
+            })
             .disposed(by: bag)
+
+        // refresh
+        let activatingState = PublishSubject<Bool>()
+
+        activating = activatingState
+            .asSignal(onErrorJustReturn: false)
+
+        reload
+            .do(onNext: { activatingState.onNext(true) })
+            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
+            .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
+            .do(onNext: { _ in activatingState.onNext(false) })
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    places.onNext(data)
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        break
+                    }
+                }
+            })
+            .disposed(by: bag)
+
+        // more fetching
+
+//        moreFetching
+//            .withLatestFrom(Observable.combineLatest(searchFilter, sortType))
+//            .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
+//            .withLatestFrom(places) { $1 + $0 }
+//            .bind(to: places)
+//            .disposed(by: bag)
+
+        placeTableViewHidden = places
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: false)
 
         placeListCellVMs = places
             .map { $0.map { PlaceListCellViewModel($0) } }
@@ -57,11 +111,6 @@ class PlaceListViewModel {
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        searchFilterTitle = searchFilter
-            .compactMap { ($0.personnel, $0.pet, $0.region, $0.category) }
-            .map { "\($0.0) \($0.1) \($0.2) \($0.3)" }
-            .asDriver(onErrorJustReturn: "")
-
         presentFilterVC = searchNavigationVM
             .searchFilterButtonTapped
             .map { FilterViewModel(.research) }
@@ -72,7 +121,5 @@ class PlaceListViewModel {
             .withLatestFrom(sortType)
             .map { SortViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
-
-        pop = searchNavigationVM.pop
     }
 }

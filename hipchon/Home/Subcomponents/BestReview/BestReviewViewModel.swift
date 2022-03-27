@@ -15,11 +15,19 @@ class BestReviewViewModel {
     // MARK: viewModel -> view
 
     let reviews: Driver<[BestReviewModel]>
+    let pushReviewDetailVC: Signal<ReviewDetailViewModel>
 
     // MARK: view -> viewModel
+
+    let selectedBestReview = PublishRelay<BestReviewModel>()
 
     init() {
         reviews = NetworkManager.shared.getBestReview()
             .asDriver(onErrorJustReturn: [])
+
+        pushReviewDetailVC = selectedBestReview
+            .compactMap { $0.review }
+            .map { ReviewDetailViewModel($0) }
+            .asSignal(onErrorSignalWith: .empty())
     }
 }

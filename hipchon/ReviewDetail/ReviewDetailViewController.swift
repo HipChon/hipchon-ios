@@ -15,15 +15,14 @@ class ReviewDetailViewController: UIViewController {
     // MARK: Property
 
     private lazy var scrollView = UIScrollView().then {
-        $0.bounces = true
+        $0.bounces = false
         $0.showsVerticalScrollIndicator = false
     }
 
     private lazy var contentView = UIView().then { _ in
     }
 
-    private lazy var backButton = UIButton().then {
-        $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
+    private lazy var navigationView = NavigationView().then { _ in
     }
 
     private lazy var placeNameLabel = UILabel().then {
@@ -88,6 +87,13 @@ class ReviewDetailViewController: UIViewController {
     private lazy var commentCountLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
     }
+    
+    private lazy var reportButton = UIButton().then {
+        $0.setImage(UIImage(named: "report"), for: .normal)
+        $0.setTitle(" 신고하기", for: .normal)
+        $0.setTitleColor(.gray04, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+    }
 
     private lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
@@ -108,12 +114,14 @@ class ReviewDetailViewController: UIViewController {
 //        $0.rowHeight = 200.0
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
+        $0.isScrollEnabled = false
     }
 
     private lazy var inputCommentView = InputCommentView().then { _ in
     }
 
     private let bag = DisposeBag()
+    var viewModel: ReviewDetailViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -132,6 +140,8 @@ class ReviewDetailViewController: UIViewController {
     }
 
     func bind(_ viewModel: ReviewDetailViewModel) {
+        self.viewModel = viewModel
+
         // MARK: subViewModels
 
         viewModel.reviewPlaceVM
@@ -140,12 +150,19 @@ class ReviewDetailViewController: UIViewController {
             })
             .disposed(by: bag)
 
+        inputCommentView.bind(viewModel.inputCommentVM)
+
         // MARK: view -> viewModel
 
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-
+        
+        reportButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.reportButtonTapped)
+            .disposed(by: bag)
+        
         // MARK: viewModel -> view
 
         viewModel.placeName
@@ -174,6 +191,7 @@ class ReviewDetailViewController: UIViewController {
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
                 let viewModel = ImageURLCellViewModel(data)
+                cell.imageView.contentMode = .scaleAspectFill
                 cell.bind(viewModel)
                 return cell
             }
@@ -207,8 +225,6 @@ class ReviewDetailViewController: UIViewController {
             }
             .disposed(by: bag)
 
-        // MARK: scene
-
         viewModel.pushPlaceDetailVC
             .emit(onNext: { [weak self] viewModel in
                 let placeDetailVC = PlaceDetailViewController()
@@ -217,10 +233,11 @@ class ReviewDetailViewController: UIViewController {
             })
             .disposed(by: bag)
 
-        backButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
+        viewModel.share
+            .emit(onNext: { [weak self] in
+                let activityVC = UIActivityViewController(activityItems: [$0],
+                                                          applicationActivities: nil)
+                self?.present(activityVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
     }
@@ -235,14 +252,22 @@ class ReviewDetailViewController: UIViewController {
         // MARK: scroll
 
         [
+            navigationView,
             scrollView,
             inputCommentView,
         ].forEach {
             view.addSubview($0)
         }
 
+        navigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(navigationView.viewHeight)
+        }
+
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.leading.bottom.trailing.equalToSuperview()
+            $0.top.equalTo(navigationView.snp.bottom)
         }
 
         inputCommentView.snp.makeConstraints {
@@ -258,7 +283,6 @@ class ReviewDetailViewController: UIViewController {
         }
 
         [
-            backButton,
             placeNameLabel,
             profileImageView,
             userNameLabel,
@@ -269,6 +293,7 @@ class ReviewDetailViewController: UIViewController {
             likeCountLabel,
             commentButton,
             commentCountLabel,
+            reportButton,
             contentLabel,
             reviewPlaceView,
             boundaryView,
@@ -277,14 +302,8 @@ class ReviewDetailViewController: UIViewController {
             contentView.addSubview($0)
         }
 
-        backButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(26.0)
-            $0.top.equalTo(26.0)
-            $0.width.height.equalTo(28.0)
-        }
-
         placeNameLabel.snp.makeConstraints {
-            $0.top.equalTo(backButton.snp.bottom).offset(20.0)
+            $0.top.equalToSuperview().inset(7.0)
             $0.leading.equalToSuperview().inset(20.0)
         }
 
@@ -349,6 +368,11 @@ class ReviewDetailViewController: UIViewController {
             $0.centerY.equalTo(commentButton)
             $0.leading.equalTo(commentButton.snp.trailing).offset(12.0)
         }
+        
+        reportButton.snp.makeConstraints {
+            $0.centerY.equalTo(commentButton)
+            $0.trailing.equalToSuperview().inset(20.0)
+        }
 
         boundaryView.snp.makeConstraints {
             $0.top.equalTo(likeButton.snp.bottom).offset(17.0)
@@ -385,17 +409,19 @@ private extension ReviewDetailViewController {
 
     @objc private func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print(keyboardSize.height)
-            inputCommentView.snp.makeConstraints {
+            inputCommentView.snp.remakeConstraints {
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(102.0)
                 $0.bottom.equalToSuperview().inset(keyboardSize.height)
             }
         }
     }
 
     @objc private func keyboardWillHide(_: Notification) {
-        print("@@@@")
-        inputCommentView.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(0.0)
+        inputCommentView.snp.remakeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(102.0)
+            $0.bottom.equalToSuperview()
         }
     }
 

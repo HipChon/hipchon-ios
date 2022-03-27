@@ -40,8 +40,6 @@ class HipsterPickDetailViewController: UIViewController {
     func bind(_ viewModel: HipsterPickDetailViewModel) {
         // MARK: subViewModels
 
-        navigationView.bind(viewModel.navigationVM)
-
         // MARK: view -> viewModel
 
         rx.viewWillAppear
@@ -56,20 +54,30 @@ class HipsterPickDetailViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.hipsterPickDetailCellVMs
-            .drive(hipsterPickDetailTableView.rx.items) { tv, idx, viewModel in
-                guard let cell = tv.dequeueReusableCell(withIdentifier: HipsterPickDetailCell.identyfier,
+            .drive(hipsterPickDetailTableView.rx.items) { [weak self] tv, idx, viewModel in
+                guard let self = self,
+                      let cell = tv.dequeueReusableCell(withIdentifier: HipsterPickDetailCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? HipsterPickDetailCell else { return UITableViewCell() }
                 cell.bind(viewModel)
+
+                viewModel.pushPlaceDetailVC
+                    .emit(onNext: { [weak self] viewModel in
+                        let placeDetailVC = PlaceDetailViewController()
+                        placeDetailVC.bind(viewModel)
+                        self?.navigationController?.pushViewController(placeDetailVC, animated: true)
+                    })
+                    .disposed(by: cell.bag)
+
+                viewModel.share
+                    .emit(onNext: { [weak self] in
+                        let activityVC = UIActivityViewController(activityItems: [$0],
+                                                                  applicationActivities: nil)
+                        self?.present(activityVC, animated: true, completion: nil)
+                    })
+                    .disposed(by: cell.bag)
+
                 return cell
             }
-            .disposed(by: bag)
-
-        // MARK: scene
-
-        viewModel.pop
-            .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            })
             .disposed(by: bag)
     }
 
@@ -89,7 +97,7 @@ class HipsterPickDetailViewController: UIViewController {
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         titleLabel.snp.makeConstraints {

@@ -2,26 +2,30 @@
 //  CategoryModel.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/02/13.
+//  Created by 김범수 on 2022/03/26.
 //
 
-import Foundation
 import UIKit
 
-struct CategoryModel {
+class CategoryModel: Codable {
+    let id: Int?
     let name: String?
-    let image: UIImage?
+    
+    init(id: Int?, name: String?) {
+        self.id = id
+        self.name = name
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name
+    }
 
-    static var tmpModels: [CategoryModel] {
+    static var model: [CategoryModel] {
         return [
-            CategoryModel(name: "불멍", image: UIImage(named: "불멍") ?? UIImage()),
-            CategoryModel(name: "논멍", image: UIImage(named: "논멍") ?? UIImage()),
-            CategoryModel(name: "물멍", image: UIImage(named: "물멍") ?? UIImage()),
-            CategoryModel(name: "밭멍", image: UIImage(named: "밭멍") ?? UIImage()),
-            CategoryModel(name: "촌캉스", image: UIImage(named: "촌캉스") ?? UIImage()),
-            CategoryModel(name: "체험", image: UIImage(named: "체험") ?? UIImage()),
-            CategoryModel(name: "가게", image: UIImage(named: "가게") ?? UIImage()),
-            CategoryModel(name: "기타", image: UIImage(named: "기타") ?? UIImage()),
+            CategoryModel(id: 1, name: "카페"),
+            CategoryModel(id: 2, name: "미식"),
+            CategoryModel(id: 3, name: "활동"),
+            CategoryModel(id: 4, name: "자연"),
         ]
     }
 }

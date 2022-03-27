@@ -15,8 +15,7 @@ import YPImagePicker
 class EditProfileViewController: UIViewController {
     // MARK: Property
 
-    private lazy var backButton = UIButton().then {
-        $0.setImage(UIImage(named: "back") ?? UIImage(), for: .normal)
+    private lazy var navigationView = NavigationView().then { _ in
     }
 
     private lazy var setNickNameLabel = UILabel().then {
@@ -30,10 +29,10 @@ class EditProfileViewController: UIViewController {
     }
 
     private lazy var nickNameTextField = UITextField().then {
+        $0.delegate = self
         $0.font = .GmarketSans(size: 16.0, type: .medium)
         $0.textAlignment = .center
         $0.borderStyle = .none
-        $0.text = "닉네임"
     }
 
     private lazy var bottomLineView = UIView().then {
@@ -44,13 +43,8 @@ class EditProfileViewController: UIViewController {
         $0.setImage(UIImage(named: "cancle") ?? UIImage(), for: .normal)
     }
 
-    private lazy var completeButton = UIButton().then {
-        $0.backgroundColor = .gray02
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 5.0
+    private lazy var completeButton = BottomButton().then {
         $0.setTitle("확인", for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .medium)
-        $0.setTitleColor(.black, for: .normal)
     }
 
     private let bag = DisposeBag()
@@ -71,7 +65,7 @@ class EditProfileViewController: UIViewController {
         profileImageButton.layer.cornerRadius = profileImageButton.frame.width / 2
     }
 
-    func bind(_: EditProfileViewModel) {
+    func bind(_ viewModel: EditProfileViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
@@ -114,7 +108,7 @@ class EditProfileViewController: UIViewController {
 
                 picker.didFinishPicking { [unowned picker] items, _ in
                     if let photo = items.singlePhoto {
-                        self.profileImageButton.setImage(photo.image, for: .normal)
+                        viewModel.changedImage.onNext(photo.image)
                     }
                     picker.dismiss(animated: true, completion: nil)
                 }
@@ -124,14 +118,61 @@ class EditProfileViewController: UIViewController {
             })
             .disposed(by: bag)
 
+        nickNameTextField.rx.text.orEmpty
+            .bind(to: viewModel.inputNickName)
+            .disposed(by: bag)
+
+        clearButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                self?.nickNameTextField.text = ""
+                viewModel.inputNickName.accept("")
+            })
+            .disposed(by: bag)
+
+        completeButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.completeButtonTapped)
+            .disposed(by: bag)
+
         // MARK: viewModel -> view
+
+        viewModel.profileImageURL
+            .drive(profileImageButton.rx.setImageKF)
+            .disposed(by: bag)
+
+        viewModel.name
+            .drive(nickNameTextField.rx.text)
+            .disposed(by: bag)
+
+        viewModel.setChangedImage
+            .emit(to: profileImageButton.rx.image)
+            .disposed(by: bag)
+
+        viewModel.completeButtonValid
+            .drive(completeButton.rx.isEnabled)
+            .disposed(by: bag)
+
+        viewModel.completeButtonActivity
+            .drive(completeButton.rx.activityIndicator)
+            .disposed(by: bag)
 
         // MARK: scene
 
-        backButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
+        viewModel.pushMainVC
+            .emit(onNext: { [weak self] in
+                let tapBarViewController = TabBarViewController()
+                self?.navigationController?.pushViewController(tapBarViewController, animated: true, completion: {
+                    Singleton.shared.toastAlert.onNext("회원가입이 완료되었습니다")
+                })
+            })
+            .disposed(by: bag)
+
+        viewModel.editComplete
+            .emit(onNext: { [weak self] in
+                self?.navigationController?.popViewController(animated: true, completion: {
+                    Singleton.shared.toastAlert.onNext("프로필 편집이 완료되었습니다")
+                })
             })
             .disposed(by: bag)
     }
@@ -139,11 +180,12 @@ class EditProfileViewController: UIViewController {
     func attribute() {
         view.backgroundColor = .white
         hideKeyboardWhenTappedAround()
+        addKeyboardNotification()
     }
 
     func layout() {
         [
-            backButton,
+            navigationView,
             setNickNameLabel,
             profileImageButton,
             nickNameTextField,
@@ -154,26 +196,27 @@ class EditProfileViewController: UIViewController {
             view.addSubview($0)
         }
 
-        backButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(26.0)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(13.0)
-            $0.width.height.equalTo(28.0)
+        navigationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         setNickNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
-            $0.bottom.equalTo(profileImageButton.snp.top).offset(-55.0)
+            $0.top.equalTo(navigationView.snp.bottom).offset(45.0)
         }
 
         profileImageButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview().multipliedBy(0.8)
+            $0.top.equalTo(setNickNameLabel.snp.bottom).offset(54.0)
             $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(100.0)
+            $0.width.height.equalTo(view.frame.width * (100.0 / 390.0))
         }
 
         nickNameTextField.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(profileImageButton.snp.bottom).offset(36.0)
+            $0.height.equalTo(32.0)
         }
 
         bottomLineView.snp.makeConstraints {
@@ -214,17 +257,11 @@ private extension EditProfileViewController {
         )
     }
 
-    @objc private func keyboardWillShow(_: Notification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            keyboardHeight.onNext(keyboardSize.height + UITextField.keyboardUpBottomHeight)
-//            navigationBottomHeight.onNext(16.0 - keyboardSize.height)
-//        }
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {}
     }
 
-    @objc private func keyboardWillHide(_: Notification) {
-//        keyboardHeight.onNext(UITextField.keyboardDownBottomHeight)
-//        navigationBottomHeight.onNext(16.0)
-    }
+    @objc private func keyboardWillHide(_: Notification) {}
 
     // 주변 터치시 키보드 내림
     private func hideKeyboardWhenTappedAround() {
@@ -235,5 +272,14 @@ private extension EditProfileViewController {
 
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: TextField Delegate
+
+extension EditProfileViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
+        guard let text = textField.text else { return true }
+        return text.count <= 10
     }
 }

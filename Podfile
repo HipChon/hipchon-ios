@@ -15,7 +15,8 @@ target 'hipchon' do
 
   # For Parsing 
   pod 'Alamofire'
-
+  pod 'SwiftyJSON'
+  
   # For UI
   pod 'SnapKit'
   pod 'Then'
@@ -23,6 +24,12 @@ target 'hipchon' do
   pod 'MaterialComponents/BottomSheet'
   #pod 'SideMenu'
   pod 'NMapsMap'
-
+  pod 'Tabman', '~> 2.12'
   pod 'YPImagePicker'
+  pod 'AnyFormatKit'
+
+  # For SNS
+  pod 'KakaoSDK'
+  pod 'Toast-Swift', '~> 5.0.1'
+  pod 'SwiftKeychainWrapper'
 end

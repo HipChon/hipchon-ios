@@ -27,6 +27,7 @@ class ReviewCellViewModel {
     let commentCount: Driver<Int>
     let content: Driver<String>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let share: Signal<String>
 
     // MARK: view -> viewModel
 
@@ -54,7 +55,7 @@ class ReviewCellViewModel {
             .asDriver(onErrorJustReturn: 0)
 
         postDate = review
-            .compactMap { $0.postDt }
+            .compactMap { $0.formattedPostDate }
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
@@ -99,6 +100,7 @@ class ReviewCellViewModel {
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.addLike($0) }
             .subscribe(onNext: {
+                Singleton.shared.unauthorized.onNext(())
                 if $0 == true {
                     // reload
                 }
@@ -123,5 +125,8 @@ class ReviewCellViewModel {
 
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
+
+        share = reviewPlaceVM
+            .flatMap { $0.share }
     }
 }

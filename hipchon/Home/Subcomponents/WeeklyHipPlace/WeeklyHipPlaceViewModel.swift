@@ -28,10 +28,20 @@ class WeeklyHipPlaceViewModel {
             .map { $0.map { HipPlaceCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
-        NetworkManager.shared.getWeeklyHipPlace()
+        PlaceAPI.shared.getWeeklyHipPlace()
             .asObservable()
-            .subscribe(onNext: {
-                hipPlaces.onNext($0)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    hipPlaces.onNext(data)
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        break
+                    }
+                }
             })
             .disposed(by: bag)
 

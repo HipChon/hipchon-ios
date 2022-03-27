@@ -5,12 +5,16 @@
 //  Created by 김범수 on 2022/01/30.
 //
 
+import KakaoSDKAuth
+import KakaoSDKCommon
+import KakaoSDKUser
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        KakaoSDKCommon.KakaoSDK.initSDK(appKey: "8bd5fb988b4c96695a833cff954936ed")
         return true
     }
 

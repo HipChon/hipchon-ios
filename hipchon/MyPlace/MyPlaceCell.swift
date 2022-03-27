@@ -31,6 +31,7 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var bookmarkImageView = UIImageView().then {
         $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
+        $0.contentMode = .center
     }
 
     private lazy var bookmarkCountLabel = UILabel().then {
@@ -40,6 +41,7 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var reviewImageView = UIImageView().then {
         $0.image = UIImage(named: "reviewCount") ?? UIImage()
+        $0.contentMode = .center
     }
 
     private lazy var reviewCountLabel = UILabel().then {
@@ -49,7 +51,12 @@ class MyPlaceCell: UITableViewCell {
 
     private lazy var memoButton = UIButton().then {
         $0.layer.cornerRadius = 2.0
-        $0.backgroundColor = .primary_green
+        $0.backgroundColor = .gray01
+        $0.setTitle("메모", for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
+        $0.setTitleColor(.gray05, for: .normal)
+        $0.contentHorizontalAlignment = .left
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
     }
 
     private lazy var boundaryView = UIView().then {
@@ -71,16 +78,15 @@ class MyPlaceCell: UITableViewCell {
     }
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
-        
         // MARK: view -> viewModel
-        
+
         memoButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.memoButtonTapped)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
-        
+
         viewModel.imageURL
             .drive(placeImageView.rx.setImageKF)
             .disposed(by: bag)
@@ -106,20 +112,33 @@ class MyPlaceCell: UITableViewCell {
             .map { "\($0)" }
             .drive(reviewCountLabel.rx.text)
             .disposed(by: bag)
-        
+
+        viewModel.memoContent
+            .drive(memoButton.rx.title())
+            .disposed(by: bag)
+
+        viewModel.memoContent
+            .map { _ in UIColor.black }
+            .drive(memoButton.rx.titleColor)
+            .disposed(by: bag)
+
+        viewModel.memoColor
+            .drive(memoButton.rx.backgroundColor)
+            .disposed(by: bag)
+
         // MARK: scene
-        
+
         viewModel.presentMemoVC
             .emit(onNext: { viewModel in
                 guard let topVC = UIApplication.topViewController() else { return }
                 let memoVC = MemoViewController()
                 memoVC.bind(viewModel)
-                
+
                 memoVC.providesPresentationContextTransitionStyle = true
                 memoVC.definesPresentationContext = true
-                memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext;
-                memoVC.view.backgroundColor = UIColor.init(white: 0.4, alpha: 0.3)
-                
+                memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                memoVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
+
                 topVC.tabBarController?.present(memoVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
@@ -133,31 +152,14 @@ class MyPlaceCell: UITableViewCell {
         // MARK: count
 
         [
-            bookmarkImageView,
-            reviewImageView,
-        ].forEach {
-            $0.snp.makeConstraints {
-                $0.width.height.equalTo(20.0)
-            }
-        }
-
-        let countSpacingView = UIView()
-        countSpacingView.snp.makeConstraints {
-            $0.width.equalTo(frame.width).priority(.low)
-        }
-
-        let countStackView = UIStackView(arrangedSubviews: [bookmarkImageView, bookmarkCountLabel, reviewImageView, reviewCountLabel])
-        countStackView.axis = .horizontal
-        countStackView.alignment = .fill
-        countStackView.distribution = .fill
-        countStackView.spacing = 12.0
-
-        [
             placeImageView,
             placeNameLabel,
             sectorLabel,
             addressLabel,
-            countStackView,
+            bookmarkImageView,
+            bookmarkCountLabel,
+            reviewImageView,
+            reviewCountLabel,
             memoButton,
             boundaryView,
         ].forEach { contentView.addSubview($0) }
@@ -187,10 +189,26 @@ class MyPlaceCell: UITableViewCell {
             $0.height.equalTo(17.0)
         }
 
-        countStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(20.0)
-            $0.top.equalTo(addressLabel.snp.bottom).offset(8.0)
-            $0.height.equalTo(20.0)
+        bookmarkImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(23.0)
+            $0.top.equalTo(addressLabel.snp.bottom).offset(12.0)
+            $0.width.height.equalTo(20.0)
+        }
+
+        bookmarkCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(bookmarkImageView.snp.trailing).offset(12.0)
+            $0.centerY.equalTo(bookmarkImageView)
+        }
+
+        reviewImageView.snp.makeConstraints {
+            $0.leading.equalTo(bookmarkCountLabel.snp.trailing).offset(12.0)
+            $0.centerY.equalTo(bookmarkImageView)
+            $0.width.height.equalTo(20.0)
+        }
+
+        reviewCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(reviewImageView.snp.trailing).offset(12.0)
+            $0.centerY.equalTo(bookmarkImageView)
         }
 
         memoButton.snp.makeConstraints {

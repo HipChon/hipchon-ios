@@ -54,7 +54,7 @@ class PostReviewViewController: UIViewController {
         let height = 286.0
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -63,7 +63,7 @@ class PostReviewViewController: UIViewController {
         $0.register(KeywordListCell.self, forCellWithReuseIdentifier: KeywordListCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
-        $0.isPagingEnabled = true
+        $0.isPagingEnabled = false
         $0.backgroundColor = .white
     }
 
@@ -106,13 +106,8 @@ class PostReviewViewController: UIViewController {
         $0.setTitleColor(.gray05, for: .normal)
     }
 
-    private lazy var completeButton = UIButton().then {
-        $0.backgroundColor = .gray02
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 5.0
+    private lazy var completeButton = BottomButton(frame: .zero).then {
         $0.setTitle("완료", for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 18.0, type: .medium)
-        $0.setTitleColor(.black, for: .normal)
     }
 
     private lazy var photoCollectView = UICollectionView(frame: .zero,
@@ -149,12 +144,16 @@ class PostReviewViewController: UIViewController {
     private let bag = DisposeBag()
 
     func bind(_ viewModel: PostReviewViewModel) {
-        navigationView.bind(viewModel.navigtionVM)
-
         // MARK: view -> viewModel
 
         contentTextView.rx.text.orEmpty
+            .filter { $0 != "내용을 입력하세요" }
             .bind(to: viewModel.content)
+            .disposed(by: bag)
+
+        completeButton.rx.tap
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind(to: viewModel.completeButtonTapped)
             .disposed(by: bag)
 
         // MARK: view -> view
@@ -189,7 +188,8 @@ class PostReviewViewController: UIViewController {
                 config.bottomMenuItemSelectedTextColour = UIColor(red: 38, green: 38, blue: 38)
                 config.bottomMenuItemUnSelectedTextColour = UIColor(red: 153, green: 153, blue: 153)
                 config.maxCameraZoomFactor = 1.0
-                config.library.maxNumberOfItems = 3 // 최대 사진 수
+                let limit = 5
+                config.library.maxNumberOfItems = limit // 최대 사진 수
 
                 config.wordings.libraryTitle = "갤러리"
                 config.wordings.cameraTitle = "카메라"
@@ -198,7 +198,7 @@ class PostReviewViewController: UIViewController {
                 config.wordings.albumsTitle = "앨범"
                 config.wordings.filter = "필터"
                 config.wordings.done = "확인"
-                config.wordings.warningMaxItemsLimit = "사진은 3장까지만 등록 가능합니다!"
+                config.wordings.warningMaxItemsLimit = "사진은 \(limit)장까지만 등록 가능합니다!"
 
                 let picker = YPImagePicker(configuration: config)
 
@@ -232,13 +232,30 @@ class PostReviewViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.keywordListCellVMs
-            .drive(keywordListCollectionView.rx.items) { col, idx, viewModel in
+            .drive(keywordListCollectionView.rx.items) { col, idx, vm in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: KeywordListCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? KeywordListCell
                 else {
                     return UICollectionViewCell()
                 }
-                cell.bind(viewModel)
+                cell.bind(vm)
+                // TODO: 더 좋은 방법으로 리팩토링
+                switch idx {
+                case 0:
+                    vm.selectedKeywords
+                        .bind(to: viewModel.selectedFirstKewords)
+                        .disposed(by: cell.bag)
+                case 1:
+                    vm.selectedKeywords
+                        .bind(to: viewModel.selectedSecondKewords)
+                        .disposed(by: cell.bag)
+                case 2:
+                    vm.selectedKeywords
+                        .bind(to: viewModel.selectedThirdKewords)
+                        .disposed(by: cell.bag)
+                default:
+                    break
+                }
                 return cell
             }
             .disposed(by: bag)
@@ -249,13 +266,18 @@ class PostReviewViewController: UIViewController {
             .disposed(by: bag)
 
         viewModel.photoCellVMs
-            .drive(photoCollectView.rx.items) { col, idx, viewModel in
+            .drive(photoCollectView.rx.items) { col, idx, vm in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: PhotoCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? PhotoCell
                 else {
                     return UICollectionViewCell()
                 }
-                cell.bind(viewModel)
+                cell.bind(vm)
+
+                vm.cancleButtonTapped
+                    .map { _ in idx }
+                    .bind(to: viewModel.canclePhotoIdx)
+                    .disposed(by: cell.bag)
                 return cell
             }
             .disposed(by: bag)
@@ -263,25 +285,39 @@ class PostReviewViewController: UIViewController {
         viewModel.photoCollectionViewHidden
             .map { $0 ? 0.0 : 110.0 }
             .drive(onNext: { [weak self] height in
-                self?.photoCollectView.snp.makeConstraints {
+                guard let self = self else { return }
+                self.photoCollectView.snp.remakeConstraints {
+                    $0.leading.trailing.equalToSuperview()
+                    $0.top.equalTo(self.addPhotoButton.snp.bottom).offset(12.0)
                     $0.height.equalTo(height)
                 }
             })
+            .disposed(by: bag)
+
+        viewModel.completeButtonValid
+            .drive(completeButton.rx.isEnabled)
+            .disposed(by: bag)
+
+        viewModel.completeButtonActivity
+            .drive(completeButton.rx.activityIndicator)
             .disposed(by: bag)
 
         // MARK: scene
 
         viewModel.pop
             .emit(onNext: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
+                self?.navigationController?.popViewController(animated: true, completion: {
+                    Singleton.shared.toastAlert.onNext("게시물이 등록되었습니다")
+                })
             })
             .disposed(by: bag)
     }
 
     private func attribute() {
-        hideKeyboardWhenTappedAround()
         view.backgroundColor = .white
         contentTextView.delegate = self
+        hideKeyboardWhenTappedAround()
+        addKeyboardNotification()
     }
 
     private func layout() {
@@ -295,7 +331,7 @@ class PostReviewViewController: UIViewController {
         navigationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         scrollView.snp.makeConstraints {
@@ -359,7 +395,7 @@ class PostReviewViewController: UIViewController {
         keywordListCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(keywordSubLabel.snp.bottom).offset(32.0)
-            let height = 286.0
+            let height = 290.0
             $0.height.equalTo(height)
         }
 
@@ -423,16 +459,22 @@ private extension PostReviewViewController {
         )
     }
 
-    @objc private func keyboardWillShow(_: Notification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            keyboardHeight.onNext(keyboardSize.height + UITextField.keyboardUpBottomHeight)
-//            navigationBottomHeight.onNext(16.0 - keyboardSize.height)
-//        }
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            contentView.snp.remakeConstraints {
+                $0.top.equalToSuperview().inset(-keyboardSize.height)
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview().inset(keyboardSize.height)
+                $0.width.equalToSuperview()
+            }
+        }
     }
 
-    @objc private func keyboardWillHide(_: Notification) {
-//        keyboardHeight.onNext(UITextField.keyboardDownBottomHeight)
-//        navigationBottomHeight.onNext(16.0)
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        contentView.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
     }
 
     // 주변 터치시 키보드 내림

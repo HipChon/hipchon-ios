@@ -5,8 +5,8 @@
 //  Created by 김범수 on 2022/03/12.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 class KeywordButton: UIButton {
     public lazy var logoImageView = UIImageView().then { _ in
@@ -15,9 +15,9 @@ class KeywordButton: UIButton {
     public lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
     }
-    
+
     private let bag = DisposeBag()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()

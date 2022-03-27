@@ -11,7 +11,7 @@ import UIKit
 
 class MenuListView: UIView {
     private lazy var menuLabelImageView = UIImageView().then {
-        $0.image = UIImage(named: "reviewWhite") ?? UIImage()
+        $0.image = UIImage(named: "menu") ?? UIImage()
     }
 
     private lazy var menuLabel = UILabel().then {
@@ -24,7 +24,7 @@ class MenuListView: UIView {
                                                            collectionViewLayout: UICollectionViewFlowLayout()).then {
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 11.0
-        let width = 170.0
+        let width = ((UIApplication.shared.windows.first?.frame.width ?? 0.0) - 2 * 22.0 - itemSpacing) / 2
         let height = 170.0
 
         layout.itemSize = CGSize(width: width, height: height)
@@ -38,6 +38,7 @@ class MenuListView: UIView {
         $0.showsVerticalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
+        $0.backgroundColor = .white
     }
 
     private let bag = DisposeBag()

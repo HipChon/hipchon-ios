@@ -14,6 +14,7 @@ class ReviewDetailViewModel {
     // MARK: subviewModels
 
     let reviewPlaceVM: Driver<ReviewPlaceViewModel>
+    let inputCommentVM = InputCommentViewModel()
 
     // MARK: viewModel -> view
 
@@ -29,10 +30,12 @@ class ReviewDetailViewModel {
     let content: Driver<String>
     let commentCellVMs: Driver<[CommentCellViewModel]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
+    let share: Signal<String>
 
     // MARK: view -> viewModel
 
     let likeButtonTapped = PublishRelay<Void>()
+    let reportButtonTapped = PublishRelay<Void>()
 
     init(_ data: ReviewModel) {
         let review = BehaviorSubject<ReviewModel>(value: data)
@@ -60,7 +63,7 @@ class ReviewDetailViewModel {
             .asDriver(onErrorJustReturn: 0)
 
         postDate = review
-            .compactMap { $0.postDt }
+            .compactMap { $0.formattedPostDate }
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
@@ -83,7 +86,11 @@ class ReviewDetailViewModel {
             .map { $0.map { CommentCellViewModel($0) } }
             .asDriver(onErrorJustReturn: [])
 
-        review
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myCommentRefresh
+        )
+            .withLatestFrom(review)
             .compactMap { $0.id }
             .flatMap { NetworkManager.shared.getComments($0) }
             .bind(to: comments)
@@ -145,5 +152,13 @@ class ReviewDetailViewModel {
 
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
+
+        share = reviewPlaceVM.flatMap { $0.share }
+        
+        reportButtonTapped
+            .subscribe(onNext: { _ in
+                Singleton.shared.toastAlert.onNext("게시물 신고가 완료되었습니다")
+            })
+            .disposed(by: bag)
     }
 }

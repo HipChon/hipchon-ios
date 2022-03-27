@@ -14,11 +14,30 @@ class ReviewModel: Codable {
     let imageURLs: [String]?
     let user: UserModel?
     let place: PlaceModel?
-    let likeCount: Int?
+    var likeCount: Int?
     let commentCount: Int?
-    let likeYn: Bool?
+    var likeYn: Bool?
+    
+    // 아직 안씀
+    let userPostCount: Int?
 
     enum Codingkeys: String, CodingKey {
-        case id, content, postDt, imageURLs, user, place, compliments, likeCount, commentCount, likeYn
+        case postDt, user, place, likeYn
+        
+        case id = "postId"
+        case imageURLs// = "imageList"
+        case likeCount = "likeCnt"
+        case commentCount = "commentCnt"
+        case content = "detail"
+        
+        case userPostCount = "userPostCnt"
+    }
+
+    var formattedPostDate: String? {
+        guard let postDt = postDt else {
+            return nil
+        }
+        let date = postDt.strToDate()
+        return date.dateToStr(dateFormat: "yyyy.MM.dd")
     }
 }

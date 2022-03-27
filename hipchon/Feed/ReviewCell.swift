@@ -74,7 +74,7 @@ class ReviewCell: UITableViewCell {
         $0.numberOfLines = 2
     }
 
-    private lazy var reviewPlaceView = ReviewPlaceView().then { _ in
+    public lazy var reviewPlaceView = ReviewPlaceView().then { _ in
     }
 
     private lazy var boundaryView = UIView().then {
@@ -82,7 +82,7 @@ class ReviewCell: UITableViewCell {
     }
 
     public static let identyfier = "ReviewCell"
-    private var bag = DisposeBag()
+    var bag = DisposeBag()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -102,7 +102,7 @@ class ReviewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+        profileImageView.layer.cornerRadius = 45.0 / 2 // profileImageView.frame.width / 2
     }
 
     func bind(_ viewModel: ReviewCellViewModel) {
@@ -169,6 +169,7 @@ class ReviewCell: UITableViewCell {
 
     private func attribute() {
         selectionStyle = .none
+        backgroundColor = .white
     }
 
     private func layout() {

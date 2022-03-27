@@ -1,6 +1,39 @@
 PODS:
   - Alamofire (5.5.0)
+  - AnyFormatKit (2.5.2)
   - Differentiator (5.0.0)
+  - KakaoSDK (2.8.6):
+    - KakaoSDKAuth (= 2.8.6)
+    - KakaoSDKCommon (= 2.8.6)
+    - KakaoSDKLink (= 2.8.6)
+    - KakaoSDKNavi (= 2.8.6)
+    - KakaoSDKStory (= 2.8.6)
+    - KakaoSDKTalk (= 2.8.6)
+    - KakaoSDKTemplate (= 2.8.6)
+    - KakaoSDKUser (= 2.8.6)
+  - KakaoSDKAuth (2.8.6):
+    - KakaoSDKCommon (= 2.8.6)
+  - KakaoSDKCommon (2.8.6):
+    - KakaoSDKCommon/Common (= 2.8.6)
+    - KakaoSDKCommon/Network (= 2.8.6)
+  - KakaoSDKCommon/Common (2.8.6)
+  - KakaoSDKCommon/Network (2.8.6):
+    - Alamofire (~> 5.1)
+    - KakaoSDKCommon/Common (= 2.8.6)
+  - KakaoSDKLink (2.8.6):
+    - KakaoSDKCommon (= 2.8.6)
+    - KakaoSDKTemplate (= 2.8.6)
+  - KakaoSDKNavi (2.8.6):
+    - KakaoSDKCommon/Common (= 2.8.6)
+  - KakaoSDKStory (2.8.6):
+    - KakaoSDKUser (= 2.8.6)
+  - KakaoSDKTalk (2.8.6):
+    - KakaoSDKTemplate (= 2.8.6)
+    - KakaoSDKUser (= 2.8.6)
+  - KakaoSDKTemplate (2.8.6):
+    - KakaoSDKCommon/Common (= 2.8.6)
+  - KakaoSDKUser (2.8.6):
+    - KakaoSDKAuth (= 2.8.6)
   - Kingfisher (7.2.0)
   - MaterialComponents/Availability (124.2.0)
   - MaterialComponents/BottomSheet (124.2.0):
@@ -32,6 +65,7 @@ PODS:
     - MaterialComponents/private/Math
     - MaterialComponents/ShadowLayer
   - NMapsMap (3.14.1)
+  - Pageboy (3.6.2)
   - PryntTrimmerView (4.0.2)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
@@ -48,13 +82,20 @@ PODS:
     - RxSwift (~> 6.0)
   - SnapKit (5.0.1)
   - SteviaLayout (4.7.3)
+  - SwiftKeychainWrapper (4.0.1)
+  - SwiftyJSON (5.0.1)
+  - Tabman (2.12.0):
+    - Pageboy (~> 3.6.0)
   - Then (2.7.0)
+  - Toast-Swift (5.0.1)
   - YPImagePicker (5.2.1):
     - PryntTrimmerView (= 4.0.2)
     - SteviaLayout (= 4.7.3)
 
 DEPENDENCIES:
   - Alamofire
+  - AnyFormatKit
+  - KakaoSDK
   - Kingfisher
   - MaterialComponents/BottomSheet
   - NMapsMap
@@ -63,16 +104,31 @@ DEPENDENCIES:
   - RxSwift
   - RxViewController
   - SnapKit
+  - SwiftKeychainWrapper
+  - SwiftyJSON
+  - Tabman (~> 2.12)
   - Then
+  - Toast-Swift (~> 5.0.1)
   - YPImagePicker
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - AnyFormatKit
     - Differentiator
+    - KakaoSDK
+    - KakaoSDKAuth
+    - KakaoSDKCommon
+    - KakaoSDKLink
+    - KakaoSDKNavi
+    - KakaoSDKStory
+    - KakaoSDKTalk
+    - KakaoSDKTemplate
+    - KakaoSDKUser
     - Kingfisher
     - MaterialComponents
     - NMapsMap
+    - Pageboy
     - PryntTrimmerView
     - RxCocoa
     - RxDataSources
@@ -81,15 +137,30 @@ SPEC REPOS:
     - RxViewController
     - SnapKit
     - SteviaLayout
+    - SwiftKeychainWrapper
+    - SwiftyJSON
+    - Tabman
     - Then
+    - Toast-Swift
     - YPImagePicker
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  AnyFormatKit: b0dbb2a5f2fe7a0fc97f401f8a219a47ee63a335
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  KakaoSDK: 29ca188341fbb8994586eac73c10209f3889b574
+  KakaoSDKAuth: 53e747a3bf343a3f3e87b14478d5a865d6c2acae
+  KakaoSDKCommon: 7e56600ff4c1bd82bed93fea4299b5a37f47e6a5
+  KakaoSDKLink: 59a6bdf7abd915aacba4c2671672ffe9654798dd
+  KakaoSDKNavi: 4df155701e60822a9f4426630ae2a38328e779be
+  KakaoSDKStory: afd97ece5b6b2a6d342533397654cea773954664
+  KakaoSDKTalk: d5b5a21281fa370f7d273a9140e82ba54aa9531a
+  KakaoSDKTemplate: 23bdcba233dce91fc948353c3b03d94f928d87d1
+  KakaoSDKUser: e79480355fa789f42e628dfba359fc21e9914f4c
   Kingfisher: 3ac0b75b155cabc0e544877d1a4deea29feece92
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
   NMapsMap: 79bae4e0d7cc5214dd6dabdb95687a1356616556
+  Pageboy: cf121b9dd48c63f3f281b2a9ec93d02e0f23879b
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
@@ -98,9 +169,13 @@ SPEC CHECKSUMS:
   RxViewController: 56486fa0afd629a1d6b5ba077f3b8cd9dc31b5d2
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SteviaLayout: c2ecdcff57d44e38fd2f65e54ad52aeae28ca0c4
+  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+  Tabman: 447a50447ed2869c39ab3b1a779327e43e067c4e
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   YPImagePicker: f36043210c10b0783034eb1947d6e06e31c461e4
 
-PODFILE CHECKSUM: a0c9445845e4fe86c40e6dead753690e68f86880
+PODFILE CHECKSUM: 0cb56028379a71e7ba34c566d46b00ed7027d00a
 
 COCOAPODS: 1.11.2

@@ -42,11 +42,6 @@ class SearchNavigationView: UIView {
     func bind(_ viewModel: SearchNavigationViewModel) {
         // MARK: view -> viewModel
 
-        backButton.rx.tap
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.backButtonTapped)
-            .disposed(by: bag)
-
         searchFilterButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: viewModel.searchFilterButtonTapped)
@@ -61,6 +56,15 @@ class SearchNavigationView: UIView {
 
         viewModel.setSearchFilterTitle
             .drive(searchFilterButton.rx.title())
+            .disposed(by: bag)
+
+        backButton.rx.tap
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .asSignal(onErrorJustReturn: ())
+            .emit(onNext: {
+                guard let topVC = UIApplication.topViewController() else { return }
+                topVC.navigationController?.popViewController(animated: true)
+            })
             .disposed(by: bag)
     }
 

@@ -13,6 +13,8 @@ class HomeSearchView: UIView {
         $0.setTitle("인원, 지역, 유형을 검색하세요", for: .normal)
         $0.setTitleColor(.secondaryLabel, for: .normal)
         $0.titleLabel?.font = UIFont(name: "GmarketSansTTFMedium", size: 14.0)
+        $0.contentHorizontalAlignment = .left
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 54.0, bottom: 0.0, right: 0.0)
     }
 
     private lazy var searchImageView = UIImageView().then {

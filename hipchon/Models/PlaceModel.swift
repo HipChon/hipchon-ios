@@ -12,10 +12,7 @@ class PlaceModel: Codable {
     let name: String?
     let region: String?
     let bookmarkYn: Bool?
-    let distance: Double?
-    let price: Double?
     let imageURLs: [String]?
-    let hashtags: [String]?
     let bookmarkCount: Int?
     let reviewCount: Int?
 
@@ -31,6 +28,15 @@ class PlaceModel: Codable {
     let reviews: [ReviewModel]?
     let keywords: [KeywordModel]?
     let menus: [MenuModel]?
+    let memo: MemoModel?
+    let hashtag: HashtagModel?
+    
+//    // 안씀
+//    let holiday: String?
+//    let markerImage: String?
+//    let hiple: Bool?
+//    let animal: Bool?
+//    let hashtag: [String]?
 
     var placeTitle: String? {
         guard let region = region,
@@ -39,20 +45,6 @@ class PlaceModel: Codable {
             return nil
         }
         return "[\(region)] \(name)"
-    }
-
-    var priceDes: String? {
-        guard let price = price else {
-            return nil
-        }
-        return "\(Int(price))원부터"
-    }
-
-    var distanceKm: String? {
-        guard let distance = distance else {
-            return nil
-        }
-        return "\(Int(distance))Km"
     }
 
     var nmgLatLng: NMGLatLng? {
@@ -64,8 +56,29 @@ class PlaceModel: Codable {
         return NMGLatLng(lat: geoLat, lng: geoLon)
     }
 
+//    enum CodingKeys: String, CodingKey {
+//        case id, name, region, bookmarkYn, distance, price, imageURLs, bookmarkCount, reviewCount
+//        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus, memo, hashtag
+//    }
+    
     enum CodingKeys: String, CodingKey {
-        case id, name, region, bookmarkYn, distance, price, imageURLs, hashtags, bookmarkCount, reviewCount
-        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus
+        case id = "placeId"
+        case name
+        case sector = "category"
+        case address
+        case region = "city"
+        case imageURLs// = "placeImage"
+        case bookmarkCount = "myplaceCnt"
+        case reviewCount = "postCnt"
+        case bookmarkYn = "isMyplace"
+        case number = "contact"
+        case businessHours = "openTime"
+        case link = "homepage"
+        case description = "oneLineIntro"
+        case geoLat = "latitude"
+        case geoLon = "longitude"
+        case reviews, keywords, menus, memo
+        case hashtag = "tmp"
+//        case holiday, markerImage, hiple, animal, hashtag
     }
 }

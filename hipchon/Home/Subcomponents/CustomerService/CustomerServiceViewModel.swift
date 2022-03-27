@@ -18,9 +18,10 @@ class CustomerServiceViewModel {
 
     init() {
         Observable.merge(
-            counselingButtonTapped.map { "https://open.kakao.com/o/s6w3Py0c" },
-            placeRegisterButtonTapped.map { "https://open.kakao.com/o/s6w3Py0c" }
+            counselingButtonTapped.asObservable(),
+            placeRegisterButtonTapped.asObservable()
         )
+        .map { _ in "http://pf.kakao.com/_xgHYNb/chat" }
         .bind(to: selectedURLStr)
         .disposed(by: bag)
     }
