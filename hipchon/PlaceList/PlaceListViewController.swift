@@ -21,8 +21,7 @@ class PlaceListViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
-    private lazy var emptyView = EmptyView().then {
-        $0.checkAuth = false
+    private lazy var emptyView = UnathorizedEnptyView().then { _ in
     }
 
     private let bag = DisposeBag()

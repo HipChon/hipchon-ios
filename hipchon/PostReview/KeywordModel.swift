@@ -13,7 +13,9 @@ struct KeywordModel: Codable {
     let count: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id, content, count
+        case id = "keywordId"
+        case content = "keyword"
+        case count = "postCnt"
     }
 
     init(id: Int?, content: String?) {

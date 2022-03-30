@@ -65,6 +65,7 @@ class MyPlaceCell: UITableViewCell {
 
     public static let identyfier = "ReviewListCell"
     private let bag = DisposeBag()
+    var viewModel: MyPlaceCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -78,6 +79,8 @@ class MyPlaceCell: UITableViewCell {
     }
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
+        self.viewModel = viewModel
+        
         // MARK: view -> viewModel
 
         memoButton.rx.tap
@@ -133,6 +136,7 @@ class MyPlaceCell: UITableViewCell {
                 guard let topVC = UIApplication.topViewController() else { return }
                 let memoVC = MemoViewController()
                 memoVC.bind(viewModel)
+                viewModel.befViewModel = self.viewModel
 
                 memoVC.providesPresentationContextTransitionStyle = true
                 memoVC.definesPresentationContext = true

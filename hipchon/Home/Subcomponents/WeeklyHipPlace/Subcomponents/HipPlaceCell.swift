@@ -158,6 +158,7 @@ class HipPlaceCell: UICollectionViewCell {
         nameLabel.snp.makeConstraints {
             $0.leading.equalTo(imageView.snp.trailing).offset(18.0)
             $0.top.equalToSuperview().inset(22.0)
+            $0.trailing.equalTo(bookmarkButton.snp.leading).offset(5.0)
         }
 
         regionLabel.snp.makeConstraints {

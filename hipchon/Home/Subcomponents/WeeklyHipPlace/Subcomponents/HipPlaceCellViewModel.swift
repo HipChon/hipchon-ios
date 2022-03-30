@@ -32,12 +32,12 @@ class HipPlaceCellViewModel {
         let place = BehaviorSubject<PlaceModel>(value: data)
 
         keywordVM = place
-            .compactMap { $0.keywords?.first }
+            .compactMap { $0.topKeyword }
             .map { KeywordViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
 
         url = place
-            .compactMap { $0.imageURLs?.first }
+            .compactMap { $0.topImageUrl }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
 

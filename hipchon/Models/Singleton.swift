@@ -58,7 +58,14 @@ class Singleton {
             .throttle(.seconds(4), scheduler: MainScheduler.instance)
             .asDriver(onErrorDriveWith: .empty())
             .drive(onNext: { error in
-                // TODO: 
+                guard let topVC = UIApplication.topViewController() else { return }
+                let errorAlertVC = ErrorAlertViewController()
+                errorAlertVC.bind()
+                errorAlertVC.providesPresentationContextTransitionStyle = true
+                errorAlertVC.definesPresentationContext = true
+                errorAlertVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                errorAlertVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
+                topVC.present(errorAlertVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
     }

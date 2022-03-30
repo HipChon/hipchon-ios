@@ -18,7 +18,7 @@ class AuthModel {
     let email: String?
     let password: String?
     var name: String?
-    var maketingAgree: Bool = false
+    var maketingAgree: Bool?
     var profileImage: UIImage?
 
     init() {

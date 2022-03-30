@@ -72,7 +72,7 @@ class MyCommentViewModel {
         pushReviewDetailVC = selectedCommentIdx
             .withLatestFrom(comments) { $1[$0] }
             .compactMap { $0.review }
-            .map { ReviewDetailViewModel($0) }
+            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

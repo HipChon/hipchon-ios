@@ -34,7 +34,7 @@ class FeedViewModel {
         let reviews = BehaviorSubject<[ReviewModel]>(value: [])
 
         reviewCellVMs = reviews
-            .map { $0.map { ReviewCellViewModel($0) } }
+            .map { $0.map { ReviewCellViewModel(BehaviorSubject<ReviewModel>(value: $0)) } }
             .asDriver(onErrorJustReturn: [])
 
         reviewTableViewHidden = reviews
@@ -129,7 +129,7 @@ class FeedViewModel {
 
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }
-            .map { ReviewDetailViewModel($0) }
+            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

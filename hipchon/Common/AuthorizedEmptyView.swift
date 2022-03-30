@@ -1,5 +1,5 @@
 //
-//  EmptyView.swift
+//  AuthorizedEmptyView.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/03/24.
@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class EmptyView: UIView {
+class AuthorizedEmptyView: UIView {
     
     private lazy var noResultView = UIView().then {
         $0.backgroundColor = .white
@@ -117,8 +117,9 @@ class EmptyView: UIView {
         }
 
         noResultImageView.snp.makeConstraints {
-            $0.height.equalToSuperview().multipliedBy(156.0 / 723.0)
-            $0.width.equalTo(noResultImageView.snp.height).multipliedBy(134.0 / 156.0)
+            $0.width.equalToSuperview().multipliedBy(134.0 / 390.0)
+//            $0.height.equalToSuperview().multipliedBy(156.0 / 723.0)
+            $0.height.equalTo(noResultImageView.snp.width).multipliedBy(156.0 / 134.0)
             $0.centerX.equalToSuperview().offset(-10.0)
             $0.centerY.equalToSuperview().multipliedBy(0.84)
         }

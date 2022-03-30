@@ -31,6 +31,9 @@ class PlaceModel: Codable {
     let memo: MemoModel?
     let hashtag: HashtagModel?
     
+    let topImageUrl: String?
+    let topKeyword: KeywordModel?
+    
 //    // 안씀
 //    let holiday: String?
 //    let markerImage: String?
@@ -67,7 +70,7 @@ class PlaceModel: Codable {
         case sector = "category"
         case address
         case region = "city"
-        case imageURLs// = "placeImage"
+        case imageURLs = "imageList"
         case bookmarkCount = "myplaceCnt"
         case reviewCount = "postCnt"
         case bookmarkYn = "isMyplace"
@@ -77,8 +80,11 @@ class PlaceModel: Codable {
         case description = "oneLineIntro"
         case geoLat = "latitude"
         case geoLon = "longitude"
-        case reviews, keywords, menus, memo
+        case keywords = "keywordList"
+        case reviews, menus, memo
         case hashtag = "tmp"
+        case topKeyword = "keyword"
+        case topImageUrl = "placeImage"
 //        case holiday, markerImage, hiple, animal, hashtag
     }
 }

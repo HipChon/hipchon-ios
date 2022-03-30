@@ -34,7 +34,7 @@ class ReviewListViewModel {
         let reviews = BehaviorSubject<[ReviewModel]>(value: [])
 
         reviewCellVMs = reviews
-            .map { $0.map { ReviewCellViewModel($0) } }
+            .map { $0.map { ReviewCellViewModel(BehaviorSubject<ReviewModel>(value: $0)) } }
             .asDriver(onErrorJustReturn: [])
 
         // 첫 load, sorting
@@ -134,7 +134,7 @@ class ReviewListViewModel {
 
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }
-            .map { ReviewDetailViewModel($0) }
+            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
             .asSignal(onErrorSignalWith: .empty())
 
         pushPostReviewVC = postReviewButtonTapped

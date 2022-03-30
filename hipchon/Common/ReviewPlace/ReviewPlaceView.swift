@@ -145,14 +145,12 @@ class ReviewPlaceView: UIView {
         bookmarkStackView.snp.makeConstraints {
 //            $0.trailing.equalTo(shareStackView.snp.leading).offset(18.0)
             $0.trailing.equalToSuperview().inset(62.0)
-            $0.top.equalToSuperview().inset(11.0)
-            $0.bottom.equalToSuperview().inset(9.0)
+            $0.centerY.equalToSuperview()
         }
 
         shareStackView.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(17.0)
-            $0.top.equalToSuperview().inset(11.0)
-            $0.bottom.equalToSuperview().inset(9.0)
+            $0.centerY.equalToSuperview()
         }
     }
 }

@@ -108,7 +108,7 @@ class PlaceDetailViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
-    private lazy var emptyView = EmptyView().then { _ in
+    private lazy var emptyView = UnathorizedEnptyView().then { _ in
     }
 
     private lazy var moreReviewButton = UIButton().then {

@@ -7,6 +7,7 @@
 
 import RxCocoa
 import RxSwift
+import UIKit
 
 class MyPlaceCellViewModel {
     private let bag = DisposeBag()
@@ -26,6 +27,7 @@ class MyPlaceCellViewModel {
     // MARK: view -> viewModel
 
     let memoButtonTapped = PublishRelay<Void>()
+    let memoChanged = PublishSubject<Void>()
 
     init(_ data: PlaceModel) {
         let place = BehaviorSubject<PlaceModel>(value: data)
@@ -55,17 +57,51 @@ class MyPlaceCellViewModel {
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
 
-        memoContent = place
-            .compactMap { $0.memo?.content }
+//        memoContent = place
+//            .compactMap { $0.memo?.content }
+//            .asDriver(onErrorJustReturn: "")
+//
+//        memoColor = place
+//            .compactMap { $0.memo?.backgroundColor }
+//            .asDriver(onErrorJustReturn: .gray05)
+        
+        memoContent = Observable.merge(Observable.just(()),
+                                       memoChanged.asObserver())
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .map { String($0) }
+            .compactMap { UserDefaults.standard.value(forKey: "\($0)Content") as? String }
             .asDriver(onErrorJustReturn: "")
 
-        memoColor = place
-            .compactMap { $0.memo?.backgroundColor }
-            .asDriver(onErrorJustReturn: .gray05)
+        memoColor = Observable.merge(Observable.just(()),
+                                     memoChanged.asObserver())
+            .withLatestFrom(place)
+            .compactMap { $0.id }
+            .map { String($0) }
+            .compactMap { UserDefaults.standard.value(forKey: "\($0)Color") as? String }
+            .map { $0.stringToMemoColor() }
+            .asDriver(onErrorJustReturn: .gray04)
 
         presentMemoVC = memoButtonTapped
             .withLatestFrom(place)
             .map { MemoViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
+    }
+}
+
+extension String {
+    func stringToMemoColor() -> UIColor {
+        switch self {
+        case "primary_green":
+            return .primary_green
+        case "secondary_yellow":
+            return .secondary_yellow
+        case "secondary_blue":
+            return .secondary_blue
+        case "secondary_purple":
+            return .secondary_purple
+        default:
+            return .gray04
+        }
     }
 }

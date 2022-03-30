@@ -9,16 +9,16 @@ import Alamofire
 import RxSwift
 
 class UserModel: Codable {
-
     let id: Int?
     let name: String?
     let profileImageURL: String?
     let reviewCount: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case profileImageURL, reviewCount
+        case id = "userId"
+        case name = "userName"
+        case profileImageURL = "userImage"
+        case reviewCount = "userPostCnt"
     }
 
     init(id: Int, name: String, profileImageURL: String, reviewCount: Int) {

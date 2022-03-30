@@ -20,7 +20,7 @@ class MyCommentViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
-    private lazy var emptyView = EmptyView().then { _ in
+    private lazy var emptyView = AuthorizedEmptyView().then { _ in
     }
 
     private let bag = DisposeBag()

@@ -22,12 +22,32 @@ class BestReviewViewModel {
     let selectedBestReview = PublishRelay<BestReviewModel>()
 
     init() {
-        reviews = NetworkManager.shared.getBestReview()
+        let reviewDatas = BehaviorSubject<[BestReviewModel]>(value: [])
+        
+        reviews = reviewDatas
             .asDriver(onErrorJustReturn: [])
 
+        Observable.just(())
+            .flatMap { ReviewAPI.shared.getBestReview() }
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    reviewDatas.onNext(data)
+                case .failure(let error):
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
+            })
+            .disposed(by: bag)
+        
+        
         pushReviewDetailVC = selectedBestReview
             .compactMap { $0.review }
-            .map { ReviewDetailViewModel($0) }
+            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

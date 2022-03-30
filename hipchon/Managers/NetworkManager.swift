@@ -1624,13 +1624,17 @@ class NetworkManager {
 
     // MARK: memo
 
-    func postMemo(placeId _: Int, content _: String, color _: String) -> Single<Bool> {
+    func postMemo(placeId: Int, content: String, color: String) -> Single<Bool> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
             print("postMemo")
+            
+            UserDefaults.standard.set(content, forKey: "\(placeId)Content")
+            UserDefaults.standard.set(color, forKey: "\(placeId)Color")
+            
             single(.success(true))
 
             return Disposables.create()

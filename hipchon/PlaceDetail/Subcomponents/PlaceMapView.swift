@@ -41,7 +41,7 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
         $0.allowsRotating = false
 
         $0.isUserInteractionEnabled = false
-        $0.zoomLevel = 7.5
+        $0.zoomLevel = 9.5 
 
         // Map display Info
         $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)

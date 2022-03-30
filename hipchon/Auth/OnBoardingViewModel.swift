@@ -44,8 +44,8 @@ class OnBoardingViewModel {
         
         // AuthModel
         
-        Observable.merge(kakaoId.map { AuthModel(id: $0, type: "카카오") },
-                         appleId.map { AuthModel(id: $0, type: "애플") })
+        Observable.merge(kakaoId.map { AuthModel(id: $0, type: "kakao") },
+                         appleId.map { AuthModel(id: $0, type: "apple") })
             .bind(to: authModel)
             .disposed(by: bag)
  
@@ -55,7 +55,7 @@ class OnBoardingViewModel {
         
         // 카카오 로그인
         kakaoLoginButtonTapped
-            .flatMap { AuthManager.shared.kakaoSignin() }
+            .flatMap { AuthAPI.shared.kakaoSignin() }
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let id):
@@ -67,38 +67,23 @@ class OnBoardingViewModel {
             })
             .disposed(by: bag)
         
-        authModel
-            .subscribe(onNext: {
-                print("@@@")
-                dump($0)
-            })
-        
-        signupedUser
-            .filter { $0 == true }
-            .withLatestFrom(authModel)
-            .subscribe(onNext: {
-                print("###")
-                dump($0)
-            })
-        
         // 힙촌 로그인
         
         authModel
             .compactMap { $0 }
-            .flatMap { AuthManager.shared.signin(authModel: $0) }
+            .flatMap { AuthAPI.shared.signin(authModel: $0) }
             .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let user): // 가입된 유저: 로그인
-                    Singleton.shared.currentUser.onNext(user)
+                case let .success(data): // 가입된 유저: 로그인
                     signupedUser.onNext(true)
+                    Singleton.shared.currentUser.onNext(data)
                 case .failure(let error): // 가입안된 유저: 회원가입
                     switch error.statusCode {
                     case 401:
                         signupedUser.onNext(false)
-                        return
                     default:
-                        break
+                        signupedUser.onNext(false)
                     }
                 }
             })

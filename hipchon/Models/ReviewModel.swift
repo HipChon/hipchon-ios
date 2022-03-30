@@ -25,7 +25,7 @@ class ReviewModel: Codable {
         case postDt, user, place, likeYn
         
         case id = "postId"
-        case imageURLs// = "imageList"
+        case imageURLs = "imageList"
         case likeCount = "likeCnt"
         case commentCount = "commentCnt"
         case content = "detail"

@@ -47,7 +47,7 @@
 		D828B38D27E6F52C007C2487 /* MyCommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B38C27E6F52C007C2487 /* MyCommentViewModel.swift */; };
 		D828B38F27E6F532007C2487 /* MyCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B38E27E6F532007C2487 /* MyCommentCell.swift */; };
 		D828B39127E6F539007C2487 /* MyCommentCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39027E6F539007C2487 /* MyCommentCellViewModel.swift */; };
-		D828B39327E78163007C2487 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39227E78163007C2487 /* AuthManager.swift */; };
+		D828B39327E78163007C2487 /* AuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39227E78163007C2487 /* AuthAPI.swift */; };
 		D828B39627E79D28007C2487 /* TermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39527E79D28007C2487 /* TermsViewController.swift */; };
 		D828B39827E79D2F007C2487 /* TermsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D828B39727E79D2F007C2487 /* TermsViewModel.swift */; };
 		D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */; };
@@ -69,7 +69,7 @@
 		D83304E727AC1AEB008E7DB7 /* DefaultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83304E627AC1AEB008E7DB7 /* DefaultViewModel.swift */; };
 		D83C6AE827EB5E2B00DDB33F /* UINavigtionViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AE727EB5E2B00DDB33F /* UINavigtionViewController+.swift */; };
 		D83C6AEA27EB712300DDB33F /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AE927EB712300DDB33F /* Singleton.swift */; };
-		D83C6AEC27EB87ED00DDB33F /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AEB27EB87ED00DDB33F /* EmptyView.swift */; };
+		D83C6AEC27EB87ED00DDB33F /* AuthorizedEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */; };
 		D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538A27AA59160047A05C /* PlaceListViewController.swift */; };
 		D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538C27AA59200047A05C /* PlaceListViewModel.swift */; };
 		D83E538F27AA65E10047A05C /* HashtagCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538E27AA65E10047A05C /* HashtagCellViewModel.swift */; };
@@ -109,6 +109,12 @@
 		D85B6A9527E576AA002DC7B1 /* UIScrollView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B6A9427E576AA002DC7B1 /* UIScrollView+.swift */; };
 		D85B6A9727E5853D002DC7B1 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B6A9627E5853D002DC7B1 /* Date+.swift */; };
 		D85B6A9927E5865A002DC7B1 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85B6A9827E5865A002DC7B1 /* String+.swift */; };
+		D85DDEC327F338B0006258F9 /* APIParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDEC227F338B0006258F9 /* APIParameters.swift */; };
+		D85DDEC527F34640006258F9 /* ErrorAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDEC427F34640006258F9 /* ErrorAlertViewController.swift */; };
+		D85DDEC727F36586006258F9 /* ReviewDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDEC627F36586006258F9 /* ReviewDetailHeaderView.swift */; };
+		D85DDEC927F36676006258F9 /* ReviewDetailHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDEC827F36676006258F9 /* ReviewDetailHeaderViewModel.swift */; };
+		D85DDECB27F36ED5006258F9 /* UnathorizedEnptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDECA27F36ED5006258F9 /* UnathorizedEnptyView.swift */; };
+		D85DDECD27F37FAE006258F9 /* MemoCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDECC27F37FAE006258F9 /* MemoCompleteViewController.swift */; };
 		D866678C27CE01520098A1EA /* GmarketSansTTFBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */; };
 		D866678D27CE01520098A1EA /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */; };
 		D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */; };
@@ -219,7 +225,7 @@
 		D828B38C27E6F52C007C2487 /* MyCommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentViewModel.swift; sourceTree = "<group>"; };
 		D828B38E27E6F532007C2487 /* MyCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentCell.swift; sourceTree = "<group>"; };
 		D828B39027E6F539007C2487 /* MyCommentCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentCellViewModel.swift; sourceTree = "<group>"; };
-		D828B39227E78163007C2487 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		D828B39227E78163007C2487 /* AuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAPI.swift; sourceTree = "<group>"; };
 		D828B39427E78E79007C2487 /* hipchon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hipchon.entitlements; sourceTree = "<group>"; };
 		D828B39527E79D28007C2487 /* TermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsViewController.swift; sourceTree = "<group>"; };
 		D828B39727E79D2F007C2487 /* TermsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsViewModel.swift; sourceTree = "<group>"; };
@@ -242,7 +248,7 @@
 		D83304E627AC1AEB008E7DB7 /* DefaultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultViewModel.swift; sourceTree = "<group>"; };
 		D83C6AE727EB5E2B00DDB33F /* UINavigtionViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigtionViewController+.swift"; sourceTree = "<group>"; };
 		D83C6AE927EB712300DDB33F /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
-		D83C6AEB27EB87ED00DDB33F /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizedEmptyView.swift; sourceTree = "<group>"; };
 		D83E538A27AA59160047A05C /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		D83E538C27AA59200047A05C /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		D83E538E27AA65E10047A05C /* HashtagCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCellViewModel.swift; sourceTree = "<group>"; };
@@ -282,6 +288,12 @@
 		D85B6A9427E576AA002DC7B1 /* UIScrollView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+.swift"; sourceTree = "<group>"; };
 		D85B6A9627E5853D002DC7B1 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D85B6A9827E5865A002DC7B1 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		D85DDEC227F338B0006258F9 /* APIParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIParameters.swift; sourceTree = "<group>"; };
+		D85DDEC427F34640006258F9 /* ErrorAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertViewController.swift; sourceTree = "<group>"; };
+		D85DDEC627F36586006258F9 /* ReviewDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDetailHeaderView.swift; sourceTree = "<group>"; };
+		D85DDEC827F36676006258F9 /* ReviewDetailHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDetailHeaderViewModel.swift; sourceTree = "<group>"; };
+		D85DDECA27F36ED5006258F9 /* UnathorizedEnptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnathorizedEnptyView.swift; sourceTree = "<group>"; };
+		D85DDECC27F37FAE006258F9 /* MemoCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCompleteViewController.swift; sourceTree = "<group>"; };
 		D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFBold.ttf; sourceTree = "<group>"; };
 		D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
 		D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxNMFMapView+.swift"; sourceTree = "<group>"; };
@@ -415,6 +427,7 @@
 				D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */,
 				D8B86CCA27E24261004EBFD9 /* MemoViewController.swift */,
 				D8B86CCC27E242C1004EBFD9 /* MemoViewModel.swift */,
+				D85DDECC27F37FAE006258F9 /* MemoCompleteViewController.swift */,
 			);
 			path = MyPlace;
 			sourceTree = "<group>";
@@ -451,6 +464,8 @@
 			children = (
 				D809200F27B28C3F000F057E /* ReviewDetailViewController.swift */,
 				D809201127B28C46000F057E /* ReviewDetailViewModel.swift */,
+				D85DDEC627F36586006258F9 /* ReviewDetailHeaderView.swift */,
+				D85DDEC827F36676006258F9 /* ReviewDetailHeaderViewModel.swift */,
 				D840779527DE0F100029C17E /* CommectCell.swift */,
 				D840779727DE0F160029C17E /* CommentCellViewModel.swift */,
 				D840779927DE169F0029C17E /* InputCommentView.swift */,
@@ -466,7 +481,8 @@
 				D8522AAD27F01AA900381EE8 /* ReviewAPI.swift */,
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
 				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
-				D828B39227E78163007C2487 /* AuthManager.swift */,
+				D828B39227E78163007C2487 /* AuthAPI.swift */,
+				D85DDEC227F338B0006258F9 /* APIParameters.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -724,9 +740,9 @@
 				D83304DD27AC1763008E7DB7 /* TabBarViewController.swift */,
 				D809200727B28703000F057E /* Models */,
 				D83304E327AC1A9E008E7DB7 /* Extensions */,
+				D8EBA6B927D65B9F00305CB5 /* Common */,
 				D80967BA27BA846C0015E7EF /* Managers */,
 				D841C86B27A6B60C005B8C25 /* Auth */,
-				D8EBA6B927D65B9F00305CB5 /* Common */,
 				D841C86C27A6B613005B8C25 /* Home */,
 				D871E0DC27DF726F00072522 /* HipsterPickDetail */,
 				D8091FFA27B28071000F057E /* Feed */,
@@ -875,8 +891,10 @@
 				D8237DEB27B9361800238387 /* ImageURLCell.swift */,
 				D8237DED27B9362800238387 /* ImageURLCellViewModel.swift */,
 				D812307627EA23390038A96C /* BottomButton.swift */,
-				D83C6AEB27EB87ED00DDB33F /* EmptyView.swift */,
+				D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */,
+				D85DDECA27F36ED5006258F9 /* UnathorizedEnptyView.swift */,
 				D8B84AE227EF6F43002AAA8E /* UnauthorizedAlertViewController.swift */,
+				D85DDEC427F34640006258F9 /* ErrorAlertViewController.swift */,
 				D854E43327E8E04F0088DD29 /* Keyword */,
 				D85B6A8D27E4E4C8002DC7B1 /* ReviewPlace */,
 				D8E019DC27C0D49600A167CA /* Filter */,
@@ -1003,6 +1021,7 @@
 			files = (
 				D89E8B8027DDDAEF00090C5B /* PhotoCellViewModel.swift in Sources */,
 				D89E8B7A27DDC3F000090C5B /* EditProfileViewController.swift in Sources */,
+				D85DDEC927F36676006258F9 /* ReviewDetailHeaderViewModel.swift in Sources */,
 				D8B86CBF27E21C40004EBFD9 /* KeywordListModel.swift in Sources */,
 				D83C6AEA27EB712300DDB33F /* Singleton.swift in Sources */,
 				D890251927DA58480099FACA /* PostReviewViewController.swift in Sources */,
@@ -1029,14 +1048,16 @@
 				D83E538F27AA65E10047A05C /* HashtagCellViewModel.swift in Sources */,
 				D8237DE627B925A700238387 /* BannerModel.swift in Sources */,
 				D8237DDF27B920EB00238387 /* SettingViewController.swift in Sources */,
+				D85DDEC327F338B0006258F9 /* APIParameters.swift in Sources */,
 				D88FAF9327A68A7900E41F4F /* LoginModel.swift in Sources */,
 				D83257DE27CFBF3500129E50 /* PlaceMapViewModel.swift in Sources */,
+				D85DDECB27F36ED5006258F9 /* UnathorizedEnptyView.swift in Sources */,
 				D83E539527AA6F310047A05C /* PlaceListCellViewModel.swift in Sources */,
 				D8091FF927B2803E000F057E /* FeedViewModel.swift in Sources */,
 				D809200127B28332000F057E /* PlaceDetailViewController.swift in Sources */,
 				D809200327B28368000F057E /* PlaceDetailViewModel.swift in Sources */,
 				D854E43027E8DE190088DD29 /* KeywordView.swift in Sources */,
-				D828B39327E78163007C2487 /* AuthManager.swift in Sources */,
+				D828B39327E78163007C2487 /* AuthAPI.swift in Sources */,
 				D8B86CCF27E244BA004EBFD9 /* UIApplication+.swift in Sources */,
 				D809200D27B28AD9000F057E /* ReviewCellViewModel.swift in Sources */,
 				D8237DEA27B9304400238387 /* HashtagModel.swift in Sources */,
@@ -1044,7 +1065,7 @@
 				D828B39127E6F539007C2487 /* MyCommentCellViewModel.swift in Sources */,
 				D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */,
 				D88FAF9127A689B500E41F4F /* LoginViewModel.swift in Sources */,
-				D83C6AEC27EB87ED00DDB33F /* EmptyView.swift in Sources */,
+				D83C6AEC27EB87ED00DDB33F /* AuthorizedEmptyView.swift in Sources */,
 				D809200B27B28831000F057E /* ReviewCell.swift in Sources */,
 				D8C72E9C27CE069F007C160A /* UIFont+.swift in Sources */,
 				D83304E027AC1A36008E7DB7 /* ProfileViewController.swift in Sources */,
@@ -1059,6 +1080,7 @@
 				D82A28DB27DC9FBB00E7C898 /* KeywordListCellViewModel.swift in Sources */,
 				D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */,
 				D8CF9C6927ECA94D00520CAF /* KeywordDetailViewModel.swift in Sources */,
+				D85DDEC727F36586006258F9 /* ReviewDetailHeaderView.swift in Sources */,
 				D8B86CBD27E21C06004EBFD9 /* KeywordModel.swift in Sources */,
 				D8E7756427A810C0005E037D /* FilterViewController.swift in Sources */,
 				D812307427E9FF100038A96C /* ReviewListViewModel.swift in Sources */,
@@ -1136,6 +1158,8 @@
 				D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */,
 				D80967B927BA83310015E7EF /* UserModel.swift in Sources */,
 				D83257D227CFA0F000129E50 /* HipsterPickDetailViewModel.swift in Sources */,
+				D85DDECD27F37FAE006258F9 /* MemoCompleteViewController.swift in Sources */,
+				D85DDEC527F34640006258F9 /* ErrorAlertViewController.swift in Sources */,
 				D84B352327CBA90500BF1A63 /* BestReviewViewModel.swift in Sources */,
 				D812307B27EA244E0038A96C /* RxBottomButton+.swift in Sources */,
 				D840813127C52CC500FA9D1B /* RegisterViewModel.swift in Sources */,

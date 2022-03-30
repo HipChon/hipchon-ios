@@ -9,8 +9,11 @@ import RxSwift
 import UIKit
 
 class BestReviewCell: UICollectionViewCell {
-    private lazy var imageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
+
+    private lazy var titleLabel = UILabel().then {
+        $0.font = .AppleSDGothicNeo(size: 16.0, type: .semibold)
+        $0.textColor = .black
+        $0.numberOfLines = 2
     }
 
     private lazy var hashtagImageView = UIImageView().then { _ in
@@ -31,8 +34,8 @@ class BestReviewCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: BestReviewCellViewModel) {
-        viewModel.url
-            .drive(imageView.rx.setImageKF)
+        viewModel.title
+            .drive(titleLabel.rx.text)
             .disposed(by: bag)
 
         viewModel.hashtagImageURL
@@ -40,16 +43,26 @@ class BestReviewCell: UICollectionViewCell {
             .disposed(by: bag)
     }
 
-    private func attribute() {}
+    private func attribute() {
+        let colors = [
+            UIColor.primary_green,
+            UIColor.secondary_red,
+            UIColor.secondary_blue,
+            UIColor.secondary_purple,
+            UIColor.secondary_yellow
+        ]
+        backgroundColor = colors[Int.random(in: (0...4))]
+    }
 
     private func layout() {
         [
-            imageView,
+            titleLabel,
             hashtagImageView,
         ].forEach { addSubview($0) }
 
-        imageView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        titleLabel.snp.makeConstraints {
+            $0.leading.top.trailing.equalToSuperview().inset(24.0)
+            $0.trailing.equalTo(hashtagImageView.snp.leading).offset(20.0)
         }
 
         hashtagImageView.snp.makeConstraints {
