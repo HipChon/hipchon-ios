@@ -28,8 +28,7 @@ class MemoViewModel {
     let changedColor = PublishRelay<UIColor>()
     let completeButtonTapped = PublishRelay<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
+    init(_ place: BehaviorSubject<PlaceModel>) {
         let memo = place
             .compactMap { $0.memo }
         let memoCoplete = PublishSubject<Void>()

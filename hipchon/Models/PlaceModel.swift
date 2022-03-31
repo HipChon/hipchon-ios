@@ -11,9 +11,9 @@ class PlaceModel: Codable {
     let id: Int?
     let name: String?
     let region: String?
-    let bookmarkYn: Bool?
+    var bookmarkYn: Bool?
     let imageURLs: [String]?
-    let bookmarkCount: Int?
+    var bookmarkCount: Int?
     let reviewCount: Int?
 
     // detail
@@ -86,5 +86,30 @@ class PlaceModel: Codable {
         case topKeyword = "keyword"
         case topImageUrl = "placeImage"
 //        case holiday, markerImage, hiple, animal, hashtag
+    }
+    
+    init() {
+        id = nil
+        name = nil
+        sector = nil
+        address = nil
+        region = nil
+        imageURLs = nil
+        bookmarkCount = nil
+        reviewCount = nil
+        bookmarkYn = nil
+        number = nil
+        businessHours = nil
+        link = nil
+        description = nil
+        geoLat = nil
+        geoLon = nil
+        keywords = nil
+        reviews = nil
+        menus = nil
+        memo = nil
+        hashtag = nil
+        topKeyword = nil
+        topImageUrl = nil
     }
 }

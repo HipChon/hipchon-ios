@@ -28,8 +28,7 @@ class PlaceListCellViewModel {
     
     let currentIdx = BehaviorRelay<Int>(value: 1)
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
+    init(_ place: BehaviorSubject<PlaceModel>) {
 
         keywordVM = place
             .compactMap { $0.keywords?.first }

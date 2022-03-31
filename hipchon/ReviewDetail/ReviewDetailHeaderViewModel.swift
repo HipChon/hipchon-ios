@@ -41,6 +41,7 @@ class ReviewDetailHeaderViewModel {
      
         reviewPlaceVM = review
             .compactMap { $0.place }
+            .map { BehaviorSubject<PlaceModel>(value: $0) }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
 
@@ -78,16 +79,22 @@ class ReviewDetailHeaderViewModel {
             .asDriver(onErrorJustReturn: "")
         
         // MARK: like
-        
-        let liked = review
-            .compactMap { $0.likeYn }
-        
-        let likeCounted = review
-            .compactMap { $0.likeCount }
-        
+
+        let liked = BehaviorSubject<Bool>(value: false)
+        let likeCounted = BehaviorSubject<Int>(value: 0)
         let addLike = PublishSubject<Void>()
         let deleteLike = PublishSubject<Void>()
         
+        review
+            .compactMap { $0.likeYn }
+            .bind(to: liked)
+            .disposed(by: bag)
+
+        review
+            .compactMap { $0.likeCount }
+            .bind(to: likeCounted)
+            .disposed(by: bag)
+
         likeYn = liked
             .asDriver(onErrorJustReturn: false)
 
@@ -111,7 +118,6 @@ class ReviewDetailHeaderViewModel {
             }
             .flatMap { NetworkManager.shared.addLike($0) }
             .subscribe(onNext: {
-                Singleton.shared.unauthorized.onNext(())
                 if $0 == true {
                     // reload
                 }

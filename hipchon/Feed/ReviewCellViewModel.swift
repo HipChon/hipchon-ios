@@ -34,10 +34,10 @@ class ReviewCellViewModel {
     let likeButtonTapped = PublishRelay<Void>()
 
     init(_ review: BehaviorSubject<ReviewModel>) {
-//        let review = BehaviorSubject<ReviewModel>(value: data)
 
         reviewPlaceVM = review
             .compactMap { $0.place }
+            .map { BehaviorSubject<PlaceModel>(value: $0) }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
 
@@ -61,11 +61,6 @@ class ReviewCellViewModel {
         reviewImageURLs = review
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
-        
-        review
-            .subscribe(onNext: {
-                dump($0)
-            })
 
         commentCount = review
             .compactMap { $0.commentCount }
@@ -77,23 +72,20 @@ class ReviewCellViewModel {
 
         // MARK: like
 
-        let liked = review
-            .compactMap { $0.likeYn }
-        
-        let likeCounted =  review
-            .compactMap { $0.likeCount }
+        let liked = BehaviorSubject<Bool>(value: false)
+        let likeCounted = BehaviorSubject<Int>(value: 0)
         let addLike = PublishSubject<Void>()
         let deleteLike = PublishSubject<Void>()
         
-//        review
-//            .compactMap { $0.likeYn }
-//            .bind(to: liked)
-//            .disposed(by: bag)
-//
-//        review
-//            .compactMap { $0.likeCount }
-//            .bind(to: likeCounted)
-//            .disposed(by: bag)
+        review
+            .compactMap { $0.likeYn }
+            .bind(to: liked)
+            .disposed(by: bag)
+
+        review
+            .compactMap { $0.likeCount }
+            .bind(to: likeCounted)
+            .disposed(by: bag)
 
         likeYn = liked
             .asDriver(onErrorJustReturn: false)
@@ -118,7 +110,6 @@ class ReviewCellViewModel {
             }
             .flatMap { NetworkManager.shared.addLike($0) }
             .subscribe(onNext: {
-                Singleton.shared.unauthorized.onNext(())
                 if $0 == true {
                     // reload
                 }
@@ -143,8 +134,9 @@ class ReviewCellViewModel {
 
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
-
+        
         share = reviewPlaceVM
             .flatMap { $0.share }
+            
     }
 }

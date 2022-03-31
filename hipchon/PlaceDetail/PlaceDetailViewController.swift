@@ -215,9 +215,10 @@ class PlaceDetailViewController: UIViewController {
             }
             .disposed(by: bag)
 
-        viewModel.reviewCellVms
-            .drive(reviewTableView.rx.items) { tv, _, viewModel in
+        viewModel.reviews
+            .drive(reviewTableView.rx.items) { tv, _, review in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
+                let viewModel = ReviewCellViewModel(review)
                 cell.imageView?.contentMode = .scaleAspectFill
                 cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)

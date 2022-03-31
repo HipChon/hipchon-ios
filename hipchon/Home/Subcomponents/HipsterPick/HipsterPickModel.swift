@@ -12,9 +12,11 @@ class HipsterPickModel: Codable {
     let title: String?
     let content: String?
     let place: PlaceModel?
-    let bookmarkYn: Bool?
+    let imageURLs: [String]?
 
     enum CodingKeys: String, CodingKey {
-        case id, title, content, place, bookmarkYn
+        case id, title, place
+        case content = "detail"
+        case imageURLs = "imageList"
     }
 }

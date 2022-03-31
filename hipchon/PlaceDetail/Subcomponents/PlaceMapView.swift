@@ -131,7 +131,7 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
 
         addressLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(23.0)
-            $0.trailing.equalTo(copyButton.snp.leading).offset(7.0)
+            $0.trailing.equalTo(copyButton.snp.leading).offset(10.0)
             $0.top.equalTo(mapView.snp.bottom).offset(23.0)
         }
 

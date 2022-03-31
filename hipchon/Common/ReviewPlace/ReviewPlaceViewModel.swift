@@ -26,9 +26,8 @@ class ReviewPlaceViewModel {
     let bookmarkButtonTapped = PublishRelay<Void>()
     let shareButtonTapped = PublishRelay<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
-
+    init(_ place: BehaviorSubject<PlaceModel>) {
+        
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
@@ -48,13 +47,17 @@ class ReviewPlaceViewModel {
 
         // MARK: bookmark
 
-        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
-
-        bookmarkYn = bookmarked
-            .asDriver(onErrorJustReturn: false)
-
+        let bookmarked = BehaviorSubject<Bool>(value: false)
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
+        
+        place
+            .compactMap { $0.bookmarkYn }
+            .bind(to: bookmarked)
+            .disposed(by: bag)
+        
+        bookmarkYn = bookmarked
+            .asDriver(onErrorJustReturn: false)
 
         bookmarkButtonTapped
             .withLatestFrom(bookmarked)
@@ -69,8 +72,11 @@ class ReviewPlaceViewModel {
             .disposed(by: bag)
 
         addBookmark
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(true)
+                $0.bookmarkYn = true
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) + 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -83,8 +89,11 @@ class ReviewPlaceViewModel {
             .disposed(by: bag)
 
         deleteBookmark
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(false)
+                $0.bookmarkYn = false
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) - 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -97,8 +106,7 @@ class ReviewPlaceViewModel {
             .disposed(by: bag)
 
         pushPlaceDetailVC = insideButtonTapped
-            .withLatestFrom(place)
-            .map { PlaceDetailViewModel($0) }
+            .map { PlaceDetailViewModel(place) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

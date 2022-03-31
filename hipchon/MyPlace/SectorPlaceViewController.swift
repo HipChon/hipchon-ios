@@ -44,9 +44,10 @@ class SectorPlaceViewController: UIViewController {
 
         // MARK: view -> viewModel
 
-        placeTableView.rx.modelSelected(PlaceModel.self)
+        placeTableView.rx.itemSelected
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.selectedPlace)
+            .map { $0.row }
+            .bind(to: viewModel.selectedPlaceIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view

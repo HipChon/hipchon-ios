@@ -19,18 +19,19 @@ class ReviewModel: Codable {
     var likeYn: Bool?
     
     // 아직 안씀
-    let userPostCount: Int?
+//    let userPostCount: Int?
 
-    enum Codingkeys: String, CodingKey {
-        case postDt, user, place, likeYn
-        
+    enum CodingKeys: String, CodingKey {
         case id = "postId"
-        case imageURLs = "imageList"
+        case imageURLs = "imageListddddddd"
         case likeCount = "likeCnt"
         case commentCount = "commentCnt"
         case content = "detail"
         
-        case userPostCount = "userPostCnt"
+        case postDt, likeYn
+        
+        case user, place
+//        case userPostCount = "userPostCnt"
     }
 
     var formattedPostDate: String? {

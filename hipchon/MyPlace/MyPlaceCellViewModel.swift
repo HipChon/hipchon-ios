@@ -29,8 +29,7 @@ class MyPlaceCellViewModel {
     let memoButtonTapped = PublishRelay<Void>()
     let memoChanged = PublishSubject<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
+    init(_ place: BehaviorSubject<PlaceModel>) {
 
         imageURL = place
             .compactMap { $0.imageURLs?.first }
@@ -83,8 +82,7 @@ class MyPlaceCellViewModel {
             .asDriver(onErrorJustReturn: .gray04)
 
         presentMemoVC = memoButtonTapped
-            .withLatestFrom(place)
-            .map { MemoViewModel($0) }
+            .map { MemoViewModel(place) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

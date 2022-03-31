@@ -62,9 +62,10 @@ class WeeklyHipPlaceView: UIView {
 
         // MARK: viewModel -> view
 
-        viewModel.hipPlacesCellVMs
-            .drive(hipPlaceCollectionView.rx.items) { col, idx, vm in
+        viewModel.hipPlaces
+            .drive(hipPlaceCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: HipPlaceCell.identyfier, for: IndexPath(row: idx, section: 0)) as? HipPlaceCell else { return UICollectionViewCell() }
+                let vm = HipPlaceCellViewModel(data)
                 cell.bind(vm)
                 return cell
             }

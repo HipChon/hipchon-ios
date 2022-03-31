@@ -91,9 +91,10 @@ class PlaceListViewController: UIViewController {
             .bind(to: viewModel.moreFetching)
             .disposed(by: bag)
 
-        viewModel.placeListCellVMs
-            .drive(placeTableView.rx.items) { tv, idx, vm in
+        viewModel.places
+            .drive(placeTableView.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: PlaceListCell.identyfier, for: IndexPath(row: idx, section: 0)) as? PlaceListCell else { return UITableViewCell() }
+                let vm = PlaceListCellViewModel(data)
                 cell.bind(vm)
                 return cell
             }

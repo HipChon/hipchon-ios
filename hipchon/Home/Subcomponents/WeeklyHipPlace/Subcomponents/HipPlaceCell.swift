@@ -50,6 +50,7 @@ class HipPlaceCell: UICollectionViewCell {
 
     public static let identyfier = "HipPlaceCell"
     private var bag = DisposeBag()
+    var viewModel: HipPlaceCellViewModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,6 +69,8 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
+        self.viewModel = viewModel
+        
         viewModel.keywordVM
             .drive(onNext: { [weak self] viewModel in
                 self?.keywordView.bind(viewModel)

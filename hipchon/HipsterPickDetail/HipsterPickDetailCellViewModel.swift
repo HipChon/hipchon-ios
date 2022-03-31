@@ -27,7 +27,7 @@ class HipsterPickDetailCellViewModel {
         let hipsterPick = BehaviorSubject<HipsterPickModel>(value: data)
 
         imageURLs = hipsterPick
-            .compactMap { $0.place?.imageURLs }
+            .compactMap { $0.imageURLs }
             .compactMap { $0.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
 
@@ -41,6 +41,7 @@ class HipsterPickDetailCellViewModel {
 
         reviewPlaceVM = hipsterPick
             .compactMap { $0.place }
+            .map { BehaviorSubject<PlaceModel>(value: $0) }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
 

@@ -18,7 +18,7 @@ class PlaceDetailViewModel {
     let placeMapVM = PlaceMapViewModel()
     let menuListVM: Signal<MenuListViewModel>
     let reviewKeywordListVM: Signal<ReviewKeywordListViewModel>
-    let reviewCellVms: Driver<[ReviewCellViewModel]>
+    let reviews: Driver<[BehaviorSubject<ReviewModel>]>
     let pushReviewListVC: Signal<ReviewListViewModel>
 
     // MARK: viewModel -> view
@@ -37,9 +37,8 @@ class PlaceDetailViewModel {
     let moreReviewButtonTapped = PublishRelay<Void>()
     let postReviewButtonTapped = PublishRelay<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
-        let reviews = BehaviorSubject<[ReviewModel]>(value: [])
+    init(_ place: BehaviorSubject<PlaceModel>) {
+        let reviewDatas = BehaviorSubject<[ReviewModel]>(value: [])
 
         // MARK: subViewModels
 
@@ -53,8 +52,8 @@ class PlaceDetailViewModel {
             })
             .disposed(by: bag)
 
-        reviewCellVms = reviews
-            .map { $0.map { ReviewCellViewModel(BehaviorSubject<ReviewModel>(value: $0)) } }
+        reviews = reviewDatas
+            .map { $0.map { BehaviorSubject<ReviewModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 
         // MARK: data
@@ -132,32 +131,47 @@ class PlaceDetailViewModel {
 
         // MARK: bookmark
 
-        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
-        let bookmarkCount = BehaviorSubject<Int>(value: data.bookmarkCount ?? 0)
-
+        let bookmarked = BehaviorSubject<Bool>(value: false)
+        let bookmarkCount = BehaviorSubject<Int>(value: 0)
+        let addBookmark = PublishSubject<Void>()
+        let deleteBookmark = PublishSubject<Void>()
+        
+        place
+            .compactMap { $0.bookmarkYn }
+            .bind(to: bookmarked)
+            .disposed(by: bag)
+        
+        place
+            .compactMap { $0.bookmarkCount }
+            .bind(to: bookmarkCount)
+            .disposed(by: bag)
+        
         bookmarked
             .bind(to: placeDesVM.bookmarkYn)
             .disposed(by: bag)
-
+        
         bookmarkCount
             .bind(to: placeDesVM.bookmarkCount)
             .disposed(by: bag)
 
-        let addBookmark = PublishSubject<Void>()
-        let deleteBookmark = PublishSubject<Void>()
-
         placeDesVM.bookmarkButtonTapped
             .withLatestFrom(bookmarked)
             .subscribe(onNext: {
-                $0 ? deleteBookmark.onNext(()) : addBookmark.onNext(())
+                switch $0 {
+                case true:
+                    deleteBookmark.onNext(())
+                case false:
+                    addBookmark.onNext(())
+                }
             })
             .disposed(by: bag)
 
         addBookmark
-            .withLatestFrom(bookmarkCount)
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(true)
-                bookmarkCount.onNext($0 + 1)
+                $0.bookmarkYn = true
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) + 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -170,10 +184,11 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
 
         deleteBookmark
-            .withLatestFrom(bookmarkCount)
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(false)
-                bookmarkCount.onNext($0 - 1)
+                $0.bookmarkYn = false
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) - 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -190,7 +205,7 @@ class PlaceDetailViewModel {
             .map { $0 == 0 }
             .asDriver(onErrorJustReturn: true)
 
-        reviewTableViewHidden = reviews
+        reviewTableViewHidden = reviewDatas
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: true)
 
@@ -226,7 +241,7 @@ class PlaceDetailViewModel {
 
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }
-            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
+            .map { ReviewDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
         pushReviewListVC = moreReviewButtonTapped
@@ -245,13 +260,13 @@ class PlaceDetailViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
-                    reviews.onNext(data)
+                    reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
                     case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviews.onNext([])
+                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:

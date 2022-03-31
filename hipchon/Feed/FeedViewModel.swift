@@ -21,7 +21,7 @@ class FeedViewModel {
 //    let presentFilterVC: Signal<FilterViewModel>
 //    let pushPlaceDetailVC: Signal<ReviewPlaceViewModel>
 
-    let reviewCellVMs: Driver<[ReviewCellViewModel]>
+    let reviews: Driver<[BehaviorSubject<ReviewModel>]>
 
     // MARK: view -> viewModel
 
@@ -31,13 +31,13 @@ class FeedViewModel {
     let selectedReviewIdx = PublishRelay<Int>()
 
     init() {
-        let reviews = BehaviorSubject<[ReviewModel]>(value: [])
+        let reviewDatas = BehaviorSubject<[ReviewModel]>(value: [])
 
-        reviewCellVMs = reviews
-            .map { $0.map { ReviewCellViewModel(BehaviorSubject<ReviewModel>(value: $0)) } }
+        reviews = reviewDatas
+            .map { $0.map { BehaviorSubject<ReviewModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 
-        reviewTableViewHidden = reviews
+        reviewTableViewHidden = reviewDatas
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: false)
 
@@ -50,13 +50,13 @@ class FeedViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
-                    reviews.onNext(data)
+                    reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
                     case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviews.onNext([])
+                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
@@ -82,13 +82,13 @@ class FeedViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
-                    reviews.onNext(data)
+                    reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
                     case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviews.onNext([])
+                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
@@ -129,7 +129,7 @@ class FeedViewModel {
 
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }
-            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
+            .map { ReviewDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

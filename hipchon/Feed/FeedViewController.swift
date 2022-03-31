@@ -115,10 +115,11 @@ class FeedViewController: UIViewController {
 
         // data binding
 
-        viewModel.reviewCellVMs
-            .drive(reviewTableView.rx.items) { tv, idx, viewModel in
+        viewModel.reviews
+            .drive(reviewTableView.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
+                let viewModel = ReviewCellViewModel(data)
                 cell.bind(viewModel)
 
                 viewModel.pushPlaceDetailVC

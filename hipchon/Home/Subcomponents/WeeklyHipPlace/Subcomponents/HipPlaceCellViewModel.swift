@@ -28,8 +28,7 @@ class HipPlaceCellViewModel {
 
     let bookmarkButtonTapped = PublishRelay<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
+    init(_ place:  BehaviorSubject<PlaceModel>) {
 
         keywordVM = place
             .compactMap { $0.topKeyword }
@@ -55,17 +54,26 @@ class HipPlaceCellViewModel {
 
         // MARK: bookmark
 
-        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
-        let bookmarkCounted = BehaviorSubject<Int>(value: data.bookmarkCount ?? 0)
+        let bookmarked = BehaviorSubject<Bool>(value: false)
+        let bookmarkCounted = BehaviorSubject<Int>(value: 0)
+        let addBookmark = PublishSubject<Void>()
+        let deleteBookmark = PublishSubject<Void>()
 
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
         
         bookmarkCount = bookmarkCounted
             .asDriver(onErrorJustReturn: 0)
-
-        let addBookmark = PublishSubject<Void>()
-        let deleteBookmark = PublishSubject<Void>()
+        
+        place
+            .compactMap { $0.bookmarkYn }
+            .bind(to: bookmarked)
+            .disposed(by: bag)
+        
+        place
+            .compactMap { $0.bookmarkCount }
+            .bind(to: bookmarkCounted)
+            .disposed(by: bag)
 
         bookmarkButtonTapped
             .withLatestFrom(bookmarked)
@@ -80,10 +88,11 @@ class HipPlaceCellViewModel {
             .disposed(by: bag)
 
         addBookmark
-            .withLatestFrom(bookmarkCounted)
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(true)
-                bookmarkCounted.onNext($0 + 1)
+                $0.bookmarkYn = true
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) + 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -96,10 +105,11 @@ class HipPlaceCellViewModel {
             .disposed(by: bag)
 
         deleteBookmark
-            .withLatestFrom(bookmarkCounted)
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(false)
-                bookmarkCounted.onNext($0 - 1)
+                $0.bookmarkYn = false
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) - 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
