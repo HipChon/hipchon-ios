@@ -24,7 +24,7 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private lazy var navigationView = UIView().then {
-        $0.backgroundColor = .red
+        $0.backgroundColor = .white
     }
 
     private lazy var backButton = UIButton().then {
@@ -174,6 +174,19 @@ class PlaceDetailViewController: UIViewController {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.postReviewButtonTapped)
             .disposed(by: bag)
+        
+        scrollView.rx.contentOffset
+            .asDriver()
+            .map { $0.y }
+            .map { y in
+                let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
+                let imageCollectionViewHeight = width * (263.0 / 390.0)
+                let navigationViewHeight = 68.0
+                return y < imageCollectionViewHeight - navigationViewHeight
+            }
+            .drive(navigationView.rx.isHidden)
+            .disposed(by: bag)
+        
 
         // MARK: viewModel -> view
 
@@ -283,11 +296,22 @@ class PlaceDetailViewController: UIViewController {
     }
 
     func layout() {
-        view.addSubview(scrollView)
+        [
+            scrollView,
+            navigationView
+        ].forEach {
+            view.addSubview($0)
+        }
 
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.edges.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        navigationView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.height.equalTo(68.0)
         }
 
         scrollView.addSubview(contentView)
@@ -296,8 +320,10 @@ class PlaceDetailViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
+        
 
         [
+            imageCollectView,
             placeDesView,
             firstBorderView,
             menuListView,
@@ -312,7 +338,6 @@ class PlaceDetailViewController: UIViewController {
             feedBorderView,
             reviewTableView,
             emptyView,
-            imageCollectView,
             moreReviewButton,
             marginView,
         ].forEach {
@@ -321,7 +346,7 @@ class PlaceDetailViewController: UIViewController {
         view.addSubview(backButton)
         backButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(28.0)
+            $0.centerY.equalTo(navigationView)
             $0.width.height.equalTo(28.0)
         }
 
