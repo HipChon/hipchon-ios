@@ -168,4 +168,41 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
+    
+    func getBestReviews() -> Single<Result<[BestReviewModel], APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/best") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+            print("getBestReviews")
+            
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data {
+                            do {
+                                let model = try JSONDecoder().decode([BestReviewModel].self, from: data)
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                        }
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
 }

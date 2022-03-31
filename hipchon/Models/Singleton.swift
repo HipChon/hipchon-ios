@@ -27,14 +27,14 @@ class Singleton {
 
     private init() {
         toastAlert
-            .throttle(.seconds(4), scheduler: MainScheduler.instance)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .asDriver(onErrorJustReturn: "")
             .drive(onNext: { text in
                 guard let topVC = UIApplication.topViewController() else { return }
                 var style = ToastStyle()
                 style.messageColor = .white
                 style.backgroundColor = .black
-                topVC.view.makeToast(text, duration: 3.0, position: .top, style: style)
+                topVC.view.makeToast(text, duration: 2.0, position: .top, style: style)
             })
             .disposed(by: bag)
 

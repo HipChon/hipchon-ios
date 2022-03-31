@@ -133,7 +133,7 @@ class ReviewPlaceView: UIView {
 
         labelStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(17.0)
-            $0.trailing.equalTo(bookmarkStackView.snp.leading).offset(5.0)
+            $0.width.equalToSuperview().multipliedBy(0.6)
             $0.top.equalToSuperview().inset(12.0)
             $0.bottom.equalToSuperview().inset(10.0)
         }

@@ -19,7 +19,9 @@ class HashtagModel: Codable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, name, imageURL
+        case id = "hasgtagId"
+        case name
+        case imageURL = "image"
     }
 
     static var model: [HashtagModel] {
