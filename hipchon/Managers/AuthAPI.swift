@@ -42,12 +42,12 @@ class AuthAPI {
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 } else { // 로그인 성공, userId 발급
                                     UserApi.shared.me(completion: { user, error in
-                                        guard let user = user else {
+                                        guard let user = user,
+                                              let id = user.id else {
                                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                             return
                                         }
-                                        let id = "\(user.id ?? -1)"
-                                        single(.success(.success(id)))
+                                        single(.success(.success(String(id))))
                                     })
                                 }
                             }
@@ -57,24 +57,24 @@ class AuthAPI {
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 } else { // 로그인 성공, userId 발급
                                     UserApi.shared.me(completion: { user, error in
-                                        guard let user = user else {
+                                        guard let user = user,
+                                              let id = user.id else {
                                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                             return
                                         }
-                                        let id = "\(user.id ?? -1)"
-                                        single(.success(.success(id)))
+                                        single(.success(.success(String(id))))
                                     })
                                 }
                             }
                         }
                     } else { // 토큰 유효 시, userId 발급
-                        UserApi.shared.me(completion: { user, errㅐㄱ in
-                            guard let user = user else {
+                        UserApi.shared.me(completion: { user, error in
+                            guard let user = user,
+                                  let id = user.id else {
                                 single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 return
                             }
-                            let id = "\(user.id ?? -1)"
-                            single(.success(.success(id)))
+                            single(.success(.success(String(id))))
                         })
                     }
                 }
@@ -85,12 +85,12 @@ class AuthAPI {
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                         } else { // 로그인 성공, userId 발급
                             UserApi.shared.me(completion: { user, error in
-                                guard let user = user else {
+                                guard let user = user,
+                                      let id = user.id else {
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                     return
                                 }
-                                let id = "\(user.id ?? -1)"
-                                single(.success(.success(id)))
+                                single(.success(.success(String(id))))
                             })
                         }
                     }
@@ -100,12 +100,12 @@ class AuthAPI {
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                         } else { // 로그인 성공, userId 발급
                             UserApi.shared.me(completion: { user, error in
-                                guard let user = user else {
+                                guard let user = user,
+                                      let id = user.id else {
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                     return
                                 }
-                                let id = "\(user.id ?? -1)"
-                                single(.success(.success(id)))
+                                single(.success(.success(String(id))))
                             })
                         }
                     }
@@ -125,53 +125,55 @@ class AuthAPI {
                   }
             
             
-            // TMP
-            KeychainWrapper.standard.set("1", forKey: "userId")
-            KeychainWrapper.standard.set(loginId, forKey: "loginId")
-            KeychainWrapper.standard.set(loginType, forKey: "loginType")
-            APIParameters.shared.refreshUserId()
-            
-            let user = UserModel(id: 1, name: "김범수", profileImageURL: "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9", reviewCount: 5)
-            single(.success(.success(user)))
-            
-            
+//            // TMP
+//            KeychainWrapper.standard.set("1", forKey: "userId")
+//            KeychainWrapper.standard.set(loginId, forKey: "loginId")
+//            KeychainWrapper.standard.set(loginType, forKey: "loginType")
+//            APIParameters.shared.refreshUserId()
+//            
+//            let user = UserModel(id: 1, name: "김범수", profileImageURL: "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9", reviewCount: 5)
+//            single(.success(.success(user)))
             
             
             
-//            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
-//                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
-//                return Disposables.create()
-//            }
-//            print("signin")
-//
-//            APIParameters.shared.session
-//                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
-//                .validate(statusCode: 200 ..< 300)
-//                .responseJSON(completionHandler: { response in
-//                    switch response.result {
-//                    case .success:
-//                        if let data = response.data {
-//                            do {
-//                                let model = try JSONDecoder().decode(UserModel.self, from: data)
-//
-//                                KeychainWrapper.standard.set(loginId, forKey: "loginId")
-//                                KeychainWrapper.standard.set(loginType, forKey: "loginType")
-//
-//                                single(.success(.success(model)))
-//                            } catch {
-//                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
-//                            }
-//                        }
-//                    case let .failure(error):
-//                        guard let statusCode = response.response?.statusCode else {
-//                            single(.success(.failure(APIError(statusCode: error._code,
-//                                                              description: error.errorDescription))))
-//                            return
-//                        }
-//                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
-//                    }
-//                })
-//                .resume()
+            
+            
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+            print("signin")
+
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data {
+                            do {
+                                let model = try JSONDecoder().decode(UserModel.self, from: data)
+
+                                KeychainWrapper.standard.set("1", forKey: "userId")
+                                KeychainWrapper.standard.set(loginId, forKey: "loginId")
+                                KeychainWrapper.standard.set(loginType, forKey: "loginType")
+                                APIParameters.shared.refreshUserId()
+
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                        }
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
             
             return Disposables.create()
         }

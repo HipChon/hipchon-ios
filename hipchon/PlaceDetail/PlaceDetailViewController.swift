@@ -159,6 +159,11 @@ class PlaceDetailViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: view -> viewModel
+        
+        rx.viewWillAppear
+            .map { _ in () }
+            .bind(to: viewModel.viewAppear)
+            .disposed(by: bag)
 
         reviewTableView.rx.itemSelected
             .map { $0.row }

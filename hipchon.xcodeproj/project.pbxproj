@@ -53,6 +53,7 @@
 		D82A28D927DC9F3400E7C898 /* KeywordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */; };
 		D82A28DB27DC9FBB00E7C898 /* KeywordListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28DA27DC9FBB00E7C898 /* KeywordListCellViewModel.swift */; };
 		D82A28DD27DCA08400E7C898 /* KeywordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A28DC27DCA08400E7C898 /* KeywordButton.swift */; };
+		D82EBEF027F7E4B100BA009C /* ElseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EBEEF27F7E4B100BA009C /* ElseAPI.swift */; };
 		D83257CC27CF9E9300129E50 /* BestReviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83257CB27CF9E9300129E50 /* BestReviewModel.swift */; };
 		D83257CE27CF9FF600129E50 /* BestReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83257CD27CF9FF500129E50 /* BestReviewCell.swift */; };
 		D83257D027CF9FFE00129E50 /* BestReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83257CF27CF9FFE00129E50 /* BestReviewCellViewModel.swift */; };
@@ -117,6 +118,9 @@
 		D85DDECD27F37FAE006258F9 /* MemoCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85DDECC27F37FAE006258F9 /* MemoCompleteViewController.swift */; };
 		D866678C27CE01520098A1EA /* GmarketSansTTFBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */; };
 		D866678D27CE01520098A1EA /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */; };
+		D86768C927F60AD9004D9620 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86768C827F60AD9004D9620 /* LoadingIndicator.swift */; };
+		D86768CB27F61C4A004D9620 /* PageBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86768CA27F61C4A004D9620 /* PageBarView.swift */; };
+		D86768CD27F61C51004D9620 /* PageBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86768CC27F61C51004D9620 /* PageBarViewModel.swift */; };
 		D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */; };
 		D86CC50D27D3438D004B74EA /* ReviewKeywordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50C27D3438D004B74EA /* ReviewKeywordListView.swift */; };
 		D86CC50F27D343EB004B74EA /* ReviewKeywordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86CC50E27D343EB004B74EA /* ReviewKeywordListViewModel.swift */; };
@@ -232,6 +236,7 @@
 		D82A28D827DC9F3400E7C898 /* KeywordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListCell.swift; sourceTree = "<group>"; };
 		D82A28DA27DC9FBB00E7C898 /* KeywordListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordListCellViewModel.swift; sourceTree = "<group>"; };
 		D82A28DC27DCA08400E7C898 /* KeywordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordButton.swift; sourceTree = "<group>"; };
+		D82EBEEF27F7E4B100BA009C /* ElseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElseAPI.swift; sourceTree = "<group>"; };
 		D83257CB27CF9E9300129E50 /* BestReviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewModel.swift; sourceTree = "<group>"; };
 		D83257CD27CF9FF500129E50 /* BestReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewCell.swift; sourceTree = "<group>"; };
 		D83257CF27CF9FFE00129E50 /* BestReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestReviewCellViewModel.swift; sourceTree = "<group>"; };
@@ -296,6 +301,9 @@
 		D85DDECC27F37FAE006258F9 /* MemoCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCompleteViewController.swift; sourceTree = "<group>"; };
 		D866678927CE01520098A1EA /* GmarketSansTTFBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFBold.ttf; sourceTree = "<group>"; };
 		D866678A27CE01520098A1EA /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
+		D86768C827F60AD9004D9620 /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
+		D86768CA27F61C4A004D9620 /* PageBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageBarView.swift; sourceTree = "<group>"; };
+		D86768CC27F61C51004D9620 /* PageBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageBarViewModel.swift; sourceTree = "<group>"; };
 		D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxNMFMapView+.swift"; sourceTree = "<group>"; };
 		D86CC50C27D3438D004B74EA /* ReviewKeywordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewKeywordListView.swift; sourceTree = "<group>"; };
 		D86CC50E27D343EB004B74EA /* ReviewKeywordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewKeywordListViewModel.swift; sourceTree = "<group>"; };
@@ -477,12 +485,13 @@
 		D80967BA27BA846C0015E7EF /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				D85DDEC227F338B0006258F9 /* APIParameters.swift */,
 				D8522AAB27F00B8F00381EE8 /* PlaceAPI.swift */,
 				D8522AAD27F01AA900381EE8 /* ReviewAPI.swift */,
+				D82EBEEF27F7E4B100BA009C /* ElseAPI.swift */,
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
 				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
 				D828B39227E78163007C2487 /* AuthAPI.swift */,
-				D85DDEC227F338B0006258F9 /* APIParameters.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -887,6 +896,8 @@
 				D8C72EBC27CE3C33007C160A /* RoundLabelViewModel.swift */,
 				D8EBA6BF27D6612500305CB5 /* PageCountView.swift */,
 				D8EBA6C127D6612E00305CB5 /* PageCountViewModel.swift */,
+				D86768CA27F61C4A004D9620 /* PageBarView.swift */,
+				D86768CC27F61C51004D9620 /* PageBarViewModel.swift */,
 				D890251127DA55AE0099FACA /* NavigationView.swift */,
 				D8237DEB27B9361800238387 /* ImageURLCell.swift */,
 				D8237DED27B9362800238387 /* ImageURLCellViewModel.swift */,
@@ -895,6 +906,7 @@
 				D85DDECA27F36ED5006258F9 /* UnathorizedEnptyView.swift */,
 				D8B84AE227EF6F43002AAA8E /* UnauthorizedAlertViewController.swift */,
 				D85DDEC427F34640006258F9 /* ErrorAlertViewController.swift */,
+				D86768C827F60AD9004D9620 /* LoadingIndicator.swift */,
 				D854E43327E8E04F0088DD29 /* Keyword */,
 				D85B6A8D27E4E4C8002DC7B1 /* ReviewPlace */,
 				D8E019DC27C0D49600A167CA /* Filter */,
@@ -1034,6 +1046,7 @@
 				D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */,
 				D83304E227AC1A43008E7DB7 /* ProfileViewModel.swift in Sources */,
 				D8091FFE27B280A1000F057E /* SectorPlaceViewModel.swift in Sources */,
+				D86768CB27F61C4A004D9620 /* PageBarView.swift in Sources */,
 				D84B352127CBA8FE00BF1A63 /* BestReviewView.swift in Sources */,
 				D828B39827E79D2F007C2487 /* TermsViewModel.swift in Sources */,
 				D80967BC27BA847E0015E7EF /* NetworkManager.swift in Sources */,
@@ -1167,6 +1180,7 @@
 				D840779627DE0F100029C17E /* CommectCell.swift in Sources */,
 				D86CC50F27D343EB004B74EA /* ReviewKeywordListViewModel.swift in Sources */,
 				D840779827DE0F160029C17E /* CommentCellViewModel.swift in Sources */,
+				D86768CD27F61C51004D9620 /* PageBarViewModel.swift in Sources */,
 				D8237DEC27B9361800238387 /* ImageURLCell.swift in Sources */,
 				D84B351B27CB9A6900BF1A63 /* SortViewController.swift in Sources */,
 				D83257D027CF9FFE00129E50 /* BestReviewCellViewModel.swift in Sources */,
@@ -1180,6 +1194,8 @@
 				D88FAF9527A68AD500E41F4F /* HomeViewController.swift in Sources */,
 				D809201027B28C3F000F057E /* ReviewDetailViewController.swift in Sources */,
 				D871F4B627BD18E300CCDE4D /* HipPlaceCellViewModel.swift in Sources */,
+				D82EBEF027F7E4B100BA009C /* ElseAPI.swift in Sources */,
+				D86768C927F60AD9004D9620 /* LoadingIndicator.swift in Sources */,
 				D86CC50D27D3438D004B74EA /* ReviewKeywordListView.swift in Sources */,
 				D871E0E327DF7B1D00072522 /* LocalHipsterPickModel.swift in Sources */,
 				D871F4BA27BD240100CCDE4D /* MyPlaceCellViewModel.swift in Sources */,

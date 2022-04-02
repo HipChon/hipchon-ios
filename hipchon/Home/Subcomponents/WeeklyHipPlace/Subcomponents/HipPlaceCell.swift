@@ -140,8 +140,8 @@ class HipPlaceCell: UICollectionViewCell {
 
         let countStackView = UIStackView(arrangedSubviews: [bookmarkCountImageView, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
         countStackView.axis = .horizontal
-        countStackView.alignment = .fill
-        countStackView.distribution = .fill
+        countStackView.alignment = .center
+        countStackView.distribution = .equalSpacing
         countStackView.spacing = 12.0
 
         [

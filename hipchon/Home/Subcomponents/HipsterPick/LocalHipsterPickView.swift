@@ -38,9 +38,8 @@ class LocalHipsterPickView: UIView {
         $0.isPagingEnabled = false
         $0.backgroundColor = .gray_background
     }
-
-    private lazy var selectView = UIView().then {
-        $0.backgroundColor = .black
+    
+    private lazy var pageBarView = PageBarView().then { _ in
     }
 
     override init(frame: CGRect) {
@@ -55,10 +54,20 @@ class LocalHipsterPickView: UIView {
     }
 
     func bind(_ viewModel: LocalHipsterPickViewModel) {
+        
+        // MARK: subViewModels
+        pageBarView.bind(viewModel.pageBarVM)
+        
         // MARK: view -> viewModel
 
         localHipsterPickCollectionView.rx.modelSelected(LocalHipsterPickModel.self)
             .bind(to: viewModel.selectedLocalHipsterPick)
+            .disposed(by: bag)
+        
+        localHipsterPickCollectionView.rx.contentOffset
+            .compactMap { [weak self] in $0.x / (self?.frame.width ?? 1.0) }
+            .distinctUntilChanged()
+            .bind(to: viewModel.offsetRatio)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
@@ -71,6 +80,7 @@ class LocalHipsterPickView: UIView {
                 return cell
             }
             .disposed(by: bag)
+        
     }
 
     private func attribute() {
@@ -81,7 +91,7 @@ class LocalHipsterPickView: UIView {
         [
             titleLabel,
             localHipsterPickCollectionView,
-            selectView,
+            pageBarView,
         ].forEach { addSubview($0) }
 
         titleLabel.snp.makeConstraints {
@@ -95,7 +105,7 @@ class LocalHipsterPickView: UIView {
             $0.height.equalTo(284.0)
         }
 
-        selectView.snp.makeConstraints {
+        pageBarView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
             $0.top.equalTo(localHipsterPickCollectionView.snp.bottom).offset(33.0)
             $0.height.equalTo(2.0)

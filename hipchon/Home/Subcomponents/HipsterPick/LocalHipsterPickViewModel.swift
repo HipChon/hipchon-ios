@@ -12,6 +12,9 @@ import RxSwift
 class LocalHipsterPickViewModel {
     private let bag = DisposeBag()
 
+    // MARK: subViewModels
+    let pageBarVM = PageBarViewModel()
+    
     // MARK: viewModel -> view
 
     let localHipsterPicks: Driver<[LocalHipsterPickModel]>
@@ -20,6 +23,7 @@ class LocalHipsterPickViewModel {
 
     
     let selectedLocalHipsterPick = PublishRelay<LocalHipsterPickModel>()
+    let offsetRatio = PublishRelay<Double>()
 
     init() {
         let localHipsterPickListData = BehaviorSubject<[LocalHipsterPickModel]>(value: [])
@@ -49,6 +53,16 @@ class LocalHipsterPickViewModel {
                     }
                 }
             })
+            .disposed(by: bag)
+        
+        localHipsterPicks
+            .map { $0.count }
+            .asObservable()
+            .bind(to: pageBarVM.entireCount)
+            .disposed(by: bag)
+        
+        offsetRatio
+            .bind(to: pageBarVM.offsetRatio)
             .disposed(by: bag)
 
     }

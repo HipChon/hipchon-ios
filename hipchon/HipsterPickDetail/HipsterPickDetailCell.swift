@@ -28,6 +28,9 @@ class HipsterPickDetailCell: UITableViewCell {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
+    
+    private lazy var pageCountView = PageCountView().then { _ in
+    }
 
     private lazy var titleLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 18.0, type: .semibold)
@@ -62,6 +65,8 @@ class HipsterPickDetailCell: UITableViewCell {
 
     func bind(_ viewModel: HipsterPickDetailCellViewModel) {
         // MARK: subViewModels
+        
+        pageCountView.bind(viewModel.pageCountVM)
 
         viewModel.reviewPlaceVM
             .drive(onNext: { [weak self] in
@@ -70,6 +75,12 @@ class HipsterPickDetailCell: UITableViewCell {
             .disposed(by: bag)
 
         // MARK: view -> viewModel
+        
+        imageCollectView.rx.contentOffset
+            .compactMap { [unowned self] in Int(($0.x + self.contentView.frame.width / 2) / self.contentView.frame.width) }
+            .distinctUntilChanged()
+            .bind(to: viewModel.currentIdx)
+            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -100,6 +111,7 @@ class HipsterPickDetailCell: UITableViewCell {
     private func layout() {
         [
             imageCollectView,
+            pageCountView,
             titleLabel,
             contentLabel,
             reviewPlace,
@@ -113,6 +125,11 @@ class HipsterPickDetailCell: UITableViewCell {
             let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
             let height = width * (238.0 / 390.0)
             $0.height.equalTo(height)
+        }
+        
+        pageCountView.snp.makeConstraints {
+            $0.trailing.equalTo(imageCollectView).inset(16.0)
+            $0.bottom.equalTo(imageCollectView).inset(16.0)
         }
 
         titleLabel.snp.makeConstraints {

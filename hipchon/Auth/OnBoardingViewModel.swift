@@ -55,14 +55,23 @@ class OnBoardingViewModel {
         
         // 카카오 로그인
         kakaoLoginButtonTapped
+            .filter { DeviceManager.shared.networkStatus }
             .flatMap { AuthAPI.shared.kakaoSignin() }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let id):
                     kakaoId.onNext(id)
                 case let .failure(error):
-                    // TODO: 에러 핸들링
-                    print(error.description)
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
@@ -70,9 +79,13 @@ class OnBoardingViewModel {
         // 힙촌 로그인
         
         authModel
-            .compactMap { $0 }
+            .compactMap { $0 } // nil filtering
+            .filter { _ in DeviceManager.shared.networkStatus }
+            .do(onNext: { _ in LoadingIndicator.showLoading() })
             .flatMap { AuthAPI.shared.signin(authModel: $0) }
-            .delay(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { _ in LoadingIndicator.hideLoading() })
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data): // 가입된 유저: 로그인
@@ -80,15 +93,18 @@ class OnBoardingViewModel {
                     Singleton.shared.currentUser.onNext(data)
                 case .failure(let error): // 가입안된 유저: 회원가입
                     switch error.statusCode {
-                    case 401:
-                        signupedUser.onNext(false)
+//                    case 401: // 401: unauthorized(토큰 만료)
+//                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
                         signupedUser.onNext(false)
+//                        Singleton.shared.unknownedError.onNext(error)
                     }
                 }
             })
             .disposed(by: bag)
-
+        
         // 회원가입
         pushTermsVC = signupedUser
             .filter { $0 == false }
@@ -108,7 +124,6 @@ class OnBoardingViewModel {
             .subscribe(onNext: {
                 login.onNext(())
             })
-//            .bind(to: login)
             .disposed(by: bag)
         
         pushMainVC = login

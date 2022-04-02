@@ -33,6 +33,7 @@ class PlaceDetailViewModel {
 
     // MARK: view -> viewModel
 
+    let viewAppear = PublishRelay<Void>()
     let selectedReviewIdx = PublishSubject<Int>()
     let moreReviewButtonTapped = PublishRelay<Void>()
     let postReviewButtonTapped = PublishRelay<Void>()
@@ -251,7 +252,8 @@ class PlaceDetailViewModel {
 
         // MARK: API
 
-        place
+        viewAppear
+            .withLatestFrom(place)
             .compactMap { $0.id }
             .filter {_ in DeviceManager.shared.networkStatus }
             .flatMap { ReviewAPI.shared.getPlaceReview($0) }
