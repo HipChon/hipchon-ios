@@ -272,7 +272,7 @@ class PlaceAPI {
 
     func addBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/mypost/\(APIParameters.shared.userId)/\(id)") else {
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
@@ -303,7 +303,7 @@ class PlaceAPI {
 
     func deleteBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/mypost/\(APIParameters.shared.userId)/\(id)") else {
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }

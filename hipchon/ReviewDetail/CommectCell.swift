@@ -34,7 +34,7 @@ class CommentCell: UITableViewCell {
         $0.setImage(UIImage(named: "report"), for: .normal)
         $0.setTitle(" 신고하기", for: .normal)
         $0.setTitleColor(.gray04, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 10.0, type: .regular)
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -132,7 +132,7 @@ class CommentCell: UITableViewCell {
         reportButton.snp.makeConstraints {
             $0.leading.equalTo(timeForNowLabel.snp.trailing).offset(16.0)
             $0.centerY.equalTo(timeForNowLabel)
-            $0.height.equalTo(20.0)
+            $0.height.equalTo(16.0)
         }
     }
 }

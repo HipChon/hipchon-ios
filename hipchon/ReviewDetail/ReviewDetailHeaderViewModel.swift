@@ -109,6 +109,7 @@ class ReviewDetailHeaderViewModel {
             .disposed(by: bag)
 
         addLike
+            .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(review)
             .compactMap {
                 $0.likeYn = true
@@ -116,15 +117,29 @@ class ReviewDetailHeaderViewModel {
                 review.onNext($0)
                 return $0.id
             }
-            .flatMap { NetworkManager.shared.addLike($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .flatMap { ReviewAPI.shared.addLike($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("좋아요 추가가 완료었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
 
         deleteLike
+            .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(review)
             .compactMap {
                 $0.likeYn = false
@@ -132,13 +147,27 @@ class ReviewDetailHeaderViewModel {
                 review.onNext($0)
                 return $0.id
             }
-            .flatMap { NetworkManager.shared.deleteLike($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .flatMap { ReviewAPI.shared.deleteLike($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("좋아요 추가가 완료었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
+
 
         // MARK: scene
 
