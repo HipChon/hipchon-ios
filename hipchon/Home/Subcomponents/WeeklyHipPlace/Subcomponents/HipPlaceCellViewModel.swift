@@ -88,6 +88,7 @@ class HipPlaceCellViewModel {
             .disposed(by: bag)
 
         addBookmark
+            .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)
             .do(onNext: {
                 $0.bookmarkYn = true
@@ -96,15 +97,29 @@ class HipPlaceCellViewModel {
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.addBookmark($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .flatMap { PlaceAPI.shared.addBookmark($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("저장 장소에 등록되었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
-
+    
         deleteBookmark
+            .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)
             .do(onNext: {
                 $0.bookmarkYn = false
@@ -113,10 +128,23 @@ class HipPlaceCellViewModel {
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.deleteBookmark($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .flatMap { PlaceAPI.shared.deleteBookmark($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("저장 장소에서 제거되었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)

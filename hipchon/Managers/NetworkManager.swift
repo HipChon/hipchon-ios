@@ -1175,38 +1175,7 @@ class NetworkManager {
         }
     }
 
-    // MARK: Bookmark
-
-    func addBookmark(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("addBookmark")
-            Singleton.shared.toastAlert.onNext("저장 장소에 추가되었습니다")
-            Singleton.shared.myPlaceRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
-
-    func deleteBookmark(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("deleteBookmark")
-            Singleton.shared.toastAlert.onNext("저장 장소에서 삭제되었습니다")
-            Singleton.shared.myPlaceRefresh.onNext(())
-            single(.success(true))
-            
-
-            return Disposables.create()
-        }
-    }
+   
 
     // MARK: Like
 

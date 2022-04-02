@@ -55,8 +55,7 @@ class EditProfileViewModel {
             .compactMap { $0 }
             .asSignal(onErrorSignalWith: .empty())
 
-        completeButtonValid = name
-            .asObservable()
+        completeButtonValid = inputNickName
             .map { $0.count >= 3 }
             .asDriver(onErrorJustReturn: false)
 

@@ -170,7 +170,7 @@ class AuthAPI {
                                                               description: error.errorDescription))))
                             return
                         }
-                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                         single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()
@@ -190,37 +190,72 @@ class AuthAPI {
             guard let loginId = authModel.id,
                   let loginType = authModel.type,
                   let isMarketing = authModel.maketingAgree,
-                  let name = authModel.name,
-                  let profileImage = authModel.profileImage,
-                  let imageData = profileImage.jpegData(compressionQuality: 1.0) else {
+                  let name = authModel.name
+//                  let profileImage = authModel.profileImage,
+//                  let imageData = profileImage.jpegData(compressionQuality: 1.0)
+            
+            else {
                       single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
                       return Disposables.create()
                   }
             
-            let header: HTTPHeaders = [
-                "Authorization": "some auth",
-                "Accept": "application/json",
-                "Content-Type": "multipart/form-data",
-            ]
+//            let header: HTTPHeaders = [
+//                "Authorization": "some auth",
+//                "Accept": "application/json",
+//                "Content-Type": "multipart/form-data",
+//            ]
+            
+//            let parameters: [String : Any] = [
+//                "loginId": loginId,
+//                "loginType": loginType,
+//                "isMarketing": isMarketing,
+//                "name": name,
+//            ]
+            
+//            APIParameters.shared.session
+//                .upload(multipartFormData: { multipartFormData in
+//                    for (key, value) in parameters {
+//                        multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
+//                    }
+//                    multipartFormData.append(imageData, withName: "profileImage", fileName: "\(name).png", mimeType: "image/png")
+//                }, to: url, usingThreshold: UInt64.init(), method: .post, headers: header)
+//                .response(completionHandler: { response in
+//                    switch response.result {
+//                    case .success:
+//                        single(.success(.success(())))
+//                    case let .failure(error):
+//                        guard let statusCode = response.response?.statusCode else {
+//                            single(.success(.failure(APIError(statusCode: error._code,
+//                                                              description: error.errorDescription))))
+//                            return
+//                        }
+//                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+//                    }
+//                })
+//                .resume()
+            
+            
+            // tmp
+
+            print("signin")
             
             let parameters: [String : Any] = [
                 "loginId": loginId,
                 "loginType": loginType,
                 "isMarketing": isMarketing,
                 "name": name,
+//                "profileImage": "",
+//                "email": "bsbs7605@naver.com"
+                
             ]
-            
+
             APIParameters.shared.session
-                .upload(multipartFormData: { multipartFormData in
-                    for (key, value) in parameters {
-                        multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
-                    }
-                    multipartFormData.append(imageData, withName: "profileImage", fileName: "\(name).png", mimeType: "image/png")
-                }, to: url, usingThreshold: UInt64.init(), method: .post, headers: header)
+                .request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
                 .response(completionHandler: { response in
                     switch response.result {
                     case .success:
-                        single(.success(.success(())))
+                            single(.success(.success(())))
                     case let .failure(error):
                         guard let statusCode = response.response?.statusCode else {
                             single(.success(.failure(APIError(statusCode: error._code,
@@ -238,43 +273,38 @@ class AuthAPI {
 
     func withdraw() -> Single<Result<Void, APIError>> {
         return Single.create { single in
-            //tmp
-            
- 
-            single(.success(.success(())))
-            print("withdraw")
-//            guard let loginId = KeychainWrapper.standard.string(forKey: "loginId"),
-//                  let loginType = KeychainWrapper.standard.string(forKey: "loginType") else {
-//                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
-//                      return Disposables.create()
-//                  }
-//
-//            guard let url = URL(string: "\(NetworkManager.uri)/api/\(loginType)/\(loginId)") else {
-//                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
-//                return Disposables.create()
-//            }
-//
-//            APIParameters.shared.session
-//                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
-//                .validate(statusCode: 200 ..< 300)
-//                .responseJSON(completionHandler: { response in
-//                    switch response.result {
-//                    case .success:
-//                        KeychainWrapper.standard.remove(forKey: "userId")
-//                        KeychainWrapper.standard.remove(forKey: "loginId")
-//                        KeychainWrapper.standard.remove(forKey: "loginType")
-//                        APIParameters.shared.refreshUserId()
-//                        single(.success(.success(())))
-//                    case let .failure(error):
-//                        guard let statusCode = response.response?.statusCode else {
-//                            single(.success(.failure(APIError(statusCode: error._code,
-//                                                              description: error.errorDescription))))
-//                            return
-//                        }
-//                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
-//                    }
-//                })
-//                .resume()
+            guard let loginId = KeychainWrapper.standard.string(forKey: "loginId"),
+                  let loginType = KeychainWrapper.standard.string(forKey: "loginType") else {
+                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
+                      return Disposables.create()
+                  }
+
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
+                return Disposables.create()
+            }
+
+            APIParameters.shared.session
+                .request(url, method: .delete, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        KeychainWrapper.standard.remove(forKey: "userId")
+                        KeychainWrapper.standard.remove(forKey: "loginId")
+                        KeychainWrapper.standard.remove(forKey: "loginType")
+                        APIParameters.shared.refreshUserId()
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
             
             return Disposables.create()
         }

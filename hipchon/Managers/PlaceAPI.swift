@@ -268,5 +268,67 @@ class PlaceAPI {
         }
     }
     
-    
+    // MARK: Bookmark
+
+    func addBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/mypost/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("addBookmark")
+
+            APIParameters.shared.session
+                .request(url, method: .post, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+
+    func deleteBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/mypost/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("deleteBookmark")
+
+            APIParameters.shared.session
+                .request(url, method: .delete, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
 }

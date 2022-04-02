@@ -26,8 +26,8 @@ class APIParameters {
     
     let session: Session = {
       let configuration = URLSessionConfiguration.af.default
-        configuration.timeoutIntervalForRequest = 5
-        configuration.timeoutIntervalForResource = 5
+        configuration.timeoutIntervalForRequest = 5000
+        configuration.timeoutIntervalForResource = 5000
       return Session(configuration: configuration)
     }()
     

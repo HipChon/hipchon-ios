@@ -16,8 +16,8 @@ class UserModel: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id = "userId"
-        case name = "userName"
-        case profileImageURL = "userImage"
+        case name
+        case profileImageURL = "profileImage"
         case reviewCount = "userPostCnt"
     }
 
