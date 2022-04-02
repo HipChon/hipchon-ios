@@ -89,8 +89,8 @@ class OnBoardingViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data): // 가입된 유저: 로그인
-                    signupedUser.onNext(true)
                     Singleton.shared.currentUser.onNext(data)
+                    signupedUser.onNext(true)
                 case .failure(let error): // 가입안된 유저: 회원가입
                     switch error.statusCode {
 //                    case 401: // 401: unauthorized(토큰 만료)

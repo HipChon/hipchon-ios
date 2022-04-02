@@ -39,12 +39,30 @@ class MyCommentCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         deleteButtonTapped
+            .filter { DeviceManager.shared.networkStatus }
+            .do(onNext: { LoadingIndicator.showLoading() })
             .withLatestFrom(comment)
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.deleteComment($0) }
-            .subscribe(onNext: { _ in
-                Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
+            .flatMap { ReviewAPI.shared.deleteComment(id: $0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { _ in LoadingIndicator.hideLoading() })
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
             })
             .disposed(by: bag)
+        
     }
 }

@@ -218,7 +218,7 @@ class ReviewAPI {
             print("addLike")
 
             APIParameters.shared.session
-                .request(url, method: .delete, parameters: nil, headers: APIParameters.shared.headers)
+                .request(url, method: .post, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
                 .response(completionHandler: { response in
                     switch response.result {
@@ -307,4 +307,76 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
+    
+    // MARK: post comment
+
+    func postComment(id: Int, content: String) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/postcomment") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("postComment")
+            
+            let parameters: [String: Any] = [
+                "detail": content,
+                "postId": id,
+                "userId": APIParameters.shared.userId
+            ]
+
+            APIParameters.shared.session
+                .request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+        
+    func deleteComment(id: Int) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/postcomment/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+            
+            print("deleteComment")
+            
+            APIParameters.shared.session
+                .request(url, method: .delete, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+            
+            return Disposables.create()
+        }
+    }
+        
+        
 }

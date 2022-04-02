@@ -39,12 +39,7 @@ class SettingViewModel {
 
         logoutButtonTapped
             .subscribe(onNext: {
-                // TODO: Local Info Delete
-                KeychainWrapper.standard.remove(forKey: "userId")
-                KeychainWrapper.standard.remove(forKey: "loginId")
-                KeychainWrapper.standard.remove(forKey: "loginType")
-                APIParameters.shared.refreshUserId()
-                Singleton.shared.currentUser.onNext(UserModel())
+                Singleton.shared.removeUserInfo()
                 logoutComplete.onNext(())
             })
             .disposed(by: bag)
@@ -54,11 +49,7 @@ class SettingViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
-                    KeychainWrapper.standard.remove(forKey: "userId")
-                    KeychainWrapper.standard.remove(forKey: "loginId")
-                    KeychainWrapper.standard.remove(forKey: "loginType")
-                    APIParameters.shared.refreshUserId()
-                    Singleton.shared.currentUser.onNext(UserModel())
+                    Singleton.shared.removeUserInfo()
                     withdrawComplete.onNext(())
                 case let .failure(error):
                     switch error.statusCode {

@@ -122,13 +122,13 @@ class FeedViewController: UIViewController {
                 let viewModel = ReviewCellViewModel(data)
                 cell.bind(viewModel)
 
-                viewModel.pushPlaceDetailVC
-                    .emit(onNext: { [weak self] viewModel in
-                        let placeDetailVC = PlaceDetailViewController()
-                        placeDetailVC.bind(viewModel)
-                        self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
-                    })
-                    .disposed(by: cell.bag)
+//                viewModel.pushPlaceDetailVC
+//                    .emit(onNext: { [weak self] viewModel in
+//                        let placeDetailVC = PlaceDetailViewController()
+//                        placeDetailVC.bind(viewModel)
+//                        self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+//                    })
+//                    .disposed(by: cell.bag)
 
                 viewModel.share
                     .emit(onNext: { [weak self] in

@@ -51,11 +51,10 @@ class ReviewDetailViewController: UIViewController {
     func bind(_ viewModel: ReviewDetailViewModel) {
         self.viewModel = viewModel
 
-
-        inputCommentView.bind(viewModel.inputCommentVM)
-
-        
-
+        if let inputCommentVM = viewModel.inputCommentVM {
+            inputCommentView.bind(inputCommentVM)
+        }
+     
         viewModel.reloadData
             .emit(onNext: { [weak self] in
                 self?.commentTableView.reloadData()

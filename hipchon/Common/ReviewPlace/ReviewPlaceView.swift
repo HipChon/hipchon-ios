@@ -86,6 +86,15 @@ class ReviewPlaceView: UIView {
             .compactMap { $0 ? UIImage(named: "bookmarkY_gray") : UIImage(named: "bookmarkN_gray") }
             .drive(bookmarkButton.rx.image)
             .disposed(by: bag)
+        
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let topVC = UIApplication.topViewController() else { return }
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                topVC.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     private func attribute() {

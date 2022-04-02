@@ -15,7 +15,7 @@ class UserModel: Codable {
     let reviewCount: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id = "userId"
+        case id
         case name
         case profileImageURL = "profileImage"
         case reviewCount = "userPostCnt"

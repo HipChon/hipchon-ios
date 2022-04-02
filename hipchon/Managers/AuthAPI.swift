@@ -154,7 +154,7 @@ class AuthAPI {
                             do {
                                 let model = try JSONDecoder().decode(UserModel.self, from: data)
 
-                                KeychainWrapper.standard.set("1", forKey: "userId")
+                                KeychainWrapper.standard.set("\(model.id ?? -1)", forKey: "userId")
                                 KeychainWrapper.standard.set(loginId, forKey: "loginId")
                                 KeychainWrapper.standard.set(loginType, forKey: "loginType")
                                 APIParameters.shared.refreshUserId()

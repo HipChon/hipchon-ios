@@ -42,8 +42,12 @@ class SectorPlaceViewModel {
             .map { $0.map { BehaviorSubject<PlaceModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 
-        // 첫 로드, sorting
-        sector
+        // 첫 로드, refresh
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myPlaceRefresh
+        )
+            .withLatestFrom(sector)
             .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { PlaceAPI.shared.getMyPlaces($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))

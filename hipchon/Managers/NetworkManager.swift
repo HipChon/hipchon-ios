@@ -1212,36 +1212,7 @@ class NetworkManager {
         }
     }
 
-    // MARK: post comment
-
-    func postComment(content: String) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("postComment")
-            Singleton.shared.myCommentRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
-
-    func deleteComment(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("deleteComment")
-            Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
-            Singleton.shared.myCommentRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
+   
     
     func reportComment(_: Int) -> Single<Bool> {
         return Single.create { single in

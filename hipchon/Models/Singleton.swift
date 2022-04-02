@@ -8,6 +8,7 @@
 import RxCocoa
 import RxSwift
 import Toast_Swift
+import SwiftKeychainWrapper
 
 class Singleton {
     public static let shared = Singleton()
@@ -18,6 +19,7 @@ class Singleton {
     let myPlaceRefresh = PublishSubject<Void>()
     let myReviewRefresh = PublishSubject<Void>()
     let likedReviewRefresh = PublishSubject<Void>()
+    let commentRefresh = PublishSubject<Void>()
     let myCommentRefresh = PublishSubject<Void>()
 
     let toastAlert = PublishSubject<String>()
@@ -68,5 +70,13 @@ class Singleton {
                 topVC.present(errorAlertVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
+    }
+    
+    func removeUserInfo() {
+        KeychainWrapper.standard.remove(forKey: "userId")
+        KeychainWrapper.standard.remove(forKey: "loginId")
+        KeychainWrapper.standard.remove(forKey: "loginType")
+        Singleton.shared.currentUser.onNext(UserModel())
+        APIParameters.shared.refreshUserId()
     }
 }

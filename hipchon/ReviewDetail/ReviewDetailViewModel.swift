@@ -14,7 +14,7 @@ class ReviewDetailViewModel {
 
     // MARK: subviewModels
 
-    let inputCommentVM = InputCommentViewModel()
+    var inputCommentVM: InputCommentViewModel?
     var reviewDetailHeaderVM: ReviewDetailHeaderViewModel?
 
     // MARK: viewModel -> view
@@ -26,7 +26,7 @@ class ReviewDetailViewModel {
 //        let review = BehaviorSubject<ReviewModel>(value: data)
 
         reviewDetailHeaderVM = ReviewDetailHeaderViewModel(review)
-            
+        inputCommentVM = InputCommentViewModel(review)
         
        
 
@@ -36,7 +36,7 @@ class ReviewDetailViewModel {
 
         Observable.merge(
             Observable.just(()),
-            Singleton.shared.myCommentRefresh
+            Singleton.shared.commentRefresh
         )
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(review)
