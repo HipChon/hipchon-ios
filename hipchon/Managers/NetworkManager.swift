@@ -1175,68 +1175,9 @@ class NetworkManager {
         }
     }
 
-    // MARK: Bookmark
+   
 
-    func addBookmark(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("addBookmark")
-            Singleton.shared.toastAlert.onNext("저장 장소에 추가되었습니다")
-            Singleton.shared.myPlaceRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
-
-    func deleteBookmark(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/bookmarks") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("deleteBookmark")
-            Singleton.shared.toastAlert.onNext("저장 장소에서 삭제되었습니다")
-            Singleton.shared.myPlaceRefresh.onNext(())
-            single(.success(true))
-            
-
-            return Disposables.create()
-        }
-    }
-
-    // MARK: Like
-
-    func addLike(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("addLike")
-            Singleton.shared.likedReviewRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
-
-    func deleteLike(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("deleteLike")
-            Singleton.shared.likedReviewRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
+    
 
     // MARK: post review
 
@@ -1271,36 +1212,7 @@ class NetworkManager {
         }
     }
 
-    // MARK: post comment
-
-    func postComment(content: String) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("postComment")
-            Singleton.shared.myCommentRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
-
-    func deleteComment(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("deleteComment")
-            Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
-            Singleton.shared.myCommentRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
+   
     
     func reportComment(_: Int) -> Single<Bool> {
         return Single.create { single in
@@ -1319,189 +1231,7 @@ class NetworkManager {
 
     // MARK: comments
 
-    func getComments(_: Int) -> Single<[CommentModel]> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/comments") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-           
-            print("getComments")
-            let str = """
-            [
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
-                    "dateTime": "2022-03-15T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2022-03-13T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2021-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2020-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
-                    "dateTime": "2022-03-15T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2022-03-13T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2021-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2020-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
-                    "dateTime": "2022-03-15T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2022-03-13T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2021-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2020-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다. 메뉴도 다양하고 모든 메뉴가 신선하고 맛있었습니다. 탁 트인 뷰를 보며 간만에 힐링했습니다.",
-                    "dateTime": "2022-03-15T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2022-03-13T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2021-03-19T11:02:11.111"
-                },
-                {
-                    "id": 1,
-                    "user": {
-                        "id": 1,
-                        "name": "김범수",
-                        "profileImageURL": "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9"
-                    },
-                    "content": "완전 재밌었겠네용!!",
-                    "dateTime": "2020-03-19T11:02:11.111"
-                }
-            ]
-            """
-
-            do {
-                let model = try JSONDecoder().decode([CommentModel].self, from: Data(str.utf8))
-                single(.success(model))
-            } catch {
-                single(.failure(NetworkError.parsing))
-            }
-
-            return Disposables.create()
-        }
-    }
+    
 
     func getMyComments() -> Single<[CommentModel]> {
         return Single.create { single in
@@ -1624,13 +1354,17 @@ class NetworkManager {
 
     // MARK: memo
 
-    func postMemo(placeId _: Int, content _: String, color _: String) -> Single<Bool> {
+    func postMemo(placeId: Int, content: String, color: String) -> Single<Bool> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
                 single(.failure(NetworkError.uri))
                 return Disposables.create()
             }
             print("postMemo")
+            
+            UserDefaults.standard.set(content, forKey: "\(placeId)Content")
+            UserDefaults.standard.set(color, forKey: "\(placeId)Color")
+            
             single(.success(true))
 
             return Disposables.create()

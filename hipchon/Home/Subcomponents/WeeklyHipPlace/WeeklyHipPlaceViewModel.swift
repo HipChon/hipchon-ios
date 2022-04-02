@@ -14,18 +14,18 @@ class WeeklyHipPlaceViewModel {
 
     // MARK: viewModel -> view
 
-    let hipPlacesCellVMs: Driver<[HipPlaceCellViewModel]>
+    let hipPlaces: Driver<[BehaviorSubject<PlaceModel>]>
 
     // MARK: view -> viewModel
 
     let selectedIdx = PublishRelay<Int>()
-    let selectedHipPlace = PublishRelay<PlaceModel>()
+    let selectedHipPlace = PublishRelay<BehaviorSubject<PlaceModel>>()
 
     init() {
-        let hipPlaces = BehaviorSubject<[PlaceModel]>(value: [])
+        let hipPlaceDatas = BehaviorSubject<[PlaceModel]>(value: [])
 
-        hipPlacesCellVMs = hipPlaces
-            .map { $0.map { HipPlaceCellViewModel($0) } }
+        hipPlaces = hipPlaceDatas
+            .map { $0.map { BehaviorSubject<PlaceModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 
         PlaceAPI.shared.getWeeklyHipPlace()
@@ -33,7 +33,7 @@ class WeeklyHipPlaceViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
-                    hipPlaces.onNext(data)
+                    hipPlaceDatas.onNext(data)
                 case .failure(let error):
                     switch error.statusCode {
                     case 401:

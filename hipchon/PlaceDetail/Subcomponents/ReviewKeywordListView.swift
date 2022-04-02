@@ -27,6 +27,12 @@ class ReviewKeywordListView: UIView {
 
     private lazy var thirdKeywordView = KeywordDetailView().then { _ in
     }
+    
+    private lazy var emptyLabel = UILabel().then {
+        $0.text = "아직 키워드가 없어요"
+        $0.font = .GmarketSans(size: 15.0, type: .medium)
+        $0.textColor = .black
+    }
 
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
@@ -78,6 +84,7 @@ class ReviewKeywordListView: UIView {
             reviewLabelImageView,
             reviewLabel,
             firstKeywordView,
+            emptyLabel,
             secondKeywordView,
             thirdKeywordView,
             boundaryView,
@@ -105,6 +112,10 @@ class ReviewKeywordListView: UIView {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(firstKeywordView.snp.bottom).offset(8.0)
             $0.height.equalTo(40.0)
+        }
+        
+        emptyLabel.snp.makeConstraints {
+            $0.centerY.centerX.equalTo(secondKeywordView)
         }
 
         thirdKeywordView.snp.makeConstraints {

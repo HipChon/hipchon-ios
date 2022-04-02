@@ -33,11 +33,11 @@ class ReviewCellViewModel {
 
     let likeButtonTapped = PublishRelay<Void>()
 
-    init(_ data: ReviewModel) {
-        let review = BehaviorSubject<ReviewModel>(value: data)
+    init(_ review: BehaviorSubject<ReviewModel>) {
 
         reviewPlaceVM = review
             .compactMap { $0.place }
+            .map { BehaviorSubject<PlaceModel>(value: $0) }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
 
@@ -72,10 +72,20 @@ class ReviewCellViewModel {
 
         // MARK: like
 
-        let liked = BehaviorSubject<Bool>(value: data.likeYn ?? false)
-        let likeCounted = BehaviorSubject<Int>(value: data.likeCount ?? 0)
+        let liked = BehaviorSubject<Bool>(value: false)
+        let likeCounted = BehaviorSubject<Int>(value: 0)
         let addLike = PublishSubject<Void>()
         let deleteLike = PublishSubject<Void>()
+        
+        review
+            .compactMap { $0.likeYn }
+            .bind(to: liked)
+            .disposed(by: bag)
+
+        review
+            .compactMap { $0.likeCount }
+            .bind(to: likeCounted)
+            .disposed(by: bag)
 
         likeYn = liked
             .asDriver(onErrorJustReturn: false)
@@ -91,42 +101,70 @@ class ReviewCellViewModel {
             .disposed(by: bag)
 
         addLike
-            .withLatestFrom(likeCounted)
-            .do(onNext: {
-                liked.onNext(true)
-                likeCounted.onNext($0 + 1)
-            })
+            .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(review)
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.addLike($0) }
-            .subscribe(onNext: {
-                Singleton.shared.unauthorized.onNext(())
-                if $0 == true {
-                    // reload
+            .compactMap {
+                $0.likeYn = true
+                $0.likeCount = ($0.likeCount ?? 0) + 1
+                review.onNext($0)
+                return $0.id
+            }
+            .flatMap { ReviewAPI.shared.addLike($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("좋아요 추가가 완료었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
 
         deleteLike
-            .withLatestFrom(likeCounted)
-            .do(onNext: {
-                liked.onNext(false)
-                likeCounted.onNext($0 - 1)
-            })
+            .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(review)
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.deleteLike($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .compactMap {
+                $0.likeYn = false
+                $0.likeCount = ($0.likeCount ?? 0) - 1
+                review.onNext($0)
+                return $0.id
+            }
+            .flatMap { ReviewAPI.shared.deleteLike($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("좋아요 추가가 완료었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
 
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
-
+        
         share = reviewPlaceVM
             .flatMap { $0.share }
+            
     }
 }

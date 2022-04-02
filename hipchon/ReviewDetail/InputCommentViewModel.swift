@@ -23,7 +23,7 @@ class InputCommentViewModel {
     let content = BehaviorRelay<String>(value: "")
     let registerButtonTapped = PublishRelay<Void>()
 
-    init() {
+    init(_ review: BehaviorSubject<ReviewModel>) {
         let postComplete = PublishSubject<Void>()
         
         profileImageURL = Singleton.shared.currentUser
@@ -36,12 +36,29 @@ class InputCommentViewModel {
             .asDriver(onErrorJustReturn: true)
 
         registerButtonTapped
-            .withLatestFrom(content)
-            .flatMap { NetworkManager.shared.postComment(content: $0) }
-            .subscribe(onNext: { _ in
-                // success
-                postComplete.onNext(())
-                Singleton.shared.toastAlert.onNext("댓글 작성이 완료되었습니다")
+            .filter { DeviceManager.shared.networkStatus }
+            .do(onNext: { LoadingIndicator.showLoading() })
+            .withLatestFrom(Observable.combineLatest(review.compactMap { $0.id }, content))
+            .flatMap { ReviewAPI.shared.postComment(id: $0, content: $1) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { _ in LoadingIndicator.hideLoading() })
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    postComplete.onNext(())
+                    Singleton.shared.commentRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("댓글 작성이 완료되었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
             })
             .disposed(by: bag)
         

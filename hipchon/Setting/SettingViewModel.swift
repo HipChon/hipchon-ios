@@ -39,26 +39,31 @@ class SettingViewModel {
 
         logoutButtonTapped
             .subscribe(onNext: {
-                // TODO: Local Info Delete
-                KeychainWrapper.standard.remove(forKey: "accessToken")
+                Singleton.shared.removeUserInfo()
                 logoutComplete.onNext(())
             })
             .disposed(by: bag)
 
         withdrawButtonTapped
-            .flatMap { AuthManager.shared.withdraw() }
+            .flatMap { AuthAPI.shared.withdraw() }
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
-                    KeychainWrapper.standard.remove(forKey: "accessToken")
+                    Singleton.shared.removeUserInfo()
                     withdrawComplete.onNext(())
                 case let .failure(error):
-                    print(error.description)
+                    switch error.statusCode {
+                    case 401:
+                        Singleton.shared.unauthorized.onNext(())
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
         
-        openURL = customerServiceButtonTapped
+        openURL = Observable.merge(customerServiceButtonTapped.map { _ in () },
+                                   partnershipButtonTapped.map { _ in () })
             .map { "http://pf.kakao.com/_xgHYNb/chat" }
             .compactMap { URL(string: $0) }
             .asSharedSequence(onErrorDriveWith: .empty())

@@ -25,6 +25,7 @@ class HipsterPickDetailViewController: UIViewController {
     }
 
     private let bag = DisposeBag()
+    var viewModel: HipsterPickDetailViewModel?
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -39,6 +40,7 @@ class HipsterPickDetailViewController: UIViewController {
 
     func bind(_ viewModel: HipsterPickDetailViewModel) {
         // MARK: subViewModels
+        self.viewModel = viewModel
 
         // MARK: view -> viewModel
 

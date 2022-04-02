@@ -50,6 +50,7 @@ class HipPlaceCell: UICollectionViewCell {
 
     public static let identyfier = "HipPlaceCell"
     private var bag = DisposeBag()
+    var viewModel: HipPlaceCellViewModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,6 +69,8 @@ class HipPlaceCell: UICollectionViewCell {
     }
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
+        self.viewModel = viewModel
+        
         viewModel.keywordVM
             .drive(onNext: { [weak self] viewModel in
                 self?.keywordView.bind(viewModel)
@@ -137,8 +140,8 @@ class HipPlaceCell: UICollectionViewCell {
 
         let countStackView = UIStackView(arrangedSubviews: [bookmarkCountImageView, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
         countStackView.axis = .horizontal
-        countStackView.alignment = .fill
-        countStackView.distribution = .fill
+        countStackView.alignment = .center
+        countStackView.distribution = .equalSpacing
         countStackView.spacing = 12.0
 
         [
@@ -158,6 +161,7 @@ class HipPlaceCell: UICollectionViewCell {
         nameLabel.snp.makeConstraints {
             $0.leading.equalTo(imageView.snp.trailing).offset(18.0)
             $0.top.equalToSuperview().inset(22.0)
+            $0.trailing.equalTo(bookmarkButton.snp.leading).offset(5.0)
         }
 
         regionLabel.snp.makeConstraints {

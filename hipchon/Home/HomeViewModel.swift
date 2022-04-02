@@ -45,10 +45,38 @@ class HomeViewModel {
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
-        banners = NetworkManager.shared.getBanners()
+        
+        // MARK: banner
+        
+        let bannerData = BehaviorSubject<[BannerModel]>(value: [])
+        
+        Observable.just(())
+            .filter { DeviceManager.shared.networkStatus }
+            .flatMap { _ in ElseAPI.shared.getBanners() }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    bannerData.onNext(data)
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+//                        Singleton.shared.unknownedError.onNext(error) // TODO:
+                        break
+                    }
+                }
+            })
+            .disposed(by: bag)
+        
+        banners = bannerData
             .asDriver(onErrorJustReturn: [])
 
-        banners
+        bannerData
             .map { $0.count }
             .asObservable()
             .bind(to: bannerPageCountVM.entireIdx)

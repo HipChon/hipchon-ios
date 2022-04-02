@@ -64,6 +64,7 @@ class UnauthorizedAlertViewController: UIViewController {
                 guard let alertVC = UIApplication.topViewController() else { return }
                 alertVC.dismiss(animated: true, completion: {
                     guard let topVC = UIApplication.topViewController() else { return }
+                    topVC.navigationController?.popToRootViewController(animated: true)
                     topVC.tabBarController?.navigationController?.popToRootViewController(animated: true)
                 })
             })

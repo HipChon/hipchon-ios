@@ -26,9 +26,8 @@ class ReviewPlaceViewModel {
     let bookmarkButtonTapped = PublishRelay<Void>()
     let shareButtonTapped = PublishRelay<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
-
+    init(_ place: BehaviorSubject<PlaceModel>) {
+        
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
@@ -48,13 +47,17 @@ class ReviewPlaceViewModel {
 
         // MARK: bookmark
 
-        let bookmarked = BehaviorSubject<Bool>(value: data.bookmarkYn ?? false)
-
-        bookmarkYn = bookmarked
-            .asDriver(onErrorJustReturn: false)
-
+        let bookmarked = BehaviorSubject<Bool>(value: false)
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
+        
+        place
+            .compactMap { $0.bookmarkYn }
+            .bind(to: bookmarked)
+            .disposed(by: bag)
+        
+        bookmarkYn = bookmarked
+            .asDriver(onErrorJustReturn: false)
 
         bookmarkButtonTapped
             .withLatestFrom(bookmarked)
@@ -69,36 +72,69 @@ class ReviewPlaceViewModel {
             .disposed(by: bag)
 
         addBookmark
+            .filter { DeviceManager.shared.networkStatus }
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(true)
+                $0.bookmarkYn = true
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) + 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.addBookmark($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .flatMap { PlaceAPI.shared.addBookmark($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("저장 장소에 등록되었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
-
+    
         deleteBookmark
+            .filter { DeviceManager.shared.networkStatus }
+            .withLatestFrom(place)
             .do(onNext: {
-                bookmarked.onNext(false)
+                $0.bookmarkYn = false
+                $0.bookmarkCount = ($0.bookmarkCount ?? 0) - 1
+                place.onNext($0)
             })
             .withLatestFrom(place)
             .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.deleteBookmark($0) }
-            .subscribe(onNext: {
-                if $0 == true {
-                    // reload
+            .flatMap { PlaceAPI.shared.deleteBookmark($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success:
+                    Singleton.shared.myPlaceRefresh.onNext(())
+                    Singleton.shared.toastAlert.onNext("저장 장소에서 제거되었습니다")
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
                 }
             })
             .disposed(by: bag)
 
         pushPlaceDetailVC = insideButtonTapped
-            .withLatestFrom(place)
-            .map { PlaceDetailViewModel($0) }
+            .map { PlaceDetailViewModel(place) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

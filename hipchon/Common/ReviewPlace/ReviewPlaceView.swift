@@ -86,6 +86,15 @@ class ReviewPlaceView: UIView {
             .compactMap { $0 ? UIImage(named: "bookmarkY_gray") : UIImage(named: "bookmarkN_gray") }
             .drive(bookmarkButton.rx.image)
             .disposed(by: bag)
+        
+        viewModel.pushPlaceDetailVC
+            .emit(onNext: { [weak self] viewModel in
+                guard let topVC = UIApplication.topViewController() else { return }
+                let placeDetailVC = PlaceDetailViewController()
+                placeDetailVC.bind(viewModel)
+                topVC.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -133,7 +142,7 @@ class ReviewPlaceView: UIView {
 
         labelStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(17.0)
-            $0.trailing.equalTo(bookmarkStackView.snp.leading).offset(5.0)
+            $0.width.equalToSuperview().multipliedBy(0.6)
             $0.top.equalToSuperview().inset(12.0)
             $0.bottom.equalToSuperview().inset(10.0)
         }
@@ -145,14 +154,12 @@ class ReviewPlaceView: UIView {
         bookmarkStackView.snp.makeConstraints {
 //            $0.trailing.equalTo(shareStackView.snp.leading).offset(18.0)
             $0.trailing.equalToSuperview().inset(62.0)
-            $0.top.equalToSuperview().inset(11.0)
-            $0.bottom.equalToSuperview().inset(9.0)
+            $0.centerY.equalToSuperview()
         }
 
         shareStackView.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(17.0)
-            $0.top.equalToSuperview().inset(11.0)
-            $0.bottom.equalToSuperview().inset(9.0)
+            $0.centerY.equalToSuperview()
         }
     }
 }

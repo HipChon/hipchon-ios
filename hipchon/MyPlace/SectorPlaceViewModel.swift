@@ -23,7 +23,7 @@ class SectorPlaceViewModel {
 
     // MARK: viewModel -> view
 
-    let places: Driver<[PlaceModel]>
+    let places: Driver<[BehaviorSubject<PlaceModel>]>
     let activating: Signal<Bool>
     let placeTableViewHidden: Driver<Bool>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
@@ -32,17 +32,22 @@ class SectorPlaceViewModel {
 
     let reload = PublishRelay<Void>()
     let moreFetching = PublishRelay<Void>()
-    let selectedPlace = PublishRelay<PlaceModel>()
+    let selectedPlaceIdx = PublishRelay<Int>()
 
     init(_ data: SectorType) {
         let sector = BehaviorSubject<SectorType>(value: data)
         let placeDatas = BehaviorSubject<[PlaceModel]>(value: [])
 
         places = placeDatas
+            .map { $0.map { BehaviorSubject<PlaceModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 
-        // 첫 로드, sorting
-        sector
+        // 첫 로드, refresh
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myPlaceRefresh
+        )
+            .withLatestFrom(sector)
             .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { PlaceAPI.shared.getMyPlaces($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
@@ -130,7 +135,8 @@ class SectorPlaceViewModel {
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: false)
 
-        pushPlaceDetailVC = selectedPlace
+        pushPlaceDetailVC = selectedPlaceIdx
+            .withLatestFrom(places) { $1[$0] }
             .map { PlaceDetailViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
     }

@@ -58,6 +58,7 @@ class KeywordView: UIView {
         iconImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(7.5)
             $0.top.bottom.equalToSuperview().inset(4.8)
+            $0.height.equalTo(iconImageView.snp.width)
         }
 
         contentLabel.snp.makeConstraints {

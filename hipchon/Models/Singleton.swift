@@ -8,6 +8,7 @@
 import RxCocoa
 import RxSwift
 import Toast_Swift
+import SwiftKeychainWrapper
 
 class Singleton {
     public static let shared = Singleton()
@@ -18,6 +19,7 @@ class Singleton {
     let myPlaceRefresh = PublishSubject<Void>()
     let myReviewRefresh = PublishSubject<Void>()
     let likedReviewRefresh = PublishSubject<Void>()
+    let commentRefresh = PublishSubject<Void>()
     let myCommentRefresh = PublishSubject<Void>()
 
     let toastAlert = PublishSubject<String>()
@@ -27,14 +29,14 @@ class Singleton {
 
     private init() {
         toastAlert
-            .throttle(.seconds(4), scheduler: MainScheduler.instance)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .asDriver(onErrorJustReturn: "")
             .drive(onNext: { text in
                 guard let topVC = UIApplication.topViewController() else { return }
                 var style = ToastStyle()
                 style.messageColor = .white
                 style.backgroundColor = .black
-                topVC.view.makeToast(text, duration: 3.0, position: .top, style: style)
+                topVC.view.makeToast(text, duration: 2.0, position: .top, style: style)
             })
             .disposed(by: bag)
 
@@ -58,8 +60,23 @@ class Singleton {
             .throttle(.seconds(4), scheduler: MainScheduler.instance)
             .asDriver(onErrorDriveWith: .empty())
             .drive(onNext: { error in
-                // TODO: 
+                guard let topVC = UIApplication.topViewController() else { return }
+                let errorAlertVC = ErrorAlertViewController()
+                errorAlertVC.bind()
+                errorAlertVC.providesPresentationContextTransitionStyle = true
+                errorAlertVC.definesPresentationContext = true
+                errorAlertVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                errorAlertVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
+                topVC.present(errorAlertVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
+    }
+    
+    func removeUserInfo() {
+        KeychainWrapper.standard.remove(forKey: "userId")
+        KeychainWrapper.standard.remove(forKey: "loginId")
+        KeychainWrapper.standard.remove(forKey: "loginType")
+        Singleton.shared.currentUser.onNext(UserModel())
+        APIParameters.shared.refreshUserId()
     }
 }

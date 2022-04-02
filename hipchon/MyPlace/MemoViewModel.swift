@@ -12,6 +12,7 @@ class MemoViewModel {
     private let bag = DisposeBag()
 
     // MARK: subViewModels
+    var befViewModel: MyPlaceCellViewModel?
 
     // MARK: viewModel -> view
 
@@ -19,6 +20,7 @@ class MemoViewModel {
     let color: Driver<UIColor>
     let contentCount: Driver<Int>
     let completeButtonValid: Driver<Bool>
+    let presentMemoCompleteVC: Signal<Void>
 
     // MARK: view -> viewModel
 
@@ -26,10 +28,10 @@ class MemoViewModel {
     let changedColor = PublishRelay<UIColor>()
     let completeButtonTapped = PublishRelay<Void>()
 
-    init(_ data: PlaceModel) {
-        let place = BehaviorSubject<PlaceModel>(value: data)
+    init(_ place: BehaviorSubject<PlaceModel>) {
         let memo = place
             .compactMap { $0.memo }
+        let memoCoplete = PublishSubject<Void>()
 
         content = memo
             .compactMap { $0.content }
@@ -48,13 +50,20 @@ class MemoViewModel {
             .map { $0.count > 0 && $0.count <= 30 && $0 != "나만의 메모를 남겨볼까요" }
             .asDriver(onErrorJustReturn: true)
 
+        
+        presentMemoCompleteVC = memoCoplete
+            .asSignal(onErrorJustReturn: ())
+        
         completeButtonTapped
             .withLatestFrom(Observable.combineLatest(place.compactMap { $0.id }, inputContent, color.asObservable()))
             .flatMap { NetworkManager.shared.postMemo(placeId: $0, content: $1, color: $2.memoColorString()) }
             .subscribe(onNext: { _ in
+                self.befViewModel?.memoChanged.onNext(())
+                memoCoplete.onNext(())
                 Singleton.shared.toastAlert.onNext("메모가 등록되었습니다")
             })
             .disposed(by: bag)
+
     }
 }
 
@@ -62,15 +71,15 @@ extension UIColor {
     func memoColorString() -> String {
         switch self {
         case .primary_green:
-            return "green"
+            return "primary_green"
         case .secondary_yellow:
-            return "yello"
+            return "secondary_yellow"
         case .secondary_blue:
-            return "blue"
+            return "secondary_blue"
         case .secondary_purple:
-            return "purple"
+            return "secondary_purple"
         default:
-            return "gray"
+            return "gray04"
         }
     }
 }

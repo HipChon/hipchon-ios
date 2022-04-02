@@ -35,7 +35,7 @@ class HashtagReviewViewController: UIViewController {
         $0.backgroundColor = .white
     }
 
-    private lazy var emptyView = EmptyView().then { _ in
+    private lazy var emptyView = AuthorizedEmptyView().then { _ in
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {

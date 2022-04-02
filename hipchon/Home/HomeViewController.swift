@@ -197,10 +197,22 @@ class HomeViewController: UIViewController {
     }
 
     func layout() {
-        view.addSubview(scrollView)
+        [
+            homeSearchView,
+            scrollView,
+        ].forEach {
+            view.addSubview($0)
+        }
+        
+        homeSearchView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(74.0)
+        }
 
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(homeSearchView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
 
         scrollView.addSubview(contentView)
@@ -211,7 +223,6 @@ class HomeViewController: UIViewController {
         }
 
         [
-            homeSearchView,
             hashtagCollectionView,
             localHipsterPickView,
             bestReviewView,
@@ -223,15 +234,9 @@ class HomeViewController: UIViewController {
             contentView.addSubview($0)
         }
 
-        homeSearchView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaInsets.top)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(74.0)
-        }
-
         hashtagCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(homeSearchView.snp.bottom)
+            $0.top.equalToSuperview()
             $0.height.equalTo(106.0)
         }
 

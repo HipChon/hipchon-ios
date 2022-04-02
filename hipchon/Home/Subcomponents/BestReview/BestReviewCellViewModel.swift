@@ -11,7 +11,7 @@ import RxSwift
 class BestReviewCellViewModel {
     // MARK: viewModel -> view
 
-    let url: Driver<URL>
+    let title: Driver<String>
     let hashtagImageURL: Driver<URL>
 
     // MARK: view -> viewModel
@@ -19,11 +19,10 @@ class BestReviewCellViewModel {
     init(_ data: BestReviewModel) {
         let bestReview = BehaviorSubject<BestReviewModel>(value: data)
 
-        url = bestReview
-            .compactMap { $0.imageURL }
-            .compactMap { URL(string: $0) }
-            .asDriver(onErrorDriveWith: .empty())
-
+        title = bestReview
+            .compactMap { $0.title }
+            .asDriver(onErrorJustReturn: "")
+      
         hashtagImageURL = bestReview
             .compactMap { $0.review?.place?.hashtag?.imageURL }
             .compactMap { URL(string: $0) }

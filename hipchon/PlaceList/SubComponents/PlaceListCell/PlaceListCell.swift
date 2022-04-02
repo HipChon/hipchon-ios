@@ -75,6 +75,7 @@ class PlaceListCell: UITableViewCell {
 
     public static let identyfier = "PlaceListCell"
     private let bag = DisposeBag()
+    var viewModel: PlaceListCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -95,7 +96,7 @@ class PlaceListCell: UITableViewCell {
 
     func bind(_ viewModel: PlaceListCellViewModel) {
         // MARK: subViewModels
-
+        self.viewModel = viewModel
         placeImageCollectView.dataSource = nil
         placeImageCollectView.delegate = nil
         pageCountView.bind(viewModel.pageCountVM)
@@ -189,8 +190,8 @@ class PlaceListCell: UITableViewCell {
 
         let countStackView = UIStackView(arrangedSubviews: [bookmarkButton, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
         countStackView.axis = .horizontal
-        countStackView.alignment = .fill
-        countStackView.distribution = .fill
+        countStackView.alignment = .center
+        countStackView.distribution = .equalSpacing
         countStackView.spacing = 12.0
 
         [

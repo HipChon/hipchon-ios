@@ -12,37 +12,34 @@ import SwiftKeychainWrapper
 import SwiftyJSON
 
 class PlaceAPI {
+    private init() {}
+    
     public static let shared = PlaceAPI()
-
-    static let hostUrl = "http://54.180.25.216/"
-    let headers: HTTPHeaders = [
-        "Authorization": "some auth",
-        "Accept": "application/json",
-        "token": KeychainWrapper.standard.string(forKey: "token") ?? "",
-    ]
-    
-    let session: Session = {
-      let configuration = URLSessionConfiguration.af.default
-        configuration.timeoutIntervalForRequest = 5
-        configuration.timeoutIntervalForResource = 5
-      return Session(configuration: configuration)
-    }()
-    
-    let bag = DisposeBag()
+    private let bag = DisposeBag()
 
     func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
             print("getPlaceList")
-            var urlStr = ""
+            var urlStr = "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)"
             
-            if filter.hashtag == nil,
-               let regionId = filter.region?.id,
-               let categoryId = filter.category?.id,
-               let order = sort == .bookmark ? "myplace" : "review" {
-                urlStr = "\(PlaceAPI.hostUrl)/api/place/1/\(regionId)/\(categoryId)/\(order)"
+            if filter.hashtag == nil {
+                if let regionId = filter.region?.id {
+                    urlStr += "/\(regionId)"
+                }
+                
+                if let categoryId = filter.category?.id {
+                    urlStr += "/\(categoryId)"
+                }
+                
+                if sort == .bookmark {
+                    urlStr += "/myplace"
+                } else {
+                    urlStr += "/review"
+                }
+                
             } else if let hashtagId = filter.hashtag?.id,
                       let order = sort == .bookmark ? "myplace" : "review" {
-                urlStr = "\(PlaceAPI.hostUrl)/api/place/hashtag/1/\(hashtagId)/\(order)"
+                urlStr = "\(APIParameters.shared.hostUrl)/api/place/hashtag/\(APIParameters.shared.userId)/\(hashtagId)/\(order)"
             } else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
             }
@@ -54,31 +51,27 @@ class PlaceAPI {
 
             
             
-            self.session
-                .request(url, method: .get, parameters: nil, headers: PlaceAPI.shared.headers)
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
                 .responseJSON(completionHandler: { response in
                     switch response.result {
-                    case .success(let data):
-                        do {
-                            let modelData = try JSON(data)["data"].rawData()
+                    case .success:
+                        if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: modelData)
+                                let model = try JSONDecoder().decode([PlaceModel].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                             }
-                            
-                        } catch {
-                            single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                         }
                     case let .failure(error):
                         guard let statusCode = response.response?.statusCode else {
                             single(.success(.failure(APIError(statusCode: error._code,
-                                                              description: error.errorDescription ?? ""))))
+                                                              description: error.errorDescription))))
                             return
                         }
-                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription ?? ""))))
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()
@@ -89,37 +82,33 @@ class PlaceAPI {
 
     func getWeeklyHipPlace() -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(PlaceAPI.hostUrl)/api/place/hiple/1") else {
-                single(.failure(NetworkError.uri))
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/place/hiple/\(APIParameters.shared.userId)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
             print("getWeeklyHipPlace")
             
-            self.session
-                .request(url, method: .get, parameters: nil, headers: PlaceAPI.shared.headers)
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
                 .responseJSON(completionHandler: { response in
                     switch response.result {
-                    case .success(let data):
-                        do {
-                            let modelData = try JSON(data)["data"].rawData()
+                    case .success:
+                        if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: modelData)
+                                let model = try JSONDecoder().decode([PlaceModel].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                             }
-                            
-                        } catch {
-                            single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                         }
                     case let .failure(error):
                         guard let statusCode = response.response?.statusCode else {
                             single(.success(.failure(APIError(statusCode: error._code,
-                                                              description: error.errorDescription ?? ""))))
+                                                              description: error.errorDescription))))
                             return
                         }
-                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription ?? ""))))
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()
@@ -130,37 +119,33 @@ class PlaceAPI {
     
     func getPlaceDetail(_ id: Int) -> Single<Result<PlaceModel, APIError>>  {
         return Single.create { single in
-            guard let url = URL(string: "\(PlaceAPI.hostUrl)/api/place/1/\(id)") else {
-                single(.failure(NetworkError.uri))
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
             print("getPlaceDetail")
             
-            self.session
-                .request(url, method: .get, parameters: nil, headers: PlaceAPI.shared.headers)
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
                 .responseJSON(completionHandler: { response in
                     switch response.result {
-                    case .success(let data):
-                        do {
-                            let modelData = try JSON(data)["data"].rawData()
+                    case .success:
+                        if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode(PlaceModel.self, from: modelData)
+                                let model = try JSONDecoder().decode(PlaceModel.self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                             }
-                            
-                        } catch {
-                            single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                         }
                     case let .failure(error):
                         guard let statusCode = response.response?.statusCode else {
                             single(.success(.failure(APIError(statusCode: error._code,
-                                                              description: error.errorDescription ?? ""))))
+                                                              description: error.errorDescription))))
                             return
                         }
-                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription ?? ""))))
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()
@@ -171,37 +156,174 @@ class PlaceAPI {
     
     func getMyPlaces(_ sector: SectorType) -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(PlaceAPI.hostUrl)/api/myplace/1") else {
-                single(.failure(NetworkError.uri))
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
             print("getMyPlaces \(sector)")
             
-            self.session
-                .request(url, method: .get, parameters: nil, headers: PlaceAPI.shared.headers)
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
                 .responseJSON(completionHandler: { response in
                     switch response.result {
-                    case .success(let data):
-                        do {
-                            let modelData = try JSON(data)["data"].rawData()
+                    case .success:
+                        if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: modelData)
+                                let model = try JSONDecoder().decode([PlaceModel].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                             }
-                            
-                        } catch {
-                            single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
                         }
                     case let .failure(error):
                         guard let statusCode = response.response?.statusCode else {
                             single(.success(.failure(APIError(statusCode: error._code,
-                                                              description: error.errorDescription ?? ""))))
+                                                              description: error.errorDescription))))
                             return
                         }
-                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription ?? ""))))
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+    
+    // MARK: local hipster
+    
+    func getLocalHipsterPickList() -> Single<Result<[LocalHipsterPickModel], APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/hipster") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+            print("getLocalHipsterPickList")
+            
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data {
+                            do {
+                                let model = try JSONDecoder().decode([LocalHipsterPickModel].self, from: data)
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                        }
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+    
+    func getLocalHipsterPickDetail(id: Int) -> Single<Result<LocalHipsterPickModel, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/hipster/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("getLocalHipsterPickDetail")
+
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data {
+                            do {
+                                let model = try JSONDecoder().decode(LocalHipsterPickModel.self, from: data)
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                        }
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+    
+    // MARK: Bookmark
+
+    func addBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("addBookmark")
+
+            APIParameters.shared.session
+                .request(url, method: .post, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+
+    func deleteBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("deleteBookmark")
+
+            APIParameters.shared.session
+                .request(url, method: .delete, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()

@@ -17,7 +17,7 @@ class PlaceListViewModel {
 
     // MARK: viewModel -> view
 
-    let placeListCellVMs: Driver<[PlaceListCellViewModel]>
+    let places: Driver<[BehaviorSubject<PlaceModel>]>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     let activating: Signal<Bool>
     let placeTableViewHidden: Driver<Bool>
@@ -34,15 +34,19 @@ class PlaceListViewModel {
 
     init(_ data: SearchFilterModel) {
         let searchFilter = BehaviorSubject<SearchFilterModel>(value: data)
-        let places = BehaviorSubject<[PlaceModel]>(value: [])
+        let placeDatas = BehaviorSubject<[PlaceModel]>(value: [])
 
+        places = placeDatas
+            .map { $0.map { BehaviorSubject<PlaceModel>(value: $0) } }
+            .asDriver(onErrorJustReturn: [])
+        
         // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
             .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
-                    places.onNext(data)
+                    placeDatas.onNext(data)
                 case .failure(let error):
                     switch error.statusCode {
                     case 401:
@@ -68,7 +72,7 @@ class PlaceListViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success(let data):
-                    places.onNext(data)
+                    placeDatas.onNext(data)
                 case .failure(let error):
                     switch error.statusCode {
                     case 401:
@@ -89,13 +93,9 @@ class PlaceListViewModel {
 //            .bind(to: places)
 //            .disposed(by: bag)
 
-        placeTableViewHidden = places
+        placeTableViewHidden = placeDatas
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: false)
-
-        placeListCellVMs = places
-            .map { $0.map { PlaceListCellViewModel($0) } }
-            .asDriver(onErrorJustReturn: [])
 
         searchFilter
             .compactMap { $0.filterTitle }

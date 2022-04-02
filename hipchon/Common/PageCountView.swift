@@ -31,7 +31,7 @@ class PageCountView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = 8.5
+        layer.cornerRadius = 9.0
     }
 
     func bind(_ viewModel: PageCountViewModel) {
@@ -42,8 +42,8 @@ class PageCountView: UIView {
 
     private func attribute() {
 //        backgroundColor = UIColor(red: 0, green: 0, blue: 0, a: 0.5)
-        backgroundColor = .black
-        alpha = 0.8
+        backgroundColor = .black.withAlphaComponent(0.5)
+//        alpha = 0.5
     }
 
     private func layout() {
@@ -51,8 +51,8 @@ class PageCountView: UIView {
         addSubview(label)
 
         label.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(6.0)
-            $0.top.bottom.equalToSuperview().inset(4.0)
+            $0.leading.trailing.equalToSuperview().inset(4.0)
+            $0.top.bottom.equalToSuperview().inset(2.0)
         }
     }
 }

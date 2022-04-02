@@ -356,7 +356,7 @@ class PlaceDesView: UIView {
         
         reportButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
-            $0.top.equalTo(linkButton.snp.bottom).offset(16.0)
+            $0.centerY.equalTo(infoChangeButton)
         }
         
         infoChangeButton.snp.makeConstraints {

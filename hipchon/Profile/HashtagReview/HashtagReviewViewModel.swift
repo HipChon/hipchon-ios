@@ -135,7 +135,7 @@ class HashtagReviewViewModel {
 
         pushReviewDetailVC = selectedReviewIdx
             .withLatestFrom(reviews) { $1[$0] }
-            .map { ReviewDetailViewModel($0) }
+            .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }
             .asSignal(onErrorSignalWith: .empty())
     }
 }

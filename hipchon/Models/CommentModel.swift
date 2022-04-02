@@ -15,7 +15,10 @@ class CommentModel: Codable {
     let review: ReviewModel?
 
     enum CodingKeys: String, CodingKey {
-        case id, user, content, dateTime, review
+        case id = "commentId"
+        case user
+        case content = "detail"
+        case dateTime, review
     }
 
     var relatedDT: String? {

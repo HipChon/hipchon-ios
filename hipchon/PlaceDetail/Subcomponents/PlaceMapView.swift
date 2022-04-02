@@ -41,7 +41,7 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
         $0.allowsRotating = false
 
         $0.isUserInteractionEnabled = false
-        $0.zoomLevel = 7.5
+        $0.zoomLevel = 9.5 
 
         // Map display Info
         $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
@@ -131,7 +131,7 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
 
         addressLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(23.0)
-            $0.trailing.equalTo(copyButton.snp.leading).offset(7.0)
+            $0.trailing.equalTo(copyButton.snp.leading).offset(10.0)
             $0.top.equalTo(mapView.snp.bottom).offset(23.0)
         }
 

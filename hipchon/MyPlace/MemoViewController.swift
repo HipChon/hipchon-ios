@@ -152,6 +152,20 @@ class MemoViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
+        
+        viewModel.presentMemoCompleteVC
+            .emit(onNext: { [weak self] in
+                let memoCompleteVC = MemoCompleteViewController()
+                memoCompleteVC.providesPresentationContextTransitionStyle = true
+                memoCompleteVC.definesPresentationContext = true
+                memoCompleteVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                memoCompleteVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
+                self?.dismiss(animated: true, completion: {
+                    guard let topVC = UIApplication.topViewController() else { return }
+                    topVC.present(memoCompleteVC, animated: true, completion: nil)
+                })
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {

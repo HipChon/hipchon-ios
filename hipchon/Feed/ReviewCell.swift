@@ -12,6 +12,7 @@ class ReviewCell: UITableViewCell {
     private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "default_profile") ?? UIImage()
     }
 
     private lazy var userNameLabel = UILabel().then {
@@ -83,6 +84,7 @@ class ReviewCell: UITableViewCell {
 
     public static let identyfier = "ReviewCell"
     var bag = DisposeBag()
+    var viewModel: ReviewCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -106,6 +108,8 @@ class ReviewCell: UITableViewCell {
     }
 
     func bind(_ viewModel: ReviewCellViewModel) {
+        self.viewModel = viewModel
+        
         viewModel.reviewPlaceVM
             .drive(onNext: { [weak self] in
                 self?.reviewPlaceView.bind($0)

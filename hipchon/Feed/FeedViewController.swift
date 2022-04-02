@@ -39,7 +39,7 @@ class FeedViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
-    private lazy var emptyView = EmptyView().then { _ in
+    private lazy var emptyView = UnathorizedEnptyView().then { _ in
     }
 
     private lazy var uploadButton = UIButton().then {
@@ -115,19 +115,20 @@ class FeedViewController: UIViewController {
 
         // data binding
 
-        viewModel.reviewCellVMs
-            .drive(reviewTableView.rx.items) { tv, idx, viewModel in
+        viewModel.reviews
+            .drive(reviewTableView.rx.items) { tv, idx, data in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
+                let viewModel = ReviewCellViewModel(data)
                 cell.bind(viewModel)
 
-                viewModel.pushPlaceDetailVC
-                    .emit(onNext: { [weak self] viewModel in
-                        let placeDetailVC = PlaceDetailViewController()
-                        placeDetailVC.bind(viewModel)
-                        self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
-                    })
-                    .disposed(by: cell.bag)
+//                viewModel.pushPlaceDetailVC
+//                    .emit(onNext: { [weak self] viewModel in
+//                        let placeDetailVC = PlaceDetailViewController()
+//                        placeDetailVC.bind(viewModel)
+//                        self?.tabBarController?.navigationController?.pushViewController(placeDetailVC, animated: true)
+//                    })
+//                    .disposed(by: cell.bag)
 
                 viewModel.share
                     .emit(onNext: { [weak self] in

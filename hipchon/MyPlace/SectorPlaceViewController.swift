@@ -20,7 +20,7 @@ class SectorPlaceViewController: UIViewController {
         $0.separatorStyle = .none
     }
 
-    private lazy var emptyView = EmptyView().then { _ in
+    private lazy var emptyView = AuthorizedEmptyView().then { _ in
     }
 
     private let bag = DisposeBag()
@@ -44,9 +44,10 @@ class SectorPlaceViewController: UIViewController {
 
         // MARK: view -> viewModel
 
-        placeTableView.rx.modelSelected(PlaceModel.self)
+        placeTableView.rx.itemSelected
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.selectedPlace)
+            .map { $0.row }
+            .bind(to: viewModel.selectedPlaceIdx)
             .disposed(by: bag)
 
         // MARK: viewModel -> view
