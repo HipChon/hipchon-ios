@@ -45,6 +45,32 @@ class HomeViewModel {
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())
 
+        // MARK: user
+        
+        Observable.just(())
+            .withLatestFrom(Singleton.shared.currentUser)
+            .filter { $0.id == nil }
+            .map { _ in () }
+            .filter { _ in DeviceManager.shared.networkStatus }
+            .flatMap { AuthAPI.shared.getUser() }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case let .success(data): // 가입된 유저: 로그인
+                    Singleton.shared.currentUser.onNext(data)
+                case .failure(let error): // 가입안된 유저: 회원가입
+                    switch error.statusCode {
+                    case 13: // timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        
+                        break
+                    }
+                }
+            })
+            .disposed(by: bag)
+        
         
         // MARK: banner
         

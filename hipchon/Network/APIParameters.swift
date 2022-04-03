@@ -15,8 +15,7 @@ class APIParameters {
     
     static let shared = APIParameters()
     private let bag = DisposeBag()
-    var userId = "-1"
-    var id = -1
+    var userId = KeychainWrapper.standard.string(forKey: "userId") ?? "-1"
     
     let hostUrl = "http://54.180.25.216"
     let headers: HTTPHeaders = [

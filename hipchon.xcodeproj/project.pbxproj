@@ -492,13 +492,13 @@
 			isa = PBXGroup;
 			children = (
 				D85DDEC227F338B0006258F9 /* APIParameters.swift */,
+				D828B39227E78163007C2487 /* AuthAPI.swift */,
 				D8522AAB27F00B8F00381EE8 /* PlaceAPI.swift */,
 				D8522AAD27F01AA900381EE8 /* ReviewAPI.swift */,
 				D82EBF0027F9536700BA009C /* CommentAPI.swift */,
 				D82EBEEF27F7E4B100BA009C /* ElseAPI.swift */,
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
 				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
-				D828B39227E78163007C2487 /* AuthAPI.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";

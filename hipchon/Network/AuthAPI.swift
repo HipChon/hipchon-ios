@@ -123,21 +123,7 @@ class AuthAPI {
                       single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
                       return Disposables.create() 
                   }
-            
-            
-//            // TMP
-//            KeychainWrapper.standard.set("1", forKey: "userId")
-//            KeychainWrapper.standard.set(loginId, forKey: "loginId")
-//            KeychainWrapper.standard.set(loginType, forKey: "loginType")
-//            APIParameters.shared.refreshUserId()
-//            
-//            let user = UserModel(id: 1, name: "김범수", profileImageURL: "https://firebasestorage.googleapis.com:443/v0/b/ipsamitest.appspot.com/o/Post2%2Fu8Ca2VDJsBgUR3RajiIJ6uGCIUn2%2FpostImages%2F-MvLdAViV02DgAdeC02g%2Fbig%2F0?alt=media&token=26e43d26-9f5d-4aaa-9fbe-2fe11224c0c9", reviewCount: 5)
-//            single(.success(.success(user)))
-            
-            
-            
-            
-            
+
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
@@ -179,6 +165,48 @@ class AuthAPI {
         }
     }
 
+    func getUser() -> Single<Result<UserModel, APIError>> {
+        return Single.create { single in
+            guard let loginId = KeychainWrapper.standard.string(forKey: "loginId"),
+                  let loginType = KeychainWrapper.standard.string(forKey: "loginType") else {
+                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
+                      return Disposables.create()
+                  }
+
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+            print("getUser")
+
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data {
+                            do {
+                                let model = try JSONDecoder().decode(UserModel.self, from: data)
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                        }
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                         single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+            return Disposables.create()
+        }
+    }
+    
     func signup(authModel: AuthModel) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             print("signup")

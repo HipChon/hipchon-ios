@@ -91,13 +91,10 @@ class OnBoardingViewModel {
                     signupedUser.onNext(true)
                 case .failure(let error): // 가입안된 유저: 회원가입
                     switch error.statusCode {
-//                    case 401: // 401: unauthorized(토큰 만료)
-//                        Singleton.shared.unauthorized.onNext(())
-                    case 13: // 13: Timeout
+                    case 13: // timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
                         signupedUser.onNext(false)
-//                        Singleton.shared.unknownedError.onNext(error)
                     }
                 }
             })
