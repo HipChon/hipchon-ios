@@ -32,7 +32,7 @@ class InputCommentViewModel {
             .asDriver(onErrorDriveWith: .empty())
 
         registerButtonValid = content
-            .map { $0.count > 0 && $0.count <= 100 }
+            .map { $0.count > 0 && $0.count <= CommentModel.maxLength }
             .asDriver(onErrorJustReturn: true)
 
         registerButtonTapped

@@ -43,7 +43,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         let height = 191.0
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -96,6 +96,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
 
     public static let identyfier = "ReviewDetailHeaderView"
     private var bag = DisposeBag()
+    var viewModel: ReviewDetailHeaderViewModel?
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -112,9 +113,42 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         super.prepareForReuse()
         bag = DisposeBag()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        profileImageView.layer.cornerRadius = 45.0 / 2 // profileImageView.frame.width / 2
+
+        viewModel?.reviewImageURLs
+            .map { $0.count }
+            .asDriver()
+            .drive(onNext: { [unowned self] count in
+                let cellWidth = self.contentView.frame.width
+                if let layout = self.reviewImageCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                    var width = 300.0
+                    let height = 191.0
+                    let itemSpacing = 4.0
+                    switch count {
+                    case 1:
+                        width = cellWidth - 20.0 * 2
+                    case 2:
+                        width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
+                    default:
+                        break
+                    }
+
+                    layout.itemSize = CGSize(width: width, height: height)
+                    layout.minimumLineSpacing = itemSpacing
+                    layout.minimumInteritemSpacing = itemSpacing
+                }
+            })
+            .disposed(by: bag)
+    }
+
 
     func bind(_ viewModel: ReviewDetailHeaderViewModel) {
         // MARK: subViewModels
+        
+        self.viewModel = viewModel
 
         viewModel.reviewPlaceVM
             .drive(onNext: {

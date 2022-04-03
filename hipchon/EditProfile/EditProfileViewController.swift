@@ -289,8 +289,9 @@ private extension EditProfileViewController {
 // MARK: TextField Delegate
 
 extension EditProfileViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
-        guard let text = textField.text else { return true }
-        return text.count <= 10
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString text: String) -> Bool {
+        guard let str = textField.text else { return true }
+        let newLength = str.count + text.count - range.length
+        return newLength <= 10
     }
 }

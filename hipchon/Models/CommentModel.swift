@@ -8,6 +8,9 @@
 import Foundation
 
 class CommentModel: Codable {
+    
+    static let maxLength = 200
+    
     let id: Int?
     let user: UserModel?
     let content: String?

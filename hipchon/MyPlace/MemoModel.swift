@@ -21,7 +21,7 @@ class MemoModel: Codable {
         color = nil
     }
     
-    init(content: String, color: String) {
+    init(content: String?, color: String?) {
         self.content = content
         self.color = color
     }

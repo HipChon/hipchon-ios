@@ -61,7 +61,7 @@ class EditProfileViewModel {
             orgName.asObservable(),
             newName.asObservable()
         )
-        .map { $0.count >= 3 }
+        .map { 3 <= $0.count && $0.count <= 10 }
         .asDriver(onErrorJustReturn: false)
 
         completeButtonActivity = activity

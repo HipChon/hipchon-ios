@@ -10,7 +10,10 @@ import RxSwift
 import UIKit
 
 class MyCommentCell: UITableViewCell {
-    private lazy var reviewImageView = UIImageView().then { _ in
+    private lazy var reviewImageView = UIImageView().then {
+        $0.layer.cornerRadius = 3.0
+        $0.layer.masksToBounds = true
+        $0.contentMode = .scaleAspectFill
     }
 
     private lazy var contentLabel = UILabel().then {

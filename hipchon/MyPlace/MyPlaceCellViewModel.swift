@@ -67,8 +67,8 @@ class MyPlaceCellViewModel {
         place
             .filter { $0.memo == nil && $0.id != nil }
             .map { org -> PlaceModel in
-                let content = UserDefaults.standard.value(forKey: "\(org.id ?? -1)Content") as? String ?? "메모"
-                let color = UserDefaults.standard.value(forKey: "\(org.id ?? -1)Color") as? String ?? "gray01"
+                let content = UserDefaults.standard.value(forKey: "\(org.id ?? -1)Content") as? String
+                let color = UserDefaults.standard.value(forKey: "\(org.id ?? -1)Color") as? String
                 org.memo = MemoModel(content: content, color: color)
                 return org
             }
