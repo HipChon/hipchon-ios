@@ -17,8 +17,6 @@ class ReviewDetailViewController: UIViewController {
     private lazy var navigationView = NavigationView().then { _ in
     }
 
-   
-
     private lazy var commentTableView = UITableView(frame: .zero, style: .grouped).then {
         $0.delegate = self
         $0.dataSource = self
@@ -54,13 +52,12 @@ class ReviewDetailViewController: UIViewController {
         if let inputCommentVM = viewModel.inputCommentVM {
             inputCommentView.bind(inputCommentVM)
         }
-     
+
         viewModel.reloadData
             .emit(onNext: { [weak self] in
                 self?.commentTableView.reloadData()
             })
             .disposed(by: bag)
-
     }
 
     func attribute() {
@@ -101,15 +98,15 @@ class ReviewDetailViewController: UIViewController {
 
 extension ReviewDetailViewController: UITableViewDelegate, UITableViewDataSource {
     // TableView DataSource
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
+
+    func numberOfSections(in _: UITableView) -> Int {
         return 1
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         return viewModel?.commentVMs.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CommentCell.identyfier) as? CommentCell,
               let viewModel = viewModel
@@ -120,30 +117,29 @@ extension ReviewDetailViewController: UITableViewDelegate, UITableViewDataSource
         cell.bind(cellViewModel)
         return cell
     }
-    
+
     // Header & Footer
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection _: Int) -> UIView? {
         guard let viewModel = viewModel?.reviewDetailHeaderVM,
-                let headerCell = tableView.dequeueReusableHeaderFooterView(withIdentifier: ReviewDetailHeaderView.identyfier) as? ReviewDetailHeaderView else { return nil }
-        
+              let headerCell = tableView.dequeueReusableHeaderFooterView(withIdentifier: ReviewDetailHeaderView.identyfier) as? ReviewDetailHeaderView else { return nil }
+
         headerCell.bind(viewModel)
-        
+
         return headerCell
     }
-    
+
 //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        return 0.0
 //    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+
+    func tableView(_: UITableView, estimatedHeightForHeaderInSection _: Int) -> CGFloat {
         return 600.0
     }
-    
+
     // Select Cell
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
+
+    func tableView(_: UITableView, didSelectRowAt _: IndexPath) {}
 }
 
 private extension ReviewDetailViewController {
@@ -171,7 +167,6 @@ private extension ReviewDetailViewController {
                 $0.height.equalTo(102.0)
                 $0.bottom.equalToSuperview().inset(keyboardSize.height)
             }
-                
         }
     }
 

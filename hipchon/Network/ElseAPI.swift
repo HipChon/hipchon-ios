@@ -23,7 +23,7 @@ class ElseAPI {
                 return Disposables.create()
             }
             print("getBanners")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -52,5 +52,4 @@ class ElseAPI {
             return Disposables.create()
         }
     }
-    
 }

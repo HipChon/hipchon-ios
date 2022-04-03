@@ -203,7 +203,7 @@ class HomeViewController: UIViewController {
         ].forEach {
             view.addSubview($0)
         }
-        
+
         homeSearchView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()

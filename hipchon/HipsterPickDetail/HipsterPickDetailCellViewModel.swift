@@ -23,9 +23,9 @@ class HipsterPickDetailCellViewModel {
     let imageURLs: Driver<[URL]>
     let title: Driver<String>
     let content: Driver<String>
-    
+
     // MARK: view -> viewModel
-    
+
     let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ data: HipsterPickModel) {
@@ -43,7 +43,7 @@ class HipsterPickDetailCellViewModel {
         content = hipsterPick
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
-        
+
         hipsterPick
             .compactMap { $0.imageURLs?.count }
             .bind(to: pageCountVM.entireIdx)
@@ -53,7 +53,6 @@ class HipsterPickDetailCellViewModel {
             .map { $0 + 1 }
             .bind(to: pageCountVM.currentIdx)
             .disposed(by: bag)
-
 
         reviewPlaceVM = hipsterPick
             .compactMap { $0.place }

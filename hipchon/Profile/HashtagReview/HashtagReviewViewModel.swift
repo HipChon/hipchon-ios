@@ -44,15 +44,14 @@ class HashtagReviewViewModel {
         // 첫 load, refresh
         Observable.merge(Observable.just(()).withLatestFrom(type),
                          Singleton.shared.myPlaceRefresh.withLatestFrom(type).filter { $0 == .myReview },
-                         Singleton.shared.likedReviewRefresh.withLatestFrom(type).filter { $0 == .likeReview }
-        )
+                         Singleton.shared.likedReviewRefresh.withLatestFrom(type).filter { $0 == .likeReview })
             .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { ReviewAPI.shared.getMyReviews($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviews.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -68,7 +67,7 @@ class HashtagReviewViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         // refresh
         let activatingState = PublishSubject<Bool>()
 
@@ -85,7 +84,7 @@ class HashtagReviewViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviews.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {

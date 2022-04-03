@@ -29,7 +29,7 @@ class AuthModel {
         name = nil
         profileImage = nil
     }
-    
+
     // 소셜 로그인 시
     init(id: String, type: String) {
         self.id = id

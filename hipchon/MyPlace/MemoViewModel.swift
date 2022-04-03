@@ -12,6 +12,7 @@ class MemoViewModel {
     private let bag = DisposeBag()
 
     // MARK: subViewModels
+
     var befViewModel: MyPlaceCellViewModel?
 
     // MARK: viewModel -> view
@@ -37,8 +38,8 @@ class MemoViewModel {
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
 
-        color = Observable.merge( Observable.just(.gray01),
-                                  memo.map { $0.backgroundColor }.asObservable(),
+        color = Observable.merge(Observable.just(.gray01),
+                                 memo.map { $0.backgroundColor }.asObservable(),
                                  changedColor.asObservable())
             .asDriver(onErrorJustReturn: .gray01)
 
@@ -50,10 +51,9 @@ class MemoViewModel {
             .map { $0.count > 0 && $0.count <= 30 && $0 != "나만의 메모를 남겨볼까요" }
             .asDriver(onErrorJustReturn: true)
 
-        
         presentMemoCompleteVC = memoCoplete
             .asSignal(onErrorJustReturn: ())
-        
+
         completeButtonTapped
             .withLatestFrom(Observable.combineLatest(place.compactMap { $0.id }, inputContent, color.asObservable()))
             .flatMap { NetworkManager.shared.postMemo(placeId: $0, content: $1, color: $2.memoColorString()) }
@@ -63,7 +63,6 @@ class MemoViewModel {
                 Singleton.shared.toastAlert.onNext("메모가 등록되었습니다")
             })
             .disposed(by: bag)
-
     }
 }
 

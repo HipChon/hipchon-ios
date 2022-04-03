@@ -153,7 +153,7 @@ class SettingViewController: UIViewController {
                 })
             })
             .disposed(by: bag)
-        
+
         viewModel.openURL
             .emit(onNext: {
                 UIApplication.shared.open($0, options: [:])

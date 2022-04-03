@@ -25,14 +25,14 @@ class InputCommentViewModel {
 
     init(_ review: BehaviorSubject<ReviewModel>) {
         let postComplete = PublishSubject<Void>()
-        
+
         profileImageURL = Singleton.shared.currentUser
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         registerButtonValid = content
-            .map { 0 < $0.count && $0.count <= 100 }
+            .map { $0.count > 0 && $0.count <= 100 }
             .asDriver(onErrorJustReturn: true)
 
         registerButtonTapped
@@ -62,7 +62,7 @@ class InputCommentViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         contentInit = postComplete
             .asSignal(onErrorJustReturn: ())
     }

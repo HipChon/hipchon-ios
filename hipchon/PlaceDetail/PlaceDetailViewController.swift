@@ -159,7 +159,7 @@ class PlaceDetailViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: view -> viewModel
-        
+
         rx.viewWillAppear
             .map { _ in () }
             .bind(to: viewModel.viewAppear)
@@ -179,7 +179,7 @@ class PlaceDetailViewController: UIViewController {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.postReviewButtonTapped)
             .disposed(by: bag)
-        
+
         scrollView.rx.contentOffset
             .asDriver()
             .map { $0.y }
@@ -192,7 +192,6 @@ class PlaceDetailViewController: UIViewController {
             }
             .drive(navigationView.rx.isHidden)
             .disposed(by: bag)
-        
 
         // MARK: viewModel -> view
 
@@ -304,11 +303,11 @@ class PlaceDetailViewController: UIViewController {
     func layout() {
         [
             scrollView,
-            navigationView
+            navigationView,
         ].forEach {
             view.addSubview($0)
         }
-        
+
         let safetyAreaTopInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0.0
         print(safetyAreaTopInset, "@@@@@@@")
         scrollView.snp.makeConstraints {
@@ -316,12 +315,12 @@ class PlaceDetailViewController: UIViewController {
             $0.top.equalToSuperview().inset(-safetyAreaTopInset)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        
+
         navigationView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
 //            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
 //            $0.top.equalToSuperview().inset(-safetyAreaTopInset)
-            
+
             $0.top.equalToSuperview()
             $0.height.equalTo(60.0 + safetyAreaTopInset)
 //            $0.height.equalTo(0.0)
@@ -333,7 +332,6 @@ class PlaceDetailViewController: UIViewController {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        
 
         [
             imageCollectView,
@@ -356,9 +354,9 @@ class PlaceDetailViewController: UIViewController {
         ].forEach {
             contentView.addSubview($0)
         }
-        
+
         view.addSubview(backButton)
-        
+
         backButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
 //            $0.centerY.equalTo(navigationView)

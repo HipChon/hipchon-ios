@@ -470,7 +470,7 @@ private extension PostReviewViewController {
         }
     }
 
-    @objc private func keyboardWillHide(_ notification: Notification) {
+    @objc private func keyboardWillHide(_: Notification) {
         contentView.snp.remakeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()

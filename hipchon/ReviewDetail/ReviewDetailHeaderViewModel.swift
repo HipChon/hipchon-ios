@@ -10,11 +10,11 @@ import RxSwift
 
 class ReviewDetailHeaderViewModel {
     private let bag = DisposeBag()
-    
+
     // MARK: subviewModels
 
     let reviewPlaceVM: Driver<ReviewPlaceViewModel>
-    
+
     // MARK: viewModel -> view
 
     let placeName: Driver<String>
@@ -29,16 +29,15 @@ class ReviewDetailHeaderViewModel {
     let content: Driver<String>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     let share: Signal<String>
-    
-    
+
     // MARK: view -> viewModel
 
     let likeButtonTapped = PublishRelay<Void>()
     let reportButtonTapped = PublishRelay<Void>()
-    
+
     init(_ review: BehaviorSubject<ReviewModel>) {
 //        let review = BehaviorSubject<ReviewModel>(value: data)
-     
+
         reviewPlaceVM = review
             .compactMap { $0.place }
             .map { BehaviorSubject<PlaceModel>(value: $0) }
@@ -67,7 +66,7 @@ class ReviewDetailHeaderViewModel {
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
-            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "" ) } }
+            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "") } }
             .asDriver(onErrorJustReturn: [])
 
         commentCount = review
@@ -77,14 +76,14 @@ class ReviewDetailHeaderViewModel {
         content = review
             .compactMap { $0.content }
             .asDriver(onErrorJustReturn: "")
-        
+
         // MARK: like
 
         let liked = BehaviorSubject<Bool>(value: false)
         let likeCounted = BehaviorSubject<Int>(value: 0)
         let addLike = PublishSubject<Void>()
         let deleteLike = PublishSubject<Void>()
-        
+
         review
             .compactMap { $0.likeYn }
             .bind(to: liked)
@@ -168,14 +167,13 @@ class ReviewDetailHeaderViewModel {
             })
             .disposed(by: bag)
 
-
         // MARK: scene
 
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
 
         share = reviewPlaceVM.flatMap { $0.share }
-        
+
         reportButtonTapped
             .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
@@ -183,5 +181,4 @@ class ReviewDetailHeaderViewModel {
             })
             .disposed(by: bag)
     }
-    
 }

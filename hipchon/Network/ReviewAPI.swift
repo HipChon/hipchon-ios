@@ -23,7 +23,7 @@ class ReviewAPI {
                 return Disposables.create()
             }
             print("getFeedReviews")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -52,7 +52,7 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
+
     func getPlaceReview(_ id: Int) -> Single<Result<[ReviewModel], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/place/\(id)") else {
@@ -60,7 +60,7 @@ class ReviewAPI {
                 return Disposables.create()
             }
             print("getPlaceReview", id)
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -89,18 +89,18 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
+
     func getMyReviews(_ type: ProfileReviewType) -> Single<Result<[ReviewModel], APIError>> {
         return Single.create { single in
 
             print("getMyReviews")
             let filter = type == .myReview ? "/post/user" : "/mypost"
-           
+
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api\(filter)/\(APIParameters.shared.userId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -129,7 +129,7 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
+
     func getBestReview() -> Single<Result<[BestReviewModel], APIError>> {
         return Single.create { single in
 
@@ -139,7 +139,7 @@ class ReviewAPI {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -168,7 +168,7 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
+
     func getBestReviews() -> Single<Result<[BestReviewModel], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/best") else {
@@ -176,7 +176,7 @@ class ReviewAPI {
                 return Disposables.create()
             }
             print("getBestReviews")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -205,16 +205,16 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
+
     func getReviewDetail(_ id: Int) -> Single<Result<ReviewModel, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            
+
             print("getReviewDetail")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -243,7 +243,7 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
+
     // MARK: Like
 
     func addLike(_ id: Int) -> Single<Result<Void, APIError>> {
@@ -307,7 +307,4 @@ class ReviewAPI {
             return Disposables.create()
         }
     }
-    
-  
-        
 }

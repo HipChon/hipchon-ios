@@ -37,7 +37,6 @@ class HomeViewModel {
     let bannerCurrentIdx = BehaviorRelay<Int>(value: 1)
 
     init() {
-
         hashtags = Driver.just(HashtagModel.model)
 
         pushPlaceListVC = selectedHashtag
@@ -46,7 +45,7 @@ class HomeViewModel {
             .asSignal(onErrorSignalWith: .empty())
 
         // MARK: user
-        
+
         Observable.just(())
             .withLatestFrom(Singleton.shared.currentUser)
             .filter { $0.id == nil }
@@ -59,23 +58,22 @@ class HomeViewModel {
                 switch result {
                 case let .success(data): // 가입된 유저: 로그인
                     Singleton.shared.currentUser.onNext(data)
-                case .failure(let error): // 가입안된 유저: 회원가입
+                case let .failure(error): // 가입안된 유저: 회원가입
                     switch error.statusCode {
                     case 13: // timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        
+
                         break
                     }
                 }
             })
             .disposed(by: bag)
-        
-        
+
         // MARK: banner
-        
+
         let bannerData = BehaviorSubject<[BannerModel]>(value: [])
-        
+
         Observable.just(())
             .filter { DeviceManager.shared.networkStatus }
             .flatMap { _ in ElseAPI.shared.getBanners() }
@@ -83,7 +81,7 @@ class HomeViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     bannerData.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -98,7 +96,7 @@ class HomeViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         banners = bannerData
             .asDriver(onErrorJustReturn: [])
 

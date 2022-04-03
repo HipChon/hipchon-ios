@@ -15,8 +15,7 @@ class CommentAPI {
     private init() {}
     public static let shared = CommentAPI()
     private let bag = DisposeBag()
-    
-    
+
     func getComments(_ id: Int) -> Single<Result<[CommentModel], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/postcomment/\(id)") else {
@@ -103,11 +102,11 @@ class CommentAPI {
             }
 
             print("postComment")
-            
+
             let parameters: [String: Any] = [
                 "detail": content,
                 "postId": id,
-                "userId": APIParameters.shared.userId
+                "userId": APIParameters.shared.userId,
             ]
 
             APIParameters.shared.session
@@ -131,16 +130,16 @@ class CommentAPI {
             return Disposables.create()
         }
     }
-        
+
     func deleteComment(id: Int) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/postcomment/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            
+
             print("deleteComment")
-            
+
             APIParameters.shared.session
                 .request(url, method: .delete, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -158,16 +157,8 @@ class CommentAPI {
                     }
                 })
                 .resume()
-            
+
             return Disposables.create()
         }
     }
-        
-
-    
-    
 }
-
-
-
-

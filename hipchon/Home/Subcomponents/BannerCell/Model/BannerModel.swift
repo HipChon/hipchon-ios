@@ -11,7 +11,6 @@ struct BannerModel: Codable {
     let imageURL: String?
     let linkURL: String?
     let title: String?
-    
 
     enum CodingKeys: String, CodingKey {
         case title, linkURL

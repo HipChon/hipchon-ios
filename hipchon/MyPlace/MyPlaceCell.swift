@@ -80,7 +80,7 @@ class MyPlaceCell: UITableViewCell {
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
         self.viewModel = viewModel
-        
+
         // MARK: view -> viewModel
 
         memoButton.rx.tap

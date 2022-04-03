@@ -11,16 +11,16 @@ import RxSwift
 
 class CommentCellViewModel {
     private let bag = DisposeBag()
-    
+
     // MARK: viewModel -> view
-    
+
     let profileImageURL: Driver<URL>
     let name: Driver<String>
     let content: Driver<String>
     let timeForNow: Driver<String>
-    
+
     // MARK: view -> viewModel
-    
+
     let reportButtonTapped = PublishRelay<Void>()
 
     init(_ data: CommentModel) {

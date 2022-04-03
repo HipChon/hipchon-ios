@@ -27,7 +27,6 @@ class ReviewPlaceViewModel {
     let shareButtonTapped = PublishRelay<Void>()
 
     init(_ place: BehaviorSubject<PlaceModel>) {
-        
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
@@ -50,12 +49,12 @@ class ReviewPlaceViewModel {
         let bookmarked = BehaviorSubject<Bool>(value: false)
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
-        
+
         place
             .compactMap { $0.bookmarkYn }
             .bind(to: bookmarked)
             .disposed(by: bag)
-        
+
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
 
@@ -101,7 +100,7 @@ class ReviewPlaceViewModel {
                 }
             })
             .disposed(by: bag)
-    
+
         deleteBookmark
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)

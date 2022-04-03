@@ -9,7 +9,6 @@ import RxSwift
 import UIKit
 
 class BestReviewCell: UICollectionViewCell {
-
     private lazy var titleLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .semibold)
         $0.textColor = .black
@@ -49,9 +48,9 @@ class BestReviewCell: UICollectionViewCell {
             UIColor.secondary_red,
             UIColor.secondary_blue,
             UIColor.secondary_purple,
-            UIColor.secondary_yellow
+            UIColor.secondary_yellow,
         ]
-        backgroundColor = colors[Int.random(in: (0...4))]
+        backgroundColor = colors[Int.random(in: 0 ... 4)]
     }
 
     private func layout() {

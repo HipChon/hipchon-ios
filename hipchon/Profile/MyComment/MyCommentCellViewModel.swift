@@ -64,6 +64,5 @@ class MyCommentCellViewModel {
                 }
             })
             .disposed(by: bag)
-        
     }
 }

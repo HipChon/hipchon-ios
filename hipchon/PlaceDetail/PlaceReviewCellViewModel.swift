@@ -41,7 +41,7 @@ class PlaceReviewCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
-            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "" ) } }
+            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "") } }
             .asDriver(onErrorJustReturn: [])
 
         content = review

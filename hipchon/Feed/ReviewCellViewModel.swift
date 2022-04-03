@@ -34,7 +34,6 @@ class ReviewCellViewModel {
     let likeButtonTapped = PublishRelay<Void>()
 
     init(_ review: BehaviorSubject<ReviewModel>) {
-
         reviewPlaceVM = review
             .compactMap { $0.place }
             .map { BehaviorSubject<PlaceModel>(value: $0) }
@@ -59,7 +58,7 @@ class ReviewCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
-            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "" ) } }
+            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "") } }
             .asDriver(onErrorJustReturn: [])
 
         commentCount = review
@@ -76,7 +75,7 @@ class ReviewCellViewModel {
         let likeCounted = BehaviorSubject<Int>(value: 0)
         let addLike = PublishSubject<Void>()
         let deleteLike = PublishSubject<Void>()
-        
+
         review
             .compactMap { $0.likeYn }
             .bind(to: liked)
@@ -162,9 +161,8 @@ class ReviewCellViewModel {
 
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
-        
+
         share = reviewPlaceVM
             .flatMap { $0.share }
-            
     }
 }

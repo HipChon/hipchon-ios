@@ -68,11 +68,11 @@ class InputCommentView: UIView {
         viewModel.profileImageURL
             .drive(profileImageView.rx.setImageKF)
             .disposed(by: bag)
-        
+
         viewModel.registerButtonValid
             .drive(registerButton.rx.isEnabled)
             .disposed(by: bag)
-        
+
         viewModel.contentInit
             .emit(onNext: { [weak self] in
                 self?.contentTextField.text = ""

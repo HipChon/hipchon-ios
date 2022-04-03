@@ -28,7 +28,7 @@ class HipsterPickDetailCell: UITableViewCell {
         $0.bounces = false
         $0.isPagingEnabled = true
     }
-    
+
     private lazy var pageCountView = PageCountView().then { _ in
     }
 
@@ -65,7 +65,7 @@ class HipsterPickDetailCell: UITableViewCell {
 
     func bind(_ viewModel: HipsterPickDetailCellViewModel) {
         // MARK: subViewModels
-        
+
         pageCountView.bind(viewModel.pageCountVM)
 
         viewModel.reviewPlaceVM
@@ -75,7 +75,7 @@ class HipsterPickDetailCell: UITableViewCell {
             .disposed(by: bag)
 
         // MARK: view -> viewModel
-        
+
         imageCollectView.rx.contentOffset
             .compactMap { [unowned self] in Int(($0.x + self.contentView.frame.width / 2) / self.contentView.frame.width) }
             .distinctUntilChanged()
@@ -126,7 +126,7 @@ class HipsterPickDetailCell: UITableViewCell {
             let height = width * (238.0 / 390.0)
             $0.height.equalTo(height)
         }
-        
+
         pageCountView.snp.makeConstraints {
             $0.trailing.equalTo(imageCollectView).inset(16.0)
             $0.bottom.equalTo(imageCollectView).inset(16.0)

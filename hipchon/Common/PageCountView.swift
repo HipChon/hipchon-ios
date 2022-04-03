@@ -9,7 +9,6 @@ import RxSwift
 import UIKit
 
 class PageCountView: UIView {
-
     private lazy var label = UILabel().then {
         $0.textAlignment = .center
         $0.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
@@ -47,7 +46,6 @@ class PageCountView: UIView {
     }
 
     private func layout() {
-
         addSubview(label)
 
         label.snp.makeConstraints {

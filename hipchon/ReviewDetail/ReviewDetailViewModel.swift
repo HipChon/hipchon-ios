@@ -8,7 +8,6 @@
 import RxCocoa
 import RxSwift
 
-
 class ReviewDetailViewModel {
     private let bag = DisposeBag()
 
@@ -18,17 +17,16 @@ class ReviewDetailViewModel {
     var reviewDetailHeaderVM: ReviewDetailHeaderViewModel?
 
     // MARK: viewModel -> view
+
     var commentVMs: [CommentCellViewModel] = []
     let reloadData: Signal<Void>
-
 
     init(_ review: BehaviorSubject<ReviewModel>) {
 //        let review = BehaviorSubject<ReviewModel>(value: data)
 
         reviewDetailHeaderVM = ReviewDetailHeaderViewModel(review)
         inputCommentVM = InputCommentViewModel(review)
-        
-        
+
         // review Id 만 있을 시 fetching
         Observable.just(())
             .filter { DeviceManager.shared.networkStatus }
@@ -40,7 +38,7 @@ class ReviewDetailViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     review.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -54,7 +52,6 @@ class ReviewDetailViewModel {
                 }
             })
             .disposed(by: bag)
-       
 
         let reload = PublishSubject<Void>()
         reloadData = reload
@@ -64,29 +61,28 @@ class ReviewDetailViewModel {
             Observable.just(()),
             Singleton.shared.commentRefresh
         )
-            .filter { DeviceManager.shared.networkStatus }
-            .withLatestFrom(review)
-            .compactMap { $0.id }
-            .flatMap { CommentAPI.shared.getComments($0) }
-            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in
-                switch result {
-                case .success(let data):
-                    self.commentVMs = data.map { CommentCellViewModel($0) }
-                    reload.onNext(())
-                case let .failure(error):
-                    switch error.statusCode {
-                    case 401: // 401: unauthorized(토큰 만료)
-                        Singleton.shared.unauthorized.onNext(())
-                    case 13: // 13: Timeout
-                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
-                    default:
-                        Singleton.shared.unknownedError.onNext(error)
-                    }
+        .filter { DeviceManager.shared.networkStatus }
+        .withLatestFrom(review)
+        .compactMap { $0.id }
+        .flatMap { CommentAPI.shared.getComments($0) }
+        .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+        .observe(on: MainScheduler.instance)
+        .subscribe(onNext: { result in
+            switch result {
+            case let .success(data):
+                self.commentVMs = data.map { CommentCellViewModel($0) }
+                reload.onNext(())
+            case let .failure(error):
+                switch error.statusCode {
+                case 401: // 401: unauthorized(토큰 만료)
+                    Singleton.shared.unauthorized.onNext(())
+                case 13: // 13: Timeout
+                    Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                default:
+                    Singleton.shared.unknownedError.onNext(error)
                 }
-            })
-            .disposed(by: bag)
-        
+            }
+        })
+        .disposed(by: bag)
     }
 }

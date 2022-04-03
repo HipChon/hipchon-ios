@@ -36,11 +36,10 @@ class LocalHipsterPickView: UIView {
         $0.isPagingEnabled = false
         $0.backgroundColor = .gray_background
     }
-    
+
     private lazy var pageBarView = PageBarView().then { _ in
     }
 
-    
     private let bag = DisposeBag()
     var viewModel: LocalHipsterPickViewModel?
 
@@ -55,25 +54,24 @@ class LocalHipsterPickView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     func bind(_ viewModel: LocalHipsterPickViewModel) {
         self.viewModel = viewModel
-        
+
         // MARK: subViewModels
+
         pageBarView.bind(viewModel.pageBarVM)
-        
+
         // MARK: view -> viewModel
 
         localHipsterPickCollectionView.rx.modelSelected(LocalHipsterPickModel.self)
             .bind(to: viewModel.selectedLocalHipsterPick)
             .disposed(by: bag)
-        
+
         localHipsterPickCollectionView.rx.contentOffset
             .compactMap { [weak self] in $0.x / (self?.frame.width ?? 1.0) }
             .distinctUntilChanged()
             .bind(to: viewModel.offsetRatio)
             .disposed(by: bag)
-                                                    
 
         // MARK: viewModel -> view
 
@@ -85,7 +83,6 @@ class LocalHipsterPickView: UIView {
                 return cell
             }
             .disposed(by: bag)
-        
     }
 
     private func attribute() {
@@ -115,6 +112,5 @@ class LocalHipsterPickView: UIView {
             $0.top.equalTo(localHipsterPickCollectionView.snp.bottom).offset(33.0)
             $0.height.equalTo(2.0)
         }
-
     }
 }

@@ -96,6 +96,7 @@ class PlaceListCell: UITableViewCell {
 
     func bind(_ viewModel: PlaceListCellViewModel) {
         // MARK: subViewModels
+
         self.viewModel = viewModel
         placeImageCollectView.dataSource = nil
         placeImageCollectView.delegate = nil
@@ -165,7 +166,7 @@ class PlaceListCell: UITableViewCell {
         regionLabel.snp.makeConstraints {
             $0.width.equalTo(frame.width).priority(.high)
         }
-        
+
         let titleStackView = UIStackView(arrangedSubviews: [placeNameLabel, regionLabel, titleSpacingView])
         titleStackView.axis = .horizontal
         titleStackView.alignment = .fill

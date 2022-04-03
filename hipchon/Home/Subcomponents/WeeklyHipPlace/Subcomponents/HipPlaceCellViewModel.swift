@@ -28,8 +28,7 @@ class HipPlaceCellViewModel {
 
     let bookmarkButtonTapped = PublishRelay<Void>()
 
-    init(_ place:  BehaviorSubject<PlaceModel>) {
-
+    init(_ place: BehaviorSubject<PlaceModel>) {
         keywordVM = place
             .compactMap { $0.topKeyword }
             .map { KeywordViewModel($0) }
@@ -61,15 +60,15 @@ class HipPlaceCellViewModel {
 
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
-        
+
         bookmarkCount = bookmarkCounted
             .asDriver(onErrorJustReturn: 0)
-        
+
         place
             .compactMap { $0.bookmarkYn }
             .bind(to: bookmarked)
             .disposed(by: bag)
-        
+
         place
             .compactMap { $0.bookmarkCount }
             .bind(to: bookmarkCounted)
@@ -117,7 +116,7 @@ class HipPlaceCellViewModel {
                 }
             })
             .disposed(by: bag)
-    
+
         deleteBookmark
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)

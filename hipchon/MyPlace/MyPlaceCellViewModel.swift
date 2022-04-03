@@ -30,7 +30,6 @@ class MyPlaceCellViewModel {
     let memoChanged = PublishSubject<Void>()
 
     init(_ place: BehaviorSubject<PlaceModel>) {
-
         imageURL = place
             .compactMap { $0.imageURLs?.first }
             .compactMap { URL(string: $0) }
@@ -63,7 +62,7 @@ class MyPlaceCellViewModel {
 //        memoColor = place
 //            .compactMap { $0.memo?.backgroundColor }
 //            .asDriver(onErrorJustReturn: .gray05)
-        
+
         memoContent = Observable.merge(Observable.just(()),
                                        memoChanged.asObserver())
             .withLatestFrom(place)

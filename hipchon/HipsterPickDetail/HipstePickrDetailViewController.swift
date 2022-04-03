@@ -40,6 +40,7 @@ class HipsterPickDetailViewController: UIViewController {
 
     func bind(_ viewModel: HipsterPickDetailViewModel) {
         // MARK: subViewModels
+
         self.viewModel = viewModel
 
         // MARK: view -> viewModel

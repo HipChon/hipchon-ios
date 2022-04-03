@@ -29,6 +29,7 @@ class AuthAPI {
     ]
 
     // MARK: kakao
+
     // TODO: 로그인 후 User.me? 에서 userId 받은 후 우리 서버 로그인 API 호출?
 
     func kakaoSignin() -> Single<Result<String, APIError>> {
@@ -37,13 +38,14 @@ class AuthAPI {
                 UserApi.shared.accessTokenInfo { _, error in // access token 토큰 요청
                     if error != nil { // access token 토큰 만료 시
                         if UserApi.isKakaoTalkLoginAvailable() { // 앱 로그인: 카톡 어플 O
-                            UserApi.shared.loginWithKakaoTalk { oauthToken, error in
+                            UserApi.shared.loginWithKakaoTalk { _, error in
                                 if error != nil { // 로그인 실패
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 } else { // 로그인 성공, userId 발급
                                     UserApi.shared.me(completion: { user, error in
                                         guard let user = user,
-                                              let id = user.id else {
+                                              let id = user.id
+                                        else {
                                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                             return
                                         }
@@ -52,13 +54,14 @@ class AuthAPI {
                                 }
                             }
                         } else { // 웹 로그인: 카톡 어플 X
-                            UserApi.shared.loginWithKakaoAccount { oauthToken, error in
+                            UserApi.shared.loginWithKakaoAccount { _, error in
                                 if error != nil { // 로그인 실패
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 } else { // 로그인 성공, userId 발급
                                     UserApi.shared.me(completion: { user, error in
                                         guard let user = user,
-                                              let id = user.id else {
+                                              let id = user.id
+                                        else {
                                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                             return
                                         }
@@ -70,7 +73,8 @@ class AuthAPI {
                     } else { // 토큰 유효 시, userId 발급
                         UserApi.shared.me(completion: { user, error in
                             guard let user = user,
-                                  let id = user.id else {
+                                  let id = user.id
+                            else {
                                 single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                 return
                             }
@@ -80,13 +84,14 @@ class AuthAPI {
                 }
             } else { // 토큰 없을 시
                 if UserApi.isKakaoTalkLoginAvailable() { // 간편 로그인: 카톡 어플 있을 시
-                    UserApi.shared.loginWithKakaoTalk { oauthToken, error in
+                    UserApi.shared.loginWithKakaoTalk { _, error in
                         if error != nil { // 로그인 실패
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                         } else { // 로그인 성공, userId 발급
                             UserApi.shared.me(completion: { user, error in
                                 guard let user = user,
-                                      let id = user.id else {
+                                      let id = user.id
+                                else {
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                     return
                                 }
@@ -95,13 +100,14 @@ class AuthAPI {
                         }
                     }
                 } else { // 카톡 어플 없을 시
-                    UserApi.shared.loginWithKakaoAccount { oauthToken, error in
+                    UserApi.shared.loginWithKakaoAccount { _, error in
                         if error != nil {
                             single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                         } else { // 로그인 성공, userId 발급
                             UserApi.shared.me(completion: { user, error in
                                 guard let user = user,
-                                      let id = user.id else {
+                                      let id = user.id
+                                else {
                                     single(.success(.failure(APIError(statusCode: -1, description: error.debugDescription))))
                                     return
                                 }
@@ -117,12 +123,13 @@ class AuthAPI {
 
     func signin(authModel: AuthModel) -> Single<Result<UserModel, APIError>> {
         return Single.create { single in
-            
+
             guard let loginId = authModel.id,
-                  let loginType = authModel.type else {
-                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
-                      return Disposables.create() 
-                  }
+                  let loginType = authModel.type
+            else {
+                single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
+                return Disposables.create()
+            }
 
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -156,11 +163,11 @@ class AuthAPI {
                                                               description: error.errorDescription))))
                             return
                         }
-                         single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()
-            
+
             return Disposables.create()
         }
     }
@@ -168,10 +175,11 @@ class AuthAPI {
     func getUser() -> Single<Result<UserModel, APIError>> {
         return Single.create { single in
             guard let loginId = KeychainWrapper.standard.string(forKey: "loginId"),
-                  let loginType = KeychainWrapper.standard.string(forKey: "loginType") else {
-                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
-                      return Disposables.create()
-                  }
+                  let loginType = KeychainWrapper.standard.string(forKey: "loginType")
+            else {
+                single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
+                return Disposables.create()
+            }
 
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -199,14 +207,14 @@ class AuthAPI {
                                                               description: error.errorDescription))))
                             return
                         }
-                         single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
                     }
                 })
                 .resume()
             return Disposables.create()
         }
     }
-    
+
     func signup(authModel: AuthModel) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             print("signup")
@@ -214,32 +222,32 @@ class AuthAPI {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
                 return Disposables.create()
             }
-            
+
             guard let loginId = authModel.id,
                   let loginType = authModel.type,
                   let isMarketing = authModel.maketingAgree,
                   let name = authModel.name
 //                  let profileImage = authModel.profileImage,
 //                  let imageData = profileImage.jpegData(compressionQuality: 1.0)
-            
+
             else {
-                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
-                      return Disposables.create()
-                  }
-            
+                single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
+                return Disposables.create()
+            }
+
 //            let header: HTTPHeaders = [
 //                "Authorization": "some auth",
 //                "Accept": "application/json",
 //                "Content-Type": "multipart/form-data",
 //            ]
-            
+
 //            let parameters: [String : Any] = [
 //                "loginId": loginId,
 //                "loginType": loginType,
 //                "isMarketing": isMarketing,
 //                "name": name,
 //            ]
-            
+
 //            APIParameters.shared.session
 //                .upload(multipartFormData: { multipartFormData in
 //                    for (key, value) in parameters {
@@ -261,20 +269,18 @@ class AuthAPI {
 //                    }
 //                })
 //                .resume()
-            
-            
+
             // tmp
 
             print("signin")
-            
-            let parameters: [String : Any] = [
+
+            let parameters: [String: Any] = [
                 "loginId": loginId,
                 "loginType": loginType,
                 "isMarketing": isMarketing,
                 "name": name,
 //                "profileImage": "",
 //                "email": "bsbs7605@naver.com"
-                
             ]
 
             APIParameters.shared.session
@@ -283,7 +289,7 @@ class AuthAPI {
                 .response(completionHandler: { response in
                     switch response.result {
                     case .success:
-                            single(.success(.success(())))
+                        single(.success(.success(())))
                     case let .failure(error):
                         guard let statusCode = response.response?.statusCode else {
                             single(.success(.failure(APIError(statusCode: error._code,
@@ -294,7 +300,7 @@ class AuthAPI {
                     }
                 })
                 .resume()
-            
+
             return Disposables.create()
         }
     }
@@ -302,10 +308,11 @@ class AuthAPI {
     func withdraw() -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let loginId = KeychainWrapper.standard.string(forKey: "loginId"),
-                  let loginType = KeychainWrapper.standard.string(forKey: "loginType") else {
-                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
-                      return Disposables.create()
-                  }
+                  let loginType = KeychainWrapper.standard.string(forKey: "loginType")
+            else {
+                single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
+                return Disposables.create()
+            }
 
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user/\(loginType)/\(loginId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
@@ -333,12 +340,12 @@ class AuthAPI {
                     }
                 })
                 .resume()
-            
+
             return Disposables.create()
         }
     }
 
-    func putProfileImage(name: String, image: UIImage?) -> Single<Result<Void, APIError>> {
+    func putProfileImage(name _: String, image _: UIImage?) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             print("putProfileImage")
             single(.success(.success(())))
@@ -346,23 +353,23 @@ class AuthAPI {
 //                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
 //                return Disposables.create()
 //            }
-//            
+//
 //            guard let profileImage = image,
 //                  let imageData = profileImage.jpegData(compressionQuality: 1.0) else {
 //                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
 //                      return Disposables.create()
 //                  }
-//            
+//
 //            let header: HTTPHeaders = [
 //                "Authorization": "some auth",
 //                "Accept": "application/json",
 //                "Content-Type": "multipart/form-data",
 //            ]
-//            
+//
 //            let parameters: [String : Any] = [
 //                "name": name,
 //            ]
-//            
+//
 //            APIParameters.shared.session
 //                .upload(multipartFormData: { multipartFormData in
 //                    for (key, value) in parameters {

@@ -38,7 +38,7 @@ class FilterViewModel {
     init(_ befViewType: FilterSearchType) {
         regions = Driver.just(RegionModel.model)
             .map { $0.map { FilterCellModel(region: $0) } }
-        
+
         categorys = Driver.just(CategoryModel.model)
             .map { $0.map { FilterCellModel(category: $0) } }
 
@@ -84,7 +84,7 @@ class FilterViewModel {
             .withLatestFrom(Observable.combineLatest(region.asObservable(),
                                                      category.asObservable(),
                                                      resultSelector: {
-                SearchFilterModel(region: $0.region, category: $1.category)
+                                                         SearchFilterModel(region: $0.region, category: $1.category)
                                                      }))
             .map { PlaceListViewModel($0) }
             .asSignal(onErrorSignalWith: .empty())

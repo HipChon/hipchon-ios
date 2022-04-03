@@ -31,7 +31,6 @@ class ReviewCell: UITableViewCell {
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
                                                                   collectionViewLayout: UICollectionViewLayout()).then {
-
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 173.0
@@ -106,7 +105,7 @@ class ReviewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         profileImageView.layer.cornerRadius = 45.0 / 2 // profileImageView.frame.width / 2
-        
+
         viewModel?.reviewImageURLs
             .map { $0.count }
             .asDriver()
@@ -124,7 +123,7 @@ class ReviewCell: UITableViewCell {
                     default:
                         width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
                     }
-                    
+
                     layout.itemSize = CGSize(width: width, height: height)
                     layout.minimumLineSpacing = itemSpacing
                     layout.minimumInteritemSpacing = itemSpacing
@@ -135,7 +134,7 @@ class ReviewCell: UITableViewCell {
 
     func bind(_ viewModel: ReviewCellViewModel) {
         self.viewModel = viewModel
-        
+
         viewModel.reviewPlaceVM
             .drive(onNext: { [weak self] in
                 self?.reviewPlaceView.bind($0)

@@ -17,10 +17,10 @@ class ReviewModel: Codable {
     var likeCount: Int?
     let commentCount: Int?
     var likeYn: Bool?
-    
+
     // 아직 안씀
 //    let userPostCount: Int?
-    
+
     init(id: Int?) {
         self.id = id
         content = nil
@@ -41,7 +41,7 @@ class ReviewModel: Codable {
         case content = "detail"
         case postDt = "date"
         case likeYn
-        
+
         case user, place
 //        case userPostCount = "userPostCnt"
     }

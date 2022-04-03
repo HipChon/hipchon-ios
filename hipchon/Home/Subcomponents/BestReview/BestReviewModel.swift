@@ -12,7 +12,7 @@ class BestReviewModel: Codable {
     let title: String?
     let reviewId: Int?
     let hashtag: HashtagModel?
-    
+
     var review: ReviewModel? {
         return ReviewModel(id: reviewId)
     }

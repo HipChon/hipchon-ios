@@ -186,7 +186,6 @@ class EditProfileViewController: UIViewController {
 
     func layout() {
         [
-            
             setNickNameLabel,
             profileImageButton,
             nickNameTextField,
@@ -258,12 +257,12 @@ private extension EditProfileViewController {
             object: nil
         )
     }
-    
+
     @objc private func keyboardWillShow(_ notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             setNickNameLabel.snp.remakeConstraints {
                 $0.leading.equalToSuperview().inset(20.0)
-                $0.top.equalTo(navigationView.snp.top)//.offset(45.0)
+                $0.top.equalTo(navigationView.snp.top) // .offset(45.0)
             }
         }
     }

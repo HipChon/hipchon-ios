@@ -30,7 +30,7 @@ class ProfileViewModel {
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         name = Singleton.shared.currentUser
             .map { $0.name }
             .asDriver(onErrorJustReturn: "")

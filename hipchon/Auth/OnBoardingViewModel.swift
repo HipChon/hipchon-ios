@@ -30,7 +30,7 @@ class OnBoardingViewModel {
         let login = PublishSubject<Void>()
         let authModel = BehaviorSubject<AuthModel?>(value: nil)
         let kakaoId = PublishSubject<String>()
-        
+
 //        // 자동 로그인
 //        Observable.just(())
 //            .delay(.seconds(3), scheduler: MainScheduler.instance)
@@ -39,18 +39,18 @@ class OnBoardingViewModel {
 //                signupedUser.onNext(true)
 //            })
 //            .disposed(by: bag)
-        
+
         // AuthModel
-        
+
         Observable.merge(kakaoId.map { AuthModel(id: $0, type: "kakao") },
                          appleId.map { AuthModel(id: $0, type: "apple") })
             .bind(to: authModel)
             .disposed(by: bag)
- 
+
         guestLoginButtonTapped
             .bind(to: login)
             .disposed(by: bag)
-        
+
         // 카카오 로그인
         kakaoLoginButtonTapped
             .filter { DeviceManager.shared.networkStatus }
@@ -59,7 +59,7 @@ class OnBoardingViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let id):
+                case let .success(id):
                     kakaoId.onNext(id)
                 case let .failure(error):
                     switch error.statusCode {
@@ -73,9 +73,9 @@ class OnBoardingViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         // 힙촌 로그인
-        
+
         authModel
             .compactMap { $0 } // nil filtering
             .filter { _ in DeviceManager.shared.networkStatus }
@@ -89,7 +89,7 @@ class OnBoardingViewModel {
                 case let .success(data): // 가입된 유저: 로그인
                     Singleton.shared.currentUser.onNext(data)
                     signupedUser.onNext(true)
-                case .failure(let error): // 가입안된 유저: 회원가입
+                case let .failure(error): // 가입안된 유저: 회원가입
                     switch error.statusCode {
                     case 13: // timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
@@ -99,7 +99,7 @@ class OnBoardingViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         // 회원가입
         pushTermsVC = signupedUser
             .filter { $0 == false }
@@ -115,7 +115,7 @@ class OnBoardingViewModel {
                 login.onNext(())
             })
             .disposed(by: bag)
-        
+
         pushMainVC = login
             .asSignal(onErrorJustReturn: ())
     }

@@ -14,7 +14,7 @@ class LoadingIndicator {
             guard let window = UIApplication.shared.windows.last else { return }
 
             let loadingIndicatorView: UIActivityIndicatorView
-            if let existedView = window.subviews.first(where: { $0 is UIActivityIndicatorView } ) as? UIActivityIndicatorView {
+            if let existedView = window.subviews.first(where: { $0 is UIActivityIndicatorView }) as? UIActivityIndicatorView {
                 loadingIndicatorView = existedView
             } else {
                 loadingIndicatorView = UIActivityIndicatorView(style: .large)
@@ -31,7 +31,7 @@ class LoadingIndicator {
     static func hideLoading() {
         DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.last else { return }
-            window.subviews.filter({ $0 is UIActivityIndicatorView }).forEach { $0.removeFromSuperview() }
+            window.subviews.filter { $0 is UIActivityIndicatorView }.forEach { $0.removeFromSuperview() }
         }
     }
 }

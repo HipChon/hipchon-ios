@@ -152,7 +152,7 @@ class MemoViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
-        
+
         viewModel.presentMemoCompleteVC
             .emit(onNext: { [weak self] in
                 let memoCompleteVC = MemoCompleteViewController()

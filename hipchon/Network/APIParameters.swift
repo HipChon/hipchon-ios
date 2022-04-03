@@ -10,29 +10,26 @@ import RxSwift
 import SwiftKeychainWrapper
 
 class APIParameters {
-    
     private init() {}
-    
+
     static let shared = APIParameters()
     private let bag = DisposeBag()
     var userId = KeychainWrapper.standard.string(forKey: "userId") ?? "-1"
-    
+
     let hostUrl = "http://54.180.25.216"
     let headers: HTTPHeaders = [
         "Authorization": "some auth",
         "Accept": "application/json",
         // TODO: Token
     ]
-    
+
     let session: Session = {
-      let configuration = URLSessionConfiguration.af.default
+        let configuration = URLSessionConfiguration.af.default
         configuration.timeoutIntervalForRequest = 5000
         configuration.timeoutIntervalForResource = 5000
-      return Session(configuration: configuration)
+        return Session(configuration: configuration)
     }()
-    
-    
-    
+
     func refreshUserId() {
         userId = KeychainWrapper.standard.string(forKey: "userId") ?? "-1"
     }
