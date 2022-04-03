@@ -28,7 +28,7 @@ class PlaceModel: Codable {
     let reviews: [ReviewModel]?
     let keywords: [KeywordModel]?
     let menus: [MenuModel]?
-    let memo: MemoModel?
+    var memo: MemoModel?
     let hashtag: HashtagModel?
 
     let topImageUrl: String?

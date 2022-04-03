@@ -55,30 +55,26 @@ class MyPlaceCellViewModel {
             .compactMap { $0.reviewCount }
             .asDriver(onErrorJustReturn: 0)
 
-//        memoContent = place
-//            .compactMap { $0.memo?.content }
-//            .asDriver(onErrorJustReturn: "")
-//
-//        memoColor = place
-//            .compactMap { $0.memo?.backgroundColor }
-//            .asDriver(onErrorJustReturn: .gray05)
-
-        memoContent = Observable.merge(Observable.just(()),
-                                       memoChanged.asObserver())
-            .withLatestFrom(place)
-            .compactMap { $0.id }
-            .map { String($0) }
-            .compactMap { UserDefaults.standard.value(forKey: "\($0)Content") as? String }
+        memoContent = place
+            .compactMap { $0.memo?.content }
             .asDriver(onErrorJustReturn: "")
 
-        memoColor = Observable.merge(Observable.just(()),
-                                     memoChanged.asObserver())
-            .withLatestFrom(place)
-            .compactMap { $0.id }
-            .map { String($0) }
-            .compactMap { UserDefaults.standard.value(forKey: "\($0)Color") as? String }
-            .map { $0.stringToMemoColor() }
-            .asDriver(onErrorJustReturn: .gray04)
+        memoColor = place
+            .compactMap { $0.memo?.backgroundColor }
+            .asDriver(onErrorJustReturn: .gray05)
+
+        // TODO: remove
+        place
+            .filter { $0.memo == nil && $0.id != nil }
+            .map { org -> PlaceModel in
+                let content = UserDefaults.standard.value(forKey: "\(org.id ?? -1)Content") as? String ?? "메모"
+                let color = UserDefaults.standard.value(forKey: "\(org.id ?? -1)Color") as? String ?? "gray01"
+                org.memo = MemoModel(content: content, color: color)
+                return org
+            }
+            .bind(to: place)
+            .disposed(by: bag)
+
 
         presentMemoVC = memoButtonTapped
             .map { MemoViewModel(place) }

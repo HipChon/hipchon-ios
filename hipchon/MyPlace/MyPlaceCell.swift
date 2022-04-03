@@ -121,7 +121,7 @@ class MyPlaceCell: UITableViewCell {
             .disposed(by: bag)
 
         viewModel.memoContent
-            .map { _ in UIColor.black }
+            .map { $0 == "메모" ? .gray01 : .black }
             .drive(memoButton.rx.titleColor)
             .disposed(by: bag)
 
@@ -136,7 +136,6 @@ class MyPlaceCell: UITableViewCell {
                 guard let topVC = UIApplication.topViewController() else { return }
                 let memoVC = MemoViewController()
                 memoVC.bind(viewModel)
-                viewModel.befViewModel = self.viewModel
 
                 memoVC.providesPresentationContextTransitionStyle = true
                 memoVC.definesPresentationContext = true

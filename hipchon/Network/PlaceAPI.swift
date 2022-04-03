@@ -330,4 +330,28 @@ class PlaceAPI {
             return Disposables.create()
         }
     }
+    
+    func postMemo(placeId: Int, memo: MemoModel) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let content = memo.content,
+                  let color = memo.color else {
+                      single(.success(.failure(APIError(statusCode: -1, description: "parameters error"))))
+                      return Disposables.create()
+                  }
+            
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("postMemo")
+
+            UserDefaults.standard.set(content, forKey: "\(placeId)Content")
+            UserDefaults.standard.set(color, forKey: "\(placeId)Color")
+
+            single(.success(.success(())))
+
+            return Disposables.create()
+        }
+    }
 }
