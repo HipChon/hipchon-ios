@@ -237,9 +237,25 @@ class PlaceDesView: UIView {
             $0.axis = .vertical
             $0.alignment = .fill
             $0.distribution = .equalCentering
-            $0.spacing = 7.0
+            $0.spacing = 10.0
         }
 
+        let firstButtonBoundaryView = UIView()
+        let secondButtonBoundaryView = UIView()
+        let thirdButtonBoundaryView = UIView()
+        [
+            firstButtonBoundaryView,
+            secondButtonBoundaryView,
+            thirdButtonBoundaryView,
+        ].forEach {
+            $0.backgroundColor = .black
+            $0.snp.makeConstraints {
+                $0.width.equalTo(2.0)
+                $0.height.equalTo(27.5)
+            }
+        }
+       
+        
         [
             callButton,
             shareButton,
@@ -252,30 +268,16 @@ class PlaceDesView: UIView {
         }
 
         let buttonStackView = UIStackView(arrangedSubviews: [callStackView,
+                                                             firstButtonBoundaryView,
                                                              shareStackView,
+                                                             secondButtonBoundaryView,
                                                              reviewStackView,
+                                                             thirdButtonBoundaryView,
                                                              bookmarkStackView])
         buttonStackView.axis = .horizontal
-        buttonStackView.alignment = .fill
+        buttonStackView.alignment = .center
         buttonStackView.distribution = .equalSpacing
         buttonStackView.spacing = 0.0
-
-        let sectorStackView = UIStackView(arrangedSubviews: [sectorImageView,
-                                                             sectorLabel])
-        let businessHoursStackView = UIStackView(arrangedSubviews: [businessHoursImageView,
-                                                                    businessHoursLabel])
-        let descriptionStackView = UIStackView(arrangedSubviews: [descriptionImageView,
-                                                                  descriptionImageView])
-        [
-            sectorStackView,
-            businessHoursStackView,
-            descriptionStackView,
-        ].forEach {
-            $0.axis = .horizontal
-            $0.alignment = .center
-            $0.distribution = .equalSpacing
-            $0.spacing = 4.0
-        }
 
         [
             placeNameLabel,
@@ -320,7 +322,7 @@ class PlaceDesView: UIView {
 
         sectorLabel.snp.makeConstraints {
             $0.leading.equalTo(sectorImageView.snp.trailing).offset(8.0)
-            $0.top.equalTo(sectorImageView)
+            $0.centerY.equalTo(sectorImageView)
             $0.trailing.equalToSuperview().inset(20.0)
         }
 
@@ -332,7 +334,7 @@ class PlaceDesView: UIView {
 
         businessHoursLabel.snp.makeConstraints {
             $0.leading.equalTo(businessHoursImageView.snp.trailing).offset(8.0)
-            $0.top.equalTo(businessHoursImageView)
+            $0.centerY.equalTo(businessHoursImageView)
             $0.trailing.equalToSuperview().inset(20.0)
         }
 
