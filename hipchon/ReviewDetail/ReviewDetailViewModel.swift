@@ -28,6 +28,32 @@ class ReviewDetailViewModel {
         reviewDetailHeaderVM = ReviewDetailHeaderViewModel(review)
         inputCommentVM = InputCommentViewModel(review)
         
+        
+        // review Id 만 있을 시 fetching
+        Observable.just(())
+            .filter { DeviceManager.shared.networkStatus }
+            .withLatestFrom(review)
+            .filter { $0.user == nil }
+            .compactMap { $0.id }
+            .flatMap { ReviewAPI.shared.getReviewDetail($0) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    review.onNext(data)
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
+            })
+            .disposed(by: bag)
        
 
         let reload = PublishSubject<Void>()

@@ -20,6 +20,18 @@ class ReviewModel: Codable {
     
     // 아직 안씀
 //    let userPostCount: Int?
+    
+    init(id: Int?) {
+        self.id = id
+        content = nil
+        postDt = nil
+        imageURLs = nil
+        user = nil
+        place = nil
+        likeCount = nil
+        commentCount = nil
+        likeYn = nil
+    }
 
     enum CodingKeys: String, CodingKey {
         case id = "postId"

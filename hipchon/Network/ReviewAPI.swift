@@ -206,6 +206,44 @@ class ReviewAPI {
         }
     }
     
+    func getReviewDetail(_ id: Int) -> Single<Result<ReviewModel, APIError>> {
+        return Single.create { single in
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/\(APIParameters.shared.userId)/\(id)") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+            
+            print("getReviewDetail")
+            
+            APIParameters.shared.session
+                .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
+                .validate(statusCode: 200 ..< 300)
+                .responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        if let data = response.data {
+                            do {
+                                let model = try JSONDecoder().decode(ReviewModel.self, from: data)
+                                single(.success(.success(model)))
+                            } catch {
+                                single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
+                            }
+                        }
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
+
+            return Disposables.create()
+        }
+    }
+    
     // MARK: Like
 
     func addLike(_ id: Int) -> Single<Result<Void, APIError>> {
