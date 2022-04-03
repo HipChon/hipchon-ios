@@ -101,14 +101,14 @@ class PlaceDesView: UIView {
         $0.contentHorizontalAlignment = .left
         $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 0.0)
     }
-    
+
     private lazy var reportButton = UIButton().then {
         $0.setImage(UIImage(named: "report"), for: .normal)
         $0.setTitle(" 신고하기", for: .normal)
         $0.setTitleColor(.gray04, for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
     }
-    
+
     private lazy var infoChangeButton = UIButton().then {
 //        $0.setImage(UIImage(named: "arrowGray"), for: .normal)
         $0.setTitle("정보 수정 제안 >", for: .normal)
@@ -160,12 +160,12 @@ class PlaceDesView: UIView {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.linkButtonTapped)
             .disposed(by: bag)
-        
+
         reportButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.reportButtonTapped)
             .disposed(by: bag)
-        
+
         infoChangeButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.infoChangeButtonTapped)
@@ -207,7 +207,7 @@ class PlaceDesView: UIView {
         viewModel.setLink
             .drive(linkButton.rx.title())
             .disposed(by: bag)
-        
+
         viewModel.openURL
             .emit(onNext: {
                 UIApplication.shared.open($0, options: [:])
@@ -237,7 +237,22 @@ class PlaceDesView: UIView {
             $0.axis = .vertical
             $0.alignment = .fill
             $0.distribution = .equalCentering
-            $0.spacing = 7.0
+            $0.spacing = 10.0
+        }
+
+        let firstButtonBoundaryView = UIView()
+        let secondButtonBoundaryView = UIView()
+        let thirdButtonBoundaryView = UIView()
+        [
+            firstButtonBoundaryView,
+            secondButtonBoundaryView,
+            thirdButtonBoundaryView,
+        ].forEach {
+            $0.backgroundColor = .black
+            $0.snp.makeConstraints {
+                $0.width.equalTo(2.0)
+                $0.height.equalTo(27.5)
+            }
         }
 
         [
@@ -252,30 +267,16 @@ class PlaceDesView: UIView {
         }
 
         let buttonStackView = UIStackView(arrangedSubviews: [callStackView,
+                                                             firstButtonBoundaryView,
                                                              shareStackView,
+                                                             secondButtonBoundaryView,
                                                              reviewStackView,
+                                                             thirdButtonBoundaryView,
                                                              bookmarkStackView])
         buttonStackView.axis = .horizontal
-        buttonStackView.alignment = .fill
+        buttonStackView.alignment = .center
         buttonStackView.distribution = .equalSpacing
         buttonStackView.spacing = 0.0
-
-        let sectorStackView = UIStackView(arrangedSubviews: [sectorImageView,
-                                                             sectorLabel])
-        let businessHoursStackView = UIStackView(arrangedSubviews: [businessHoursImageView,
-                                                                    businessHoursLabel])
-        let descriptionStackView = UIStackView(arrangedSubviews: [descriptionImageView,
-                                                                  descriptionImageView])
-        [
-            sectorStackView,
-            businessHoursStackView,
-            descriptionStackView,
-        ].forEach {
-            $0.axis = .horizontal
-            $0.alignment = .fill
-            $0.distribution = .equalSpacing
-            $0.spacing = 4.0
-        }
 
         [
             placeNameLabel,
@@ -320,7 +321,7 @@ class PlaceDesView: UIView {
 
         sectorLabel.snp.makeConstraints {
             $0.leading.equalTo(sectorImageView.snp.trailing).offset(8.0)
-            $0.top.equalTo(sectorImageView)
+            $0.centerY.equalTo(sectorImageView)
             $0.trailing.equalToSuperview().inset(20.0)
         }
 
@@ -332,7 +333,7 @@ class PlaceDesView: UIView {
 
         businessHoursLabel.snp.makeConstraints {
             $0.leading.equalTo(businessHoursImageView.snp.trailing).offset(8.0)
-            $0.top.equalTo(businessHoursImageView)
+            $0.centerY.equalTo(businessHoursImageView)
             $0.trailing.equalToSuperview().inset(20.0)
         }
 
@@ -353,12 +354,12 @@ class PlaceDesView: UIView {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(16.0)
             $0.height.equalTo(44.0)
         }
-        
+
         reportButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
             $0.centerY.equalTo(infoChangeButton)
         }
-        
+
         infoChangeButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(20.0)
             $0.top.equalTo(linkButton.snp.bottom).offset(16.0)

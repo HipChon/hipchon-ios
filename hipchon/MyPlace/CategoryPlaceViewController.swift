@@ -1,5 +1,5 @@
 //
-//  SectorPlaceViewController.swift
+//  CategoryPlaceViewController.swift
 //  hipchon
 //
 //  Created by 김범수 on 2022/02/08.
@@ -9,7 +9,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 
-class SectorPlaceViewController: UIViewController {
+class CategoryPlaceViewController: UIViewController {
     // MARK: Property
 
     private lazy var placeTableView = UITableView().then {
@@ -39,7 +39,7 @@ class SectorPlaceViewController: UIViewController {
         attribute()
     }
 
-    func bind(_ viewModel: SectorPlaceViewModel) {
+    func bind(_ viewModel: CategoryPlaceViewModel) {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel

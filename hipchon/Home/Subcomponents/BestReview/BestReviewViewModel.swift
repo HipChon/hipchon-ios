@@ -23,7 +23,7 @@ class BestReviewViewModel {
 
     init() {
         let reviewDatas = BehaviorSubject<[BestReviewModel]>(value: [])
-        
+
         reviews = reviewDatas
             .asDriver(onErrorJustReturn: [])
 
@@ -34,7 +34,7 @@ class BestReviewViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -50,7 +50,7 @@ class BestReviewViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         pushReviewDetailVC = selectedBestReview
             .compactMap { $0.review }
             .map { ReviewDetailViewModel(BehaviorSubject<ReviewModel>(value: $0)) }

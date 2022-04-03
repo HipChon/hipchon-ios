@@ -22,7 +22,7 @@ class PostReviewViewController: UIViewController {
     }
 
     private lazy var placeImageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 5.0
         $0.layer.masksToBounds = true
     }
@@ -329,7 +329,7 @@ class PostReviewViewController: UIViewController {
         }
 
         navigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(navigationView.viewHeight)
         }
@@ -470,7 +470,7 @@ private extension PostReviewViewController {
         }
     }
 
-    @objc private func keyboardWillHide(_ notification: Notification) {
+    @objc private func keyboardWillHide(_: Notification) {
         contentView.snp.remakeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()

@@ -54,7 +54,6 @@ class ProfileViewController: TabmanViewController {
         bar.backgroundColor = .white
 
         bar.layout.transitionStyle = .progressive
-        
     }
 
     let myReviewVM = HashtagReviewViewModel(.myReview)
@@ -114,7 +113,7 @@ class ProfileViewController: TabmanViewController {
         viewModel.profileImageURL
             .drive(profileImageButton.rx.setImageKF)
             .disposed(by: bag)
-        
+
         viewModel.name
             .drive(onNext: { [weak self] in
                 self?.setNameLabel($0)
@@ -186,7 +185,7 @@ class ProfileViewController: TabmanViewController {
         dataSource = self
         addBar(topBar, dataSource: self, at: .custom(view: topBarPositionView, layout: nil))
     }
-    
+
     private func setNameLabel(_ name: String?) {
         if name != nil {
             nameLabel.text = name!
@@ -197,9 +196,9 @@ class ProfileViewController: TabmanViewController {
             settingButton.isHidden = false
         } else {
             nameLabel.text = """
-로그인이
-필요합니다
-"""
+            로그인이
+            필요합니다
+            """
             nameLabel.font = .AppleSDGothicNeo(size: 16.0, type: .semibold)
             nameLabel.textColor = .gray04
             nameLabel.numberOfLines = 2
@@ -238,5 +237,4 @@ extension ProfileViewController: PageboyViewControllerDataSource, TMBarDataSourc
         }
         return TMBarItem(title: title)
     }
-
 }

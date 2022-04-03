@@ -17,7 +17,7 @@ class HashtagModel: Codable {
         self.name = name
         imageURL = nil
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "hasgtagId"
         case name

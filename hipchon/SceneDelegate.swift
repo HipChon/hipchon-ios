@@ -6,11 +6,11 @@
 //
 
 import KakaoSDKAuth
+import SwiftKeychainWrapper
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    let loginViewModel = LoginViewModel()
 
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -18,16 +18,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .white
 
+        let autoLogin = KeychainWrapper.standard.string(forKey: "userId") != nil
+
         let onBoardingViewController = OnBoardingViewController()
-        window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
-
-//        let tapBarViewController = TabBarViewController()
-//        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
-
+        let naviagtionController = UINavigationController(rootViewController: onBoardingViewController)
+        if KeychainWrapper.standard.string(forKey: "userId") != nil { // 자동 로그인
+            let tapBarViewController = TabBarViewController()
+            naviagtionController.viewControllers.append(tapBarViewController)
+        }
+        window?.rootViewController = naviagtionController
         window?.makeKeyAndVisible()
     }
 
     // MARK: Kakao Redirect Url
+
     func scene(_: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             if AuthApi.isKakaoTalkLoginUrl(url) {

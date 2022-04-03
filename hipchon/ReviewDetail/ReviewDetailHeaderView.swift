@@ -5,11 +5,10 @@
 //  Created by 김범수 on 2022/03/30.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 class ReviewDetailHeaderView: UITableViewHeaderFooterView {
-    
     private lazy var placeNameLabel = UILabel().then {
         $0.font = .GmarketSans(size: 22.0, type: .medium)
     }
@@ -37,14 +36,14 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
                                                                   collectionViewLayout: UICollectionViewLayout()).then {
         $0.delegate = nil
         $0.dataSource = nil
-        
+
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 300.0
         let height = 191.0
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -75,7 +74,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
     private lazy var commentCountLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
     }
-    
+
     private lazy var reportButton = UIButton().then {
         $0.setImage(UIImage(named: "report"), for: .normal)
         $0.setTitle(" 신고하기", for: .normal)
@@ -94,46 +93,80 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
-    
-    static public let identyfier = "ReviewDetailHeaderView"
+
+    public static let identyfier = "ReviewDetailHeaderView"
     private var bag = DisposeBag()
-    
+    var viewModel: ReviewDetailHeaderViewModel?
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         attribute()
         layout()
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         bag = DisposeBag()
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        profileImageView.layer.cornerRadius = 45.0 / 2 // profileImageView.frame.width / 2
+
+        viewModel?.reviewImageURLs
+            .map { $0.count }
+            .asDriver()
+            .drive(onNext: { [unowned self] count in
+                let cellWidth = self.contentView.frame.width
+                if let layout = self.reviewImageCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                    var width = 300.0
+                    let height = 191.0
+                    let itemSpacing = 4.0
+                    switch count {
+                    case 1:
+                        width = cellWidth - 20.0 * 2
+                    case 2:
+                        width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
+                    default:
+                        break
+                    }
+
+                    layout.itemSize = CGSize(width: width, height: height)
+                    layout.minimumLineSpacing = itemSpacing
+                    layout.minimumInteritemSpacing = itemSpacing
+                }
+            })
+            .disposed(by: bag)
+    }
+
+
     func bind(_ viewModel: ReviewDetailHeaderViewModel) {
-        
         // MARK: subViewModels
+        
+        self.viewModel = viewModel
 
         viewModel.reviewPlaceVM
             .drive(onNext: {
                 self.reviewPlaceView.bind($0)
             })
             .disposed(by: bag)
-        
+
         // MARK: view -> viewModel
 
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-        
+
         reportButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.reportButtonTapped)
             .disposed(by: bag)
-        
+
         // MARK: viewModel -> view
 
         viewModel.placeName
@@ -186,7 +219,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         viewModel.content
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
-        
+
         viewModel.pushPlaceDetailVC
             .emit(onNext: { [weak self] viewModel in
                 guard let topVC = UIApplication.topViewController() else { return }
@@ -204,14 +237,13 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
                 topVC.present(activityVC, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        
     }
-    
+
     private func attribute() {
         backgroundColor = .white
         profileImageView.layer.cornerRadius = 22.5
     }
-    
+
     private func layout() {
         [
             placeNameLabel,
@@ -298,7 +330,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             $0.centerY.equalTo(commentButton)
             $0.leading.equalTo(commentButton.snp.trailing).offset(12.0)
         }
-        
+
         reportButton.snp.makeConstraints {
             $0.centerY.equalTo(commentButton)
             $0.trailing.equalToSuperview().inset(20.0)
@@ -311,5 +343,4 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             $0.bottom.equalToSuperview().inset(0.0)
         }
     }
-    
 }

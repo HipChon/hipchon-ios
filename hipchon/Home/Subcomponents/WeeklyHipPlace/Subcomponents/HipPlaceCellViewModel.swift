@@ -28,8 +28,7 @@ class HipPlaceCellViewModel {
 
     let bookmarkButtonTapped = PublishRelay<Void>()
 
-    init(_ place:  BehaviorSubject<PlaceModel>) {
-
+    init(_ place: BehaviorSubject<PlaceModel>) {
         keywordVM = place
             .compactMap { $0.topKeyword }
             .map { KeywordViewModel($0) }
@@ -61,15 +60,15 @@ class HipPlaceCellViewModel {
 
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
-        
+
         bookmarkCount = bookmarkCounted
             .asDriver(onErrorJustReturn: 0)
-        
+
         place
             .compactMap { $0.bookmarkYn }
             .bind(to: bookmarked)
             .disposed(by: bag)
-        
+
         place
             .compactMap { $0.bookmarkCount }
             .bind(to: bookmarkCounted)
@@ -104,7 +103,6 @@ class HipPlaceCellViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에 등록되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -112,12 +110,12 @@ class HipPlaceCellViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
             .disposed(by: bag)
-    
+
         deleteBookmark
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)
@@ -135,7 +133,6 @@ class HipPlaceCellViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에서 제거되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -143,7 +140,7 @@ class HipPlaceCellViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })

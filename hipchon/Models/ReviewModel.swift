@@ -11,25 +11,39 @@ class ReviewModel: Codable {
     let id: Int?
     let content: String?
     let postDt: String?
-    let imageURLs: [String]?
+    let imageURLs: [String?]?
+    let topImageUrl: String?
     let user: UserModel?
     let place: PlaceModel?
     var likeCount: Int?
     let commentCount: Int?
     var likeYn: Bool?
-    
+
     // 아직 안씀
 //    let userPostCount: Int?
 
+    init(id: Int?) {
+        self.id = id
+        content = nil
+        postDt = nil
+        imageURLs = nil
+        user = nil
+        place = nil
+        likeCount = nil
+        commentCount = nil
+        likeYn = nil
+        topImageUrl = nil
+    }
+
     enum CodingKeys: String, CodingKey {
         case id = "postId"
-        case imageURLs = "imageListddddddd"
+        case imageURLs = "imageList"
         case likeCount = "likeCnt"
         case commentCount = "commentCnt"
         case content = "detail"
-        
-        case postDt, likeYn
-        
+        case postDt = "date"
+        case likeYn
+        case topImageUrl = "image"
         case user, place
 //        case userPostCount = "userPostCnt"
     }

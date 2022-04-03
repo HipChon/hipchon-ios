@@ -28,12 +28,12 @@ class PlaceModel: Codable {
     let reviews: [ReviewModel]?
     let keywords: [KeywordModel]?
     let menus: [MenuModel]?
-    let memo: MemoModel?
+    var memo: MemoModel?
     let hashtag: HashtagModel?
-    
+
     let topImageUrl: String?
     let topKeyword: KeywordModel?
-    
+
 //    // 안씀
 //    let holiday: String?
 //    let markerImage: String?
@@ -63,7 +63,7 @@ class PlaceModel: Codable {
 //        case id, name, region, bookmarkYn, distance, price, imageURLs, bookmarkCount, reviewCount
 //        case sector, businessHours, description, link, geoLat, geoLon, address, number, reviews, keywords, menus, memo, hashtag
 //    }
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "placeId"
         case name
@@ -87,7 +87,7 @@ class PlaceModel: Codable {
         case topImageUrl = "placeImage"
 //        case holiday, markerImage, hiple, animal, hashtag
     }
-    
+
     init() {
         id = nil
         name = nil

@@ -43,7 +43,7 @@ class MyCommentViewController: UIViewController {
         myCommentTableView.dataSource = nil
 
         // MARK: view -> viewModel
-        
+
         rx.viewWillAppear
             .map { _ in () }
             .bind(to: viewModel.viewAppear)

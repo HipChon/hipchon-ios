@@ -20,14 +20,14 @@ class MemoViewController: UIViewController {
 
     private lazy var contentTextView = UITextView().then {
         $0.delegate = self
-        $0.backgroundColor = .gray01
+        $0.backgroundColor = .black
         $0.isEditable = true
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
         $0.showsVerticalScrollIndicator = false
 
         // title holder
         $0.text = "나만의 메모를 남겨볼까요"
-        $0.textColor = UIColor.lightGray
+        $0.textColor = .black.withAlphaComponent(0.6)
     }
 
     private lazy var countLabel = UILabel().then {
@@ -118,12 +118,12 @@ class MemoViewController: UIViewController {
             .bind(to: viewModel.completeButtonTapped)
             .disposed(by: bag)
 
+
         contentTextView.rx.didBeginEditing
             .subscribe(onNext: { [weak self] in
-                if self?.contentTextView.textColor == UIColor.lightGray {
+                if self?.contentTextView.text == "나만의 메모를 남겨볼까요" {
                     self?.contentTextView.text = ""
                     viewModel.inputContent.accept("")
-                    self?.contentTextView.textColor = .gray05
                 }
             })
             .disposed(by: bag)
@@ -152,7 +152,7 @@ class MemoViewController: UIViewController {
             .disposed(by: bag)
 
         // MARK: scene
-        
+
         viewModel.presentMemoCompleteVC
             .emit(onNext: { [weak self] in
                 let memoCompleteVC = MemoCompleteViewController()

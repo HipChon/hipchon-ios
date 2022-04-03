@@ -5,15 +5,14 @@
 //  Created by 김범수 on 2022/03/30.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 class UnathorizedEnptyView: UIView {
-    
     private lazy var noResultView = UIView().then {
         $0.backgroundColor = .white
     }
-    
+
     private lazy var noResultImageView = UIImageView().then {
         $0.image = UIImage(named: "noResult") ?? UIImage()
     }
@@ -24,7 +23,7 @@ class UnathorizedEnptyView: UIView {
         $0.textColor = .gray04
         $0.textAlignment = .center
     }
-    
+
     private let bag = DisposeBag()
 
     override init(frame: CGRect) {
@@ -38,27 +37,24 @@ class UnathorizedEnptyView: UIView {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func bind() {
-    }
+
+    func bind() {}
 
     private func attribute() {
         backgroundColor = .white
     }
 
     private func layout() {
-        
         [
             noResultView,
         ].forEach {
             addSubview($0)
-            
+
             $0.snp.makeConstraints {
                 $0.edges.equalToSuperview()
             }
         }
-        
-        
+
         [
             noResultImageView,
             noResultLabel,
@@ -78,6 +74,5 @@ class UnathorizedEnptyView: UIView {
             $0.top.equalTo(noResultImageView.snp.bottom).offset(20.0)
             $0.centerX.equalToSuperview()
         }
-        
     }
 }

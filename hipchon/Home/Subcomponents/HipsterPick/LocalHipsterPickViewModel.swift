@@ -13,32 +13,32 @@ class LocalHipsterPickViewModel {
     private let bag = DisposeBag()
 
     // MARK: subViewModels
+
     let pageBarVM = PageBarViewModel()
-    
+
     // MARK: viewModel -> view
 
     let localHipsterPicks: Driver<[LocalHipsterPickModel]>
 
     // MARK: view -> viewModel
 
-    
     let selectedLocalHipsterPick = PublishRelay<LocalHipsterPickModel>()
     let offsetRatio = PublishRelay<Double>()
 
     init() {
         let localHipsterPickListData = BehaviorSubject<[LocalHipsterPickModel]>(value: [])
-        
+
         localHipsterPicks = localHipsterPickListData
             .asDriver(onErrorJustReturn: [])
-        
-         Observable.just(())
+
+        Observable.just(())
             .filter { DeviceManager.shared.networkStatus }
             .flatMap { PlaceAPI.shared.getLocalHipsterPickList() }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     localHipsterPickListData.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -54,16 +54,15 @@ class LocalHipsterPickViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         localHipsterPicks
             .map { $0.count }
             .asObservable()
             .bind(to: pageBarVM.entireCount)
             .disposed(by: bag)
-        
+
         offsetRatio
             .bind(to: pageBarVM.offsetRatio)
             .disposed(by: bag)
-
     }
 }

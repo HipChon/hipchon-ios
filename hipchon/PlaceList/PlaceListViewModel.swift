@@ -39,15 +39,15 @@ class PlaceListViewModel {
         places = placeDatas
             .map { $0.map { BehaviorSubject<PlaceModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
-        
+
         // 첫 검색, sorting
         Observable.combineLatest(searchFilter, sortType)
             .flatMap { PlaceAPI.shared.getPlaceList(filter: $0, sort: $1) }
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     placeDatas.onNext(data)
-                case .failure(let error):
+                case let .failure(error):
                     switch error.statusCode {
                     case 401:
                         Singleton.shared.unauthorized.onNext(())
@@ -71,9 +71,9 @@ class PlaceListViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     placeDatas.onNext(data)
-                case .failure(let error):
+                case let .failure(error):
                     switch error.statusCode {
                     case 401:
                         Singleton.shared.unauthorized.onNext(())

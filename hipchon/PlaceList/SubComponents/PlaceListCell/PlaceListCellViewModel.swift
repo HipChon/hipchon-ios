@@ -25,11 +25,10 @@ class PlaceListCellViewModel {
     let reviewCount: Driver<Int>
 
     // MARK: view -> viewModel
-    
+
     let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ place: BehaviorSubject<PlaceModel>) {
-
         keywordVM = place
             .compactMap { $0.keywords?.first }
             .map { KeywordViewModel($0) }
@@ -65,6 +64,5 @@ class PlaceListCellViewModel {
             .map { $0 + 1 }
             .bind(to: pageCountVM.currentIdx)
             .disposed(by: bag)
-
     }
 }

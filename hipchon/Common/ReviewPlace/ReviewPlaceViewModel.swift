@@ -27,7 +27,6 @@ class ReviewPlaceViewModel {
     let shareButtonTapped = PublishRelay<Void>()
 
     init(_ place: BehaviorSubject<PlaceModel>) {
-        
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")
@@ -50,12 +49,12 @@ class ReviewPlaceViewModel {
         let bookmarked = BehaviorSubject<Bool>(value: false)
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
-        
+
         place
             .compactMap { $0.bookmarkYn }
             .bind(to: bookmarked)
             .disposed(by: bag)
-        
+
         bookmarkYn = bookmarked
             .asDriver(onErrorJustReturn: false)
 
@@ -88,7 +87,6 @@ class ReviewPlaceViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에 등록되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -96,12 +94,12 @@ class ReviewPlaceViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
             .disposed(by: bag)
-    
+
         deleteBookmark
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)
@@ -119,7 +117,6 @@ class ReviewPlaceViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에서 제거되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -127,7 +124,7 @@ class ReviewPlaceViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })

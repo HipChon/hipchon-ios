@@ -8,6 +8,9 @@
 import Foundation
 
 class CommentModel: Codable {
+    
+    static let maxLength = 200
+    
     let id: Int?
     let user: UserModel?
     let content: String?
@@ -18,7 +21,8 @@ class CommentModel: Codable {
         case id = "commentId"
         case user
         case content = "detail"
-        case dateTime, review
+        case dateTime = "time"
+        case review = "post"
     }
 
     var relatedDT: String? {

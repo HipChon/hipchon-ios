@@ -10,10 +10,15 @@ import Foundation
 class BestReviewModel: Codable {
     let id: Int?
     let title: String?
-    let review: ReviewModel?
+    let reviewId: Int?
     let hashtag: HashtagModel?
 
+    var review: ReviewModel? {
+        return ReviewModel(id: reviewId)
+    }
+
     enum CodingKeys: String, CodingKey {
-        case id, title, review, hashtag
+        case id, title, hashtag
+        case reviewId = "postId"
     }
 }

@@ -9,7 +9,6 @@ import RxSwift
 import UIKit
 
 class PageBarView: UIView {
-
     private lazy var currentView = UIView().then {
         $0.backgroundColor = .black
         $0.layer.cornerRadius = 1.0
@@ -32,7 +31,7 @@ class PageBarView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = 9.0
-        
+
 //        viewModel?.setBar
 //            .drive(onNext: { ratio, count in
 //                self.currentView.snp.remakeConstraints {

@@ -25,21 +25,21 @@ class InputCommentViewModel {
 
     init(_ review: BehaviorSubject<ReviewModel>) {
         let postComplete = PublishSubject<Void>()
-        
+
         profileImageURL = Singleton.shared.currentUser
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         registerButtonValid = content
-            .map { 0 < $0.count && $0.count <= 100 }
+            .map { $0.count > 0 && $0.count <= CommentModel.maxLength }
             .asDriver(onErrorJustReturn: true)
 
         registerButtonTapped
             .filter { DeviceManager.shared.networkStatus }
             .do(onNext: { LoadingIndicator.showLoading() })
             .withLatestFrom(Observable.combineLatest(review.compactMap { $0.id }, content))
-            .flatMap { ReviewAPI.shared.postComment(id: $0, content: $1) }
+            .flatMap { CommentAPI.shared.postComment(id: $0, content: $1) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .do(onNext: { _ in LoadingIndicator.hideLoading() })
@@ -48,7 +48,7 @@ class InputCommentViewModel {
                 case .success:
                     postComplete.onNext(())
                     Singleton.shared.commentRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("댓글 작성이 완료되었습니다")
+                    Singleton.shared.myCommentRefresh.onNext(())
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -61,7 +61,7 @@ class InputCommentViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         contentInit = postComplete
             .asSignal(onErrorJustReturn: ())
     }

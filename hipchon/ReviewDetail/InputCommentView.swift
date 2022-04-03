@@ -11,7 +11,7 @@ import UIKit
 
 class InputCommentView: UIView {
     private lazy var profileImageView = UIImageView().then {
-        $0.image = UIImage(named: "default_profile")! // TODO:
+        $0.image = UIImage(named: "default_profile") ?? UIImage()
         $0.layer.masksToBounds = true
     }
 
@@ -34,6 +34,7 @@ class InputCommentView: UIView {
     }
 
     private let bag = DisposeBag()
+    var viewModel: InputCommentViewModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,6 +53,8 @@ class InputCommentView: UIView {
     }
 
     func bind(_ viewModel: InputCommentViewModel) {
+        self.viewModel = viewModel
+        
         // MARK: view -> viewModel
 
         contentTextField.rx.text.orEmpty
@@ -68,11 +71,11 @@ class InputCommentView: UIView {
         viewModel.profileImageURL
             .drive(profileImageView.rx.setImageKF)
             .disposed(by: bag)
-        
+
         viewModel.registerButtonValid
             .drive(registerButton.rx.isEnabled)
             .disposed(by: bag)
-        
+
         viewModel.contentInit
             .emit(onNext: { [weak self] in
                 self?.contentTextField.text = ""
@@ -119,8 +122,9 @@ class InputCommentView: UIView {
 // MARK: TextField Delegate
 
 extension InputCommentView: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
-        guard let text = textField.text else { return true }
-        return text.count <= 100
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString text: String) -> Bool {
+        guard let str = textField.text else { return true }
+        let newLength = str.count + text.count - range.length
+        return newLength <= CommentModel.maxLength
     }
 }

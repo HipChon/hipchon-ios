@@ -54,7 +54,7 @@ class MyPlaceCell: UITableViewCell {
         $0.backgroundColor = .gray01
         $0.setTitle("메모", for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 14.0, type: .regular)
-        $0.setTitleColor(.gray05, for: .normal)
+        $0.setTitleColor(.black.withAlphaComponent(0.6), for: .normal)
         $0.contentHorizontalAlignment = .left
         $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
     }
@@ -80,7 +80,7 @@ class MyPlaceCell: UITableViewCell {
 
     func bind(_ viewModel: MyPlaceCellViewModel) {
         self.viewModel = viewModel
-        
+
         // MARK: view -> viewModel
 
         memoButton.rx.tap
@@ -120,11 +120,6 @@ class MyPlaceCell: UITableViewCell {
             .drive(memoButton.rx.title())
             .disposed(by: bag)
 
-        viewModel.memoContent
-            .map { _ in UIColor.black }
-            .drive(memoButton.rx.titleColor)
-            .disposed(by: bag)
-
         viewModel.memoColor
             .drive(memoButton.rx.backgroundColor)
             .disposed(by: bag)
@@ -136,7 +131,6 @@ class MyPlaceCell: UITableViewCell {
                 guard let topVC = UIApplication.topViewController() else { return }
                 let memoVC = MemoViewController()
                 memoVC.bind(viewModel)
-                viewModel.befViewModel = self.viewModel
 
                 memoVC.providesPresentationContextTransitionStyle = true
                 memoVC.definesPresentationContext = true

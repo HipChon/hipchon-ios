@@ -34,23 +34,28 @@ class HashtagReviewCell: UICollectionViewCell {
     public static let identyfier = "HashtagReviewCell"
     var bag = DisposeBag()
     var viewModel: HashtagReviewCellViewModel?
-    
+
     private lazy var dotButton = UIButton().then {
         $0.setImage(UIImage(named: "dots"), for: .normal)
-        
-        
+
         var actions: [UIAction] = []
         let showAction = UIAction(title: "조회",
-                                     image: nil) { [weak self] _ in
+                                  image: nil) { [weak self] _ in
             self?.viewModel?.showTapped.onNext(())
         }
         actions.append(showAction)
-        let deleteAction = UIAction(title: "삭제",
-                                     image: nil) { [weak self] _ in
-            self?.viewModel?.deleteTapped.onNext(())
-        }
-        actions.append(deleteAction)
-        
+
+        viewModel?.deleteEnable
+            .filter { $0 == true }
+            .drive(onNext: { _ in
+                let deleteAction = UIAction(title: "삭제",
+                                            image: nil) { [weak self] _ in
+                    self?.viewModel?.deleteTapped.onNext(())
+                }
+                actions.append(deleteAction)
+            })
+            .disposed(by: bag)
+
         let menu = UIMenu(title: "", children: actions)
         $0.menu = menu
         $0.showsMenuAsPrimaryAction = true
@@ -74,7 +79,7 @@ class HashtagReviewCell: UICollectionViewCell {
 
     func bind(_ viewModel: HashtagReviewCellViewModel) {
         self.viewModel = viewModel
-        
+
         viewModel.imageURL
             .drive(imageView.rx.setImageKF)
             .disposed(by: bag)

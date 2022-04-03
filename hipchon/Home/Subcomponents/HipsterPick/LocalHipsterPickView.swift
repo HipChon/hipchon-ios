@@ -11,8 +11,6 @@ import Then
 import UIKit
 
 class LocalHipsterPickView: UIView {
-    private let bag = DisposeBag()
-
     private lazy var titleLabel = UILabel().then {
         $0.text = "로컬 힙스터 픽"
         $0.font = .GmarketSans(size: 20.0, type: .medium)
@@ -38,9 +36,12 @@ class LocalHipsterPickView: UIView {
         $0.isPagingEnabled = false
         $0.backgroundColor = .gray_background
     }
-    
+
     private lazy var pageBarView = PageBarView().then { _ in
     }
+
+    private let bag = DisposeBag()
+    var viewModel: LocalHipsterPickViewModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,16 +55,18 @@ class LocalHipsterPickView: UIView {
     }
 
     func bind(_ viewModel: LocalHipsterPickViewModel) {
-        
+        self.viewModel = viewModel
+
         // MARK: subViewModels
+
         pageBarView.bind(viewModel.pageBarVM)
-        
+
         // MARK: view -> viewModel
 
         localHipsterPickCollectionView.rx.modelSelected(LocalHipsterPickModel.self)
             .bind(to: viewModel.selectedLocalHipsterPick)
             .disposed(by: bag)
-        
+
         localHipsterPickCollectionView.rx.contentOffset
             .compactMap { [weak self] in $0.x / (self?.frame.width ?? 1.0) }
             .distinctUntilChanged()
@@ -80,7 +83,6 @@ class LocalHipsterPickView: UIView {
                 return cell
             }
             .disposed(by: bag)
-        
     }
 
     private func attribute() {

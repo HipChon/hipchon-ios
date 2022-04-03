@@ -57,7 +57,7 @@ class HipPlaceCell: UICollectionViewCell {
         attribute()
         layout()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         bag = DisposeBag()
@@ -70,7 +70,7 @@ class HipPlaceCell: UICollectionViewCell {
 
     func bind(_ viewModel: HipPlaceCellViewModel) {
         self.viewModel = viewModel
-        
+
         viewModel.keywordVM
             .drive(onNext: { [weak self] viewModel in
                 self?.keywordView.bind(viewModel)

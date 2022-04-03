@@ -10,7 +10,7 @@ import UIKit
 
 class PhotoCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
     }
 
     private lazy var cancleButton = UIButton().then {

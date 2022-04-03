@@ -15,17 +15,17 @@ class FilterCellModel {
         id = nil
         name = nil
     }
-    
+
     init(region: RegionModel) {
-        self.id = region.id
-        self.name = region.name
+        id = region.id
+        name = region.name
     }
-    
+
     init(category: CategoryModel) {
-        self.id = category.id
-        self.name = category.name
+        id = category.id
+        name = category.name
     }
-    
+
     var region: RegionModel {
         return RegionModel(id: id, name: name)
     }

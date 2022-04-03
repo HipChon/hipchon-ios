@@ -10,19 +10,22 @@ import RxSwift
 
 class HashtagReviewCellViewModel {
     private let bag = DisposeBag()
-    
+
     let imageURL: Driver<URL>
     let name: Driver<String>
     let hashtagImageURL: Driver<URL>
-    
+    let deleteEnable: Driver<Bool>
+
     let deleteTapped = PublishSubject<Void>()
     let showTapped = PublishSubject<Void>()
 
-    init(_ data: ReviewModel) {
-        let review = BehaviorSubject<ReviewModel>(value: data)
-        dump(data)
+    init(review: BehaviorSubject<ReviewModel>, type: BehaviorSubject<ProfileReviewType>) {
+        deleteEnable = type
+            .map { $0 == .myReview }
+            .asDriver(onErrorJustReturn: false)
+
         imageURL = review
-            .compactMap { $0.imageURLs?.first }
+            .compactMap { $0.imageURLs?.first ?? "" }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
 
@@ -34,7 +37,7 @@ class HashtagReviewCellViewModel {
             .compactMap { $0.place?.hashtag?.imageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
-        
+
         deleteTapped
             .withLatestFrom(review)
             .map { $0.id ?? 0 }

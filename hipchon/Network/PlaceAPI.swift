@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class PlaceAPI {
     private init() {}
-    
+
     public static let shared = PlaceAPI()
     private let bag = DisposeBag()
 
@@ -21,36 +21,21 @@ class PlaceAPI {
         return Single.create { single in
             print("getPlaceList")
             var urlStr = "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)"
-            
+            let order = sort == .bookmark ? "myplace" : "review"
+
             if filter.hashtag == nil {
-                if let regionId = filter.region?.id {
-                    urlStr += "/\(regionId)"
-                }
-                
-                if let categoryId = filter.category?.id {
-                    urlStr += "/\(categoryId)"
-                }
-                
-                if sort == .bookmark {
-                    urlStr += "/myplace"
-                } else {
-                    urlStr += "/review"
-                }
-                
-            } else if let hashtagId = filter.hashtag?.id,
-                      let order = sort == .bookmark ? "myplace" : "review" {
+                urlStr = "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)/\(filter.region?.id ?? -1)/\(filter.category?.id ?? -1)/\(order)"
+            } else if let hashtagId = filter.hashtag?.id {
                 urlStr = "\(APIParameters.shared.hostUrl)/api/place/hashtag/\(APIParameters.shared.userId)/\(hashtagId)/\(order)"
             } else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
             }
-            
+
             guard let url = URL(string: urlStr) else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
 
-            
-            
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -87,7 +72,7 @@ class PlaceAPI {
                 return Disposables.create()
             }
             print("getWeeklyHipPlace")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -116,15 +101,15 @@ class PlaceAPI {
             return Disposables.create()
         }
     }
-    
-    func getPlaceDetail(_ id: Int) -> Single<Result<PlaceModel, APIError>>  {
+
+    func getPlaceDetail(_ id: Int) -> Single<Result<PlaceModel, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
             print("getPlaceDetail")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -149,19 +134,27 @@ class PlaceAPI {
                     }
                 })
                 .resume()
-            
+
             return Disposables.create()
         }
     }
-    
-    func getMyPlaces(_ sector: SectorType) -> Single<Result<[PlaceModel], APIError>> {
+
+    func getMyPlaces(_ category: CategoryModel) -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)") else {
+            
+            
+            var urlStr = "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)"
+            
+            if let id = category.id {
+                urlStr.append("/\(id)")
+            }
+
+            guard let url = URL(string: urlStr) else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            print("getMyPlaces \(sector)")
-            
+            print("getMyPlaces \(category.name)")
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -171,6 +164,7 @@ class PlaceAPI {
                         if let data = response.data {
                             do {
                                 let model = try JSONDecoder().decode([PlaceModel].self, from: data)
+
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -190,9 +184,9 @@ class PlaceAPI {
             return Disposables.create()
         }
     }
-    
+
     // MARK: local hipster
-    
+
     func getLocalHipsterPickList() -> Single<Result<[LocalHipsterPickModel], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/hipster") else {
@@ -200,7 +194,7 @@ class PlaceAPI {
                 return Disposables.create()
             }
             print("getLocalHipsterPickList")
-            
+
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
                 .validate(statusCode: 200 ..< 300)
@@ -229,7 +223,7 @@ class PlaceAPI {
             return Disposables.create()
         }
     }
-    
+
     func getLocalHipsterPickDetail(id: Int) -> Single<Result<LocalHipsterPickModel, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/hipster/\(APIParameters.shared.userId)/\(id)") else {
@@ -267,7 +261,7 @@ class PlaceAPI {
             return Disposables.create()
         }
     }
-    
+
     // MARK: Bookmark
 
     func addBookmark(_ id: Int) -> Single<Result<Void, APIError>> {
@@ -327,6 +321,30 @@ class PlaceAPI {
                     }
                 })
                 .resume()
+
+            return Disposables.create()
+        }
+    }
+    
+    func postMemo(placeId: Int, memo: MemoModel) -> Single<Result<Void, APIError>> {
+        return Single.create { single in
+            guard let content = memo.content,
+                  let color = memo.color else {
+                      single(.success(.failure(APIError(statusCode: -1, description: "parameters error"))))
+                      return Disposables.create()
+                  }
+            
+            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
+                return Disposables.create()
+            }
+
+            print("postMemo")
+
+            UserDefaults.standard.set(content, forKey: "\(placeId)Content")
+            UserDefaults.standard.set(color, forKey: "\(placeId)Color")
+
+            single(.success(.success(())))
 
             return Disposables.create()
         }

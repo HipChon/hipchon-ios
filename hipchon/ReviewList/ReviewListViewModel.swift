@@ -40,13 +40,13 @@ class ReviewListViewModel {
         // 첫 load, sorting
         place
             .compactMap { $0.id }
-            .filter {_ in DeviceManager.shared.networkStatus }
+            .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { ReviewAPI.shared.getPlaceReview($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviews.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -84,7 +84,7 @@ class ReviewListViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviews.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -100,7 +100,7 @@ class ReviewListViewModel {
                 }
             })
             .disposed(by: bag)
-            
+
         // more fetching
 
 //        moreFetching

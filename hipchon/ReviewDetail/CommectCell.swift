@@ -29,7 +29,7 @@ class CommentCell: UITableViewCell {
         $0.font = .AppleSDGothicNeo(size: 13.0, type: .regular)
         $0.textColor = .gray04
     }
-    
+
     private lazy var reportButton = UIButton().then {
         $0.setImage(UIImage(named: "report"), for: .normal)
         $0.setTitle(" 신고하기", for: .normal)
@@ -56,7 +56,7 @@ class CommentCell: UITableViewCell {
         super.prepareForReuse()
         bag = DisposeBag()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
@@ -64,7 +64,7 @@ class CommentCell: UITableViewCell {
 
     func bind(_ viewModel: CommentCellViewModel) {
         self.viewModel = viewModel
-        
+
         viewModel.profileImageURL
             .drive(profileImageView.rx.setImageKF)
             .disposed(by: bag)
@@ -80,7 +80,7 @@ class CommentCell: UITableViewCell {
         viewModel.timeForNow
             .drive(timeForNowLabel.rx.text)
             .disposed(by: bag)
-        
+
         // TODO: change
         reportButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
@@ -99,9 +99,9 @@ class CommentCell: UITableViewCell {
             nameLabel,
             contentLabel,
             timeForNowLabel,
-            reportButton
+            reportButton,
         ].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
 
         profileImageView.snp.makeConstraints {
@@ -128,7 +128,7 @@ class CommentCell: UITableViewCell {
             $0.leading.equalTo(nameLabel)
             $0.bottom.equalToSuperview().inset(12.0)
         }
-        
+
         reportButton.snp.makeConstraints {
             $0.leading.equalTo(timeForNowLabel.snp.trailing).offset(16.0)
             $0.centerY.equalTo(timeForNowLabel)

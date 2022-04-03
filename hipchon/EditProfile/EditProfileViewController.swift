@@ -25,6 +25,7 @@ class EditProfileViewController: UIViewController {
 
     private lazy var profileImageButton = UIButton().then {
         $0.setImage(UIImage(named: "default_profile"), for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
     }
 
@@ -119,14 +120,14 @@ class EditProfileViewController: UIViewController {
             .disposed(by: bag)
 
         nickNameTextField.rx.text.orEmpty
-            .bind(to: viewModel.inputNickName)
+            .bind(to: viewModel.newName)
             .disposed(by: bag)
 
         clearButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 self?.nickNameTextField.text = ""
-                viewModel.inputNickName.accept("")
+                viewModel.newName.accept("")
             })
             .disposed(by: bag)
 
@@ -141,7 +142,7 @@ class EditProfileViewController: UIViewController {
             .drive(profileImageButton.rx.setImageKF)
             .disposed(by: bag)
 
-        viewModel.name
+        viewModel.orgName
             .drive(nickNameTextField.rx.text)
             .disposed(by: bag)
 
@@ -185,19 +186,19 @@ class EditProfileViewController: UIViewController {
 
     func layout() {
         [
-            navigationView,
             setNickNameLabel,
             profileImageButton,
             nickNameTextField,
             bottomLineView,
             clearButton,
             completeButton,
+            navigationView,
         ].forEach {
             view.addSubview($0)
         }
 
         navigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(navigationView.viewHeight)
         }
@@ -258,10 +259,20 @@ private extension EditProfileViewController {
     }
 
     @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {}
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            setNickNameLabel.snp.remakeConstraints {
+                $0.leading.equalToSuperview().inset(20.0)
+                $0.top.equalTo(navigationView.snp.top) // .offset(45.0)
+            }
+        }
     }
 
-    @objc private func keyboardWillHide(_: Notification) {}
+    @objc private func keyboardWillHide(_: Notification) {
+        setNickNameLabel.snp.remakeConstraints {
+            $0.leading.equalToSuperview().inset(20.0)
+            $0.top.equalTo(navigationView.snp.bottom).offset(45.0)
+        }
+    }
 
     // 주변 터치시 키보드 내림
     private func hideKeyboardWhenTappedAround() {
@@ -278,8 +289,9 @@ private extension EditProfileViewController {
 // MARK: TextField Delegate
 
 extension EditProfileViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn _: NSRange, replacementString _: String) -> Bool {
-        guard let text = textField.text else { return true }
-        return text.count <= 10
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString text: String) -> Bool {
+        guard let str = textField.text else { return true }
+        let newLength = str.count + text.count - range.length
+        return newLength <= 10
     }
 }

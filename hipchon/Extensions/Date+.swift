@@ -8,8 +8,8 @@
 import Foundation
 
 public extension Date {
-    static let defaultFormat = "YYYY-MM-DDTHH:mm:ss.SSS"
-//    static let defaultFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+//    static let defaultFormat = "YYYY-MM-DDTHH:mm:ss"
+    static let defaultFormat = "yyyy-MM-dd'T'HH:mm:ss"
 
     static var currentDate: String {
         let date = Date()
@@ -32,6 +32,7 @@ public extension Date {
         let formatter = RelativeDateTimeFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.unitsStyle = .abbreviated
+        formatter.dateTimeStyle = .named
         return formatter.localizedString(for: self, relativeTo: Date())
     }
 }

@@ -61,7 +61,7 @@ class SettingViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         openURL = Observable.merge(customerServiceButtonTapped.map { _ in () },
                                    partnershipButtonTapped.map { _ in () })
             .map { "http://pf.kakao.com/_xgHYNb/chat" }

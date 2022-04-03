@@ -7,15 +7,15 @@
 
 import RxCocoa
 import RxSwift
-import Toast_Swift
 import SwiftKeychainWrapper
+import Toast_Swift
 
 class Singleton {
     public static let shared = Singleton()
     private let bag = DisposeBag()
 
     let currentUser = BehaviorSubject<UserModel>(value: UserModel())
-    
+
     let myPlaceRefresh = PublishSubject<Void>()
     let myReviewRefresh = PublishSubject<Void>()
     let likedReviewRefresh = PublishSubject<Void>()
@@ -40,7 +40,6 @@ class Singleton {
             })
             .disposed(by: bag)
 
-        
         unauthorized
             .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
             .asDriver(onErrorDriveWith: .empty())
@@ -60,6 +59,7 @@ class Singleton {
             .throttle(.seconds(4), scheduler: MainScheduler.instance)
             .asDriver(onErrorDriveWith: .empty())
             .drive(onNext: { error in
+                dump(error)
                 guard let topVC = UIApplication.topViewController() else { return }
                 let errorAlertVC = ErrorAlertViewController()
                 errorAlertVC.bind()
@@ -71,7 +71,7 @@ class Singleton {
             })
             .disposed(by: bag)
     }
-    
+
     func removeUserInfo() {
         KeychainWrapper.standard.remove(forKey: "userId")
         KeychainWrapper.standard.remove(forKey: "loginId")

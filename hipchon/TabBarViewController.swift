@@ -54,6 +54,7 @@ class TabBarViewController: UITabBarController {
         view.backgroundColor = .white
         tabBar.backgroundColor = .white
         tabBar.tintColor = .black
+        tabBar.barTintColor = .white
 
         let boundaryView = UIView(frame: CGRect(x: tabBar.frame.minX,
                                                 y: tabBar.frame.minY,

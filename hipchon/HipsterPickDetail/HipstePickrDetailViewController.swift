@@ -40,6 +40,7 @@ class HipsterPickDetailViewController: UIViewController {
 
     func bind(_ viewModel: HipsterPickDetailViewModel) {
         // MARK: subViewModels
+
         self.viewModel = viewModel
 
         // MARK: view -> viewModel
@@ -97,7 +98,7 @@ class HipsterPickDetailViewController: UIViewController {
         }
 
         navigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(navigationView.viewHeight)
         }

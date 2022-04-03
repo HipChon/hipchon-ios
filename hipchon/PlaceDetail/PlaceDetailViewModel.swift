@@ -106,13 +106,13 @@ class PlaceDetailViewModel {
         place
             .take(1)
             .compactMap { $0.id }
-            .filter {_ in DeviceManager.shared.networkStatus }
+            .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { PlaceAPI.shared.getPlaceDetail($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     place.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -136,21 +136,21 @@ class PlaceDetailViewModel {
         let bookmarkCount = BehaviorSubject<Int>(value: 0)
         let addBookmark = PublishSubject<Void>()
         let deleteBookmark = PublishSubject<Void>()
-        
+
         place
             .compactMap { $0.bookmarkYn }
             .bind(to: bookmarked)
             .disposed(by: bag)
-        
+
         place
             .compactMap { $0.bookmarkCount }
             .bind(to: bookmarkCount)
             .disposed(by: bag)
-        
+
         bookmarked
             .bind(to: placeDesVM.bookmarkYn)
             .disposed(by: bag)
-        
+
         bookmarkCount
             .bind(to: placeDesVM.bookmarkCount)
             .disposed(by: bag)
@@ -180,11 +180,10 @@ class PlaceDetailViewModel {
             .flatMap { PlaceAPI.shared.addBookmark($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in 
+            .subscribe(onNext: { result in
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에 등록되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -194,12 +193,12 @@ class PlaceDetailViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
             .disposed(by: bag)
-    
+
         deleteBookmark
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(place)
@@ -217,7 +216,6 @@ class PlaceDetailViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에서 제거되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -227,7 +225,7 @@ class PlaceDetailViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
@@ -287,13 +285,13 @@ class PlaceDetailViewModel {
         viewAppear
             .withLatestFrom(place)
             .compactMap { $0.id }
-            .filter {_ in DeviceManager.shared.networkStatus }
+            .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { ReviewAPI.shared.getPlaceReview($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {

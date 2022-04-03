@@ -11,7 +11,7 @@ import RxSwift
 
 class PlaceDesViewModel {
     private let bag = DisposeBag()
-    
+
     // MARK: viewModel -> view
 
     let setPlaceName: Driver<String>
@@ -68,17 +68,18 @@ class PlaceDesViewModel {
 
         setLink = link
             .asDriver(onErrorJustReturn: "")
-        
+
         share = shareButtonTapped
             .withLatestFrom(link)
             .asSignal(onErrorJustReturn: "")
-        
+
         reportButtonTapped
+            .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 Singleton.shared.toastAlert.onNext("장소 신고가 완료되었습니다")
             })
             .disposed(by: bag)
-        
+
         openURL = infoChangeButtonTapped
             .map { "http://pf.kakao.com/_xgHYNb/chat" }
             .compactMap { URL(string: $0) }

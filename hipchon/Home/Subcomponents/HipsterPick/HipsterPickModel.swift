@@ -15,7 +15,8 @@ class HipsterPickModel: Codable {
     let imageURLs: [String]?
 
     enum CodingKeys: String, CodingKey {
-        case id, title, place
+        case id = "hipsterPostId"
+        case title, place
         case content = "detail"
         case imageURLs = "imageList"
     }

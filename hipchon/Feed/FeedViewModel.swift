@@ -49,7 +49,7 @@ class FeedViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {
@@ -81,7 +81,7 @@ class FeedViewModel {
             .do(onNext: { _ in activatingState.onNext(false) })
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     reviewDatas.onNext(data)
                 case let .failure(error):
                     switch error.statusCode {

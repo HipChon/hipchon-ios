@@ -26,7 +26,7 @@ class MyCommentCellViewModel {
         let comment = BehaviorSubject<CommentModel>(value: data)
 
         imageURL = comment
-            .compactMap { $0.review?.imageURLs?.first }
+            .compactMap { $0.review?.topImageUrl }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
 
@@ -43,13 +43,14 @@ class MyCommentCellViewModel {
             .do(onNext: { LoadingIndicator.showLoading() })
             .withLatestFrom(comment)
             .compactMap { $0.id }
-            .flatMap { ReviewAPI.shared.deleteComment(id: $0) }
+            .flatMap { CommentAPI.shared.deleteComment(id: $0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .do(onNext: { _ in LoadingIndicator.hideLoading() })
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
+                    Singleton.shared.myCommentRefresh.onNext(())
                     Singleton.shared.toastAlert.onNext("댓글이 삭제되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
@@ -63,6 +64,5 @@ class MyCommentCellViewModel {
                 }
             })
             .disposed(by: bag)
-        
     }
 }

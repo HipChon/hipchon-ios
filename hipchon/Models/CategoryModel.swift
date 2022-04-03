@@ -10,12 +10,12 @@ import UIKit
 class CategoryModel: Codable {
     let id: Int?
     let name: String?
-    
+
     init(id: Int?, name: String?) {
         self.id = id
         self.name = name
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id, name
     }

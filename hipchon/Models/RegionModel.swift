@@ -15,7 +15,7 @@ class RegionModel: Codable {
         self.id = id
         self.name = name
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id, name
     }

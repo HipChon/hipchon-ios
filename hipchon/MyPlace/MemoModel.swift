@@ -20,16 +20,21 @@ class MemoModel: Codable {
         content = nil
         color = nil
     }
+    
+    init(content: String?, color: String?) {
+        self.content = content
+        self.color = color
+    }
 
     var backgroundColor: UIColor {
         switch color ?? "" {
-        case "green":
+        case "primary_green":
             return .primary_green
-        case "yello":
+        case "secondary_yellow":
             return .secondary_yellow
-        case "blue":
+        case "secondary_blue":
             return .secondary_blue
-        case "purple":
+        case "secondary_purple":
             return .secondary_purple
         default:
             return .gray01

@@ -32,9 +32,9 @@ class WeeklyHipPlaceViewModel {
             .asObservable()
             .subscribe(onNext: { result in
                 switch result {
-                case .success(let data):
+                case let .success(data):
                     hipPlaceDatas.onNext(data)
-                case .failure(let error):
+                case let .failure(error):
                     switch error.statusCode {
                     case 401:
                         Singleton.shared.unauthorized.onNext(())

@@ -110,18 +110,17 @@ class HashtagReviewViewController: UIViewController {
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: HashtagReviewCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? HashtagReviewCell else { return UICollectionViewCell() }
                 cell.bind(vm)
-                
+
                 vm.deleteTapped
                     .map { idx }
                     .bind(to: viewModel.deleteReviewIdx)
                     .disposed(by: cell.bag)
-                
+
                 vm.showTapped
                     .map { idx }
                     .bind(to: viewModel.selectedReviewIdx)
                     .disposed(by: cell.bag)
-                
-                
+
                 return cell
             }
             .disposed(by: bag)

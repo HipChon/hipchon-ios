@@ -12,6 +12,7 @@ class PlaceReviewCell: UICollectionViewCell {
     private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleToFill
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "default_profile") ?? UIImage()
     }
 
     private lazy var userNameLabel = UILabel().then {
