@@ -39,7 +39,7 @@ class InputCommentViewModel {
             .filter { DeviceManager.shared.networkStatus }
             .do(onNext: { LoadingIndicator.showLoading() })
             .withLatestFrom(Observable.combineLatest(review.compactMap { $0.id }, content))
-            .flatMap { ReviewAPI.shared.postComment(id: $0, content: $1) }
+            .flatMap { CommentAPI.shared.postComment(id: $0, content: $1) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .do(onNext: { _ in LoadingIndicator.hideLoading() })
@@ -48,6 +48,7 @@ class InputCommentViewModel {
                 case .success:
                     postComplete.onNext(())
                     Singleton.shared.commentRefresh.onNext(())
+                    Singleton.shared.myCommentRefresh.onNext(())
                     Singleton.shared.toastAlert.onNext("댓글 작성이 완료되었습니다")
                 case let .failure(error):
                     switch error.statusCode {

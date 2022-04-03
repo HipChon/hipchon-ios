@@ -45,11 +45,18 @@ class HashtagReviewCell: UICollectionViewCell {
             self?.viewModel?.showTapped.onNext(())
         }
         actions.append(showAction)
-        let deleteAction = UIAction(title: "삭제",
-                                     image: nil) { [weak self] _ in
-            self?.viewModel?.deleteTapped.onNext(())
-        }
-        actions.append(deleteAction)
+        
+        viewModel?.deleteEnable
+            .filter { $0 == true }
+            .drive(onNext: { _ in
+                let deleteAction = UIAction(title: "삭제",
+                                             image: nil) { [weak self] _ in
+                    self?.viewModel?.deleteTapped.onNext(())
+                }
+                actions.append(deleteAction)
+            })
+            .disposed(by: bag)
+        
         
         let menu = UIMenu(title: "", children: actions)
         $0.menu = menu

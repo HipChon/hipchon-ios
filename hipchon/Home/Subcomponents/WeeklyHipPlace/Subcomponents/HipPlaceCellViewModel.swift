@@ -112,7 +112,7 @@ class HipPlaceCellViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
@@ -143,7 +143,7 @@ class HipPlaceCellViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })

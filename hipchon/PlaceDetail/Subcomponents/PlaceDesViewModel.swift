@@ -74,6 +74,7 @@ class PlaceDesViewModel {
             .asSignal(onErrorJustReturn: "")
         
         reportButtonTapped
+            .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 Singleton.shared.toastAlert.onNext("장소 신고가 완료되었습니다")
             })

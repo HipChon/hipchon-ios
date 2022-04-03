@@ -67,7 +67,7 @@ class ReviewDetailHeaderViewModel {
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
-            .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
+            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "" ) } }
             .asDriver(onErrorJustReturn: [])
 
         commentCount = review
@@ -132,7 +132,7 @@ class ReviewDetailHeaderViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
@@ -162,7 +162,7 @@ class ReviewDetailHeaderViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
@@ -177,6 +177,7 @@ class ReviewDetailHeaderViewModel {
         share = reviewPlaceVM.flatMap { $0.share }
         
         reportButtonTapped
+            .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 Singleton.shared.toastAlert.onNext("게시물 신고가 완료되었습니다")
             })

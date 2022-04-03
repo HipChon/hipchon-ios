@@ -42,38 +42,9 @@ class CommentCellViewModel {
         timeForNow = comment
             .compactMap { $0.relatedDT }
             .asDriver(onErrorJustReturn: "")
-    
-        
+
         reportButtonTapped
-            .subscribe(onNext: {
-                print("tap")
-            })
-        
-        reportButtonTapped
-            .subscribe(onNext: {
-                print("tap")
-            })
-            .disposed(by: bag)
-        
-        reportButtonTapped
-            .withLatestFrom(comment)
-            .compactMap { $0.id }
-            .subscribe(onNext: {
-                print($0)
-            })
-        
-        reportButtonTapped
-            .withLatestFrom(comment)
-            .compactMap { $0.id }
-            .subscribe(onNext: {
-                print($0)
-            })
-            .disposed(by: bag)
-        
-        reportButtonTapped
-            .withLatestFrom(comment)
-            .compactMap { $0.id }
-            .flatMap { NetworkManager.shared.reportComment($0) }
+            .delay(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 Singleton.shared.toastAlert.onNext("댓글 신고가 완료되었습니다")
             })

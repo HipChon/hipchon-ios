@@ -31,13 +31,14 @@ class ReviewCell: UITableViewCell {
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
                                                                   collectionViewLayout: UICollectionViewLayout()).then {
+
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 173.0
         let height = 110.0
 
         layout.itemSize = CGSize(width: width, height: height)
-        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 0.0)
+        layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = itemSpacing
         layout.minimumInteritemSpacing = itemSpacing
@@ -105,6 +106,31 @@ class ReviewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         profileImageView.layer.cornerRadius = 45.0 / 2 // profileImageView.frame.width / 2
+        
+        viewModel?.reviewImageURLs
+            .map { $0.count }
+            .asDriver()
+            .drive(onNext: { [unowned self] count in
+                let cellWidth = self.contentView.frame.width
+                if let layout = self.reviewImageCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                    var width = 170.0
+                    let height = 110.0
+                    let itemSpacing = 4.0
+                    switch count {
+                    case 1:
+                        width = cellWidth - 20.0 * 2
+                    case 2:
+                        width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
+                    default:
+                        width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
+                    }
+                    
+                    layout.itemSize = CGSize(width: width, height: height)
+                    layout.minimumLineSpacing = itemSpacing
+                    layout.minimumInteritemSpacing = itemSpacing
+                }
+            })
+            .disposed(by: bag)
     }
 
     func bind(_ viewModel: ReviewCellViewModel) {

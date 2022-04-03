@@ -37,7 +37,8 @@ class HashtagReviewViewModel {
         let reviews = BehaviorSubject<[ReviewModel]>(value: [])
 
         profileReviewCellVMs = reviews
-            .map { $0.map { HashtagReviewCellViewModel($0) } }
+            .map { $0.map { HashtagReviewCellViewModel(review: BehaviorSubject<ReviewModel>(value: $0),
+                                                       type: type) } }
             .asDriver(onErrorJustReturn: [])
 
         // 첫 load, refresh

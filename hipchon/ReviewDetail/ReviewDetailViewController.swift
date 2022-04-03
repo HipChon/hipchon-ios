@@ -61,7 +61,6 @@ class ReviewDetailViewController: UIViewController {
             })
             .disposed(by: bag)
 
-
     }
 
     func attribute() {
@@ -172,6 +171,7 @@ private extension ReviewDetailViewController {
                 $0.height.equalTo(102.0)
                 $0.bottom.equalToSuperview().inset(keyboardSize.height)
             }
+                
         }
     }
 

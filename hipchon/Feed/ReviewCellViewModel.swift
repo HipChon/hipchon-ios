@@ -59,7 +59,7 @@ class ReviewCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         reviewImageURLs = review
-            .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
+            .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "" ) } }
             .asDriver(onErrorJustReturn: [])
 
         commentCount = review
@@ -124,7 +124,7 @@ class ReviewCellViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
@@ -154,7 +154,7 @@ class ReviewCellViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })

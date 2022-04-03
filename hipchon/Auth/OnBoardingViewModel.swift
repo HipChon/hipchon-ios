@@ -31,15 +31,13 @@ class OnBoardingViewModel {
         let authModel = BehaviorSubject<AuthModel?>(value: nil)
         let kakaoId = PublishSubject<String>()
         
-        // 자동 로그인
+//        // 자동 로그인
 //        Observable.just(())
-////            .delay(.seconds(3), scheduler: MainScheduler.instance)
-//            .compactMap { KeychainWrapper.standard.string(forKey: "accessToken") }
-//            .map {  _ in () }
-//            .subscribe(onNext: {
-//                login.onNext(())
+//            .delay(.seconds(3), scheduler: MainScheduler.instance)
+//            .compactMap { KeychainWrapper.standard.string(forKey: "userId") }
+//            .subscribe(onNext: { _ in
+//                signupedUser.onNext(true)
 //            })
-////            .bind(to: login)
 //            .disposed(by: bag)
         
         // AuthModel
@@ -115,11 +113,6 @@ class OnBoardingViewModel {
 
         signupedUser
             .filter { $0 == true }
-            .withLatestFrom(authModel)
-            .compactMap { $0?.id }
-            .do(onNext: { id in // 로컬에 id 저장
-                KeychainWrapper.standard.set(id, forKey: "accessToken")
-            })
             .map { _ in () }
             .subscribe(onNext: {
                 login.onNext(())

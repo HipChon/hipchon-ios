@@ -35,11 +35,30 @@ class MyCommentViewModel {
             .asDriver(onErrorJustReturn: [])
 
         Observable.merge(
-            viewAppear.take(1),
+            Observable.just(()),
             Singleton.shared.myCommentRefresh
         )
-            .flatMap { _ in NetworkManager.shared.getMyComments() }
-            .bind(to: comments)
+            .filter { _ in DeviceManager.shared.networkStatus }
+            .flatMap { _ in CommentAPI.shared.getMyComments() }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    comments.onNext(data)
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 404: // 404: Not Found(등록된 댓글 없음)
+                        comments.onNext([])
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
+            })
             .disposed(by: bag)
 
         // refresh
@@ -49,19 +68,38 @@ class MyCommentViewModel {
             .asSignal(onErrorJustReturn: false)
 
         reload
+            .filter { _ in DeviceManager.shared.networkStatus }
             .do(onNext: { activatingState.onNext(true) })
-            .flatMap { NetworkManager.shared.getMyComments() }
+            .flatMap { CommentAPI.shared.getMyComments() }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
             .do(onNext: { _ in activatingState.onNext(false) })
-            .bind(to: comments)
+            .subscribe(onNext: { result in
+                switch result {
+                case .success(let data):
+                    comments.onNext(data)
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 404: // 404: Not Found(등록된 댓글 없음)
+                        comments.onNext([])
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
+            })
             .disposed(by: bag)
 
         // more fetching
 
-        moreFetching
-            .flatMap { _ in NetworkManager.shared.getMyComments() }
-            .withLatestFrom(comments) { $1 + $0 }
-            .bind(to: comments)
-            .disposed(by: bag)
+//        moreFetching
+//            .flatMap { _ in CommentAPI.shared.getMyComments() }
+//            .withLatestFrom(comments) { $1 + $0 }
+//            .bind(to: comments)
+//            .disposed(by: bag)
 
         commentTableViewHidden = comments
             .map { $0.count == 0 }

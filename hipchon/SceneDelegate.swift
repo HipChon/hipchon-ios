@@ -7,6 +7,7 @@
 
 import KakaoSDKAuth
 import UIKit
+import SwiftKeychainWrapper
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -18,12 +19,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .white
 
+        
+        let autoLogin = KeychainWrapper.standard.string(forKey: "userId") != nil
+        
         let onBoardingViewController = OnBoardingViewController()
-        window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
-
-//        let tapBarViewController = TabBarViewController()
-//        window?.rootViewController = UINavigationController(rootViewController: tapBarViewController)
-
+        let naviagtionController = UINavigationController(rootViewController: onBoardingViewController)
+        if KeychainWrapper.standard.string(forKey: "userId") != nil { // 자동 로그인
+            let tapBarViewController = TabBarViewController()
+            naviagtionController.viewControllers.append(tapBarViewController)
+        }
+        window?.rootViewController = naviagtionController
         window?.makeKeyAndVisible()
     }
 

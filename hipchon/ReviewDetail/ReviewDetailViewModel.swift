@@ -41,7 +41,7 @@ class ReviewDetailViewModel {
             .filter { DeviceManager.shared.networkStatus }
             .withLatestFrom(review)
             .compactMap { $0.id }
-            .flatMap { ReviewAPI.shared.getComments($0) }
+            .flatMap { CommentAPI.shared.getComments($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { result in

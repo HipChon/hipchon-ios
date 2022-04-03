@@ -180,7 +180,7 @@ class PlaceDetailViewModel {
             .flatMap { PlaceAPI.shared.addBookmark($0) }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { result in 
+            .subscribe(onNext: { result in
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
@@ -194,7 +194,7 @@ class PlaceDetailViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })
@@ -227,7 +227,7 @@ class PlaceDetailViewModel {
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
-                        Singleton.shared.unknownedError.onNext(error)
+                        break
                     }
                 }
             })

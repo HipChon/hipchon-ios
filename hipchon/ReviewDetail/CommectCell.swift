@@ -101,7 +101,7 @@ class CommentCell: UITableViewCell {
             timeForNowLabel,
             reportButton
         ].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
 
         profileImageView.snp.makeConstraints {

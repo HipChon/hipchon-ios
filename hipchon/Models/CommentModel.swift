@@ -18,7 +18,8 @@ class CommentModel: Codable {
         case id = "commentId"
         case user
         case content = "detail"
-        case dateTime, review
+        case dateTime = "time"
+        case review
     }
 
     var relatedDT: String? {

@@ -11,8 +11,6 @@ import Then
 import UIKit
 
 class LocalHipsterPickView: UIView {
-    private let bag = DisposeBag()
-
     private lazy var titleLabel = UILabel().then {
         $0.text = "로컬 힙스터 픽"
         $0.font = .GmarketSans(size: 20.0, type: .medium)
@@ -42,6 +40,10 @@ class LocalHipsterPickView: UIView {
     private lazy var pageBarView = PageBarView().then { _ in
     }
 
+    
+    private let bag = DisposeBag()
+    var viewModel: LocalHipsterPickViewModel?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
@@ -53,7 +55,9 @@ class LocalHipsterPickView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+
     func bind(_ viewModel: LocalHipsterPickViewModel) {
+        self.viewModel = viewModel
         
         // MARK: subViewModels
         pageBarView.bind(viewModel.pageBarVM)
@@ -69,6 +73,7 @@ class LocalHipsterPickView: UIView {
             .distinctUntilChanged()
             .bind(to: viewModel.offsetRatio)
             .disposed(by: bag)
+                                                    
 
         // MARK: viewModel -> view
 
@@ -110,5 +115,6 @@ class LocalHipsterPickView: UIView {
             $0.top.equalTo(localHipsterPickCollectionView.snp.bottom).offset(33.0)
             $0.height.equalTo(2.0)
         }
+
     }
 }

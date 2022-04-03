@@ -11,7 +11,7 @@ class ReviewModel: Codable {
     let id: Int?
     let content: String?
     let postDt: String?
-    let imageURLs: [String]?
+    let imageURLs: [String?]?
     let user: UserModel?
     let place: PlaceModel?
     var likeCount: Int?
@@ -23,12 +23,12 @@ class ReviewModel: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id = "postId"
-        case imageURLs = "imageListddddddd"
+        case imageURLs = "imageList"
         case likeCount = "likeCnt"
         case commentCount = "commentCnt"
         case content = "detail"
-        
-        case postDt, likeYn
+        case postDt = "date"
+        case likeYn
         
         case user, place
 //        case userPostCount = "userPostCnt"
