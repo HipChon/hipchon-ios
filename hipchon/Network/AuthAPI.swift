@@ -341,7 +341,7 @@ class AuthAPI {
     func putProfileImage(name: String, image: UIImage?) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             print("putProfileImage")
-            single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
+            single(.success(.success(())))
 //            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user") else {
 //                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
 //                return Disposables.create()

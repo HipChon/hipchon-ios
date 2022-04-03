@@ -186,8 +186,9 @@ class PlaceDetailViewController: UIViewController {
             .map { y in
                 let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
                 let imageCollectionViewHeight = width * (263.0 / 390.0)
-                let navigationViewHeight = 68.0
-                return y < imageCollectionViewHeight - navigationViewHeight
+                let navigationViewHeight = 60.0 + (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0.0)
+                let safeAreaTopInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0.0
+                return y < imageCollectionViewHeight - safeAreaTopInset - navigationViewHeight
             }
             .drive(navigationView.rx.isHidden)
             .disposed(by: bag)
@@ -307,16 +308,23 @@ class PlaceDetailViewController: UIViewController {
         ].forEach {
             view.addSubview($0)
         }
-
+        
+        let safetyAreaTopInset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0.0
+        print(safetyAreaTopInset, "@@@@@@@")
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview().inset(-safetyAreaTopInset)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
         navigationView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.height.equalTo(68.0)
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+//            $0.top.equalToSuperview().inset(-safetyAreaTopInset)
+            
+            $0.top.equalToSuperview()
+            $0.height.equalTo(60.0 + safetyAreaTopInset)
+//            $0.height.equalTo(0.0)
         }
 
         scrollView.addSubview(contentView)
@@ -348,11 +356,14 @@ class PlaceDetailViewController: UIViewController {
         ].forEach {
             contentView.addSubview($0)
         }
+        
         view.addSubview(backButton)
+        
         backButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
-            $0.centerY.equalTo(navigationView)
+//            $0.centerY.equalTo(navigationView)
             $0.width.height.equalTo(28.0)
+            $0.bottom.equalTo(navigationView.snp.bottom).inset(20.0)
         }
 
         imageCollectView.snp.makeConstraints {

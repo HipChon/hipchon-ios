@@ -272,7 +272,7 @@ class PlaceDesView: UIView {
             descriptionStackView,
         ].forEach {
             $0.axis = .horizontal
-            $0.alignment = .fill
+            $0.alignment = .center
             $0.distribution = .equalSpacing
             $0.spacing = 4.0
         }

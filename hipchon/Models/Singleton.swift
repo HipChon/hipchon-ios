@@ -60,6 +60,7 @@ class Singleton {
             .throttle(.seconds(4), scheduler: MainScheduler.instance)
             .asDriver(onErrorDriveWith: .empty())
             .drive(onNext: { error in
+                dump(error)
                 guard let topVC = UIApplication.topViewController() else { return }
                 let errorAlertVC = ErrorAlertViewController()
                 errorAlertVC.bind()

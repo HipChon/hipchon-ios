@@ -17,7 +17,7 @@ class EditProfileViewModel {
     // MARK: viewModel -> view
 
     let profileImageURL: Driver<URL>
-    let name: Driver<String>
+    let orgName: Driver<String>
     let setChangedImage: Signal<UIImage>
     let completeButtonValid: Driver<Bool>
     let completeButtonActivity: Driver<Bool>
@@ -26,7 +26,7 @@ class EditProfileViewModel {
 
     // MARK: view -> viewModel
 
-    let inputNickName = BehaviorRelay<String>(value: "")
+    let newName = PublishRelay<String>()
     let changedImage = BehaviorSubject<UIImage?>(value: nil)
     let completeButtonTapped = PublishRelay<Void>()
 
@@ -38,24 +38,30 @@ class EditProfileViewModel {
         let authModel = BehaviorSubject<AuthModel?>(value: data)
         let activity = PublishSubject<Bool>()
         
+        // profile image
         profileImageURL = isSignup
             .filter { $0 == false }
             .flatMap { _ in Singleton.shared.currentUser }
             .compactMap { $0.profileImageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
-
-        name = Observable.merge(
-            isSignup.filter { $0 == true }.flatMap { _ in authModel }.compactMap { $0?.name }, // TODO: 소셜에서 받아와야함
-            isSignup.filter { $0 == false }.flatMap { _ in Singleton.shared.currentUser }.compactMap { $0.name }
-        )
-        .asDriver(onErrorJustReturn: "")
         
         setChangedImage = changedImage
             .compactMap { $0 }
             .asSignal(onErrorSignalWith: .empty())
 
-        completeButtonValid = inputNickName
+        // name
+        
+        orgName = Observable.merge(
+            authModel.map { $0?.name ?? "" }, // TODO: 소셜에서 받아와야함
+            isSignup.filter { $0 == false }.flatMap { _ in Singleton.shared.currentUser }.compactMap { $0.name }
+        )
+        .asDriver(onErrorJustReturn: "")
+
+        completeButtonValid = Observable.merge(
+            orgName.asObservable(),
+            newName.asObservable()
+        )
             .map { $0.count >= 3 }
             .asDriver(onErrorJustReturn: false)
 
@@ -71,7 +77,7 @@ class EditProfileViewModel {
             .do(onNext: { activity.onNext(true) })
             .withLatestFrom(isSignup)
             .filter { $0 == true }
-            .withLatestFrom(Observable.combineLatest(authModel, changedImage, inputNickName))
+            .withLatestFrom(Observable.combineLatest(authModel, changedImage, newName))
             .compactMap { auth, image, name in
                 auth?.profileImage = image
                 auth?.name = name
@@ -123,7 +129,7 @@ class EditProfileViewModel {
             .do(onNext: { activity.onNext(true) })
             .withLatestFrom(isSignup)
             .filter { $0 == false }
-            .withLatestFrom(Observable.combineLatest(inputNickName, changedImage))
+            .withLatestFrom(Observable.combineLatest(newName, changedImage))
             .flatMap { AuthAPI.shared.putProfileImage(name: $0, image: $1) }
             .subscribe(onNext: { result in
                 switch result {
@@ -140,13 +146,26 @@ class EditProfileViewModel {
                 }
             })
             .disposed(by: bag)
-        
+
         userRefresh
-            .flatMap { NetworkManager.shared.getUser() }
+            .filter { _ in DeviceManager.shared.networkStatus }
+            .flatMap { AuthAPI.shared.getUser() }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
             .do(onNext: { _ in activity.onNext(false) })
-            .subscribe(onNext: {
-                Singleton.shared.currentUser.onNext($0)
-                putProfileComplete.onNext(())
+            .subscribe(onNext: { result in
+                switch result {
+                case let .success(data): // 가입된 유저: 로그인
+                    Singleton.shared.currentUser.onNext(data)
+                    putProfileComplete.onNext(())
+                case .failure(let error): // 가입안된 유저: 회원가입
+                    switch error.statusCode {
+                    case 13: // timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
             })
             .disposed(by: bag)
 
