@@ -122,14 +122,13 @@ class ReviewDetailHeaderViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
-                    Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("좋아요 추가가 완료었습니다")
+                    Singleton.shared.likedReviewRefresh.onNext(())
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
                     case 13: // 13: Timeout
-                        Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
+                        Singleton.shared.toastAlert.onNext("네트워크 연결 상태를 확인해주세요")
                     default:
                         break
                     }
@@ -152,14 +151,13 @@ class ReviewDetailHeaderViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .success:
-                    Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("좋아요 추가가 완료었습니다")
+                    Singleton.shared.likedReviewRefresh.onNext(())
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
                     case 13: // 13: Timeout
-                        Singleton.shared.toastAlert.onNext("좋아요 제거가 완료되었습니다")
+                        Singleton.shared.toastAlert.onNext("네트워크 연결 상태를 확인해주세요")
                     default:
                         break
                     }

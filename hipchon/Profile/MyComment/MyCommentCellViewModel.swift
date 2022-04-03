@@ -26,7 +26,7 @@ class MyCommentCellViewModel {
         let comment = BehaviorSubject<CommentModel>(value: data)
 
         imageURL = comment
-            .compactMap { $0.review?.imageURLs?.first ?? "" }
+            .compactMap { $0.review?.topImageUrl }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
 

@@ -21,25 +21,11 @@ class PlaceAPI {
         return Single.create { single in
             print("getPlaceList")
             var urlStr = "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)"
+            let order = sort == .bookmark ? "myplace" : "review"
 
             if filter.hashtag == nil {
-                if let regionId = filter.region?.id {
-                    urlStr += "/\(regionId)"
-                }
-
-                if let categoryId = filter.category?.id {
-                    urlStr += "/\(categoryId)"
-                }
-
-                if sort == .bookmark {
-                    urlStr += "/myplace"
-                } else {
-                    urlStr += "/review"
-                }
-
-            } else if let hashtagId = filter.hashtag?.id,
-                      let order = sort == .bookmark ? "myplace" : "review"
-            {
+                urlStr = "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)/\(filter.region?.id ?? -1)/\(filter.category?.id ?? -1)/\(order)"
+            } else if let hashtagId = filter.hashtag?.id {
                 urlStr = "\(APIParameters.shared.hostUrl)/api/place/hashtag/\(APIParameters.shared.userId)/\(hashtagId)/\(order)"
             } else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -153,13 +139,21 @@ class PlaceAPI {
         }
     }
 
-    func getMyPlaces(_ sector: SectorType) -> Single<Result<[PlaceModel], APIError>> {
+    func getMyPlaces(_ category: CategoryModel) -> Single<Result<[PlaceModel], APIError>> {
         return Single.create { single in
-            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)") else {
+            
+            
+            var urlStr = "\(APIParameters.shared.hostUrl)/api/myplace/\(APIParameters.shared.userId)"
+            
+            if let id = category.id {
+                urlStr.append("/\(id)")
+            }
+
+            guard let url = URL(string: urlStr) else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
                 return Disposables.create()
             }
-            print("getMyPlaces \(sector)")
+            print("getMyPlaces \(category.name)")
 
             APIParameters.shared.session
                 .request(url, method: .get, parameters: nil, headers: APIParameters.shared.headers)
@@ -170,6 +164,7 @@ class PlaceAPI {
                         if let data = response.data {
                             do {
                                 let model = try JSONDecoder().decode([PlaceModel].self, from: data)
+
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))

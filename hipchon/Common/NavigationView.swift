@@ -14,7 +14,7 @@ class NavigationView: UIView {
     }
 
     private let bag = DisposeBag()
-    public let viewHeight = 68.0
+    public let viewHeight = 60.0 + (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0.0)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,7 +52,7 @@ class NavigationView: UIView {
 
         backButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
-            $0.centerY.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(20.0)
             $0.width.height.equalTo(28.0)
         }
     }

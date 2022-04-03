@@ -184,7 +184,6 @@ class PlaceDetailViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에 등록되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -217,7 +216,6 @@ class PlaceDetailViewModel {
                 switch result {
                 case .success:
                     Singleton.shared.myPlaceRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("저장 장소에서 제거되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)

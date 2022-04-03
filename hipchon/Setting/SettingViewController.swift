@@ -108,6 +108,11 @@ class SettingViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        navigationController?.isNavigationBarHidden = true
+    }
 
     func bind(_ viewModel: SettingViewModel) {
         // MARK: subViews Binding
@@ -198,9 +203,9 @@ class SettingViewController: UIViewController {
         }
 
         navigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(68.0)
+            $0.height.equalTo(navigationView.viewHeight)
         }
 
         appSettingLabel.snp.makeConstraints {

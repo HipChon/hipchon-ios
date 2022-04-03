@@ -78,7 +78,7 @@ class ReviewDetailViewController: UIViewController {
         }
 
         navigationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(navigationView.viewHeight)
         }
@@ -167,6 +167,12 @@ private extension ReviewDetailViewController {
                 $0.height.equalTo(102.0)
                 $0.bottom.equalToSuperview().inset(keyboardSize.height)
             }
+            
+            commentTableView.snp.remakeConstraints {
+                $0.leading.trailing.equalToSuperview()
+                $0.top.equalTo(navigationView.snp.bottom).offset(-keyboardSize.height)
+                $0.bottom.equalTo(inputCommentView.snp.top)
+            }
         }
     }
 
@@ -175,6 +181,12 @@ private extension ReviewDetailViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(102.0)
             $0.bottom.equalToSuperview()
+        }
+        
+        commentTableView.snp.remakeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(navigationView.snp.bottom)
+            $0.bottom.equalTo(inputCommentView.snp.top)
         }
     }
 

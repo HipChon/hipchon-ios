@@ -121,7 +121,7 @@ class ReviewCell: UITableViewCell {
                     case 2:
                         width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
                     default:
-                        width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
+                        break
                     }
 
                     layout.itemSize = CGSize(width: width, height: height)

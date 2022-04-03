@@ -10,8 +10,8 @@
 		3A7D358079476DF3ECF3F75A /* Pods_hipchon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D95E75F856206A0F1A096E8 /* Pods_hipchon.framework */; };
 		D8091FF727B28034000F057E /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FF627B28034000F057E /* FeedViewController.swift */; };
 		D8091FF927B2803E000F057E /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FF827B2803E000F057E /* FeedViewModel.swift */; };
-		D8091FFC27B28095000F057E /* SectorPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFB27B28095000F057E /* SectorPlaceViewController.swift */; };
-		D8091FFE27B280A1000F057E /* SectorPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */; };
+		D8091FFC27B28095000F057E /* CategoryPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFB27B28095000F057E /* CategoryPlaceViewController.swift */; };
+		D8091FFE27B280A1000F057E /* CategoryPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8091FFD27B280A1000F057E /* CategoryPlaceViewModel.swift */; };
 		D809200127B28332000F057E /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809200027B28332000F057E /* PlaceDetailViewController.swift */; };
 		D809200327B28368000F057E /* PlaceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809200227B28368000F057E /* PlaceDetailViewModel.swift */; };
 		D809200627B286FF000F057E /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D809200527B286FF000F057E /* PlaceModel.swift */; };
@@ -194,8 +194,8 @@
 		7E0ABCC1241B3D083244BD37 /* Pods-hipchon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hipchon.debug.xcconfig"; path = "Target Support Files/Pods-hipchon/Pods-hipchon.debug.xcconfig"; sourceTree = "<group>"; };
 		D8091FF627B28034000F057E /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		D8091FF827B2803E000F057E /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
-		D8091FFB27B28095000F057E /* SectorPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorPlaceViewController.swift; sourceTree = "<group>"; };
-		D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorPlaceViewModel.swift; sourceTree = "<group>"; };
+		D8091FFB27B28095000F057E /* CategoryPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPlaceViewController.swift; sourceTree = "<group>"; };
+		D8091FFD27B280A1000F057E /* CategoryPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPlaceViewModel.swift; sourceTree = "<group>"; };
 		D809200027B28332000F057E /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		D809200227B28368000F057E /* PlaceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewModel.swift; sourceTree = "<group>"; };
 		D809200527B286FF000F057E /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
@@ -434,8 +434,8 @@
 			isa = PBXGroup;
 			children = (
 				D811612827E3898500E6A0A4 /* StoragePlaceViewController.swift */,
-				D8091FFB27B28095000F057E /* SectorPlaceViewController.swift */,
-				D8091FFD27B280A1000F057E /* SectorPlaceViewModel.swift */,
+				D8091FFB27B28095000F057E /* CategoryPlaceViewController.swift */,
+				D8091FFD27B280A1000F057E /* CategoryPlaceViewModel.swift */,
 				D871F4B727BD23F800CCDE4D /* MyPlaceCell.swift */,
 				D871F4B927BD240100CCDE4D /* MyPlaceCellViewModel.swift */,
 				D85B6A8E27E4E909002DC7B1 /* MemoModel.swift */,
@@ -1055,7 +1055,7 @@
 				D890251227DA55AE0099FACA /* NavigationView.swift in Sources */,
 				D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */,
 				D83304E227AC1A43008E7DB7 /* ProfileViewModel.swift in Sources */,
-				D8091FFE27B280A1000F057E /* SectorPlaceViewModel.swift in Sources */,
+				D8091FFE27B280A1000F057E /* CategoryPlaceViewModel.swift in Sources */,
 				D86768CB27F61C4A004D9620 /* PageBarView.swift in Sources */,
 				D84B352127CBA8FE00BF1A63 /* BestReviewView.swift in Sources */,
 				D828B39827E79D2F007C2487 /* TermsViewModel.swift in Sources */,
@@ -1154,7 +1154,7 @@
 				D82EBF0127F9536700BA009C /* CommentAPI.swift in Sources */,
 				D828B38F27E6F532007C2487 /* MyCommentCell.swift in Sources */,
 				D88FAF8127A67D6F00E41F4F /* LoginViewController.swift in Sources */,
-				D8091FFC27B28095000F057E /* SectorPlaceViewController.swift in Sources */,
+				D8091FFC27B28095000F057E /* CategoryPlaceViewController.swift in Sources */,
 				D813C34927D78B9E00193384 /* PlaceReviewCell.swift in Sources */,
 				D83257DC27CFBF2F00129E50 /* PlaceMapView.swift in Sources */,
 				D871E0DE27DF736500072522 /* HipsterPickDetailCell.swift in Sources */,

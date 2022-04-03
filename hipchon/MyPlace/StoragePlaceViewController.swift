@@ -27,22 +27,22 @@ class StoragePlaceViewController: TabmanViewController {
         $0.backgroundColor = .gray_border
     }
 
-    let entireVM = SectorPlaceViewModel(.entire)
-    let cafePlaceVM = SectorPlaceViewModel(.cafe)
-    let foodPlaceVM = SectorPlaceViewModel(.food)
-    let activityPlaceVM = SectorPlaceViewModel(.activity)
-    let naturalPlaceVM = SectorPlaceViewModel(.natural)
+    let entireVM = CategoryPlaceViewModel(CategoryModel(id: nil, name: "전체"))
+    let cafePlaceVM = CategoryPlaceViewModel(CategoryModel(id: 1, name: "카페"))
+    let foodPlaceVM = CategoryPlaceViewModel(CategoryModel(id: 2, name: "미식"))
+    let activityPlaceVM = CategoryPlaceViewModel(CategoryModel(id: 3, name: "활동"))
+    let naturalPlaceVM = CategoryPlaceViewModel(CategoryModel(id: 4, name: "자연"))
 
     private lazy var viewControllers: [UIViewController] = {
-        let entirePlaceVC = SectorPlaceViewController()
+        let entirePlaceVC = CategoryPlaceViewController()
         entirePlaceVC.bind(entireVM)
-        let cafePlaceVC = SectorPlaceViewController()
+        let cafePlaceVC = CategoryPlaceViewController()
         cafePlaceVC.bind(cafePlaceVM)
-        let foodPlaceVC = SectorPlaceViewController()
+        let foodPlaceVC = CategoryPlaceViewController()
         foodPlaceVC.bind(foodPlaceVM)
-        let activityPlaceVC = SectorPlaceViewController()
+        let activityPlaceVC = CategoryPlaceViewController()
         activityPlaceVC.bind(activityPlaceVM)
-        let naturalPlaceVC = SectorPlaceViewController()
+        let naturalPlaceVC = CategoryPlaceViewController()
         naturalPlaceVC.bind(naturalPlaceVM)
         return [entirePlaceVC, cafePlaceVC, foodPlaceVC, activityPlaceVC, naturalPlaceVC]
     }()

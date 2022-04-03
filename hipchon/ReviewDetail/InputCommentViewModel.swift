@@ -49,7 +49,6 @@ class InputCommentViewModel {
                     postComplete.onNext(())
                     Singleton.shared.commentRefresh.onNext(())
                     Singleton.shared.myCommentRefresh.onNext(())
-                    Singleton.shared.toastAlert.onNext("댓글 작성이 완료되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
