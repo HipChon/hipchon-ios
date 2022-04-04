@@ -1373,8 +1373,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "애플리케이션 힙촌에서 가까운 로컬 장소 검색을 위해 위치 정보를 사용하도록 허용합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "애플리케이션 '힙촌'에서 마이크 기능에 접근하려고 합니다. 허락하시겠습니까?";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 힙촌에서 장소 후기 사진 추가를 위해 갤러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1385,7 +1386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1409,8 +1410,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "애플리케이션 힙촌에서 가까운 로컬 장소 검색을 위해 위치 정보를 사용하도록 허용합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "애플리케이션 '힙촌'에서 마이크 기능에 접근하려고 합니다. 허락하시겠습니까?";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 힙촌에서 장소 후기 사진 추가를 위해 갤러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1421,7 +1423,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
