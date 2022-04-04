@@ -11,6 +11,7 @@ import RxSwift
 class ReviewKeywordListViewModel {
     // MARK: viewModel -> view
 
+    let keywordEmpty: Driver<Bool>
     let firstKeywordVM: Driver<KeywordDetailViewModel>
     let secondKeywordVM: Driver<KeywordDetailViewModel>
     let thirdKeywordVM: Driver<KeywordDetailViewModel>
@@ -37,5 +38,9 @@ class ReviewKeywordListViewModel {
             .map { $0[2] }
             .map { KeywordDetailViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
+        
+        keywordEmpty = keywords
+            .map { $0.count == 0 }
+            .asDriver(onErrorJustReturn: false)
     }
 }

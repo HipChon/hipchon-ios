@@ -10,7 +10,7 @@ import UIKit
 
 class ReviewCell: UITableViewCell {
     private lazy var profileImageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
         $0.image = UIImage(named: "default_profile") ?? UIImage()
     }
@@ -121,6 +121,7 @@ class ReviewCell: UITableViewCell {
                     case 2:
                         width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
                     default:
+                        width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
                         break
                     }
 

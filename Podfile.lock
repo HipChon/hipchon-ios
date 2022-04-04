@@ -1,6 +1,23 @@
 PODS:
   - Alamofire (5.5.0)
   - AnyFormatKit (2.5.2)
+  - CHIPageControl (0.1.8):
+    - CHIPageControl/Aji (= 0.1.8)
+    - CHIPageControl/Aleppo (= 0.1.8)
+    - CHIPageControl/Chimayo (= 0.1.8)
+    - CHIPageControl/Fresno (= 0.1.8)
+    - CHIPageControl/Jalapeno (= 0.1.8)
+    - CHIPageControl/Jaloro (= 0.1.8)
+    - CHIPageControl/Paprika (= 0.1.8)
+    - CHIPageControl/Puya (= 0.1.8)
+  - CHIPageControl/Aji (0.1.8)
+  - CHIPageControl/Aleppo (0.1.8)
+  - CHIPageControl/Chimayo (0.1.8)
+  - CHIPageControl/Fresno (0.1.8)
+  - CHIPageControl/Jalapeno (0.1.8)
+  - CHIPageControl/Jaloro (0.1.8)
+  - CHIPageControl/Paprika (0.1.8)
+  - CHIPageControl/Puya (0.1.8)
   - Differentiator (5.0.0)
   - KakaoSDK (2.8.6):
     - KakaoSDKAuth (= 2.8.6)
@@ -95,6 +112,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - AnyFormatKit
+  - CHIPageControl (~> 0.1.3)
   - KakaoSDK
   - Kingfisher
   - MaterialComponents/BottomSheet
@@ -115,6 +133,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - AnyFormatKit
+    - CHIPageControl
     - Differentiator
     - KakaoSDK
     - KakaoSDKAuth
@@ -147,6 +166,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   AnyFormatKit: b0dbb2a5f2fe7a0fc97f401f8a219a47ee63a335
+  CHIPageControl: 76b35c8309d8dd155e869c109cc6ffc0aaa465ff
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   KakaoSDK: 29ca188341fbb8994586eac73c10209f3889b574
   KakaoSDKAuth: 53e747a3bf343a3f3e87b14478d5a865d6c2acae
@@ -176,6 +196,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   YPImagePicker: f36043210c10b0783034eb1947d6e06e31c461e4
 
-PODFILE CHECKSUM: 0cb56028379a71e7ba34c566d46b00ed7027d00a
+PODFILE CHECKSUM: 1eff0ed77133f213ba612e7e4fc9f20f81d1425f
 
 COCOAPODS: 1.11.2

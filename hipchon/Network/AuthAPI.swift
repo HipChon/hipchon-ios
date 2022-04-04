@@ -345,52 +345,54 @@ class AuthAPI {
         }
     }
 
-    func putProfileImage(name _: String, image _: UIImage?) -> Single<Result<Void, APIError>> {
+    func editProfile(name: String, image: UIImage?) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             print("putProfileImage")
-            single(.success(.success(())))
-//            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user") else {
-//                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
-//                return Disposables.create()
-//            }
-//
-//            guard let profileImage = image,
-//                  let imageData = profileImage.jpegData(compressionQuality: 1.0) else {
-//                      single(.success(.failure(APIError(statusCode: -1, description: "parameter error"))))
-//                      return Disposables.create()
-//                  }
-//
-//            let header: HTTPHeaders = [
-//                "Authorization": "some auth",
-//                "Accept": "application/json",
-//                "Content-Type": "multipart/form-data",
-//            ]
-//
-//            let parameters: [String : Any] = [
-//                "name": name,
-//            ]
-//
-//            APIParameters.shared.session
-//                .upload(multipartFormData: { multipartFormData in
-//                    for (key, value) in parameters {
-//                        multipartFormData.append("\(value)".data(using: .utf8)!, withName: key)
-//                    }
-//                    multipartFormData.append(imageData, withName: "profileImage", fileName: "\(name).png", mimeType: "image/png")
-//                }, to: url, usingThreshold: UInt64.init(), method: .post, headers: header)
-//                .response(completionHandler: { response in
-//                    switch response.result {
-//                    case .success:
-//                        single(.success(.success(())))
-//                    case let .failure(error):
-//                        guard let statusCode = response.response?.statusCode else {
-//                            single(.success(.failure(APIError(statusCode: error._code,
-//                                                              description: error.errorDescription))))
-//                            return
-//                        }
-//                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
-//                    }
-//                })
-//                .resume()
+            guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user") else {
+                single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
+                return Disposables.create()
+            }
+
+            let header: HTTPHeaders = [
+                "Accept": "application/json",
+                "Content-Type": "multipart/form-data",
+            ]
+            
+            let parameters: [String : Any] = [
+                "loginId": KeychainWrapper.standard.string(forKey: "loginId") ?? "",
+                "loginType": KeychainWrapper.standard.string(forKey: "loginType") ?? "",
+                "name": name,
+            ]
+
+            APIParameters.shared.session
+                .upload(multipartFormData: { multipartFormData in
+                    
+                    if let profileImage = image,
+                       let imageData = profileImage.jpegData(compressionQuality: 1.0) {
+                        multipartFormData.append(imageData, withName: "file",
+                                                 fileName: "\(Date().timeIntervalSince1970).png",
+                                                 mimeType: "image/png")
+                    }
+
+                    if let data = try? JSONSerialization.data(withJSONObject: parameters, options: []) {
+                        multipartFormData.append(data, withName: "user", mimeType: "application/json")
+                    }
+                    
+                }, to: url, usingThreshold: UInt64.init(), method: .put, headers: header)
+                .response(completionHandler: { response in
+                    switch response.result {
+                    case .success:
+                        single(.success(.success(())))
+                    case let .failure(error):
+                        guard let statusCode = response.response?.statusCode else {
+                            single(.success(.failure(APIError(statusCode: error._code,
+                                                              description: error.errorDescription))))
+                            return
+                        }
+                        single(.success(.failure(APIError(statusCode: statusCode, description: error.errorDescription))))
+                    }
+                })
+                .resume()
             return Disposables.create()
         }
     }

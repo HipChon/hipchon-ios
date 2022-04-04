@@ -14,7 +14,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
     }
 
     private lazy var profileImageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
     }
 
@@ -133,7 +133,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
                     case 2:
                         width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
                     default:
-                        break
+                        width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
                     }
 
                     layout.itemSize = CGSize(width: width, height: height)
@@ -195,7 +195,6 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
                 let viewModel = ImageURLCellViewModel(data)
-                cell.imageView.contentMode = .scaleAspectFill
                 cell.bind(viewModel)
                 return cell
             }

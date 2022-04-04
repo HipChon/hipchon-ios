@@ -16,7 +16,9 @@ class HashtagReviewCell: UICollectionViewCell {
         $0.addShadow(offset: CGSize(width: 2.0, height: 2.0))
     }
 
-    private lazy var imageView = UIImageView().then { _ in
+    private lazy var imageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.layer.masksToBounds = true
     }
 
     private lazy var nameView = UIView().then {
@@ -45,16 +47,11 @@ class HashtagReviewCell: UICollectionViewCell {
         }
         actions.append(showAction)
 
-        viewModel?.deleteEnable
-            .filter { $0 == true }
-            .drive(onNext: { _ in
-                let deleteAction = UIAction(title: "삭제",
-                                            image: nil) { [weak self] _ in
-                    self?.viewModel?.deleteTapped.onNext(())
-                }
-                actions.append(deleteAction)
-            })
-            .disposed(by: bag)
+        let deleteAction = UIAction(title: "삭제",
+                                    image: nil) { [weak self] _ in
+            self?.viewModel?.deleteTapped.onNext(())
+        }
+        actions.append(deleteAction)
 
         let menu = UIMenu(title: "", children: actions)
         $0.menu = menu

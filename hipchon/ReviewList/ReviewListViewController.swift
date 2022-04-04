@@ -163,7 +163,7 @@ class ReviewListViewController: UIViewController {
 
         postReviewButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(21.0)
-            $0.centerY.equalTo(navigationView)
+            $0.centerY.equalTo(reviewCountLabel)
             $0.width.height.equalTo(28.0)
         }
 
@@ -175,7 +175,7 @@ class ReviewListViewController: UIViewController {
 
         reviewCountLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(56.0)
-            $0.centerY.equalTo(navigationView)
+            $0.bottom.equalTo(navigationView.snp.bottom).offset(-20.0)
             $0.height.equalTo(24.0)
         }
 

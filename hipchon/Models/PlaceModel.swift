@@ -84,7 +84,7 @@ class PlaceModel: Codable {
         case reviews, menus, memo
         case hashtag = "tmp"
         case topKeyword = "keyword"
-        case topImageUrl = "placeImage"
+        case topImageUrl = "image"
 //        case holiday, markerImage, hiple, animal, hashtag
     }
 

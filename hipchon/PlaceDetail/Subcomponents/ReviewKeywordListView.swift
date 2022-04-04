@@ -73,6 +73,11 @@ class ReviewKeywordListView: UIView {
                 self?.thirdKeywordView.bind($0)
             })
             .disposed(by: bag)
+        
+        viewModel.keywordEmpty
+            .map { !$0 }
+            .drive(emptyLabel.rx.isHidden)
+            .disposed(by: bag)
     }
 
     private func attribute() {

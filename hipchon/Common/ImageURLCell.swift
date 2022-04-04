@@ -12,6 +12,7 @@ import UIKit
 class ImageURLCell: UICollectionViewCell {
     public lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
+        $0.layer.masksToBounds = true
     }
 
     public static let identyfier = "ImageURLCell"

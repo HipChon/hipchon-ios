@@ -18,6 +18,7 @@ class ReviewModel: Codable {
     var likeCount: Int?
     let commentCount: Int?
     var likeYn: Bool?
+    let placeName: String?
 
     // 아직 안씀
 //    let userPostCount: Int?
@@ -33,6 +34,7 @@ class ReviewModel: Codable {
         commentCount = nil
         likeYn = nil
         topImageUrl = nil
+        placeName = nil
     }
 
     enum CodingKeys: String, CodingKey {
@@ -41,10 +43,11 @@ class ReviewModel: Codable {
         case likeCount = "likeCnt"
         case commentCount = "commentCnt"
         case content = "detail"
-        case postDt = "date"
-        case likeYn
+        case postDt = "time"
+        case likeYn = "isMypost"
         case topImageUrl = "image"
         case user, place
+        case placeName = "name"
 //        case userPostCount = "userPostCnt"
     }
 

@@ -38,7 +38,12 @@ class ReviewListViewModel {
             .asDriver(onErrorJustReturn: [])
 
         // 첫 load, sorting
-        place
+        
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myReviewRefresh
+        )
+            .withLatestFrom(place)
             .compactMap { $0.id }
             .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { ReviewAPI.shared.getPlaceReview($0) }

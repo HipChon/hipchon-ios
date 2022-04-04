@@ -11,6 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
+import CHIPageControl
 
 class PlaceDetailViewController: UIViewController {
     // MARK: Property
@@ -51,6 +52,13 @@ class PlaceDetailViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
+    }
+    
+    private lazy var pageControl = CHIPageControlJaloro().then {
+        $0.radius = 0
+        $0.tintColor = .black
+        $0.currentPageTintColor = .white
+        $0.padding = 0
     }
 
     private lazy var placeDesView = PlaceDesView().then { _ in
@@ -136,6 +144,19 @@ class PlaceDetailViewController: UIViewController {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        imageCollectView.rx.contentOffset
+            .compactMap { [unowned self] in Int(($0.x + self.imageCollectView.frame.width / 2) / view.frame.width) }
+            .distinctUntilChanged()
+            .asDriver(onErrorJustReturn: 0)
+            .drive(onNext: { [weak self] in
+                //set progress with animation
+                self?.pageControl.set(progress: $0, animated: true)
+            })
+            .disposed(by: bag)
     }
 
     func bind(_ viewModel: PlaceDetailViewModel) {
@@ -237,7 +258,6 @@ class PlaceDetailViewController: UIViewController {
             .drive(reviewTableView.rx.items) { tv, _, review in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
                 let viewModel = ReviewCellViewModel(review)
-                cell.imageView?.contentMode = .scaleAspectFill
                 cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)
                 return cell
@@ -287,6 +307,13 @@ class PlaceDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(reviewListVC, animated: true)
             })
             .disposed(by: bag)
+        
+        viewModel.urls
+            .map { $0.count }
+            .drive(onNext: { [weak self] in
+                self?.pageControl.numberOfPages = $0
+            })
+            .disposed(by: bag)
 
         backButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
@@ -330,6 +357,7 @@ class PlaceDetailViewController: UIViewController {
 
         [
             imageCollectView,
+            pageControl,
             placeDesView,
             firstBorderView,
             menuListView,
@@ -365,6 +393,11 @@ class PlaceDetailViewController: UIViewController {
             let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
             let height = width * (263.0 / 390.0)
             $0.height.equalTo(height)
+        }
+        
+        pageControl.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(imageCollectView.snp.bottom).inset(-20.0)
         }
 
         placeDesView.snp.makeConstraints {

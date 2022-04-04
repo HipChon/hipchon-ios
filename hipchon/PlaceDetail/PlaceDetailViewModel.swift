@@ -282,7 +282,10 @@ class PlaceDetailViewModel {
 
         // MARK: API
 
-        viewAppear
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myReviewRefresh
+        )
             .withLatestFrom(place)
             .compactMap { $0.id }
             .filter { _ in DeviceManager.shared.networkStatus }

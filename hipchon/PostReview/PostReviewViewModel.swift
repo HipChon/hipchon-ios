@@ -81,12 +81,28 @@ class PostReviewViewModel {
             .disposed(by: bag)
 
         completeButtonTapped
+            .filter { DeviceManager.shared.networkStatus }
             .do(onNext: { activity.onNext(true) })
-            .withLatestFrom(Observable.combineLatest(selectedPhotos, content, selectedKeyword))
-            .flatMap { NetworkManager.shared.postReview(images: $0, content: $1, keywords: $2) }
+            .withLatestFrom(Observable.combineLatest(place.compactMap { $0.id }, selectedPhotos, content, selectedKeyword))
+            .flatMap { ReviewAPI.shared.postReview(placeId: $0, images: $1, content: $2, keywords: $3) }
+            .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
+            .observe(on: MainScheduler.instance)
             .do(onNext: { _ in activity.onNext(false) })
-            .subscribe(onNext: { _ in
-                postComplete.onNext(())
+            .subscribe(onNext: { result in
+                switch result {
+                case let .success(data):
+                    Singleton.shared.myReviewRefresh.onNext(())
+                    postComplete.onNext(())
+                case let .failure(error):
+                    switch error.statusCode {
+                    case 401: // 401: unauthorized(토큰 만료)
+                        Singleton.shared.unauthorized.onNext(())
+                    case 13: // 13: Timeout
+                        Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
+                    default:
+                        Singleton.shared.unknownedError.onNext(error)
+                    }
+                }
             })
             .disposed(by: bag)
 

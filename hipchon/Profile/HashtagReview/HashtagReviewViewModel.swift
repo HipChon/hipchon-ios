@@ -43,7 +43,7 @@ class HashtagReviewViewModel {
 
         // 첫 load, refresh
         Observable.merge(Observable.just(()).withLatestFrom(type),
-                         Singleton.shared.myPlaceRefresh.withLatestFrom(type).filter { $0 == .myReview },
+                         Singleton.shared.myReviewRefresh.withLatestFrom(type).filter { $0 == .myReview },
                          Singleton.shared.likedReviewRefresh.withLatestFrom(type).filter { $0 == .likeReview })
             .filter { _ in DeviceManager.shared.networkStatus }
             .flatMap { ReviewAPI.shared.getMyReviews($0) }

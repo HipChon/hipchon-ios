@@ -56,11 +56,17 @@ class EditProfileViewModel {
             isSignup.filter { $0 == false }.flatMap { _ in Singleton.shared.currentUser }.compactMap { $0.name }
         )
         .asDriver(onErrorJustReturn: "")
-
-        completeButtonValid = Observable.merge(
+        
+        let name = BehaviorSubject<String>(value: "")
+        
+        Observable.merge(
             orgName.asObservable(),
             newName.asObservable()
         )
+            .bind(to: name)
+            .disposed(by: bag)
+
+        completeButtonValid = name
         .map { 3 <= $0.count && $0.count <= 10 }
         .asDriver(onErrorJustReturn: false)
 
@@ -76,7 +82,7 @@ class EditProfileViewModel {
             .do(onNext: { activity.onNext(true) })
             .withLatestFrom(isSignup)
             .filter { $0 == true }
-            .withLatestFrom(Observable.combineLatest(authModel, changedImage, newName))
+            .withLatestFrom(Observable.combineLatest(authModel, changedImage, name))
             .compactMap { auth, image, name in
                 auth?.profileImage = image
                 auth?.name = name
@@ -128,8 +134,8 @@ class EditProfileViewModel {
             .do(onNext: { activity.onNext(true) })
             .withLatestFrom(isSignup)
             .filter { $0 == false }
-            .withLatestFrom(Observable.combineLatest(newName, changedImage))
-            .flatMap { AuthAPI.shared.putProfileImage(name: $0, image: $1) }
+            .withLatestFrom(Observable.combineLatest(name, changedImage))
+            .flatMap { AuthAPI.shared.editProfile(name: $0, image: $1) }
             .subscribe(onNext: { result in
                 switch result {
                 case .success:

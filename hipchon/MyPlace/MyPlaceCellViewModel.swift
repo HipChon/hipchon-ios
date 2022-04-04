@@ -31,7 +31,7 @@ class MyPlaceCellViewModel {
 
     init(_ place: BehaviorSubject<PlaceModel>) {
         imageURL = place
-            .compactMap { $0.imageURLs?.first }
+            .compactMap { $0.topImageUrl }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
 

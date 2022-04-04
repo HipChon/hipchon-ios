@@ -18,7 +18,7 @@ class UserModel: Codable {
         case id = "userId"
         case name
         case profileImageURL = "image"
-        case reviewCount = "userPostCnt"
+        case reviewCount = "postCnt"
     }
 
     init(id: Int, name: String, profileImageURL: String, reviewCount: Int) {
