@@ -56,8 +56,8 @@ class PlaceDetailViewController: UIViewController {
     
     private lazy var pageControl = CHIPageControlJaloro().then {
         $0.radius = 0
-        $0.tintColor = .yellow
-        $0.currentPageTintColor = .red
+        $0.tintColor = .white
+        $0.currentPageTintColor = .black
         $0.padding = 0
     }
 
@@ -112,6 +112,7 @@ class PlaceDetailViewController: UIViewController {
         $0.dataSource = nil
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
+//        $0.rowHeight = 309.0
         $0.estimatedRowHeight = 309.0
         $0.rowHeight = UITableView.automaticDimension
         $0.showsVerticalScrollIndicator = false
@@ -149,8 +150,12 @@ class PlaceDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//
+//    }
+    
+    deinit {
         menuListView.bag = DisposeBag()
     }
     
@@ -227,9 +232,21 @@ class PlaceDetailViewController: UIViewController {
         // MARK: viewModel -> view
 
         viewModel.menuListViewHidden
-            .drive(onNext: {
-                let height = $0 ? 0.0 : 440.0
-                self.menuListView.isHidden = $0
+            .drive(menuListView.rx.isHidden)
+            .disposed(by: bag)
+        viewModel.reviewTableViewCount
+            .map { count -> Double in
+                if count == 0 {
+                    return 0.0
+                } else if count == 1 || count == 2 {
+                    return 440.0 - 180.0
+                } else {
+                    return 440.0
+                }
+            }
+            .drive(onNext: { height in
+//                let height = $0 ? 0.0 : 440.0
+//                self.menuListView.isHidden = $0
                 self.menuListView.snp.remakeConstraints {
                     $0.leading.trailing.equalToSuperview()
                     $0.top.equalTo(self.firstBorderView.snp.bottom)
@@ -406,8 +423,8 @@ class PlaceDetailViewController: UIViewController {
         
         pageControl.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(imageCollectView.snp.bottom).offset(-20.0)
-            $0.height.equalTo(50.0)
+            $0.bottom.equalTo(placeDesView.snp.top).offset(16.0)
+            $0.height.equalTo(2.0)
         }
 
         placeDesView.snp.makeConstraints {

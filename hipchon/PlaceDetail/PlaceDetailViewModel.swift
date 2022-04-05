@@ -28,6 +28,7 @@ class PlaceDetailViewModel {
     let share: Signal<String>
     let menuListViewHidden: Driver<Bool>
     let reviewTableViewHidden: Driver<Bool>
+    let reviewTableViewCount: Driver<Int>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
     let pushPostReviewVC: Signal<PostReviewViewModel>
 
@@ -240,6 +241,10 @@ class PlaceDetailViewModel {
         reviewTableViewHidden = reviewDatas
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: true)
+         
+        reviewTableViewCount = place
+            .map { $0.menus?.count ?? 0 }
+            .asDriver(onErrorJustReturn: 0)
 
         menuListVM = place
             .compactMap { $0.menus }

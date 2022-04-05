@@ -32,9 +32,9 @@ class ReviewListViewController: UIViewController {
     private lazy var reviewTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
-        $0.rowHeight = 309.0
-//        $0.estimatedRowHeight = 309.0
-//        $0.rowHeight = UITableView.automaticDimension
+//        $0.rowHeight = 309.0
+        $0.estimatedRowHeight = 309.0
+        $0.rowHeight = UITableView.automaticDimension
         $0.separatorInset = UIEdgeInsets(top: 6.0, left: 0.0, bottom: 0.0, right: 0.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none

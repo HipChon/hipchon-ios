@@ -34,9 +34,9 @@ class FeedViewController: UIViewController {
     private lazy var reviewTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(FeedReviewCell.self, forCellReuseIdentifier: FeedReviewCell.identyfier)
-        $0.rowHeight = 393.0
-//        $0.estimatedRowHeight = 393.0
-//        $0.rowHeight = UITableView.automaticDimension
+//        $0.rowHeight = 393.0
+        $0.estimatedRowHeight = 393.0
+        $0.rowHeight = UITableView.automaticDimension
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
     }

@@ -284,6 +284,12 @@ class ReviewAPI {
                 return Disposables.create()
             }
             
+            guard let userId = Int(APIParameters.shared.userId),
+                  userId != -1 else {
+                      single(.success(.failure(APIError(statusCode: 401, description: "unauthorized"))))
+                      return Disposables.create()
+                  }
+            
             let header: HTTPHeaders = [
                 "Accept": "application/json",
                 "Content-Type": "application/json",
@@ -293,7 +299,7 @@ class ReviewAPI {
                 "detail": content,
                 "keywordIdList": keywords.compactMap { $0.id },
                 "placeId": placeId,
-                "userId": Int(APIParameters.shared.userId) ?? -1,
+                "userId": userId,
             ]
 
             APIParameters.shared.session

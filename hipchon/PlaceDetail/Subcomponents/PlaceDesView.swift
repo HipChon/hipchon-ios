@@ -99,7 +99,7 @@ class PlaceDesView: UIView {
         $0.layer.masksToBounds = true
         $0.addShadow(offset: CGSize(width: 2.0, height: 2.0))
         $0.contentHorizontalAlignment = .left
-        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 0.0)
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 60.0)
     }
 
     private lazy var reportButton = UIButton().then {
