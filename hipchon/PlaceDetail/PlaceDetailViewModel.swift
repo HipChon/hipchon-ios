@@ -54,6 +54,7 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
 
         reviews = reviewDatas
+            .map { $0.enumerated().filter { $0.offset <= 2 }.map { $0.element } } // 3개필터링
             .map { $0.map { BehaviorSubject<ReviewModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 

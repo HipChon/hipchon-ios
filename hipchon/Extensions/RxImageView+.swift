@@ -21,4 +21,12 @@ extension Reactive where Base: UIImageView {
             base.kf.setImage(with: url, options: [.transition(.fade(0.7))])
         }
     }
+    
+    var setProfileImageKF: Binder<URL> {
+        return Binder(base) { base, url in
+            base.kf.setImage(with: url,
+                             placeholder: UIImage(named: "default_profile") ?? UIImage()
+                             , options: [.transition(.fade(0.7))])
+        }
+    }
 }

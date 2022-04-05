@@ -22,6 +22,9 @@ class MenuListView: UIView {
 
     private lazy var menuCollectionView = UICollectionView(frame: .zero,
                                                            collectionViewLayout: UICollectionViewFlowLayout()).then {
+//        $0.delegate = nil
+//        $0.dataSource = nil
+        
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 11.0
         let width = ((UIApplication.shared.windows.first?.frame.width ?? 0.0) - 2 * 22.0 - itemSpacing) / 2
@@ -41,7 +44,7 @@ class MenuListView: UIView {
         $0.backgroundColor = .white
     }
 
-    private let bag = DisposeBag()
+    var bag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,6 +58,10 @@ class MenuListView: UIView {
     }
 
     func bind(_ viewModel: MenuListViewModel) {
+        menuCollectionView.delegate = nil
+        menuCollectionView.dataSource = nil
+        
+        
         viewModel.menuCellVMs
             .drive(menuCollectionView.rx.items) { col, idx, viewModel in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: MenuCell.identyfier,

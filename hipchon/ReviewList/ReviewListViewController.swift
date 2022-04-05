@@ -33,6 +33,8 @@ class ReviewListViewController: UIViewController {
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
         $0.rowHeight = 309.0
+//        $0.estimatedRowHeight = 309.0
+//        $0.rowHeight = UITableView.automaticDimension
         $0.separatorInset = UIEdgeInsets(top: 6.0, left: 0.0, bottom: 0.0, right: 0.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
@@ -116,7 +118,6 @@ class ReviewListViewController: UIViewController {
             .drive(reviewTableView.rx.items) { tv, idx, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
-                cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)
                 return cell
             }

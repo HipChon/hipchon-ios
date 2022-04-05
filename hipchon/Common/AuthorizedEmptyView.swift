@@ -45,10 +45,11 @@ class AuthorizedEmptyView: UIView {
 
     private lazy var loginButton = UIButton().then {
         $0.setTitle("로그인 / 회원가입", for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
+        $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
         $0.setBackgroundColor(.primary_green, for: .normal)
         $0.layer.cornerRadius = 5.0
         $0.layer.masksToBounds = true
+        $0.setTitleColor(.black, for: .normal)
     }
 
     private let bag = DisposeBag()
@@ -114,15 +115,16 @@ class AuthorizedEmptyView: UIView {
         }
 
         noResultImageView.snp.makeConstraints {
-            $0.width.equalToSuperview().multipliedBy(134.0 / 390.0)
+            $0.width.equalTo(135.0)//.equalToSuperview().multipliedBy(134.0 / 390.0)
 //            $0.height.equalToSuperview().multipliedBy(156.0 / 723.0)
-            $0.height.equalTo(noResultImageView.snp.width).multipliedBy(156.0 / 134.0)
+            $0.height.equalTo(156.0)//.equalTo(noResultImageView.snp.width).multipliedBy(156.0 / 134.0)
             $0.centerX.equalToSuperview().offset(-10.0)
             $0.centerY.equalToSuperview().multipliedBy(0.84)
         }
 
         noResultLabel.snp.makeConstraints {
-            $0.top.equalTo(noResultImageView.snp.bottom).offset(20.0)
+            $0.top.equalTo(noResultImageView.snp.bottom).offset(23.0)
+
             $0.centerX.equalToSuperview()
         }
 
@@ -135,19 +137,19 @@ class AuthorizedEmptyView: UIView {
         }
 
         noAuthImageView.snp.makeConstraints {
-            $0.width.equalToSuperview().multipliedBy(145.0 / 390.0)
-            $0.height.equalTo(noAuthImageView.snp.width).multipliedBy(110.0 / 145.0)
+            $0.width.equalTo(146.0)//.equalToSuperview().multipliedBy(145.0 / 390.0)
+            $0.height.equalTo(110.0)//.equalTo(noAuthImageView.snp.width).multipliedBy(110.0 / 145.0)
             $0.centerX.equalToSuperview().offset(-10.0)
             $0.centerY.equalToSuperview().multipliedBy(0.7)
         }
 
         noAuthLabel.snp.makeConstraints {
-            $0.top.equalTo(noAuthImageView.snp.bottom).offset(20.0)
+            $0.top.equalTo(noAuthImageView.snp.bottom).offset(16.0)
             $0.centerX.equalToSuperview()
         }
 
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(noAuthLabel.snp.bottom).offset(20.0)
+            $0.top.equalTo(noAuthLabel.snp.bottom).offset(22.0)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(208.0)
             $0.height.equalTo(48.0)

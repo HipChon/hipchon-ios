@@ -31,6 +31,9 @@ class ReviewCell: UITableViewCell {
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
                                                                   collectionViewLayout: UICollectionViewLayout()).then {
+        $0.delegate = nil
+        $0.dataSource = nil
+        
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 173.0
@@ -73,9 +76,6 @@ class ReviewCell: UITableViewCell {
     private lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
         $0.numberOfLines = 2
-    }
-
-    public lazy var reviewPlaceView = ReviewPlaceView().then { _ in
     }
 
     private lazy var boundaryView = UIView().then {
@@ -136,12 +136,6 @@ class ReviewCell: UITableViewCell {
     func bind(_ viewModel: ReviewCellViewModel) {
         self.viewModel = viewModel
 
-        viewModel.reviewPlaceVM
-            .drive(onNext: { [weak self] in
-                self?.reviewPlaceView.bind($0)
-            })
-            .disposed(by: bag)
-
         // MARK: view -> viewModel
 
         likeButton.rx.tap
@@ -151,7 +145,7 @@ class ReviewCell: UITableViewCell {
         // MARK: viewModel -> view
 
         viewModel.profileImageURL
-            .drive(profileImageView.rx.setImageKF)
+            .drive(profileImageView.rx.setProfileImageKF)
             .disposed(by: bag)
 
         viewModel.userName
@@ -175,6 +169,17 @@ class ReviewCell: UITableViewCell {
                 cell.bind(vm)
                 return cell
             }
+            .disposed(by: bag)
+        
+        viewModel.reviewImageHidden
+            .map { $0 ? 0.0 : 110.0 }
+            .drive(onNext: { height in
+                self.reviewImageCollectionView.snp.remakeConstraints {
+                    $0.top.equalTo(self.profileImageView.snp.bottom).offset(16.0)
+                    $0.leading.trailing.equalToSuperview()
+                    $0.height.equalTo(height)
+                }
+            })
             .disposed(by: bag)
 
         viewModel.likeYn
@@ -214,7 +219,6 @@ class ReviewCell: UITableViewCell {
             commentButton,
             commentCountLabel,
             contentLabel,
-            reviewPlaceView,
             boundaryView,
         ].forEach { contentView.addSubview($0) }
 
@@ -275,16 +279,11 @@ class ReviewCell: UITableViewCell {
             $0.height.equalTo(42.0)
         }
 
-        reviewPlaceView.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.height.equalTo(57.0)
-        }
-
         boundaryView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(25.0)
             $0.height.equalTo(1.0)
             $0.bottom.equalToSuperview()
-            $0.leading.trailing.equalToSuperview().inset(20.0)
         }
     }
 }

@@ -1,14 +1,14 @@
 //
-//  ReviewDetailHeaderViewModel.swift
+//  FeedReviewCellViewModel.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/03/30.
+//  Created by 김범수 on 2022/04/05.
 //
 
 import RxCocoa
 import RxSwift
 
-class ReviewDetailHeaderViewModel {
+class FeedReviewCellViewModel {
     private let bag = DisposeBag()
 
     // MARK: subviewModels
@@ -17,7 +17,6 @@ class ReviewDetailHeaderViewModel {
 
     // MARK: viewModel -> view
 
-    let placeName: Driver<String>
     let profileImageURL: Driver<URL>
     let userName: Driver<String>
     let userReviewCount: Driver<Int>
@@ -34,20 +33,13 @@ class ReviewDetailHeaderViewModel {
     // MARK: view -> viewModel
 
     let likeButtonTapped = PublishRelay<Void>()
-    let reportButtonTapped = PublishRelay<Void>()
 
     init(_ review: BehaviorSubject<ReviewModel>) {
-//        let review = BehaviorSubject<ReviewModel>(value: data)
-
         reviewPlaceVM = review
             .compactMap { $0.place }
             .map { BehaviorSubject<PlaceModel>(value: $0) }
             .map { ReviewPlaceViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
-
-        placeName = review
-            .compactMap { $0.place?.name }
-            .asDriver(onErrorJustReturn: "")
 
         profileImageURL = review
             .compactMap { $0.user?.profileImageURL }
@@ -170,18 +162,10 @@ class ReviewDetailHeaderViewModel {
             })
             .disposed(by: bag)
 
-        // MARK: scene
-
         pushPlaceDetailVC = reviewPlaceVM
             .flatMap { $0.pushPlaceDetailVC }
 
-        share = reviewPlaceVM.flatMap { $0.share }
-
-        reportButtonTapped
-            .delay(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { _ in
-                Singleton.shared.toastAlert.onNext("게시물 신고가 완료되었습니다")
-            })
-            .disposed(by: bag)
+        share = reviewPlaceVM
+            .flatMap { $0.share }
     }
 }

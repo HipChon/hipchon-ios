@@ -66,7 +66,7 @@ class CommentCell: UITableViewCell {
         self.viewModel = viewModel
 
         viewModel.profileImageURL
-            .drive(profileImageView.rx.setImageKF)
+            .drive(profileImageView.rx.setProfileImageKF)
             .disposed(by: bag)
 
         viewModel.name

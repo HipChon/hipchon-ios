@@ -69,7 +69,7 @@ class InputCommentView: UIView {
         // MARK: viewModel -> view
 
         viewModel.profileImageURL
-            .drive(profileImageView.rx.setImageKF)
+            .drive(profileImageView.rx.setProfileImageKF)
             .disposed(by: bag)
 
         viewModel.registerButtonValid

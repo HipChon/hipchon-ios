@@ -54,6 +54,7 @@ class StoragePlaceViewController: TabmanViewController {
             button.tintColor = .gray03
             button.selectedTintColor = .black
             button.selectedFont = .GmarketSans(size: 16.0, type: .medium)
+            button.font = .GmarketSans(size: 16.0, type: .medium)
         }
         // 인디케이터 조정
         bar.indicator.weight = .medium
@@ -90,7 +91,7 @@ class StoragePlaceViewController: TabmanViewController {
 
         storageLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(18.0)
-            $0.leading.equalToSuperview().inset(35.0)
+            $0.leading.equalToSuperview().inset(20.0)
             $0.height.equalTo(25.0)
         }
 

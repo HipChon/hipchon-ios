@@ -160,9 +160,9 @@ class MemoViewController: UIViewController {
                 memoCompleteVC.definesPresentationContext = true
                 memoCompleteVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
                 memoCompleteVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
-                self?.dismiss(animated: true, completion: {
+                self?.dismiss(animated: false, completion: {
                     guard let topVC = UIApplication.topViewController() else { return }
-                    topVC.present(memoCompleteVC, animated: true, completion: nil)
+                    topVC.present(memoCompleteVC, animated: false, completion: nil)
                 })
             })
             .disposed(by: bag)

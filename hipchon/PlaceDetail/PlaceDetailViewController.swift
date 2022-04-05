@@ -56,8 +56,8 @@ class PlaceDetailViewController: UIViewController {
     
     private lazy var pageControl = CHIPageControlJaloro().then {
         $0.radius = 0
-        $0.tintColor = .black
-        $0.currentPageTintColor = .white
+        $0.tintColor = .yellow
+        $0.currentPageTintColor = .red
         $0.padding = 0
     }
 
@@ -108,9 +108,12 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private lazy var reviewTableView = UITableView(frame: .zero).then {
+        $0.delegate = nil
+        $0.dataSource = nil
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
-        $0.rowHeight = 315.0
+        $0.estimatedRowHeight = 309.0
+        $0.rowHeight = UITableView.automaticDimension
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
@@ -145,10 +148,17 @@ class PlaceDetailViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        menuListView.bag = DisposeBag()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         imageCollectView.rx.contentOffset
+            .filter { _ in self.view.frame.width != 0.0 }
             .compactMap { [unowned self] in Int(($0.x + self.imageCollectView.frame.width / 2) / view.frame.width) }
             .distinctUntilChanged()
             .asDriver(onErrorJustReturn: 0)
@@ -217,8 +227,9 @@ class PlaceDetailViewController: UIViewController {
         // MARK: viewModel -> view
 
         viewModel.menuListViewHidden
-            .map { $0 ? 0.0 : 440.0 }
-            .drive(onNext: { height in
+            .drive(onNext: {
+                let height = $0 ? 0.0 : 440.0
+                self.menuListView.isHidden = $0
                 self.menuListView.snp.remakeConstraints {
                     $0.leading.trailing.equalToSuperview()
                     $0.top.equalTo(self.firstBorderView.snp.bottom)
@@ -257,7 +268,6 @@ class PlaceDetailViewController: UIViewController {
             .drive(reviewTableView.rx.items) { tv, _, review in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
                 let viewModel = ReviewCellViewModel(review)
-                cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)
                 return cell
             }
@@ -396,7 +406,8 @@ class PlaceDetailViewController: UIViewController {
         
         pageControl.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(imageCollectView.snp.bottom).inset(-20.0)
+            $0.bottom.equalTo(imageCollectView.snp.bottom).offset(-20.0)
+            $0.height.equalTo(50.0)
         }
 
         placeDesView.snp.makeConstraints {

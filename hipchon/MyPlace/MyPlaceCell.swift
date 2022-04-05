@@ -137,7 +137,7 @@ class MyPlaceCell: UITableViewCell {
                 memoVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
                 memoVC.view.backgroundColor = UIColor(white: 0.4, alpha: 0.3)
 
-                topVC.tabBarController?.present(memoVC, animated: true, completion: nil)
+                topVC.tabBarController?.present(memoVC, animated: false, completion: nil)
             })
             .disposed(by: bag)
     }

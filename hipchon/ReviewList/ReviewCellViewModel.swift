@@ -11,10 +11,6 @@ import RxSwift
 class ReviewCellViewModel {
     private let bag = DisposeBag()
 
-    // MARK: subviewModels
-
-    let reviewPlaceVM: Driver<ReviewPlaceViewModel>
-
     // MARK: viewModel -> view
 
     let profileImageURL: Driver<URL>
@@ -22,23 +18,17 @@ class ReviewCellViewModel {
     let userReviewCount: Driver<Int>
     let postDate: Driver<String>
     let reviewImageURLs: Driver<[URL]>
+    let reviewImageHidden: Driver<Bool>
     let likeYn: Driver<Bool>
     let likeCount: Driver<Int>
     let commentCount: Driver<Int>
     let content: Driver<String>
-    let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
-    let share: Signal<String>
 
     // MARK: view -> viewModel
 
     let likeButtonTapped = PublishRelay<Void>()
 
     init(_ review: BehaviorSubject<ReviewModel>) {
-        reviewPlaceVM = review
-            .compactMap { $0.place }
-            .map { BehaviorSubject<PlaceModel>(value: $0) }
-            .map { ReviewPlaceViewModel($0) }
-            .asDriver(onErrorDriveWith: .empty())
 
         profileImageURL = review
             .compactMap { $0.user?.profileImageURL }
@@ -60,6 +50,10 @@ class ReviewCellViewModel {
         reviewImageURLs = review
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0 ?? "") } }
             .asDriver(onErrorJustReturn: [])
+        
+        reviewImageHidden = review
+            .map { $0.imageURLs?.count == 0 }
+            .asDriver(onErrorJustReturn: false)
 
         commentCount = review
             .compactMap { $0.commentCount }
@@ -156,11 +150,5 @@ class ReviewCellViewModel {
                 }
             })
             .disposed(by: bag)
-
-        pushPlaceDetailVC = reviewPlaceVM
-            .flatMap { $0.pushPlaceDetailVC }
-
-        share = reviewPlaceVM
-            .flatMap { $0.share }
     }
 }

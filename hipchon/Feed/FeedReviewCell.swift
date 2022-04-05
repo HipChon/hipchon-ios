@@ -1,21 +1,18 @@
 //
-//  ReviewDetailHeaderView.swift
+//  FeedReviewCell.swift
 //  hipchon
 //
-//  Created by 김범수 on 2022/03/30.
+//  Created by 김범수 on 2022/04/05.
 //
 
 import RxSwift
 import UIKit
 
-class ReviewDetailHeaderView: UITableViewHeaderFooterView {
-    private lazy var placeNameLabel = UILabel().then {
-        $0.font = .GmarketSans(size: 22.0, type: .medium)
-    }
-
+class FeedReviewCell: UITableViewCell {
     private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "default_profile") ?? UIImage()
     }
 
     private lazy var userNameLabel = UILabel().then {
@@ -34,13 +31,10 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
                                                                   collectionViewLayout: UICollectionViewLayout()).then {
-        $0.delegate = nil
-        $0.dataSource = nil
-
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
-        let width = 300.0
-        let height = 191.0
+        let width = 173.0
+        let height = 110.0
 
         layout.itemSize = CGSize(width: width, height: height)
         layout.sectionInset = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
@@ -49,6 +43,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         layout.minimumInteritemSpacing = itemSpacing
 
         $0.collectionViewLayout = layout
+
         $0.register(ImageURLCell.self, forCellWithReuseIdentifier: ImageURLCell.identyfier)
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
@@ -60,7 +55,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
     }
 
     private lazy var likeButton = UIButton().then {
-        $0.setImage(UIImage(named: "like") ?? UIImage(), for: .normal) // Todo
+        $0.setImage(UIImage(named: "likeN") ?? UIImage(), for: .normal)
     }
 
     private lazy var likeCountLabel = UILabel().then {
@@ -75,31 +70,24 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
     }
 
-    private lazy var reportButton = UIButton().then {
-        $0.setImage(UIImage(named: "report"), for: .normal)
-        $0.setTitle(" 신고하기", for: .normal)
-        $0.setTitleColor(.gray04, for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
-    }
-
     private lazy var contentLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
     }
 
-    private lazy var reviewPlaceView = ReviewPlaceView().then { _ in
+    public lazy var reviewPlaceView = ReviewPlaceView().then { _ in
     }
 
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
     }
 
-    public static let identyfier = "ReviewDetailHeaderView"
-    private var bag = DisposeBag()
-    var viewModel: ReviewDetailHeaderViewModel?
+    public static let identyfier = "ReviewCell"
+    var bag = DisposeBag()
+    var viewModel: FeedReviewCellViewModel?
 
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         attribute()
         layout()
     }
@@ -113,7 +101,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         super.prepareForReuse()
         bag = DisposeBag()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         profileImageView.layer.cornerRadius = 45.0 / 2 // profileImageView.frame.width / 2
@@ -124,15 +112,16 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             .drive(onNext: { [unowned self] count in
                 let cellWidth = self.contentView.frame.width
                 if let layout = self.reviewImageCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                    var width = 300.0
-                    let height = 191.0
+                    var width = 170.0
+                    let height = 110.0
                     let itemSpacing = 4.0
                     switch count {
                     case 1:
                         width = cellWidth - 20.0 * 2
                     case 2:
-                        break
+                        width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
                     default:
+                        width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
                         break
                     }
 
@@ -144,15 +133,12 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             .disposed(by: bag)
     }
 
-
-    func bind(_ viewModel: ReviewDetailHeaderViewModel) {
-        // MARK: subViewModels
-        
+    func bind(_ viewModel: FeedReviewCellViewModel) {
         self.viewModel = viewModel
 
         viewModel.reviewPlaceVM
-            .drive(onNext: {
-                self.reviewPlaceView.bind($0)
+            .drive(onNext: { [weak self] in
+                self?.reviewPlaceView.bind($0)
             })
             .disposed(by: bag)
 
@@ -162,16 +148,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
 
-        reportButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.reportButtonTapped)
-            .disposed(by: bag)
-
         // MARK: viewModel -> view
-
-        viewModel.placeName
-            .drive(placeNameLabel.rx.text)
-            .disposed(by: bag)
 
         viewModel.profileImageURL
             .drive(profileImageView.rx.setProfileImageKF)
@@ -194,14 +171,14 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             .drive(reviewImageCollectionView.rx.items) { col, idx, data in
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
-                let viewModel = ImageURLCellViewModel(data)
-                cell.bind(viewModel)
+                let vm = ImageURLCellViewModel(data)
+                cell.bind(vm)
                 return cell
             }
             .disposed(by: bag)
         
         viewModel.reviewImageHidden
-            .map { $0 ? 0.0 : 191.0 }
+            .map { $0 ? 0.0 : 110.0 }
             .drive(onNext: { height in
                 self.reviewImageCollectionView.snp.remakeConstraints {
                     $0.top.equalTo(self.profileImageView.snp.bottom).offset(16.0)
@@ -229,34 +206,15 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         viewModel.content
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
-
-        viewModel.pushPlaceDetailVC
-            .emit(onNext: { [weak self] viewModel in
-                guard let topVC = UIApplication.topViewController() else { return }
-                let placeDetailVC = PlaceDetailViewController()
-                placeDetailVC.bind(viewModel)
-                topVC.navigationController?.pushViewController(placeDetailVC, animated: true)
-            })
-            .disposed(by: bag)
-
-        viewModel.share
-            .emit(onNext: { [weak self] in
-                guard let topVC = UIApplication.topViewController() else { return }
-                let activityVC = UIActivityViewController(activityItems: [$0],
-                                                          applicationActivities: nil)
-                topVC.present(activityVC, animated: true, completion: nil)
-            })
-            .disposed(by: bag)
     }
 
     private func attribute() {
+        selectionStyle = .none
         backgroundColor = .white
-        profileImageView.layer.cornerRadius = 22.5
     }
 
     private func layout() {
         [
-            placeNameLabel,
             profileImageView,
             userNameLabel,
             userReviewCountLabel,
@@ -266,27 +224,19 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             likeCountLabel,
             commentButton,
             commentCountLabel,
-            reportButton,
             contentLabel,
             reviewPlaceView,
             boundaryView,
-        ].forEach {
-            addSubview($0)
-        }
-
-        placeNameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(7.0)
-            $0.leading.equalToSuperview().inset(20.0)
-        }
+        ].forEach { contentView.addSubview($0) }
 
         profileImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20.0)
-            $0.top.equalTo(placeNameLabel.snp.bottom).offset(40.0)
+            $0.top.equalToSuperview().inset(24.0)
             $0.height.width.equalTo(45.0)
         }
 
         userNameLabel.snp.makeConstraints {
-            $0.top.equalTo(placeNameLabel.snp.bottom).offset(45.0)
+            $0.top.equalToSuperview().inset(30.0)
             $0.leading.equalTo(profileImageView.snp.trailing).offset(8.0)
             $0.height.equalTo(19.0)
         }
@@ -306,22 +256,11 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         reviewImageCollectionView.snp.makeConstraints {
             $0.top.equalTo(profileImageView.snp.bottom).offset(16.0)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(191.0)
-        }
-
-        contentLabel.snp.makeConstraints {
-            $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(20.0)
-        }
-
-        reviewPlaceView.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.height.equalTo(57.0)
+            $0.height.equalTo(110.0)
         }
 
         likeButton.snp.makeConstraints {
-            $0.top.equalTo(reviewPlaceView.snp.bottom).offset(32.0)
+            $0.top.equalTo(reviewImageCollectionView.snp.bottom).offset(17.0)
             $0.leading.equalToSuperview().inset(24.0)
             $0.width.height.equalTo(20.0)
         }
@@ -341,16 +280,23 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             $0.leading.equalTo(commentButton.snp.trailing).offset(12.0)
         }
 
-        reportButton.snp.makeConstraints {
-            $0.centerY.equalTo(commentButton)
-            $0.trailing.equalToSuperview().inset(20.0)
+        contentLabel.snp.makeConstraints {
+            $0.top.equalTo(likeButton.snp.bottom).offset(17.0)
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.height.equalTo(42.0)
+        }
+
+        reviewPlaceView.snp.makeConstraints {
+            $0.top.equalTo(contentLabel.snp.bottom).offset(20.0).priority(.low)
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.height.equalTo(57.0).priority(.high)
         }
 
         boundaryView.snp.makeConstraints {
-            $0.top.equalTo(likeButton.snp.bottom).offset(17.0)
-            $0.leading.trailing.equalToSuperview().offset(20.0)
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(reviewPlaceView.snp.bottom).offset(25.0)
             $0.height.equalTo(1.0)
-            $0.bottom.equalToSuperview().inset(0.0)
+            $0.bottom.equalToSuperview()
         }
     }
 }
