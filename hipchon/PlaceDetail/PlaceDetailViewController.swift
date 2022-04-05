@@ -217,13 +217,12 @@ class PlaceDetailViewController: UIViewController {
         // MARK: viewModel -> view
 
         viewModel.menuListViewHidden
-            .filter { $0 == true }
-            .drive(onNext: { _ in
-                self.menuListView.isHidden = true
+            .map { $0 ? 0.0 : 440.0 }
+            .drive(onNext: { height in
                 self.menuListView.snp.remakeConstraints {
                     $0.leading.trailing.equalToSuperview()
                     $0.top.equalTo(self.firstBorderView.snp.bottom)
-                    $0.height.equalTo(0.0)
+                    $0.height.equalTo(height)
                 }
             })
             .disposed(by: bag)

@@ -14,6 +14,8 @@ class MenuModel: Codable {
     let imageURL: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, price, imageURL
+        case id = "menuId"
+        case name, price
+        case imageURL = "image"
     }
 }
