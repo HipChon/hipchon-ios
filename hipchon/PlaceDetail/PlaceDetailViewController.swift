@@ -54,11 +54,7 @@ class PlaceDetailViewController: UIViewController {
         $0.isPagingEnabled = true
     }
     
-    private lazy var pageControl = CHIPageControlJaloro().then {
-        $0.radius = 0
-        $0.tintColor = .white
-        $0.currentPageTintColor = .black
-        $0.padding = 0
+    private lazy var pageCountView = PageCountView().then { _ in
     }
 
     private lazy var placeDesView = PlaceDesView().then { _ in
@@ -162,15 +158,16 @@ class PlaceDetailViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        
         imageCollectView.rx.contentOffset
-            .filter { _ in self.view.frame.width != 0.0 }
-            .compactMap { [unowned self] in Int(($0.x + self.imageCollectView.frame.width / 2) / view.frame.width) }
+            .filter { _ in self.imageCollectView.frame.width != 0.0 }
+            .compactMap { [unowned self] in Int(($0.x + self.imageCollectView.frame.width / 2) / self.imageCollectView.frame.width) }
             .distinctUntilChanged()
-            .asDriver(onErrorJustReturn: 0)
-            .drive(onNext: { [weak self] in
-                //set progress with animation
-                self?.pageControl.set(progress: $0, animated: true)
-            })
+            .bind(to: viewModel.currentIdx)
             .disposed(by: bag)
     }
 
@@ -181,6 +178,7 @@ class PlaceDetailViewController: UIViewController {
 
         placeDesView.bind(viewModel.placeDesVM)
         placeMapView.bind(viewModel.placeMapVM)
+        pageCountView.bind(viewModel.pageCountVM)
 
         viewModel.menuListVM
             .emit(onNext: { [weak self] in
@@ -228,6 +226,7 @@ class PlaceDetailViewController: UIViewController {
             }
             .drive(navigationView.rx.isHidden)
             .disposed(by: bag)
+ 
 
         // MARK: viewModel -> view
 
@@ -333,13 +332,6 @@ class PlaceDetailViewController: UIViewController {
                 self.navigationController?.pushViewController(reviewListVC, animated: true)
             })
             .disposed(by: bag)
-        
-        viewModel.urls
-            .map { $0.count }
-            .drive(onNext: { [weak self] in
-                self?.pageControl.numberOfPages = $0
-            })
-            .disposed(by: bag)
 
         backButton.rx.tap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
@@ -383,7 +375,7 @@ class PlaceDetailViewController: UIViewController {
 
         [
             imageCollectView,
-            pageControl,
+            pageCountView,
             placeDesView,
             firstBorderView,
             menuListView,
@@ -421,10 +413,9 @@ class PlaceDetailViewController: UIViewController {
             $0.height.equalTo(height)
         }
         
-        pageControl.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(placeDesView.snp.top).offset(16.0)
-            $0.height.equalTo(2.0)
+        pageCountView.snp.makeConstraints {
+            $0.trailing.equalTo(imageCollectView).inset(16.0)
+            $0.bottom.equalTo(imageCollectView).inset(24.0)
         }
 
         placeDesView.snp.makeConstraints {

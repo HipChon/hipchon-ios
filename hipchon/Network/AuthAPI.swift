@@ -246,8 +246,9 @@ class AuthAPI {
             APIParameters.shared.session
                 .upload(multipartFormData: { multipartFormData in
                     
-                    if let profileImage = authModel.profileImage,
-                       let imageData = profileImage.jpegData(compressionQuality: 1.0)  {
+                    if let profileImage = authModel.profileImage {
+                        let resizeImage = profileImage.downSample2(size: profileImage.size, scale: 0.5)
+                        let imageData = resizeImage.jpegData(compressionQuality: 0.5)!
                         multipartFormData.append(imageData, withName: "file",
                                                  fileName: "\(Date().timeIntervalSince1970).png",
                                                  mimeType: "image/png")
@@ -339,8 +340,9 @@ class AuthAPI {
             APIParameters.shared.session
                 .upload(multipartFormData: { multipartFormData in
                     
-                    if let profileImage = image,
-                       let imageData = profileImage.jpegData(compressionQuality: 1.0) {
+                    if let profileImage = image {
+                        let resizeImage = profileImage.downSample2(size: profileImage.size, scale: 0.5)
+                        let imageData = resizeImage.jpegData(compressionQuality: 0.5)!
                         multipartFormData.append(imageData, withName: "file",
                                                  fileName: "\(Date().timeIntervalSince1970).png",
                                                  mimeType: "image/png")

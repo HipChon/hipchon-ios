@@ -29,6 +29,7 @@ class EditProfileViewModel {
     let newName = PublishRelay<String>()
     let changedImage = BehaviorSubject<UIImage?>(value: nil)
     let completeButtonTapped = PublishRelay<Void>()
+    let viewApeear = PublishRelay<Void>()
 
     init(_ data: AuthModel?) {
         // MARK: 공통
@@ -52,23 +53,26 @@ class EditProfileViewModel {
         // name
 
         orgName = Observable.merge(
-            authModel.map { $0?.name ?? "" }, // TODO: 소셜에서 받아와야함
+//            authModel.map { $0?.name ?? "" }, // TODO: 소셜에서 받아와야함
             isSignup.filter { $0 == false }.flatMap { _ in Singleton.shared.currentUser }.compactMap { $0.name }
         )
         .asDriver(onErrorJustReturn: "")
         
         let name = BehaviorSubject<String>(value: "")
         
-        Observable.merge(
-            orgName.asObservable(),
-            newName.asObservable()
-        )
+        viewApeear
+            .withLatestFrom(Singleton.shared.currentUser)
+            .compactMap { $0.name }
+            .bind(to: name)
+            .disposed(by: bag)
+        
+        newName
             .bind(to: name)
             .disposed(by: bag)
 
         completeButtonValid = name
-        .map { 3 <= $0.count && $0.count <= 10 }
-        .asDriver(onErrorJustReturn: false)
+            .map { 2 <= $0.count && $0.count <= 10 }
+            .asDriver(onErrorJustReturn: false)
 
         completeButtonActivity = activity
             .asDriver(onErrorJustReturn: false)

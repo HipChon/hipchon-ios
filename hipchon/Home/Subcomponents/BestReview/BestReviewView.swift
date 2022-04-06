@@ -69,7 +69,7 @@ class BestReviewView: UIView {
                 return cell
             }
             .disposed(by: bag)
-
+        
         // MARK: scene
 
         viewModel.pushReviewDetailVC

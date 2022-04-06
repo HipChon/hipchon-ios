@@ -91,7 +91,7 @@ class PlaceListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 16.0, left: 20.0, bottom: 0.0, right: 20.0))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8.0, left: 20.0, bottom: 8.0, right: 20.0))
     }
 
     func bind(_ viewModel: PlaceListCellViewModel) {
@@ -189,7 +189,7 @@ class PlaceListCell: UITableViewCell {
             $0.width.equalTo(frame.width).priority(.low)
         }
 
-        let countStackView = UIStackView(arrangedSubviews: [bookmarkButton, bookmarkCountLabel, reviewCountImageView, reviewCountLabel])
+        let countStackView = UIStackView(arrangedSubviews: [reviewCountImageView, reviewCountLabel, bookmarkButton, bookmarkCountLabel])
         countStackView.axis = .horizontal
         countStackView.alignment = .center
         countStackView.distribution = .equalSpacing

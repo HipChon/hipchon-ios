@@ -28,6 +28,16 @@ class MyPlaceCell: UITableViewCell {
         $0.font = .AppleSDGothicNeo(size: 16.0, type: .regular)
         $0.textColor = .gray06
     }
+    
+    private lazy var addressButton = UIButton().then {
+        $0.titleLabel?.font =  .AppleSDGothicNeo(size: 13.0, type: .regular)
+        $0.setTitleColor(.gray06, for: .normal)
+        $0.backgroundColor = .white
+        $0.contentHorizontalAlignment = .left
+        $0.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+        $0.setImage(UIImage(named: "bottomArrow"), for: .normal)
+        $0.semanticContentAttribute = .forceRightToLeft
+    }
 
     private lazy var bookmarkImageView = UIImageView().then {
         $0.image = UIImage(named: "bookmarkCount") ?? UIImage()
@@ -105,6 +115,24 @@ class MyPlaceCell: UITableViewCell {
         viewModel.address
             .drive(addressLabel.rx.text)
             .disposed(by: bag)
+        
+        viewModel.address
+            .drive(addressButton.rx.title())
+            .disposed(by: bag)
+        viewModel.address
+            .drive(onNext: { [weak self] title in
+                var actions: [UIAction] = []
+                let action = UIAction(title: title,
+                                            image: nil) { _ in
+                    UIPasteboard.general.string = title
+                    Singleton.shared.toastAlert.onNext("클립보드에 복사되었습니다")
+                }
+                actions.append(action)
+
+                let menu = UIMenu(title: "", children: actions)
+                self?.addressButton.menu = menu
+                self?.addressButton.showsMenuAsPrimaryAction = true
+            })
 
         viewModel.bookmarkCount
             .map { "\($0)" }
@@ -153,7 +181,7 @@ class MyPlaceCell: UITableViewCell {
             placeImageView,
             placeNameLabel,
             sectorLabel,
-            addressLabel,
+            addressButton,
             bookmarkImageView,
             bookmarkCountLabel,
             reviewImageView,
@@ -170,7 +198,7 @@ class MyPlaceCell: UITableViewCell {
 
         placeNameLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(22.0)
-            $0.trailing.equalTo(placeImageView.snp.leading).offset(-16.0)
+            $0.trailing.equalTo(placeImageView.snp.leading).offset(-34.0)
             $0.top.equalToSuperview().inset(20.0)
             $0.height.equalTo(19.0)
         }
@@ -181,7 +209,7 @@ class MyPlaceCell: UITableViewCell {
             $0.height.equalTo(17.0)
         }
 
-        addressLabel.snp.makeConstraints {
+        addressButton.snp.makeConstraints {
             $0.leading.trailing.equalTo(placeNameLabel)
             $0.top.equalTo(sectorLabel.snp.bottom).offset(8)
             $0.height.equalTo(17.0)
@@ -189,7 +217,7 @@ class MyPlaceCell: UITableViewCell {
 
         bookmarkImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(23.0)
-            $0.top.equalTo(addressLabel.snp.bottom).offset(12.0)
+            $0.top.equalTo(addressButton.snp.bottom).offset(12.0)
             $0.width.height.equalTo(20.0)
         }
 

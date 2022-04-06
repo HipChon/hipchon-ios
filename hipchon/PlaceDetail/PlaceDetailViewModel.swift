@@ -14,6 +14,7 @@ class PlaceDetailViewModel {
 
     // MARK: subViewModels
 
+    let pageCountVM = PageCountViewModel()
     let placeDesVM = PlaceDesViewModel()
     let placeMapVM = PlaceMapViewModel()
     let menuListVM: Signal<MenuListViewModel>
@@ -38,6 +39,7 @@ class PlaceDetailViewModel {
     let selectedReviewIdx = PublishSubject<Int>()
     let moreReviewButtonTapped = PublishRelay<Void>()
     let postReviewButtonTapped = PublishRelay<Void>()
+    let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ place: BehaviorSubject<PlaceModel>) {
         let reviewDatas = BehaviorSubject<[ReviewModel]>(value: [])
@@ -64,6 +66,16 @@ class PlaceDetailViewModel {
         urls = place
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
+        
+        place
+            .compactMap { $0.imageURLs?.count }
+            .bind(to: pageCountVM.entireIdx)
+            .disposed(by: bag)
+
+        currentIdx
+            .map { $0 + 1 }
+            .bind(to: pageCountVM.currentIdx)
+            .disposed(by: bag)
 
         place
             .compactMap { $0.name }

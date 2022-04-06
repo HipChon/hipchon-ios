@@ -30,6 +30,7 @@
 		D812307B27EA244E0038A96C /* RxBottomButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D812307A27EA244E0038A96C /* RxBottomButton+.swift */; };
 		D813C34927D78B9E00193384 /* PlaceReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34827D78B9E00193384 /* PlaceReviewCell.swift */; };
 		D813C34B27D78BED00193384 /* PlaceReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34A27D78BED00193384 /* PlaceReviewCellViewModel.swift */; };
+		D816D21A27FDDCFF00B5B798 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D816D21927FDDCFF00B5B798 /* UIImage+.swift */; };
 		D8237DDD27B920C400238387 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8237DDC27B920C400238387 /* SettingViewModel.swift */; };
 		D8237DDF27B920EB00238387 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8237DDE27B920EB00238387 /* SettingViewController.swift */; };
 		D8237DE227B9245A00238387 /* BannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8237DE127B9245A00238387 /* BannerCell.swift */; };
@@ -216,6 +217,7 @@
 		D812307A27EA244E0038A96C /* RxBottomButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxBottomButton+.swift"; sourceTree = "<group>"; };
 		D813C34827D78B9E00193384 /* PlaceReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewCell.swift; sourceTree = "<group>"; };
 		D813C34A27D78BED00193384 /* PlaceReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewCellViewModel.swift; sourceTree = "<group>"; };
+		D816D21927FDDCFF00B5B798 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		D8237DDC27B920C400238387 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		D8237DDE27B920EB00238387 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		D8237DE127B9245A00238387 /* BannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCell.swift; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 				D840813427C5414300FA9D1B /* RxButton+.swift */,
 				D8C72E9927CE026E007C160A /* UIColor+.swift */,
 				D8C72E9B27CE069F007C160A /* UIFont+.swift */,
+				D816D21927FDDCFF00B5B798 /* UIImage+.swift */,
 				D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */,
 				D89E8B7627DDC0F300090C5B /* RxTextView.swift */,
 				D840779D27DE1ABB0029C17E /* UITextField+.swift */,
@@ -1132,6 +1135,7 @@
 				D8E7756627A81178005E037D /* FilterViewModel.swift in Sources */,
 				D828B38727E6E826007C2487 /* HashtagReviewCellViewModel.swift in Sources */,
 				D83F7DC627FC73FB0054E1C0 /* FeedReviewCellViewModel.swift in Sources */,
+				D816D21A27FDDCFF00B5B798 /* UIImage+.swift in Sources */,
 				D828B38A27E6F511007C2487 /* MyCommentViewController.swift in Sources */,
 				D828B38527E6E81A007C2487 /* HashtagReivewCell.swift in Sources */,
 				D89E8B7E27DDDAE300090C5B /* PhotoCell.swift in Sources */,

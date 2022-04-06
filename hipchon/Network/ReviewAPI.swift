@@ -306,7 +306,9 @@ class ReviewAPI {
                 .upload(multipartFormData: { multipartFormData in
                     
                     images.forEach { image in
-                        let imageData = image.jpegData(compressionQuality: 1.0)!
+                        
+                        let resizeImage = image.downSample2(size: image.size, scale: 0.5)
+                        let imageData = resizeImage.jpegData(compressionQuality: 0.5)!
                         multipartFormData.append(imageData, withName: "file",
                                                  fileName: "\(Date().timeIntervalSince1970).png",
                                                  mimeType: "image/png")
