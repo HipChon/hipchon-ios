@@ -252,6 +252,10 @@ class AuthAPI {
                         multipartFormData.append(imageData, withName: "file",
                                                  fileName: "\(Date().timeIntervalSince1970).png",
                                                  mimeType: "image/png")
+                    } else {
+                        multipartFormData.append("".data(using: .utf8)!, withName: "file",
+                                                 fileName: "\(Date().timeIntervalSince1970).png",
+                                                 mimeType: "image/png")
                     }
 
                     if let data = try? JSONSerialization.data(withJSONObject: parameters, options: []) {
