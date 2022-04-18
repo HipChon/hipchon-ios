@@ -27,7 +27,8 @@ target 'hipchon' do
   pod 'Tabman', '~> 2.12'
   pod 'YPImagePicker'
   pod 'AnyFormatKit'
-
+  pod 'CHIPageControl', '~> 0.1.3'
+  
   # For SNS
   pod 'KakaoSDK'
   pod 'Toast-Swift', '~> 5.0.1'

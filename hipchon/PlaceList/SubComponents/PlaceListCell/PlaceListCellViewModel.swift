@@ -30,7 +30,7 @@ class PlaceListCellViewModel {
 
     init(_ place: BehaviorSubject<PlaceModel>) {
         keywordVM = place
-            .compactMap { $0.keywords?.first }
+            .compactMap { $0.topKeyword }
             .map { KeywordViewModel($0) }
             .asDriver(onErrorDriveWith: .empty())
 

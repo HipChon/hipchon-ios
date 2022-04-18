@@ -32,8 +32,9 @@ class UnauthorizedAlertViewController: UIViewController {
 
     private lazy var loginButton = UIButton().then {
         $0.setTitle("로그인 / 회원가입", for: .normal)
-        $0.titleLabel?.font = .AppleSDGothicNeo(size: 16.0, type: .medium)
+        $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
         $0.setBackgroundColor(.primary_green, for: .normal)
+        $0.setTitleColor(.black, for: .normal)
     }
 
     private lazy var cancleButton = UIButton().then {
@@ -90,7 +91,7 @@ class UnauthorizedAlertViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview().multipliedBy(0.95)
             $0.width.equalTo(290.0)
-            $0.height.equalTo(323.0)
+            $0.height.equalTo(300.0)
         }
 
         [
@@ -111,7 +112,7 @@ class UnauthorizedAlertViewController: UIViewController {
         imageView.snp.makeConstraints {
             $0.width.equalTo(167.0)
             $0.height.equalTo(126.0)
-            $0.top.equalToSuperview().offset(62.0)
+            $0.top.equalToSuperview().offset(55.0)
             $0.centerX.equalToSuperview().offset(-10.0)
         }
 
@@ -121,8 +122,9 @@ class UnauthorizedAlertViewController: UIViewController {
         }
 
         loginButton.snp.makeConstraints {
+            $0.top.equalTo(label.snp.bottom).offset(22.0)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(48.0)
+//            $0.height.equalTo(48.0)
         }
     }
 

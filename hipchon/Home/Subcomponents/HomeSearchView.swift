@@ -10,7 +10,7 @@ import UIKit
 
 class HomeSearchView: UIView {
     private lazy var searchButton = SearchFilterButton().then {
-        $0.setTitle("인원, 지역, 유형을 검색하세요", for: .normal)
+        $0.setTitle("지역, 유형을 검색하세요", for: .normal)
         $0.setTitleColor(.secondaryLabel, for: .normal)
         $0.titleLabel?.font = UIFont(name: "GmarketSansTTFMedium", size: 14.0)
         $0.contentHorizontalAlignment = .left

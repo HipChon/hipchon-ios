@@ -70,7 +70,7 @@ class ReviewDetailViewModel {
         .subscribe(onNext: { result in
             switch result {
             case let .success(data):
-                self.commentVMs = data.map { CommentCellViewModel($0) }
+                self.commentVMs = data.filter { $0.isBlock == false }.map { CommentCellViewModel($0) }
                 reload.onNext(())
             case let .failure(error):
                 switch error.statusCode {

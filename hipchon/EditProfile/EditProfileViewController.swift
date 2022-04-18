@@ -24,7 +24,7 @@ class EditProfileViewController: UIViewController {
     }
 
     private lazy var profileImageButton = UIButton().then {
-        $0.setImage(UIImage(named: "default_profile"), for: .normal)
+        $0.setImage(UIImage(named: "default_profile_button"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
     }
@@ -70,6 +70,12 @@ class EditProfileViewController: UIViewController {
         // MARK: subViews Binding
 
         // MARK: view -> viewModel
+        
+        rx.viewWillAppear
+            .take(1)
+            .map { _ in () }
+            .bind(to: viewModel.viewApeear)
+            .disposed(by: bag)
 
         profileImageButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)

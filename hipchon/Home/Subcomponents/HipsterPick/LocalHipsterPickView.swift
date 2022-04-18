@@ -9,6 +9,7 @@ import RxCocoa
 import RxSwift
 import Then
 import UIKit
+import CHIPageControl
 
 class LocalHipsterPickView: UIView {
     private lazy var titleLabel = UILabel().then {
@@ -37,7 +38,11 @@ class LocalHipsterPickView: UIView {
         $0.backgroundColor = .gray_background
     }
 
-    private lazy var pageBarView = PageBarView().then { _ in
+    private lazy var pageControl = CHIPageControlJaloro().then {
+        $0.radius = 0
+        $0.tintColor = .black
+        $0.currentPageTintColor = .white
+        $0.padding = 0
     }
 
     private let bag = DisposeBag()
@@ -53,13 +58,23 @@ class LocalHipsterPickView: UIView {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        localHipsterPickCollectionView.rx.contentOffset
+            .compactMap { [unowned self] in Int(($0.x + self.localHipsterPickCollectionView.frame.width / 2) / 230.0) }
+            .distinctUntilChanged()
+            .asDriver(onErrorJustReturn: 0)
+            .drive(onNext: { [weak self] in
+                //set progress with animation
+                self?.pageControl.set(progress: $0, animated: true)
+            })
+            .disposed(by: bag)
+    }
 
     func bind(_ viewModel: LocalHipsterPickViewModel) {
         self.viewModel = viewModel
-
-        // MARK: subViewModels
-
-        pageBarView.bind(viewModel.pageBarVM)
 
         // MARK: view -> viewModel
 
@@ -67,11 +82,6 @@ class LocalHipsterPickView: UIView {
             .bind(to: viewModel.selectedLocalHipsterPick)
             .disposed(by: bag)
 
-        localHipsterPickCollectionView.rx.contentOffset
-            .compactMap { [weak self] in $0.x / (self?.frame.width ?? 1.0) }
-            .distinctUntilChanged()
-            .bind(to: viewModel.offsetRatio)
-            .disposed(by: bag)
 
         // MARK: viewModel -> view
 
@@ -83,6 +93,13 @@ class LocalHipsterPickView: UIView {
                 return cell
             }
             .disposed(by: bag)
+        
+        viewModel.localHipsterPicks
+            .map { $0.count }
+            .drive(onNext: { [weak self] in
+                self?.pageControl.numberOfPages = $0
+            })
+            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -93,7 +110,7 @@ class LocalHipsterPickView: UIView {
         [
             titleLabel,
             localHipsterPickCollectionView,
-            pageBarView,
+            pageControl,
         ].forEach { addSubview($0) }
 
         titleLabel.snp.makeConstraints {
@@ -107,7 +124,7 @@ class LocalHipsterPickView: UIView {
             $0.height.equalTo(284.0)
         }
 
-        pageBarView.snp.makeConstraints {
+        pageControl.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(30.0)
             $0.top.equalTo(localHipsterPickCollectionView.snp.bottom).offset(33.0)
             $0.height.equalTo(2.0)

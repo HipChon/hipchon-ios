@@ -11,7 +11,7 @@ import UIKit
 
 class CustomerServiceView: UIView {
     private lazy var counselingLabel = UILabel().then {
-        $0.text = "어디서 살지 못 정하셨나요?"
+        $0.text = "문의사항이 있으시다면?"
         $0.font = .GmarketSans(size: 16.0, type: .medium)
         $0.textColor = .black
         $0.textAlignment = .center

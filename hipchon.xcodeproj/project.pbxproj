@@ -30,6 +30,7 @@
 		D812307B27EA244E0038A96C /* RxBottomButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D812307A27EA244E0038A96C /* RxBottomButton+.swift */; };
 		D813C34927D78B9E00193384 /* PlaceReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34827D78B9E00193384 /* PlaceReviewCell.swift */; };
 		D813C34B27D78BED00193384 /* PlaceReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813C34A27D78BED00193384 /* PlaceReviewCellViewModel.swift */; };
+		D816D21A27FDDCFF00B5B798 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D816D21927FDDCFF00B5B798 /* UIImage+.swift */; };
 		D8237DDD27B920C400238387 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8237DDC27B920C400238387 /* SettingViewModel.swift */; };
 		D8237DDF27B920EB00238387 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8237DDE27B920EB00238387 /* SettingViewController.swift */; };
 		D8237DE227B9245A00238387 /* BannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8237DE127B9245A00238387 /* BannerCell.swift */; };
@@ -73,11 +74,14 @@
 		D83C6AE827EB5E2B00DDB33F /* UINavigtionViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AE727EB5E2B00DDB33F /* UINavigtionViewController+.swift */; };
 		D83C6AEA27EB712300DDB33F /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AE927EB712300DDB33F /* Singleton.swift */; };
 		D83C6AEC27EB87ED00DDB33F /* AuthorizedEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */; };
+		D83CC1A4280DB3870004B2D9 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CC1A3280DB3870004B2D9 /* AppVersion.swift */; };
 		D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538A27AA59160047A05C /* PlaceListViewController.swift */; };
 		D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538C27AA59200047A05C /* PlaceListViewModel.swift */; };
 		D83E538F27AA65E10047A05C /* HashtagCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538E27AA65E10047A05C /* HashtagCellViewModel.swift */; };
 		D83E539327AA6D0C0047A05C /* PlaceListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E539227AA6D0C0047A05C /* PlaceListCell.swift */; };
 		D83E539527AA6F310047A05C /* PlaceListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */; };
+		D83F7DC427FC73F10054E1C0 /* FeedReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83F7DC327FC73F10054E1C0 /* FeedReviewCell.swift */; };
+		D83F7DC627FC73FB0054E1C0 /* FeedReviewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83F7DC527FC73FB0054E1C0 /* FeedReviewCellViewModel.swift */; };
 		D840779427DE0B8A0029C17E /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840779327DE0B8A0029C17E /* CommentModel.swift */; };
 		D840779627DE0F100029C17E /* CommectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840779527DE0F100029C17E /* CommectCell.swift */; };
 		D840779827DE0F160029C17E /* CommentCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D840779727DE0F160029C17E /* CommentCellViewModel.swift */; };
@@ -214,6 +218,7 @@
 		D812307A27EA244E0038A96C /* RxBottomButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxBottomButton+.swift"; sourceTree = "<group>"; };
 		D813C34827D78B9E00193384 /* PlaceReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewCell.swift; sourceTree = "<group>"; };
 		D813C34A27D78BED00193384 /* PlaceReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceReviewCellViewModel.swift; sourceTree = "<group>"; };
+		D816D21927FDDCFF00B5B798 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		D8237DDC27B920C400238387 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		D8237DDE27B920EB00238387 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		D8237DE127B9245A00238387 /* BannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCell.swift; sourceTree = "<group>"; };
@@ -260,11 +265,14 @@
 		D83C6AE727EB5E2B00DDB33F /* UINavigtionViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigtionViewController+.swift"; sourceTree = "<group>"; };
 		D83C6AE927EB712300DDB33F /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizedEmptyView.swift; sourceTree = "<group>"; };
+		D83CC1A3280DB3870004B2D9 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		D83E538A27AA59160047A05C /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		D83E538C27AA59200047A05C /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		D83E538E27AA65E10047A05C /* HashtagCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCellViewModel.swift; sourceTree = "<group>"; };
 		D83E539227AA6D0C0047A05C /* PlaceListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListCell.swift; sourceTree = "<group>"; };
 		D83E539427AA6F310047A05C /* PlaceListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListCellViewModel.swift; sourceTree = "<group>"; };
+		D83F7DC327FC73F10054E1C0 /* FeedReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedReviewCell.swift; sourceTree = "<group>"; };
+		D83F7DC527FC73FB0054E1C0 /* FeedReviewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedReviewCellViewModel.swift; sourceTree = "<group>"; };
 		D840779327DE0B8A0029C17E /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		D840779527DE0F100029C17E /* CommectCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommectCell.swift; sourceTree = "<group>"; };
 		D840779727DE0F160029C17E /* CommentCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCellViewModel.swift; sourceTree = "<group>"; };
@@ -409,6 +417,7 @@
 		D8091FF527B28003000F057E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				D8237DE027B921A900238387 /* Setting */,
 				D83304DF27AC1A36008E7DB7 /* ProfileViewController.swift */,
 				D83304E127AC1A43008E7DB7 /* ProfileViewModel.swift */,
 				D828B38827E6F505007C2487 /* HashtagReview */,
@@ -422,8 +431,8 @@
 			children = (
 				D8091FF627B28034000F057E /* FeedViewController.swift */,
 				D8091FF827B2803E000F057E /* FeedViewModel.swift */,
-				D809200A27B28831000F057E /* ReviewCell.swift */,
-				D809200C27B28AD9000F057E /* ReviewCellViewModel.swift */,
+				D83F7DC327FC73F10054E1C0 /* FeedReviewCell.swift */,
+				D83F7DC527FC73FB0054E1C0 /* FeedReviewCellViewModel.swift */,
 				D8E019D827C0CFA600A167CA /* SearchNavigationView.swift */,
 				D8E019DA27C0CFAF00A167CA /* SearchNavigationViewModel.swift */,
 			);
@@ -499,6 +508,7 @@
 				D82EBEEF27F7E4B100BA009C /* ElseAPI.swift */,
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
 				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
+				D83CC1A3280DB3870004B2D9 /* AppVersion.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -517,6 +527,8 @@
 			children = (
 				D812307127E9FF090038A96C /* ReviewListViewController.swift */,
 				D812307327E9FF100038A96C /* ReviewListViewModel.swift */,
+				D809200A27B28831000F057E /* ReviewCell.swift */,
+				D809200C27B28AD9000F057E /* ReviewCellViewModel.swift */,
 			);
 			path = ReviewList;
 			sourceTree = "<group>";
@@ -580,6 +592,7 @@
 				D840813427C5414300FA9D1B /* RxButton+.swift */,
 				D8C72E9927CE026E007C160A /* UIColor+.swift */,
 				D8C72E9B27CE069F007C160A /* UIFont+.swift */,
+				D816D21927FDDCFF00B5B798 /* UIImage+.swift */,
 				D86CC50A27D33F5D004B74EA /* RxNMFMapView+.swift */,
 				D89E8B7627DDC0F300090C5B /* RxTextView.swift */,
 				D840779D27DE1ABB0029C17E /* UITextField+.swift */,
@@ -767,7 +780,6 @@
 				D809200E27B28C2C000F057E /* ReviewDetail */,
 				D8091FF527B28003000F057E /* Profile */,
 				D89E8B7827DDC3E000090C5B /* EditProfile */,
-				D8237DE027B921A900238387 /* Setting */,
 				D83E539127AA6D010047A05C /* PlaceList */,
 				D809200427B28381000F057E /* PlaceDetail */,
 				D812307527E9FF140038A96C /* ReviewList */,
@@ -1086,6 +1098,7 @@
 				D8237DEA27B9304400238387 /* HashtagModel.swift in Sources */,
 				D8C72EBB27CE3B68007C160A /* RoundLabelView.swift in Sources */,
 				D828B39127E6F539007C2487 /* MyCommentCellViewModel.swift in Sources */,
+				D83CC1A4280DB3870004B2D9 /* AppVersion.swift in Sources */,
 				D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */,
 				D88FAF9127A689B500E41F4F /* LoginViewModel.swift in Sources */,
 				D83C6AEC27EB87ED00DDB33F /* AuthorizedEmptyView.swift in Sources */,
@@ -1125,6 +1138,8 @@
 				D83C6AE827EB5E2B00DDB33F /* UINavigtionViewController+.swift in Sources */,
 				D8E7756627A81178005E037D /* FilterViewModel.swift in Sources */,
 				D828B38727E6E826007C2487 /* HashtagReviewCellViewModel.swift in Sources */,
+				D83F7DC627FC73FB0054E1C0 /* FeedReviewCellViewModel.swift in Sources */,
+				D816D21A27FDDCFF00B5B798 /* UIImage+.swift in Sources */,
 				D828B38A27E6F511007C2487 /* MyCommentViewController.swift in Sources */,
 				D828B38527E6E81A007C2487 /* HashtagReivewCell.swift in Sources */,
 				D89E8B7E27DDDAE300090C5B /* PhotoCell.swift in Sources */,
@@ -1192,6 +1207,7 @@
 				D86CC50F27D343EB004B74EA /* ReviewKeywordListViewModel.swift in Sources */,
 				D840779827DE0F160029C17E /* CommentCellViewModel.swift in Sources */,
 				D86768CD27F61C51004D9620 /* PageBarViewModel.swift in Sources */,
+				D83F7DC427FC73F10054E1C0 /* FeedReviewCell.swift in Sources */,
 				D8237DEC27B9361800238387 /* ImageURLCell.swift in Sources */,
 				D84B351B27CB9A6900BF1A63 /* SortViewController.swift in Sources */,
 				D83257D027CF9FFE00129E50 /* BestReviewCellViewModel.swift in Sources */,
@@ -1373,8 +1389,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "애플리케이션 힙촌에서 가까운 로컬 장소 검색을 위해 위치 정보를 사용하도록 허용합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "애플리케이션 '힙촌'에서 마이크 기능에 접근하려고 합니다. 허락하시겠습니까?";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 힙촌에서 장소 후기 사진 추가를 위해 갤러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1385,7 +1402,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1409,8 +1426,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = hipchon/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "애플리케이션 '힙촌'에서 카메라 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "애플리케이션 힙촌에서 가까운 로컬 장소 검색을 위해 위치 정보를 사용하도록 허용합니다.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "애플리케이션 '힙촌'에서 마이크 기능에 접근하려고 합니다. 허락하시겠습니까?";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 '힙촌'에서 갤러리 기능에 접근하려고 합니다. 허락하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "애플리케이션 힙촌에서 장소 후기 사진 추가를 위해 갤러리에 접근하도록 허용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1421,7 +1439,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hipchon.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

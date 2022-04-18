@@ -171,10 +171,23 @@ class SettingViewController: UIViewController {
     }
 
     func layout() {
-        view.addSubview(scrollView)
-
+        
+        [
+            navigationView,
+            scrollView,
+        ].forEach {
+            view.addSubview($0)
+        }
+        
+        navigationView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(navigationView.viewHeight)
+        }
+        
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(navigationView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
 
         scrollView.addSubview(contentView)
@@ -185,7 +198,6 @@ class SettingViewController: UIViewController {
         }
 
         [
-            navigationView,
             appSettingLabel,
             versionLabel,
             versionInfoLabel,
@@ -202,14 +214,10 @@ class SettingViewController: UIViewController {
             contentView.addSubview($0)
         }
 
-        navigationView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(navigationView.viewHeight)
-        }
+
 
         appSettingLabel.snp.makeConstraints {
-            $0.top.equalTo(navigationView.snp.bottom).offset(4.0)
+            $0.top.equalToSuperview().offset(4.0)
             $0.leading.equalToSuperview().inset(30.0)
         }
 

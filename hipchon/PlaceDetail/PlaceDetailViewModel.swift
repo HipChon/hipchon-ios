@@ -14,6 +14,7 @@ class PlaceDetailViewModel {
 
     // MARK: subViewModels
 
+    let pageCountVM = PageCountViewModel()
     let placeDesVM = PlaceDesViewModel()
     let placeMapVM = PlaceMapViewModel()
     let menuListVM: Signal<MenuListViewModel>
@@ -28,6 +29,7 @@ class PlaceDetailViewModel {
     let share: Signal<String>
     let menuListViewHidden: Driver<Bool>
     let reviewTableViewHidden: Driver<Bool>
+    let reviewTableViewCount: Driver<Int>
     let pushReviewDetailVC: Signal<ReviewDetailViewModel>
     let pushPostReviewVC: Signal<PostReviewViewModel>
 
@@ -37,6 +39,7 @@ class PlaceDetailViewModel {
     let selectedReviewIdx = PublishSubject<Int>()
     let moreReviewButtonTapped = PublishRelay<Void>()
     let postReviewButtonTapped = PublishRelay<Void>()
+    let currentIdx = BehaviorRelay<Int>(value: 1)
 
     init(_ place: BehaviorSubject<PlaceModel>) {
         let reviewDatas = BehaviorSubject<[ReviewModel]>(value: [])
@@ -54,6 +57,7 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
 
         reviews = reviewDatas
+            .map { $0.enumerated().filter { $0.offset <= 2 }.map { $0.element } } // 3개필터링
             .map { $0.map { BehaviorSubject<ReviewModel>(value: $0) } }
             .asDriver(onErrorJustReturn: [])
 
@@ -62,6 +66,16 @@ class PlaceDetailViewModel {
         urls = place
             .compactMap { $0.imageURLs?.compactMap { URL(string: $0) } }
             .asDriver(onErrorJustReturn: [])
+        
+        place
+            .compactMap { $0.imageURLs?.count }
+            .bind(to: pageCountVM.entireIdx)
+            .disposed(by: bag)
+
+        currentIdx
+            .map { $0 + 1 }
+            .bind(to: pageCountVM.currentIdx)
+            .disposed(by: bag)
 
         place
             .compactMap { $0.name }
@@ -188,8 +202,6 @@ class PlaceDetailViewModel {
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
-                    case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
@@ -220,8 +232,6 @@ class PlaceDetailViewModel {
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
-                    case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
@@ -239,6 +249,10 @@ class PlaceDetailViewModel {
         reviewTableViewHidden = reviewDatas
             .map { $0.count == 0 }
             .asDriver(onErrorJustReturn: true)
+         
+        reviewTableViewCount = place
+            .map { $0.menus?.count ?? 0 }
+            .asDriver(onErrorJustReturn: 0)
 
         menuListVM = place
             .compactMap { $0.menus }
@@ -282,7 +296,11 @@ class PlaceDetailViewModel {
 
         // MARK: API
 
-        viewAppear
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.myReviewRefresh,
+            Singleton.shared.blockReviewRefresh
+        )
             .withLatestFrom(place)
             .compactMap { $0.id }
             .filter { _ in DeviceManager.shared.networkStatus }
@@ -292,7 +310,7 @@ class PlaceDetailViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data):
-                    reviewDatas.onNext(data)
+                    reviewDatas.onNext(data.filter { $0.isBlock == false })
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)

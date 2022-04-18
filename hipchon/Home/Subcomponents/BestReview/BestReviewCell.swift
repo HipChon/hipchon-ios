@@ -15,7 +15,8 @@ class BestReviewCell: UICollectionViewCell {
         $0.numberOfLines = 2
     }
 
-    private lazy var hashtagImageView = UIImageView().then { _ in
+    private lazy var hashtagImageView = UIImageView().then {
+        $0.image = UIImage(named: "물멍")
     }
 
     public static let identyfier = "BestReviewCell"
@@ -37,9 +38,9 @@ class BestReviewCell: UICollectionViewCell {
             .drive(titleLabel.rx.text)
             .disposed(by: bag)
 
-        viewModel.hashtagImageURL
-            .drive(hashtagImageView.rx.setImageKF)
-            .disposed(by: bag)
+//        viewModel.hashtagImageURL
+//            .drive(hashtagImageView.rx.setImageKF)
+//            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -51,6 +52,7 @@ class BestReviewCell: UICollectionViewCell {
             UIColor.secondary_yellow,
         ]
         backgroundColor = colors[Int.random(in: 0 ... 4)]
+        self.layer.masksToBounds = false
     }
 
     private func layout() {
@@ -61,14 +63,14 @@ class BestReviewCell: UICollectionViewCell {
 
         titleLabel.snp.makeConstraints {
             $0.leading.top.trailing.equalToSuperview().inset(24.0)
-            $0.trailing.equalTo(hashtagImageView.snp.leading).offset(20.0)
+            $0.trailing.equalTo(hashtagImageView.snp.leading).offset(20.0).priority(.low)
         }
 
         hashtagImageView.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(35.0)
-            $0.top.equalToSuperview().offset(6.0)
-            $0.height.equalTo(76.0)
-            $0.width.equalTo(58.0)
+            $0.top.equalToSuperview().offset(8.0)
+            $0.height.equalTo(56.0)
+            $0.width.equalTo(38.0).priority(.high)
         }
     }
 }

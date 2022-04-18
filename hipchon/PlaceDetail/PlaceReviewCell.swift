@@ -113,6 +113,7 @@ class PlaceReviewCell: UICollectionViewCell {
         super.prepareForReuse()
         print("CELL REUSE")
 //        bag = DisposeBag()
+        profileImageView.image = UIImage(named: "default_profile")
     }
 
     override func layoutSubviews() {
@@ -124,7 +125,7 @@ class PlaceReviewCell: UICollectionViewCell {
         // MARK: viewModel -> view
 
         viewModel.profileImageURL
-            .drive(profileImageView.rx.setImageKF)
+            .drive(profileImageView.rx.setProfileImageKF)
             .disposed(by: bag)
 
         viewModel.userName

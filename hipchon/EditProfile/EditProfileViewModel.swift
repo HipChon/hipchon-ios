@@ -29,6 +29,7 @@ class EditProfileViewModel {
     let newName = PublishRelay<String>()
     let changedImage = BehaviorSubject<UIImage?>(value: nil)
     let completeButtonTapped = PublishRelay<Void>()
+    let viewApeear = PublishRelay<Void>()
 
     init(_ data: AuthModel?) {
         // MARK: 공통
@@ -52,17 +53,26 @@ class EditProfileViewModel {
         // name
 
         orgName = Observable.merge(
-            authModel.map { $0?.name ?? "" }, // TODO: 소셜에서 받아와야함
+//            authModel.map { $0?.name ?? "" }, // TODO: 소셜에서 받아와야함
             isSignup.filter { $0 == false }.flatMap { _ in Singleton.shared.currentUser }.compactMap { $0.name }
         )
         .asDriver(onErrorJustReturn: "")
+        
+        let name = BehaviorSubject<String>(value: "")
+        
+        viewApeear
+            .withLatestFrom(Singleton.shared.currentUser)
+            .compactMap { $0.name }
+            .bind(to: name)
+            .disposed(by: bag)
+        
+        newName
+            .bind(to: name)
+            .disposed(by: bag)
 
-        completeButtonValid = Observable.merge(
-            orgName.asObservable(),
-            newName.asObservable()
-        )
-        .map { 3 <= $0.count && $0.count <= 10 }
-        .asDriver(onErrorJustReturn: false)
+        completeButtonValid = name
+            .map { 2 <= $0.count && $0.count <= 10 }
+            .asDriver(onErrorJustReturn: false)
 
         completeButtonActivity = activity
             .asDriver(onErrorJustReturn: false)
@@ -76,7 +86,7 @@ class EditProfileViewModel {
             .do(onNext: { activity.onNext(true) })
             .withLatestFrom(isSignup)
             .filter { $0 == true }
-            .withLatestFrom(Observable.combineLatest(authModel, changedImage, newName))
+            .withLatestFrom(Observable.combineLatest(authModel, changedImage, name))
             .compactMap { auth, image, name in
                 auth?.profileImage = image
                 auth?.name = name
@@ -128,8 +138,8 @@ class EditProfileViewModel {
             .do(onNext: { activity.onNext(true) })
             .withLatestFrom(isSignup)
             .filter { $0 == false }
-            .withLatestFrom(Observable.combineLatest(newName, changedImage))
-            .flatMap { AuthAPI.shared.putProfileImage(name: $0, image: $1) }
+            .withLatestFrom(Observable.combineLatest(name, changedImage))
+            .flatMap { AuthAPI.shared.editProfile(name: $0, image: $1) }
             .subscribe(onNext: { result in
                 switch result {
                 case .success:

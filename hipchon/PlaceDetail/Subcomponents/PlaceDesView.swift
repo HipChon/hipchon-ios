@@ -9,6 +9,9 @@ import RxSwift
 import UIKit
 
 class PlaceDesView: UIView {
+    
+    var viewModel: PlaceDesViewModel?
+    
     private lazy var placeNameLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 24.0, type: .bold)
         $0.textColor = .black
@@ -99,7 +102,7 @@ class PlaceDesView: UIView {
         $0.layer.masksToBounds = true
         $0.addShadow(offset: CGSize(width: 2.0, height: 2.0))
         $0.contentHorizontalAlignment = .left
-        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 0.0)
+        $0.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 60.0)
     }
 
     private lazy var reportButton = UIButton().then {
@@ -107,6 +110,23 @@ class PlaceDesView: UIView {
         $0.setTitle(" 신고하기", for: .normal)
         $0.setTitleColor(.gray04, for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+        
+        var actions: [UIAction] = []
+        let userReportAction = UIAction(title: "유저 신고 및 차단",
+                                  image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(userReportAction)
+
+        let reviewReportAction = UIAction(title: "게시물 신고 및 차단",
+                                    image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(reviewReportAction)
+
+        let menu = UIMenu(title: "", children: actions)
+        $0.menu = menu
+        $0.showsMenuAsPrimaryAction = true
     }
 
     private lazy var infoChangeButton = UIButton().then {
@@ -134,6 +154,8 @@ class PlaceDesView: UIView {
     }
 
     func bind(_ viewModel: PlaceDesViewModel) {
+        self.viewModel = viewModel
+        
         // MARK: view -> viewModel
 
         callButton.rx.tap
@@ -160,12 +182,7 @@ class PlaceDesView: UIView {
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.linkButtonTapped)
             .disposed(by: bag)
-
-        reportButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.reportButtonTapped)
-            .disposed(by: bag)
-
+        
         infoChangeButton.rx.tap
             .throttle(.seconds(2), scheduler: MainScheduler.instance)
             .bind(to: viewModel.infoChangeButtonTapped)

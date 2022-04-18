@@ -41,6 +41,7 @@ class SearchFilterModel {
         {
             titles.append("\(hashtag)")
         }
-        return titles.joined(separator: " | ")
+        let title = titles.joined(separator: " | ")
+        return title == "" ? "지역, 유형을 검색하세요" : title
     }
 }

@@ -1175,35 +1175,7 @@ class NetworkManager {
 
     // MARK: post review
 
-    func postReview(images: [UIImage], content: String, keywords: [KeywordModel]) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("postReview")
-            dump(images)
-            dump(content)
-            dump(keywords)
-            Singleton.shared.myReviewRefresh.onNext(())
-            single(.success(true))
+  
 
-            return Disposables.create()
-        }
-    }
-
-    func deleteReview(_: Int) -> Single<Bool> {
-        return Single.create { single in
-            guard let url = URL(string: "\(NetworkManager.uri)/api/Like") else {
-                single(.failure(NetworkError.uri))
-                return Disposables.create()
-            }
-            print("deleteReview")
-            Singleton.shared.myReviewRefresh.onNext(())
-            single(.success(true))
-
-            return Disposables.create()
-        }
-    }
-
+  
 }

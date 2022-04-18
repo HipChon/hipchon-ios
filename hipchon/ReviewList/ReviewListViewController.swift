@@ -32,7 +32,9 @@ class ReviewListViewController: UIViewController {
     private lazy var reviewTableView = UITableView().then {
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
-        $0.rowHeight = 309.0
+//        $0.rowHeight = 309.0
+        $0.estimatedRowHeight = 309.0
+        $0.rowHeight = UITableView.automaticDimension
         $0.separatorInset = UIEdgeInsets(top: 6.0, left: 0.0, bottom: 0.0, right: 0.0)
         $0.showsVerticalScrollIndicator = false
         $0.separatorStyle = .none
@@ -116,7 +118,6 @@ class ReviewListViewController: UIViewController {
             .drive(reviewTableView.rx.items) { tv, idx, viewModel in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier,
                                                         for: IndexPath(row: idx, section: 0)) as? ReviewCell else { return UITableViewCell() }
-                cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)
                 return cell
             }
@@ -163,7 +164,7 @@ class ReviewListViewController: UIViewController {
 
         postReviewButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(21.0)
-            $0.centerY.equalTo(navigationView)
+            $0.centerY.equalTo(reviewCountLabel)
             $0.width.height.equalTo(28.0)
         }
 
@@ -175,7 +176,7 @@ class ReviewListViewController: UIViewController {
 
         reviewCountLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(56.0)
-            $0.centerY.equalTo(navigationView)
+            $0.bottom.equalTo(navigationView.snp.bottom).offset(-20.0)
             $0.height.equalTo(24.0)
         }
 

@@ -16,12 +16,14 @@ class ProfileViewController: TabmanViewController {
     // MARK: Property
 
     private lazy var profileImageButton = UIButton().then {
-        $0.setImage(UIImage(named: "default_profile"), for: .normal)
+        $0.setImage(UIImage(named: "default_profile_button"), for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
     }
 
     private lazy var nameLabel = UILabel().then {
         $0.font = .AppleSDGothicNeo(size: 20.0, type: .bold)
+        $0.font = .GmarketSans(size: 20.0, type: .bold)
         $0.text = "로그인이 필요합니다"
     }
 
@@ -43,6 +45,7 @@ class ProfileViewController: TabmanViewController {
             button.tintColor = .gray03
             button.selectedTintColor = .black
             button.selectedFont = .GmarketSans(size: 16.0, type: .medium)
+            button.font = .GmarketSans(size: 16.0, type: .medium)
         }
         // 인디케이터 조정
         bar.indicator.weight = .medium

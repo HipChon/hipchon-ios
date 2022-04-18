@@ -77,7 +77,6 @@ class MemoViewModel {
                 switch result {
                 case .success:
                     memoComplete.onNext(())
-                    Singleton.shared.toastAlert.onNext("메모가 등록되었습니다")
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // unauthorized(토큰 만료)

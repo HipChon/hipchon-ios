@@ -18,6 +18,7 @@ class ReviewModel: Codable {
     var likeCount: Int?
     let commentCount: Int?
     var likeYn: Bool?
+    let placeName: String?
 
     // 아직 안씀
 //    let userPostCount: Int?
@@ -33,6 +34,7 @@ class ReviewModel: Codable {
         commentCount = nil
         likeYn = nil
         topImageUrl = nil
+        placeName = nil
     }
 
     enum CodingKeys: String, CodingKey {
@@ -41,10 +43,11 @@ class ReviewModel: Codable {
         case likeCount = "likeCnt"
         case commentCount = "commentCnt"
         case content = "detail"
-        case postDt = "date"
-        case likeYn
+        case postDt = "time"
+        case likeYn = "isMypost"
         case topImageUrl = "image"
         case user, place
+        case placeName = "name"
 //        case userPostCount = "userPostCnt"
     }
 
@@ -54,5 +57,13 @@ class ReviewModel: Codable {
         }
         let date = postDt.strToDate()
         return date.dateToStr(dateFormat: "yyyy.MM.dd")
+    }
+    
+    var isBlock: Bool {
+        guard let userBlockArr = UserDefaults.standard.value(forKey: "userBlock") as? [Int],
+              let reviewBlockArr = UserDefaults.standard.value(forKey: "reviewBlock") as? [Int],
+              let userId = user?.id,
+              let reviewId = id else { return false }
+        return userBlockArr.contains(userId) || reviewBlockArr.contains(reviewId)
     }
 }

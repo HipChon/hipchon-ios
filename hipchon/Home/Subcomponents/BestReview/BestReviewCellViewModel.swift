@@ -24,7 +24,7 @@ class BestReviewCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         hashtagImageURL = bestReview
-            .compactMap { $0.review?.place?.hashtag?.imageURL }
+            .compactMap { $0.hashtag?.imageURL }
             .compactMap { URL(string: $0) }
             .asDriver(onErrorDriveWith: .empty())
     }

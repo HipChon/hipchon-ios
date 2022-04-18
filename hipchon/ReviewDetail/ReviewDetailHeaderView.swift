@@ -14,8 +14,9 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
     }
 
     private lazy var profileImageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "default_profile") ?? UIImage()
     }
 
     private lazy var userNameLabel = UILabel().then {
@@ -80,6 +81,23 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         $0.setTitle(" 신고하기", for: .normal)
         $0.setTitleColor(.gray04, for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+        
+        var actions: [UIAction] = []
+        let userReportAction = UIAction(title: "유저 신고 및 차단",
+                                  image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(userReportAction)
+
+        let reviewReportAction = UIAction(title: "게시물 신고 및 차단",
+                                    image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(reviewReportAction)
+
+        let menu = UIMenu(title: "", children: actions)
+        $0.menu = menu
+        $0.showsMenuAsPrimaryAction = true
     }
 
     private lazy var contentLabel = UILabel().then {
@@ -131,7 +149,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
                     case 1:
                         width = cellWidth - 20.0 * 2
                     case 2:
-                        width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
+                        break
                     default:
                         break
                     }
@@ -161,12 +179,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-
-        reportButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.reportButtonTapped)
-            .disposed(by: bag)
-
+        
         // MARK: viewModel -> view
 
         viewModel.placeName
@@ -174,7 +187,7 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
             .disposed(by: bag)
 
         viewModel.profileImageURL
-            .drive(profileImageView.rx.setImageKF)
+            .drive(profileImageView.rx.setProfileImageKF)
             .disposed(by: bag)
 
         viewModel.userName
@@ -195,10 +208,20 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
                 guard let cell = col.dequeueReusableCell(withReuseIdentifier: ImageURLCell.identyfier,
                                                          for: IndexPath(row: idx, section: 0)) as? ImageURLCell else { return UICollectionViewCell() }
                 let viewModel = ImageURLCellViewModel(data)
-                cell.imageView.contentMode = .scaleAspectFill
                 cell.bind(viewModel)
                 return cell
             }
+            .disposed(by: bag)
+        
+        viewModel.reviewImageHidden
+            .map { $0 ? 0.0 : 191.0 }
+            .drive(onNext: { height in
+                self.reviewImageCollectionView.snp.remakeConstraints {
+                    $0.top.equalTo(self.profileImageView.snp.bottom).offset(16.0)
+                    $0.leading.trailing.equalToSuperview()
+                    $0.height.equalTo(height)
+                }
+            })
             .disposed(by: bag)
 
         viewModel.likeYn
@@ -218,6 +241,10 @@ class ReviewDetailHeaderView: UITableViewHeaderFooterView {
 
         viewModel.content
             .drive(contentLabel.rx.text)
+            .disposed(by: bag)
+        
+        viewModel.reportButtonHidden
+            .drive(reportButton.rx.isHidden)
             .disposed(by: bag)
 
         viewModel.pushPlaceDetailVC

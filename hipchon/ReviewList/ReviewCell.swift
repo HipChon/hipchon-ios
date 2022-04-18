@@ -10,7 +10,7 @@ import UIKit
 
 class ReviewCell: UITableViewCell {
     private lazy var profileImageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
         $0.image = UIImage(named: "default_profile") ?? UIImage()
     }
@@ -31,6 +31,9 @@ class ReviewCell: UITableViewCell {
 
     private lazy var reviewImageCollectionView = UICollectionView(frame: .zero,
                                                                   collectionViewLayout: UICollectionViewLayout()).then {
+        $0.delegate = nil
+        $0.dataSource = nil
+        
         let layout = UICollectionViewFlowLayout()
         let itemSpacing: CGFloat = 4.0
         let width = 173.0
@@ -74,8 +77,29 @@ class ReviewCell: UITableViewCell {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
         $0.numberOfLines = 2
     }
+    
+    private lazy var reportButton = UIButton().then {
+        $0.setImage(UIImage(named: "report"), for: .normal)
+        $0.setTitle(" 신고하기", for: .normal)
+        $0.setTitleColor(.gray04, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+        
+        var actions: [UIAction] = []
+        let userReportAction = UIAction(title: "유저 신고 및 차단",
+                                  image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(userReportAction)
 
-    public lazy var reviewPlaceView = ReviewPlaceView().then { _ in
+        let reviewReportAction = UIAction(title: "게시물 신고 및 차단",
+                                    image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(reviewReportAction)
+
+        let menu = UIMenu(title: "", children: actions)
+        $0.menu = menu
+        $0.showsMenuAsPrimaryAction = true
     }
 
     private lazy var boundaryView = UIView().then {
@@ -100,6 +124,7 @@ class ReviewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         bag = DisposeBag()
+        profileImageView.image = UIImage(named: "default_profile")
     }
 
     override func layoutSubviews() {
@@ -121,6 +146,7 @@ class ReviewCell: UITableViewCell {
                     case 2:
                         width = (cellWidth - 20.0 * 2 - itemSpacing) / 2
                     default:
+                        width = (cellWidth - 20.0 * 3 - itemSpacing) / 2
                         break
                     }
 
@@ -135,22 +161,16 @@ class ReviewCell: UITableViewCell {
     func bind(_ viewModel: ReviewCellViewModel) {
         self.viewModel = viewModel
 
-        viewModel.reviewPlaceVM
-            .drive(onNext: { [weak self] in
-                self?.reviewPlaceView.bind($0)
-            })
-            .disposed(by: bag)
-
         // MARK: view -> viewModel
 
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-
+        
         // MARK: viewModel -> view
 
         viewModel.profileImageURL
-            .drive(profileImageView.rx.setImageKF)
+            .drive(profileImageView.rx.setProfileImageKF)
             .disposed(by: bag)
 
         viewModel.userName
@@ -175,6 +195,17 @@ class ReviewCell: UITableViewCell {
                 return cell
             }
             .disposed(by: bag)
+        
+        viewModel.reviewImageHidden
+            .map { $0 ? 0.0 : 110.0 }
+            .drive(onNext: { height in
+                self.reviewImageCollectionView.snp.remakeConstraints {
+                    $0.top.equalTo(self.profileImageView.snp.bottom).offset(16.0)
+                    $0.leading.trailing.equalToSuperview()
+                    $0.height.equalTo(height)
+                }
+            })
+            .disposed(by: bag)
 
         viewModel.likeYn
             .compactMap { $0 ? UIImage(named: "likeY") : UIImage(named: "likeN") }
@@ -194,6 +225,10 @@ class ReviewCell: UITableViewCell {
         viewModel.content
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
+        
+        viewModel.reportButtonHidden
+            .drive(reportButton.rx.isHidden)
+            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -210,10 +245,10 @@ class ReviewCell: UITableViewCell {
             reviewImageCollectionView,
             likeButton,
             likeCountLabel,
+            reportButton,
             commentButton,
             commentCountLabel,
             contentLabel,
-            reviewPlaceView,
             boundaryView,
         ].forEach { contentView.addSubview($0) }
 
@@ -273,17 +308,17 @@ class ReviewCell: UITableViewCell {
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.height.equalTo(42.0)
         }
-
-        reviewPlaceView.snp.makeConstraints {
-            $0.top.equalTo(contentLabel.snp.bottom).offset(20.0)
-            $0.leading.trailing.equalToSuperview().inset(20.0)
-            $0.height.equalTo(57.0)
+        
+        reportButton.snp.makeConstraints {
+            $0.centerY.equalTo(commentButton)
+            $0.trailing.equalToSuperview().inset(20.0)
         }
 
         boundaryView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(20.0)
+            $0.top.equalTo(contentLabel.snp.bottom).offset(25.0)
             $0.height.equalTo(1.0)
             $0.bottom.equalToSuperview()
-            $0.leading.trailing.equalToSuperview().inset(20.0)
         }
     }
 }

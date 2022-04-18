@@ -11,6 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
+import CHIPageControl
 
 class PlaceDetailViewController: UIViewController {
     // MARK: Property
@@ -51,6 +52,9 @@ class PlaceDetailViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.bounces = false
         $0.isPagingEnabled = true
+    }
+    
+    private lazy var pageCountView = PageCountView().then { _ in
     }
 
     private lazy var placeDesView = PlaceDesView().then { _ in
@@ -100,9 +104,13 @@ class PlaceDetailViewController: UIViewController {
     }
 
     private lazy var reviewTableView = UITableView(frame: .zero).then {
+        $0.delegate = nil
+        $0.dataSource = nil
         $0.backgroundColor = .white
         $0.register(ReviewCell.self, forCellReuseIdentifier: ReviewCell.identyfier)
-        $0.rowHeight = 315.0
+//        $0.rowHeight = 309.0
+        $0.estimatedRowHeight = 309.0
+        $0.rowHeight = UITableView.automaticDimension
         $0.showsVerticalScrollIndicator = false
         $0.isScrollEnabled = false
         $0.separatorStyle = .none
@@ -137,6 +145,31 @@ class PlaceDetailViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//
+//    }
+    
+    deinit {
+        menuListView.bag = DisposeBag()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        
+        imageCollectView.rx.contentOffset
+            .filter { _ in self.imageCollectView.frame.width != 0.0 }
+            .compactMap { [unowned self] in Int(($0.x + self.imageCollectView.frame.width / 2) / self.imageCollectView.frame.width) }
+            .distinctUntilChanged()
+            .bind(to: viewModel.currentIdx)
+            .disposed(by: bag)
+    }
 
     func bind(_ viewModel: PlaceDetailViewModel) {
         self.viewModel = viewModel
@@ -145,6 +178,7 @@ class PlaceDetailViewController: UIViewController {
 
         placeDesView.bind(viewModel.placeDesVM)
         placeMapView.bind(viewModel.placeMapVM)
+        pageCountView.bind(viewModel.pageCountVM)
 
         viewModel.menuListVM
             .emit(onNext: { [weak self] in
@@ -192,17 +226,30 @@ class PlaceDetailViewController: UIViewController {
             }
             .drive(navigationView.rx.isHidden)
             .disposed(by: bag)
+ 
 
         // MARK: viewModel -> view
 
         viewModel.menuListViewHidden
-            .filter { $0 == true }
-            .drive(onNext: { _ in
-                self.menuListView.isHidden = true
+            .drive(menuListView.rx.isHidden)
+            .disposed(by: bag)
+        viewModel.reviewTableViewCount
+            .map { count -> Double in
+                if count == 0 {
+                    return 0.0
+                } else if count == 1 || count == 2 {
+                    return 440.0 - 180.0
+                } else {
+                    return 440.0
+                }
+            }
+            .drive(onNext: { height in
+//                let height = $0 ? 0.0 : 440.0
+//                self.menuListView.isHidden = $0
                 self.menuListView.snp.remakeConstraints {
                     $0.leading.trailing.equalToSuperview()
                     $0.top.equalTo(self.firstBorderView.snp.bottom)
-                    $0.height.equalTo(0.0)
+                    $0.height.equalTo(height)
                 }
             })
             .disposed(by: bag)
@@ -237,8 +284,6 @@ class PlaceDetailViewController: UIViewController {
             .drive(reviewTableView.rx.items) { tv, _, review in
                 guard let cell = tv.dequeueReusableCell(withIdentifier: ReviewCell.identyfier) as? ReviewCell else { return UITableViewCell() }
                 let viewModel = ReviewCellViewModel(review)
-                cell.imageView?.contentMode = .scaleAspectFill
-                cell.reviewPlaceView.isHidden = true
                 cell.bind(viewModel)
                 return cell
             }
@@ -330,6 +375,7 @@ class PlaceDetailViewController: UIViewController {
 
         [
             imageCollectView,
+            pageCountView,
             placeDesView,
             firstBorderView,
             menuListView,
@@ -365,6 +411,11 @@ class PlaceDetailViewController: UIViewController {
             let width = UIApplication.shared.windows.first?.frame.width ?? 0.0
             let height = width * (263.0 / 390.0)
             $0.height.equalTo(height)
+        }
+        
+        pageCountView.snp.makeConstraints {
+            $0.trailing.equalTo(imageCollectView).inset(16.0)
+            $0.bottom.equalTo(imageCollectView).inset(24.0)
         }
 
         placeDesView.snp.makeConstraints {

@@ -81,10 +81,11 @@ class PlaceModel: Codable {
         case geoLat = "latitude"
         case geoLon = "longitude"
         case keywords = "keywordList"
-        case reviews, menus, memo
+        case reviews, memo
+        case menus = "menuList"
         case hashtag = "tmp"
         case topKeyword = "keyword"
-        case topImageUrl = "placeImage"
+        case topImageUrl = "image"
 //        case holiday, markerImage, hiple, animal, hashtag
     }
 
