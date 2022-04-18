@@ -10,7 +10,8 @@ import UIKit
 
 class HipPlaceCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
-        $0.contentMode = .scaleToFill
+        $0.contentMode = .scaleAspectFill
+        $0.layer.masksToBounds = true
     }
 
     private lazy var nameLabel = UILabel().then {

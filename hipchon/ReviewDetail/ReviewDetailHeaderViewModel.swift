@@ -30,6 +30,7 @@ class ReviewDetailHeaderViewModel {
     let content: Driver<String>
     let pushPlaceDetailVC: Signal<PlaceDetailViewModel>
     let share: Signal<String>
+    let reportButtonHidden: Driver<Bool>
 
     // MARK: view -> viewModel
 
@@ -178,10 +179,24 @@ class ReviewDetailHeaderViewModel {
         share = reviewPlaceVM.flatMap { $0.share }
 
         reportButtonTapped
-            .delay(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { _ in
+            .withLatestFrom(review)
+            .subscribe(onNext: {
+                var userBlockArr = UserDefaults.standard.value(forKey: "userBlock") as? [Int] ?? []
+                var reviewBlockArr = UserDefaults.standard.value(forKey: "reviewBlock") as? [Int] ?? []
+                guard let userId = $0.user?.id,
+                      let reviewId = $0.id else { return }
+                userBlockArr.append(userId)
+                reviewBlockArr.append(reviewId)
+                UserDefaults.standard.set(userBlockArr, forKey: "userBlock")
+                UserDefaults.standard.set(reviewBlockArr, forKey: "reviewBlock")
+                Singleton.shared.blockReviewRefresh.onNext(())
                 Singleton.shared.toastAlert.onNext("게시물 신고가 완료되었습니다")
             })
             .disposed(by: bag)
+        
+        reportButtonHidden = Observable.combineLatest(review.compactMap { $0.user?.id },
+                                                      Singleton.shared.currentUser.compactMap { $0.id })
+            .map { $0 == $1 }
+            .asDriver(onErrorJustReturn: false)
     }
 }

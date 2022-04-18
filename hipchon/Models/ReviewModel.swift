@@ -58,4 +58,12 @@ class ReviewModel: Codable {
         let date = postDt.strToDate()
         return date.dateToStr(dateFormat: "yyyy.MM.dd")
     }
+    
+    var isBlock: Bool {
+        guard let userBlockArr = UserDefaults.standard.value(forKey: "userBlock") as? [Int],
+              let reviewBlockArr = UserDefaults.standard.value(forKey: "reviewBlock") as? [Int],
+              let userId = user?.id,
+              let reviewId = id else { return false }
+        return userBlockArr.contains(userId) || reviewBlockArr.contains(reviewId)
+    }
 }

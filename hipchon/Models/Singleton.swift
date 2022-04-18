@@ -21,6 +21,7 @@ class Singleton {
     let likedReviewRefresh = PublishSubject<Void>()
     let commentRefresh = PublishSubject<Void>()
     let myCommentRefresh = PublishSubject<Void>()
+    let blockReviewRefresh = PublishSubject<Void>()
 
     let toastAlert = PublishSubject<String>()
     let unauthorized = PublishSubject<Void>()

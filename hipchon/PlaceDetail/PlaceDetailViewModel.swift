@@ -202,8 +202,6 @@ class PlaceDetailViewModel {
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
-                    case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
@@ -234,8 +232,6 @@ class PlaceDetailViewModel {
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
                         Singleton.shared.unauthorized.onNext(())
-                    case 404: // 404: Not Found(등록된 리뷰 없음)
-                        reviewDatas.onNext([])
                     case 13: // 13: Timeout
                         Singleton.shared.toastAlert.onNext("네트워크 환경을 확인해주세요")
                     default:
@@ -302,7 +298,8 @@ class PlaceDetailViewModel {
 
         Observable.merge(
             Observable.just(()),
-            Singleton.shared.myReviewRefresh
+            Singleton.shared.myReviewRefresh,
+            Singleton.shared.blockReviewRefresh
         )
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -313,7 +310,7 @@ class PlaceDetailViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data):
-                    reviewDatas.onNext(data)
+                    reviewDatas.onNext(data.filter { $0.isBlock == false })
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)

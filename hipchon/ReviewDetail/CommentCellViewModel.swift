@@ -18,6 +18,7 @@ class CommentCellViewModel {
     let name: Driver<String>
     let content: Driver<String>
     let timeForNow: Driver<String>
+    let reportButtonHidden: Driver<Bool>
 
     // MARK: view -> viewModel
 
@@ -44,10 +45,24 @@ class CommentCellViewModel {
             .asDriver(onErrorJustReturn: "")
 
         reportButtonTapped
-            .delay(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { _ in
+            .withLatestFrom(comment)
+            .subscribe(onNext: {
+                var userBlockArr = UserDefaults.standard.value(forKey: "userBlock") as? [Int] ?? []
+                var commentBlockArr = UserDefaults.standard.value(forKey: "commentBlock") as? [Int] ?? []
+                guard let userId = $0.user?.id,
+                      let commentId = $0.id else { return }
+                userBlockArr.append(userId)
+                commentBlockArr.append(commentId)
+                UserDefaults.standard.set(userBlockArr, forKey: "userBlock")
+                UserDefaults.standard.set(commentBlockArr, forKey: "commentBlock")
+                Singleton.shared.commentRefresh.onNext(())
                 Singleton.shared.toastAlert.onNext("댓글 신고가 완료되었습니다")
             })
             .disposed(by: bag)
+        
+        reportButtonHidden = Observable.combineLatest(comment.compactMap { $0.user?.id },
+                                                      Singleton.shared.currentUser.compactMap { $0.id })
+            .map { $0 == $1 }
+            .asDriver(onErrorJustReturn: false)
     }
 }

@@ -57,7 +57,7 @@ class OnBoardingViewController: UIViewController {
         $0.layer.cornerRadius = 5.0
         $0.layer.masksToBounds = true
         $0.setImage(UIImage(named: "apple"), for: .normal)
-        $0.setTitle("애플 아이디로 시작하기", for: .normal)
+        $0.setTitle("Apple로 로그인", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = .GmarketSans(size: 16.0, type: .medium)
 
@@ -93,6 +93,18 @@ class OnBoardingViewController: UIViewController {
     }
 
     func bind() {
+        
+        // MARK: App Version Check
+        
+        rx.viewDidAppear
+            .take(1)
+            .map { _ in () }
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: {
+                AppVersion.shared.compareVersion()
+            })
+            .disposed(by: bag)
+        
         // MARK: view -> viewModel
 
         kakaoLoginButton.rx.tap

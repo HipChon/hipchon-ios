@@ -42,7 +42,10 @@ class FeedViewModel {
             .asDriver(onErrorJustReturn: false)
 
         // 첫 load, sorting
-        Observable.just(())
+        Observable.merge(
+            Observable.just(()),
+            Singleton.shared.blockReviewRefresh
+        )
             .filter { DeviceManager.shared.networkStatus }
             .flatMap { _ in ReviewAPI.shared.getFeedReviews() }
             .subscribe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
@@ -50,7 +53,7 @@ class FeedViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data):
-                    reviewDatas.onNext(data)
+                    reviewDatas.onNext(data.filter { $0.isBlock == false })
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -82,7 +85,7 @@ class FeedViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data):
-                    reviewDatas.onNext(data)
+                    reviewDatas.onNext(data.filter { $0.isBlock == false })
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)

@@ -12,6 +12,8 @@ import UIKit
 class CommentCell: UITableViewCell {
     private lazy var profileImageView = UIImageView().then {
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "default_profile") ?? UIImage()
+
     }
 
     private lazy var nameLabel = UILabel().then {
@@ -35,6 +37,23 @@ class CommentCell: UITableViewCell {
         $0.setTitle(" 신고하기", for: .normal)
         $0.setTitleColor(.gray04, for: .normal)
         $0.titleLabel?.font = .AppleSDGothicNeo(size: 10.0, type: .regular)
+        
+        var actions: [UIAction] = []
+        let userReportAction = UIAction(title: "유저 신고 및 차단",
+                                  image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(userReportAction)
+
+        let reviewReportAction = UIAction(title: "댓글 신고 및 차단",
+                                    image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(reviewReportAction)
+
+        let menu = UIMenu(title: "", children: actions)
+        $0.menu = menu
+        $0.showsMenuAsPrimaryAction = true
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -80,11 +99,9 @@ class CommentCell: UITableViewCell {
         viewModel.timeForNow
             .drive(timeForNowLabel.rx.text)
             .disposed(by: bag)
-
-        // TODO: change
-        reportButton.rx.tap
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
-            .bind(to: viewModel.reportButtonTapped)
+        
+        viewModel.reportButtonHidden
+            .drive(reportButton.rx.isHidden)
             .disposed(by: bag)
     }
 

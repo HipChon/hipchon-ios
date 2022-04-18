@@ -39,4 +39,12 @@ class CommentModel: Codable {
         let date = dateTime.strToDate()
         return date.dateToStr(dateFormat: "yyyy.MM.dd")
     }
+    
+    var isBlock: Bool {
+        guard let userBlockArr = UserDefaults.standard.value(forKey: "userBlock") as? [Int],
+              let commentBlockArr = UserDefaults.standard.value(forKey: "commentBlock") as? [Int],
+              let userId = user?.id,
+              let commentId = id else { return false }
+        return userBlockArr.contains(userId) || commentBlockArr.contains(commentId)
+    }
 }

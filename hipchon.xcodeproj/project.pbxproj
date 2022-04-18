@@ -74,6 +74,7 @@
 		D83C6AE827EB5E2B00DDB33F /* UINavigtionViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AE727EB5E2B00DDB33F /* UINavigtionViewController+.swift */; };
 		D83C6AEA27EB712300DDB33F /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AE927EB712300DDB33F /* Singleton.swift */; };
 		D83C6AEC27EB87ED00DDB33F /* AuthorizedEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */; };
+		D83CC1A4280DB3870004B2D9 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CC1A3280DB3870004B2D9 /* AppVersion.swift */; };
 		D83E538B27AA59170047A05C /* PlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538A27AA59160047A05C /* PlaceListViewController.swift */; };
 		D83E538D27AA59200047A05C /* PlaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538C27AA59200047A05C /* PlaceListViewModel.swift */; };
 		D83E538F27AA65E10047A05C /* HashtagCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83E538E27AA65E10047A05C /* HashtagCellViewModel.swift */; };
@@ -264,6 +265,7 @@
 		D83C6AE727EB5E2B00DDB33F /* UINavigtionViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigtionViewController+.swift"; sourceTree = "<group>"; };
 		D83C6AE927EB712300DDB33F /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		D83C6AEB27EB87ED00DDB33F /* AuthorizedEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizedEmptyView.swift; sourceTree = "<group>"; };
+		D83CC1A3280DB3870004B2D9 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		D83E538A27AA59160047A05C /* PlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewController.swift; sourceTree = "<group>"; };
 		D83E538C27AA59200047A05C /* PlaceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceListViewModel.swift; sourceTree = "<group>"; };
 		D83E538E27AA65E10047A05C /* HashtagCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCellViewModel.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 				D82EBEEF27F7E4B100BA009C /* ElseAPI.swift */,
 				D80967BB27BA847E0015E7EF /* NetworkManager.swift */,
 				D8CF9C6427ECA49C00520CAF /* DeviceManager.swift */,
+				D83CC1A3280DB3870004B2D9 /* AppVersion.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1095,6 +1098,7 @@
 				D8237DEA27B9304400238387 /* HashtagModel.swift in Sources */,
 				D8C72EBB27CE3B68007C160A /* RoundLabelView.swift in Sources */,
 				D828B39127E6F539007C2487 /* MyCommentCellViewModel.swift in Sources */,
+				D83CC1A4280DB3870004B2D9 /* AppVersion.swift in Sources */,
 				D86CC50B27D33F5D004B74EA /* RxNMFMapView+.swift in Sources */,
 				D88FAF9127A689B500E41F4F /* LoginViewModel.swift in Sources */,
 				D83C6AEC27EB87ED00DDB33F /* AuthorizedEmptyView.swift in Sources */,

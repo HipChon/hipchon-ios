@@ -97,6 +97,18 @@ class HomeViewController: UIViewController {
     }
 
     func bind(_ viewModel: HomeViewModel) {
+        
+        // MARK: App Version Check
+        
+        rx.viewDidAppear
+            .take(1)
+            .map { _ in () }
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: {
+                AppVersion.shared.compareVersion()
+            })
+            .disposed(by: bag)
+        
         // MARK: subViews Binding
 
         homeSearchView.bind(viewModel.homeSearchVM)

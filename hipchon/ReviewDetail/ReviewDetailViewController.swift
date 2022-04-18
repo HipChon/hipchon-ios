@@ -58,6 +58,12 @@ class ReviewDetailViewController: UIViewController {
                 self?.commentTableView.reloadData()
             })
             .disposed(by: bag)
+        
+        Singleton.shared.blockReviewRefresh
+            .subscribe(onNext: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            })
+            .disposed(by: bag)
     }
 
     func attribute() {

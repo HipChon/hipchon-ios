@@ -14,6 +14,7 @@ class MyCommentCell: UITableViewCell {
         $0.layer.cornerRadius = 3.0
         $0.layer.masksToBounds = true
         $0.contentMode = .scaleAspectFill
+        $0.image = UIImage(named: "reviewEmpty") ?? UIImage()
     }
 
     private lazy var contentLabel = UILabel().then {

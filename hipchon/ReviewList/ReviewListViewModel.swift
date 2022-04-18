@@ -41,7 +41,8 @@ class ReviewListViewModel {
         
         Observable.merge(
             Observable.just(()),
-            Singleton.shared.myReviewRefresh
+            Singleton.shared.myReviewRefresh,
+            Singleton.shared.blockReviewRefresh
         )
             .withLatestFrom(place)
             .compactMap { $0.id }
@@ -52,7 +53,7 @@ class ReviewListViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data):
-                    reviews.onNext(data)
+                    reviews.onNext(data.filter { $0.isBlock == false })
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)
@@ -90,7 +91,7 @@ class ReviewListViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case let .success(data):
-                    reviews.onNext(data)
+                    reviews.onNext(data.filter { $0.isBlock == false })
                 case let .failure(error):
                     switch error.statusCode {
                     case 401: // 401: unauthorized(토큰 만료)

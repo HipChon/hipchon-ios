@@ -77,6 +77,30 @@ class ReviewCell: UITableViewCell {
         $0.font = .AppleSDGothicNeo(size: 14.0, type: .medium)
         $0.numberOfLines = 2
     }
+    
+    private lazy var reportButton = UIButton().then {
+        $0.setImage(UIImage(named: "report"), for: .normal)
+        $0.setTitle(" 신고하기", for: .normal)
+        $0.setTitleColor(.gray04, for: .normal)
+        $0.titleLabel?.font = .AppleSDGothicNeo(size: 12.0, type: .regular)
+        
+        var actions: [UIAction] = []
+        let userReportAction = UIAction(title: "유저 신고 및 차단",
+                                  image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(userReportAction)
+
+        let reviewReportAction = UIAction(title: "게시물 신고 및 차단",
+                                    image: nil) { [weak self] _ in
+            self?.viewModel?.reportButtonTapped.accept(())
+        }
+        actions.append(reviewReportAction)
+
+        let menu = UIMenu(title: "", children: actions)
+        $0.menu = menu
+        $0.showsMenuAsPrimaryAction = true
+    }
 
     private lazy var boundaryView = UIView().then {
         $0.backgroundColor = .gray02
@@ -141,7 +165,7 @@ class ReviewCell: UITableViewCell {
         likeButton.rx.tap
             .bind(to: viewModel.likeButtonTapped)
             .disposed(by: bag)
-
+        
         // MARK: viewModel -> view
 
         viewModel.profileImageURL
@@ -200,6 +224,10 @@ class ReviewCell: UITableViewCell {
         viewModel.content
             .drive(contentLabel.rx.text)
             .disposed(by: bag)
+        
+        viewModel.reportButtonHidden
+            .drive(reportButton.rx.isHidden)
+            .disposed(by: bag)
     }
 
     private func attribute() {
@@ -216,6 +244,7 @@ class ReviewCell: UITableViewCell {
             reviewImageCollectionView,
             likeButton,
             likeCountLabel,
+            reportButton,
             commentButton,
             commentCountLabel,
             contentLabel,
@@ -277,6 +306,11 @@ class ReviewCell: UITableViewCell {
             $0.top.equalTo(likeButton.snp.bottom).offset(17.0)
             $0.leading.trailing.equalToSuperview().inset(20.0)
             $0.height.equalTo(42.0)
+        }
+        
+        reportButton.snp.makeConstraints {
+            $0.centerY.equalTo(commentButton)
+            $0.trailing.equalToSuperview().inset(20.0)
         }
 
         boundaryView.snp.makeConstraints {

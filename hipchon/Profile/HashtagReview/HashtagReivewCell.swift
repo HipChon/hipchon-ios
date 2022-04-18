@@ -19,6 +19,7 @@ class HashtagReviewCell: UICollectionViewCell {
     private lazy var imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.layer.masksToBounds = true
+        $0.image = UIImage(named: "reviewEmpty") ?? UIImage()
     }
 
     private lazy var nameView = UIView().then {
