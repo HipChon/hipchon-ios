@@ -124,6 +124,7 @@ class FeedReviewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         bag = DisposeBag()
+        profileImageView.image = UIImage(named: "default_profile")
     }
 
     override func layoutSubviews() {

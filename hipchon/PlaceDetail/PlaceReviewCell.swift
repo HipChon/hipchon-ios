@@ -113,6 +113,7 @@ class PlaceReviewCell: UICollectionViewCell {
         super.prepareForReuse()
         print("CELL REUSE")
 //        bag = DisposeBag()
+        profileImageView.image = UIImage(named: "default_profile")
     }
 
     override func layoutSubviews() {
