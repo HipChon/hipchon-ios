@@ -5,7 +5,7 @@
 //  Created by 김범수 on 2022/02/08.
 //
 
-import NMapsMap
+import Foundation
 
 class PlaceModel: Codable {
     let id: Int?
@@ -50,13 +50,13 @@ class PlaceModel: Codable {
         return "[\(region)] \(name)"
     }
 
-    var nmgLatLng: NMGLatLng? {
+    var mtMapPoint: MTMapPoint? {
         guard let geoLat = geoLat,
               let geoLon = geoLon
         else {
             return nil
         }
-        return NMGLatLng(lat: geoLat, lng: geoLon)
+        return MTMapPoint(geoCoord: MTMapPointGeo(latitude: geoLat, longitude: geoLon))
     }
 
 //    enum CodingKeys: String, CodingKey {
