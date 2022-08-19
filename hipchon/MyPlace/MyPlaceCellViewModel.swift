@@ -10,7 +10,7 @@ import RxSwift
 import UIKit
 
 class MyPlaceCellViewModel {
-    private let bag = DisposeBag()
+    var bag = DisposeBag()
 
     // MARK: viewModel -> view
 
@@ -56,11 +56,13 @@ class MyPlaceCellViewModel {
             .asDriver(onErrorJustReturn: 0)
 
         memoContent = place
-            .compactMap { $0.memo?.content }
+            .map { $0.memo?.content ?? "메모" }
+//            .compactMap { $0.memo?.content }
             .asDriver(onErrorJustReturn: "")
 
         memoColor = place
-            .compactMap { $0.memo?.backgroundColor }
+            .map { $0.memo?.backgroundColor ?? .gray01 }
+//            .compactMap { $0.memo?.backgroundColor }
             .asDriver(onErrorJustReturn: .gray05)
 
         // TODO: remove

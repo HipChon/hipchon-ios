@@ -74,7 +74,7 @@ class MyPlaceCell: UITableViewCell {
     }
 
     public static let identyfier = "ReviewListCell"
-    private let bag = DisposeBag()
+    private var bag = DisposeBag()
     var viewModel: MyPlaceCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -86,6 +86,12 @@ class MyPlaceCell: UITableViewCell {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bag = DisposeBag()
+        viewModel?.bag = DisposeBag()
     }
 
     func bind(_ viewModel: MyPlaceCellViewModel) {

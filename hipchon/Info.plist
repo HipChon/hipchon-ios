@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>KAKAO_APP_KEY</key>
+	<string>8bd5fb988b4c96695a833cff954936ed</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>애플리케이션 힙촌에서 장소 후기 사진 추가를 위해 갤러리에 접근하도록 허용합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

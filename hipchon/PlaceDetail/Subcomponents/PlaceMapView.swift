@@ -5,11 +5,10 @@
 //  Created by 김범수 on 2022/03/03.
 //
 
-import NMapsMap
 import RxSwift
 import UIKit
 
-class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, NMFMapViewTouchDelegate {
+class PlaceMapView: UIView {
     private lazy var mapLabelImageView = UIImageView().then {
         $0.image = UIImage(named: "map") ?? UIImage()
     }
@@ -19,36 +18,9 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
         $0.font = .GmarketSans(size: 18.0, type: .medium)
         $0.textColor = .black
     }
-
-    private lazy var mapView = NMFMapView(frame: CGRect(x: 0.0,
-                                                        y: 0.0,
-                                                        width: UIApplication.shared.windows.first?.frame.width ?? 0.0 - 40.0,
-                                                        height: 140.0)).then {
-        // Delegate
-        $0.addCameraDelegate(delegate: self)
-        $0.touchDelegate = self
-        $0.removeOptionDelegate(delegate: self)
-
-        // Current Position
-        $0.positionMode = .direction
-
-        // Zoom and Scroll
-        $0.minZoomLevel = 5.0
-        $0.maxZoomLevel = 10.0
-        $0.allowsZooming = true
-        $0.allowsScrolling = true
-        $0.allowsTilting = false
-        $0.allowsRotating = false
-
-        $0.isUserInteractionEnabled = false
-        $0.zoomLevel = 9.5
-
-        // Map display Info
-        $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
-        $0.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: true)
-
-        // 한반도 이내
-        $0.extent = NMGLatLngBounds(southWestLat: 31.43, southWestLng: 122.37, northEastLat: 44.35, northEastLng: 132)
+    
+    private lazy var mapView = MTMapView().then {
+        $0.delegate = self
     }
 
     private lazy var addressLabel = UILabel().then {
@@ -88,15 +60,13 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
         viewModel.setAddress
             .drive(addressLabel.rx.text)
             .disposed(by: bag)
-
-        viewModel.setNMGLatLng
+        
+        viewModel.setMapCenter
             .drive(mapView.rx.setMapCenterPoint)
             .disposed(by: bag)
 
-        viewModel.setNMGLatLng
-            .drive(onNext: { [weak self] in
-                self?.addMarker($0)
-            })
+        viewModel.setMapCenter
+            .drive(mapView.rx.addPOIItem)
             .disposed(by: bag)
     }
 
@@ -142,24 +112,51 @@ class PlaceMapView: UIView, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate, 
             $0.width.equalTo(28.0)
         }
     }
+}
 
-    private func addMarker(_ geoLocation: NMGLatLng) {
-        let marker = NMFMarker(position: geoLocation)
 
-//        marker.iconImage = NMFOverlayImage(image: UIImage(named: "nonSelectedMarker")!)
-
-//        marker.touchHandler = { [weak self] (_: NMFOverlay) -> Bool in
-//            guard let self = self else { return false }
-//            if let selectedMarker = self.selectedMarker {
-//                selectedMarker.iconImage = NMFOverlayImage(image: UIImage(named: "nonSelectedMarker")!)
-//            }
-//            marker.iconImage = NMFOverlayImage(image: UIImage(named: "selectedMarker")!)
-//
-//            self.selectedMarker = marker
-//            self.viewModel.selectedStation.accept(station)
-//            return true
-//        }
-        marker.iconImage = NMFOverlayImage(image: UIImage(named: "marker") ?? UIImage())
-        marker.mapView = mapView
+extension PlaceMapView: MTMapViewDelegate {
+    func mapView(_ mapView: MTMapView!, updateCurrentLocation location: MTMapPoint!, withAccuracy accuracy: MTMapLocationAccuracy) {
+//        #if DEBUG
+//        viewModel.currentLocation.accept(MTMapPoint(geoCoord: MTMapPointGeo(latitude: 37.394225, longitude: 127.110341)))
+//        #else
+//         viewModel.currentLocation.accept(location)
+//        #endif
     }
+    
+    func mapView(_ mapView: MTMapView!, finishedMapMoveAnimation mapCenterPoint: MTMapPoint!) {
+//        viewModel.mapCenterPoint.accept(mapCenterPoint)
+    }
+    
+    func mapView(_ mapView: MTMapView!, selectedPOIItem poiItem: MTMapPOIItem!) -> Bool {
+//        viewModel.poiItemTapped.accept(Void())
+        return false
+    }
+    
+    func mapView(_ mapView: MTMapView!, failedUpdatingCurrentLocationWithError error: Error!) {
+//        viewModel.mapViewError.accept(error.localizedDescription)
+    }
+}
+
+extension Reactive where Base: MTMapView {
+    var setMapCenterPoint: Binder<MTMapPoint> {
+        return Binder(base) { base, point in
+            base.setMapCenter(point, animated: true)
+        }
+    }
+    var addPOIItem: Binder<MTMapPoint> {
+        return Binder(base) { base, point in
+            let mapPOIItem = MTMapPOIItem()
+            mapPOIItem.mapPoint = point
+
+            mapPOIItem.showAnimationType = .noAnimation
+
+            mapPOIItem.markerType = .customImage
+            mapPOIItem.customImage = UIImage(named: "marker") ?? UIImage()
+         
+            base.removeAllPOIItems()
+            base.addPOIItems([mapPOIItem])
+        }
+    }
+
 }

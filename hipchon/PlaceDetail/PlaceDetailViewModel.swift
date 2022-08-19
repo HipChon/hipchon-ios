@@ -5,7 +5,6 @@
 //  Created by 김범수 on 2022/02/08.
 //
 
-import NMapsMap
 import RxCocoa
 import RxSwift
 
@@ -113,8 +112,8 @@ class PlaceDetailViewModel {
             .disposed(by: bag)
 
         place
-            .compactMap { $0.nmgLatLng }
-            .bind(to: placeMapVM.nmgLatLng)
+            .compactMap { $0.mtMapPoint }
+            .bind(to: placeMapVM.mtMapPoint)
             .disposed(by: bag)
 
         place
