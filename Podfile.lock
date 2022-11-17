@@ -113,6 +113,7 @@ DEPENDENCIES:
   - AnyFormatKit
   - CHIPageControl (~> 0.1.3)
   - KakaoSDK
+  - KakaoSDKNavi
   - Kingfisher
   - MaterialComponents/BottomSheet
   - RxCocoa
@@ -192,6 +193,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   YPImagePicker: f36043210c10b0783034eb1947d6e06e31c461e4
 
-PODFILE CHECKSUM: ba5f6f4c8ae6907f1e5f3e9992a83aff47232e4a
+PODFILE CHECKSUM: 4720a89be25c4125b5f11b4d520a7b18a5590d00
 
 COCOAPODS: 1.11.2

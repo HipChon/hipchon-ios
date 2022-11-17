@@ -13,8 +13,8 @@ class KeywordViewModel {
     let content: Driver<String>
     let iconImage: Driver<UIImage>
 
-    init(_ data: KeywordModel) {
-        let keyword = BehaviorSubject<KeywordModel>(value: data)
+    init(_ data: Keyword) {
+        let keyword = BehaviorSubject<Keyword>(value: data)
 
         backgroundColor = keyword
             .compactMap { $0.selectedColor }

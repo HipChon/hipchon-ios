@@ -32,4 +32,6 @@ target 'hipchon' do
   pod 'KakaoSDK'
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'SwiftKeychainWrapper'
+  pod 'KakaoSDKNavi'
+
 end

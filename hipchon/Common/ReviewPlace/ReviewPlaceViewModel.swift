@@ -26,7 +26,7 @@ class ReviewPlaceViewModel {
     let bookmarkButtonTapped = PublishRelay<Void>()
     let shareButtonTapped = PublishRelay<Void>()
 
-    init(_ place: BehaviorSubject<PlaceModel>) {
+    init(_ place: BehaviorSubject<Place>) {
         placeName = place
             .compactMap { $0.name }
             .asDriver(onErrorJustReturn: "")

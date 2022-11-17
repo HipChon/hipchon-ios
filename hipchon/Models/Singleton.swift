@@ -14,7 +14,7 @@ class Singleton {
     public static let shared = Singleton()
     private let bag = DisposeBag()
 
-    let currentUser = BehaviorSubject<UserModel>(value: UserModel())
+    let currentUser = BehaviorSubject<User>(value: User())
 
     let myPlaceRefresh = PublishSubject<Void>()
     let myReviewRefresh = PublishSubject<Void>()
@@ -77,7 +77,7 @@ class Singleton {
         KeychainWrapper.standard.remove(forKey: "userId")
         KeychainWrapper.standard.remove(forKey: "loginId")
         KeychainWrapper.standard.remove(forKey: "loginType")
-        Singleton.shared.currentUser.onNext(UserModel())
+        Singleton.shared.currentUser.onNext(User())
         APIParameters.shared.refreshUserId()
     }
 }

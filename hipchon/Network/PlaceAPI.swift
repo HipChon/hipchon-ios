@@ -17,7 +17,7 @@ class PlaceAPI {
     public static let shared = PlaceAPI()
     private let bag = DisposeBag()
 
-    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<Result<[PlaceModel], APIError>> {
+    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<Result<[Place], APIError>> {
         return Single.create { single in
             print("getPlaceList")
             var urlStr = "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)"
@@ -44,7 +44,7 @@ class PlaceAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: data)
+                                let model = try JSONDecoder().decode([Place].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -65,7 +65,7 @@ class PlaceAPI {
         }
     }
 
-    func getWeeklyHipPlace() -> Single<Result<[PlaceModel], APIError>> {
+    func getWeeklyHipPlace() -> Single<Result<[Place], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/place/hiple/\(APIParameters.shared.userId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -81,7 +81,7 @@ class PlaceAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: data)
+                                let model = try JSONDecoder().decode([Place].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -102,7 +102,7 @@ class PlaceAPI {
         }
     }
 
-    func getPlaceDetail(_ id: Int) -> Single<Result<PlaceModel, APIError>> {
+    func getPlaceDetail(_ id: Int) -> Single<Result<Place, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/place/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -118,7 +118,7 @@ class PlaceAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode(PlaceModel.self, from: data)
+                                let model = try JSONDecoder().decode(Place.self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -139,7 +139,7 @@ class PlaceAPI {
         }
     }
 
-    func getMyPlaces(_ category: CategoryModel) -> Single<Result<[PlaceModel], APIError>> {
+    func getMyPlaces(_ category: Category) -> Single<Result<[Place], APIError>> {
         return Single.create { single in
             
             
@@ -163,7 +163,7 @@ class PlaceAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: data)
+                                let model = try JSONDecoder().decode([Place].self, from: data)
 
                                 single(.success(.success(model)))
                             } catch {
@@ -326,7 +326,7 @@ class PlaceAPI {
         }
     }
     
-    func postMemo(placeId: Int, memo: MemoModel) -> Single<Result<Void, APIError>> {
+    func postMemo(placeId: Int, memo: Memo) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             guard let content = memo.content,
                   let color = memo.color else {

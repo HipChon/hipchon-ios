@@ -8,17 +8,17 @@
 import Foundation
 
 class SearchFilterModel {
-    let region: RegionModel?
-    let category: CategoryModel?
-    let hashtag: HashtagModel?
+    let region: Region?
+    let category: Category?
+    let hashtag: Hashtag?
 
-    init(region: RegionModel?, category: CategoryModel?) {
+    init(region: Region?, category: Category?) {
         self.region = region
         self.category = category
         hashtag = nil
     }
 
-    init(hashtag: HashtagModel?) {
+    init(hashtag: Hashtag?) {
         self.hashtag = hashtag
         region = nil
         category = nil

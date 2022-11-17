@@ -16,7 +16,7 @@ class ReviewAPI {
     public static let shared = ReviewAPI()
     private let bag = DisposeBag()
 
-    func getFeedReviews() -> Single<Result<[ReviewModel], APIError>> {
+    func getFeedReviews() -> Single<Result<[Review], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/all/\(APIParameters.shared.userId)/recently") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -32,7 +32,7 @@ class ReviewAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([ReviewModel].self, from: data)
+                                let model = try JSONDecoder().decode([Review].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -53,7 +53,7 @@ class ReviewAPI {
         }
     }
 
-    func getPlaceReview(_ id: Int) -> Single<Result<[ReviewModel], APIError>> {
+    func getPlaceReview(_ id: Int) -> Single<Result<[Review], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/place/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -69,7 +69,7 @@ class ReviewAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([ReviewModel].self, from: data)
+                                let model = try JSONDecoder().decode([Review].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -90,7 +90,7 @@ class ReviewAPI {
         }
     }
 
-    func getMyReviews(_ type: ProfileReviewType) -> Single<Result<[ReviewModel], APIError>> {
+    func getMyReviews(_ type: ProfileReviewType) -> Single<Result<[Review], APIError>> {
         return Single.create { single in
 
             print("getMyReviews")
@@ -109,7 +109,7 @@ class ReviewAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([ReviewModel].self, from: data)
+                                let model = try JSONDecoder().decode([Review].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -130,7 +130,7 @@ class ReviewAPI {
         }
     }
 
-    func getBestReview() -> Single<Result<[BestReviewModel], APIError>> {
+    func getBestReview() -> Single<Result<[BestReview], APIError>> {
         return Single.create { single in
 
             print("getBestReview")
@@ -148,7 +148,7 @@ class ReviewAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([BestReviewModel].self, from: data)
+                                let model = try JSONDecoder().decode([BestReview].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -170,7 +170,7 @@ class ReviewAPI {
     }
 
 
-    func getReviewDetail(_ id: Int) -> Single<Result<ReviewModel, APIError>> {
+    func getReviewDetail(_ id: Int) -> Single<Result<Review, APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/post/\(APIParameters.shared.userId)/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -187,7 +187,7 @@ class ReviewAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode(ReviewModel.self, from: data)
+                                let model = try JSONDecoder().decode(Review.self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -274,7 +274,7 @@ class ReviewAPI {
     
     // MARK: post review
     
-    func postReview(placeId: Int, images: [UIImage], content: String, keywords: [KeywordModel]) -> Single<Result<Void, APIError>> {
+    func postReview(placeId: Int, images: [UIImage], content: String, keywords: [Keyword]) -> Single<Result<Void, APIError>> {
         return Single.create { single in
           
             print("postReview")

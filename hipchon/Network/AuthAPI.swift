@@ -121,7 +121,7 @@ class AuthAPI {
         }
     }
 
-    func signin(authModel: AuthModel) -> Single<Result<UserModel, APIError>> {
+    func signin(authModel: Auth) -> Single<Result<User, APIError>> {
         return Single.create { single in
 
             guard let loginId = authModel.id,
@@ -145,7 +145,7 @@ class AuthAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode(UserModel.self, from: data)
+                                let model = try JSONDecoder().decode(User.self, from: data)
 
                                 KeychainWrapper.standard.set("\(model.id ?? -1)", forKey: "userId")
                                 KeychainWrapper.standard.set(loginId, forKey: "loginId")
@@ -172,7 +172,7 @@ class AuthAPI {
         }
     }
 
-    func getUser() -> Single<Result<UserModel, APIError>> {
+    func getUser() -> Single<Result<User, APIError>> {
         return Single.create { single in
             guard let loginId = KeychainWrapper.standard.string(forKey: "loginId"),
                   let loginType = KeychainWrapper.standard.string(forKey: "loginType")
@@ -195,7 +195,7 @@ class AuthAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode(UserModel.self, from: data)
+                                let model = try JSONDecoder().decode(User.self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -215,7 +215,7 @@ class AuthAPI {
         }
     }
 
-    func signup(authModel: AuthModel) -> Single<Result<Void, APIError>> {
+    func signup(authModel: Auth) -> Single<Result<Void, APIError>> {
         return Single.create { single in
             print("signup")
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/user") else {

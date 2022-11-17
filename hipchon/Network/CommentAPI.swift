@@ -16,7 +16,7 @@ class CommentAPI {
     public static let shared = CommentAPI()
     private let bag = DisposeBag()
 
-    func getComments(_ id: Int) -> Single<Result<[CommentModel], APIError>> {
+    func getComments(_ id: Int) -> Single<Result<[Comment], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/postcomment/\(id)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -33,7 +33,7 @@ class CommentAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([CommentModel].self, from: data)
+                                let model = try JSONDecoder().decode([Comment].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -54,7 +54,7 @@ class CommentAPI {
         }
     }
 
-    func getMyComments() -> Single<Result<[CommentModel], APIError>> {
+    func getMyComments() -> Single<Result<[Comment], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/postcomment/mycomment/\(APIParameters.shared.userId)") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -71,7 +71,7 @@ class CommentAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([CommentModel].self, from: data)
+                                let model = try JSONDecoder().decode([Comment].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))

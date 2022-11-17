@@ -36,10 +36,10 @@ class FilterViewModel {
     let searchButtonTapped = PublishRelay<Void>()
 
     init(_ befViewType: FilterSearchType) {
-        regions = Driver.just(RegionModel.model)
+        regions = Driver.just(Region.model)
             .map { $0.map { FilterCellModel(region: $0) } }
 
-        categorys = Driver.just(CategoryModel.model)
+        categorys = Driver.just(Category.model)
             .map { $0.map { FilterCellModel(category: $0) } }
 
         // MARK: 지역

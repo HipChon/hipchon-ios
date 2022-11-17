@@ -16,7 +16,7 @@ class ElseAPI {
     public static let shared = ElseAPI()
     private let bag = DisposeBag()
 
-    func getBanners() -> Single<Result<[BannerModel], APIError>> {
+    func getBanners() -> Single<Result<[Banner], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(APIParameters.shared.hostUrl)/api/event") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "url error"))))
@@ -32,7 +32,7 @@ class ElseAPI {
                     case .success:
                         if let data = response.data {
                             do {
-                                let model = try JSONDecoder().decode([BannerModel].self, from: data)
+                                let model = try JSONDecoder().decode([Banner].self, from: data)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))

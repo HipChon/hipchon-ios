@@ -16,21 +16,21 @@ class FilterCellModel {
         name = nil
     }
 
-    init(region: RegionModel) {
+    init(region: Region) {
         id = region.id
         name = region.name
     }
 
-    init(category: CategoryModel) {
+    init(category: Category) {
         id = category.id
         name = category.name
     }
 
-    var region: RegionModel {
-        return RegionModel(id: id, name: name)
+    var region: Region {
+        return Region(id: id, name: name)
     }
 
-    var category: CategoryModel {
-        return CategoryModel(id: id, name: name)
+    var category: Category {
+        return Category(id: id, name: name)
     }
 }

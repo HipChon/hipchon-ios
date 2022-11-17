@@ -36,7 +36,7 @@ class NetworkManager {
 
     // MARK: User
 
-    func getUser() -> Single<UserModel> {
+    func getUser() -> Single<User> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/user") else {
                 single(.failure(NetworkError.uri))
@@ -53,7 +53,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode(UserModel.self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode(User.self, from: Data(str.utf8))
                 single(.success(model))
             } catch {
                 single(.failure(NetworkError.parsing))
@@ -172,7 +172,7 @@ class NetworkManager {
         }
     }
 
-    func getBestReview() -> Single<[BestReviewModel]> {
+    func getBestReview() -> Single<[BestReview]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/bestReviews") else {
                 single(.failure(NetworkError.uri))
@@ -286,7 +286,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode([BestReviewModel].self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode([BestReview].self, from: Data(str.utf8))
                 single(.success(model))
             } catch {
                 single(.failure(NetworkError.parsing))
@@ -296,7 +296,7 @@ class NetworkManager {
         }
     }
 
-    func getBanners() -> Single<[BannerModel]> {
+    func getBanners() -> Single<[Banner]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/banners") else {
                 single(.failure(NetworkError.uri))
@@ -322,7 +322,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode([BannerModel].self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode([Banner].self, from: Data(str.utf8))
                 single(.success(model))
             } catch {
                 single(.failure(NetworkError.parsing))
@@ -332,7 +332,7 @@ class NetworkManager {
         }
     }
 
-    func getWeeklyHipPlace() -> Single<[PlaceModel]> {
+    func getWeeklyHipPlace() -> Single<[Place]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/hipplace") else {
                 single(.failure(NetworkError.uri))
@@ -426,7 +426,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode([Place].self, from: Data(str.utf8))
                 single(.success(model))
             } catch {
                 single(.failure(NetworkError.parsing))
@@ -438,7 +438,7 @@ class NetworkManager {
 
     // MARK: ?
 
-    func getReviews() -> Single<[ReviewModel]> {
+    func getReviews() -> Single<[Review]> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/eco") else {
                 single(.failure(NetworkError.uri))
@@ -644,7 +644,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode([ReviewModel].self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode([Review].self, from: Data(str.utf8))
                 single(.success(model))
             } catch {
                 single(.failure(NetworkError.parsing))
@@ -654,7 +654,7 @@ class NetworkManager {
         }
     }
 
-    func getPlaces() -> Single<Result<[PlaceModel], APIError>> {
+    func getPlaces() -> Single<Result<[Place], APIError>> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.localUrl)/api/myplace/1") else {
                 single(.success(.failure(APIError(statusCode: -1, description: "uri error"))))
@@ -854,7 +854,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode([PlaceModel].self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode([Place].self, from: Data(str.utf8))
                 single(.success(.success(model)))
             } catch {
                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -864,7 +864,7 @@ class NetworkManager {
         }
     }
 
-    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<Result<[PlaceModel], APIError>> {
+    func getPlaceList(filter: SearchFilterModel, sort: SortType) -> Single<Result<[Place], APIError>> {
         return Single.create { single in
             print("getPlaceList")
             var urlStr = ""
@@ -897,7 +897,7 @@ class NetworkManager {
                         do {
                             let modelData = try JSON(data)["data"].rawData()
                             do {
-                                let model = try JSONDecoder().decode([PlaceModel].self, from: modelData)
+                                let model = try JSONDecoder().decode([Place].self, from: modelData)
                                 single(.success(.success(model)))
                             } catch {
                                 single(.success(.failure(APIError(statusCode: -1, description: "parsing error"))))
@@ -1089,7 +1089,7 @@ class NetworkManager {
 
     // MARK: placeDetail
 
-    func getPlaceDetail(_ id: Int) -> Single<PlaceModel> {
+    func getPlaceDetail(_ id: Int) -> Single<Place> {
         return Single.create { single in
             guard let url = URL(string: "\(NetworkManager.uri)/api/place/\(id)") else {
                 single(.failure(NetworkError.uri))
@@ -1163,7 +1163,7 @@ class NetworkManager {
             """
 
             do {
-                let model = try JSONDecoder().decode(PlaceModel.self, from: Data(str.utf8))
+                let model = try JSONDecoder().decode(Place.self, from: Data(str.utf8))
                 single(.success(model))
             } catch {
                 single(.failure(NetworkError.parsing))
